@@ -74,7 +74,7 @@ __asm volatile ("nop");
 #include "SPI.h"
 #include "grhSoulissCustom.h"
 #include "NTC.h"
-#include <DHT.h>	
+#include "DHT.h"	
 
 #if defined(BOARD_PRODINO_V2)
 	#include "HW_Setup_DINo_v2.h"
