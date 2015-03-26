@@ -10,7 +10,7 @@
 #define SOULISS_DEFINE_TYPICALS	Set_LightsGroup(LIGHT_BATH1_1, LIGHT_BATH1_3);\
 								Set_SimpleLight(LIGHT_GW1);
 
-#define SOULISS_READ_INPUTS 	ssLightsGroupIN(IN1, LIGHT_BATH1_1, LIGHT_BATH1_3);\
+#define SOULISS_READ_INPUTS 	LightsGroupIn(IN1, LIGHT_BATH1_1, LIGHT_BATH1_3);\
 								DigIn(IN2, Souliss_T1n_ToggleCmd, LIGHT_GW1);
 
 #define SOULISS_PROCESS_LOGICS 	Logic_LightsGroup(LIGHT_BATH1_1, LIGHT_BATH1_3);\

@@ -269,8 +269,8 @@ void Souliss_SetT11Group(U8 *memory_map, U8 firstSlot, U8 lastSlot)
 //#define Logic_LightsGroup(group, offset, firstSlot, lastSlot) Souliss_Logic_T11Group(memory_map, group, offset, firstSlot, lastSlot, &data_changed)
 #define Logic_LightsGroup(firstSlot, lastSlot) Souliss_Logic_T11Group(memory_map, firstSlot, lastSlot, &data_changed)
 //#define ssLightsGroupIN(pin, slot) Souliss_DigInHoldDuration(pin, memory_map, slot)
-#define ssLightsGroupIN(pin, firstSlot, lastSlot) Souliss_DigInHoldDuration(pin, memory_map, firstSlot, lastSlot)
-#define ssLowLightsGroupIN(pin, firstSlot, lastSlot) Souliss_LowDigInHoldDuration(pin, memory_map, firstSlot, lastSlot)
+#define LightsGroupIn(pin, firstSlot, lastSlot) Souliss_DigInHoldDuration(pin, memory_map, firstSlot, lastSlot)
+#define LowLightsGroupIn(pin, firstSlot, lastSlot) Souliss_LowDigInHoldDuration(pin, memory_map, firstSlot, lastSlot)
 
 #define WINDOW_DELAY 500
 #define DigInWindow(pin, value, slot) custom_DigInFiltered(pin, value, memory_map, slot, WINDOW_DELAY)
