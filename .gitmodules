@@ -1,0 +1,3 @@
+[submodule "grhUniBoards/libraries/souliss"]
+	path = grhUniBoards/libraries/souliss
+	url = ../souliss.git
