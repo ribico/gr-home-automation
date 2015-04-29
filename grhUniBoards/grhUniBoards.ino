@@ -1,10 +1,3 @@
-
-// BOF preprocessor bug prevent - insert me on top of your arduino-code
-#if 1
-__asm volatile ("nop");
-#endif
-
-
 /**************************************************************************
 	GRHOME - Common Souliss Network Definitions
 	Architecture reference:
@@ -64,7 +57,10 @@ __asm volatile ("nop");
 
 	#include "bconf/StandardArduino.h"
 	#include "conf/ethW5100.h"
-	#include "conf/Gateway.h"
+
+	#if defined(SOULISS_GATEWAY)
+		#include "conf/Gateway.h"
+	#endif
 
 #endif
 
@@ -74,7 +70,7 @@ __asm volatile ("nop");
 #include "SPI.h"
 #include "grhSoulissCustom.h"
 #include "NTC.h"
-#include "DHT.h"	
+#include <DHT.h>	
 
 #if defined(BOARD_PRODINO_V2)
 	#include "HW_Setup_DINo_v2.h"
@@ -194,19 +190,20 @@ void loop()
 		#if defined(SOULISS_GATEWAY)
 			FAST_GatewayComms();		
 		#else		
-		FAST_PeerComms();
+			FAST_PeerComms();
 
-		// At first runs, we look for a gateway to join
-		// (not needed if the board is listed in the gateway with SetAsPearNode) 
-		START_PeerJoin();
-		
-		// Periodically check if the peer node has joined the gateway
-		FAST_1110ms() {
-			if(JoinInProgress())	// If join is in progress, toggle the LED at every turn
-				ToggleLED();
-			else
-				TurnOnLED();		// Once completed, turn ON				
-		}
+			// At first runs, we look for a gateway to join
+			// (not needed if the board is listed in the gateway with SetAsPearNode) 
+			START_PeerJoin();
+			
+			// Periodically check if the peer node has joined the gateway
+			FAST_1110ms() 
+			{
+				if(JoinInProgress())	// If join is in progress, toggle the LED at every turn
+					ToggleLED();
+				else
+					TurnOnLED();		// Once completed, turn ON				
+			}
 		#endif		
 
 		FAST_2110ms()
