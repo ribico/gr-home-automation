@@ -6,6 +6,16 @@
 #define IP_ADDRESS_4_NETGW			1
 
 
+#define DEBUG
+
+#if defined(DEBUG)
+	#define MaCaco_DEBUG_INSKETCH
+	#define MaCaco_DEBUG 	1
+	#define VNET_DEBUG_INSKETCH
+	#define VNET_DEBUG 		1
+#endif
+
+
 #include "bconf/StandardArduino.h"
 #include "conf/ethW5100.h"
 #include "conf/Gateway.h"
@@ -18,6 +28,15 @@
 
 void setup()
 {
+	#if defined(DEBUG)
+    // Open serial communications and wait for port to open:
+    Serial.begin(9600);
+    while (!Serial) {
+      ; // wait for serial port to connect. Needed for Leonardo only. If need debug setup() void.
+    }
+    Serial.println("Serial started to DEBUG");
+	#endif
+
 	InitMEGA();
 
 	uint8_t ip_address[4]  = {IP_ADDRESS_1, IP_ADDRESS_2, IP_ADDRESS_3, IP_ADDRESS_4};
@@ -29,11 +48,11 @@ void setup()
 	SetAsGateway(IP_ADDRESS_4);
 	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);
 	SetAsPeerNode(RS485_ADDRESS_ROW1B2,2);
-	SetAsPeerNode(RS485_ADDRESS_ROW1B3,3);
-	SetAsPeerNode(RS485_ADDRESS_ROW1B4,4);	
+//	SetAsPeerNode(RS485_ADDRESS_ROW1B3,3);
+//	SetAsPeerNode(RS485_ADDRESS_ROW1B4,4);	
 
-	SetAsPeerNode(IP_ADDRESS_ROW2B1,5);
-	SetAsPeerNode(RS485_ADDRESS_ROW2B2,6);
+//	SetAsPeerNode(IP_ADDRESS_ROW2B1,5);
+//	SetAsPeerNode(RS485_ADDRESS_ROW2B2,6);
 //	SetAsPeerNode(RS485_ADDRESS_ROW2B3,7);
 //	SetAsPeerNode(RS485_ADDRESS_ROW2B4,8);
 
