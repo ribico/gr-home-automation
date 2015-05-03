@@ -1,12 +1,9 @@
 
-#define IP_ADDRESS_1				192
-#define IP_ADDRESS_2				168
-#define IP_ADDRESS_3				1
-#define	IP_ADDRESS_4				110
-#define IP_ADDRESS_4_NETGW			1
+#define	IP_ADDRESS_4	IP_ADDRESS_TESTB1
 
 
-#define DEBUG
+
+//#define DEBUG
 
 #if defined(DEBUG)
 	#define MaCaco_DEBUG_INSKETCH
@@ -49,21 +46,10 @@ void setup()
 	Souliss_SetIPAddress(ip_address, subnet_mask, ip_gateway);
 	
 	SetAsGateway(IP_ADDRESS_4);
-	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);
-	SetAsPeerNode(RS485_ADDRESS_ROW1B2,2);
-	SetAsPeerNode(RS485_ADDRESS_ROW1B3,3);
-	SetAsPeerNode(RS485_ADDRESS_ROW1B4,4);	
 
-	SetAsPeerNode(IP_ADDRESS_ROW2B1,5);
-	SetAsPeerNode(RS485_ADDRESS_ROW2B2,6);
-	SetAsPeerNode(RS485_ADDRESS_ROW2B3,7);
-	SetAsPeerNode(RS485_ADDRESS_ROW2B4,8);
+	SetAsPeerNode(IP_ADDRESS_TESTB2,1);
+	SetAsPeerNode(RS485_ADDRESS_TESTB2,2);
 
-	SetAsPeerNode(IP_ADDRESS_BED1B1,9);
-
-	SetAsPeerNode(IP_ADDRESS_BED2B1,10);
-	SetAsPeerNode(RS485_ADDRESS_BED2B2,11);
-	SetAsPeerNode(RS485_ADDRESS_BED2B3,12);
 }
 
 void loop()
