@@ -11,23 +11,15 @@
 
 //#define DEBUG
 
-#if defined(DEBUG)
-	#define MaCaco_DEBUG_INSKETCH
-	#define MaCaco_DEBUG 	1
-	#define VNET_DEBUG_INSKETCH
-	#define VNET_DEBUG 		1
-#endif
-
 
 #include "bconf/DINo_v2.h"
 
 #include "Souliss.h"
 #include "SPI.h"
 
-#include "grhSoulissNetwork.h"
 #include "HW_Setup_DINo_v2.h"
 
-#include "grhSoulissCustom.h"
+#include "grhLib.h"
 
 void setup()
 {
