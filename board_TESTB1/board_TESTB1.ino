@@ -17,6 +17,7 @@
 
 
 #include "bconf/StandardArduino.h"
+//#include "bconf/DINo_v2.h"
 #include "conf/ethW5100.h"
 #include "conf/Gateway.h"
 
@@ -24,20 +25,22 @@
 #include "SPI.h"
 
 #include "grhSoulissNetwork.h"
-#include "HW_Setup_Mega_2560.h"
+//#include "HW_Setup_Mega_2560.h"
+//#include "HW_Setup_DINo_v2.h"
 
 void setup()
 {
 	#if defined(DEBUG)
-    // Open serial communications and wait for port to open:
-    Serial.begin(9600);
-    while (!Serial) {
-      ; // wait for serial port to connect. Needed for Leonardo only. If need debug setup() void.
-    }
-    Serial.println("Serial started to DEBUG");
+		// Open serial communications and wait for port to open:
+		Serial.begin(9600);
+		while (!Serial) {
+		  ; // wait for serial port to connect. Needed for Leonardo only. If need debug setup() void.
+		}
+		Serial.println("Serial started to DEBUG");
 	#endif
 
-	InitMEGA();
+	//	InitMEGA();
+	//DINo_v2_HW_Setup();
 
 	uint8_t ip_address[4]  = {IP_ADDRESS_1, IP_ADDRESS_2, IP_ADDRESS_3, IP_ADDRESS_4};
   	uint8_t subnet_mask[4] = {255, 255, 255, 0};
@@ -48,19 +51,19 @@ void setup()
 	SetAsGateway(IP_ADDRESS_4);
 	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);
 	SetAsPeerNode(RS485_ADDRESS_ROW1B2,2);
-//	SetAsPeerNode(RS485_ADDRESS_ROW1B3,3);
-//	SetAsPeerNode(RS485_ADDRESS_ROW1B4,4);	
+	SetAsPeerNode(RS485_ADDRESS_ROW1B3,3);
+	SetAsPeerNode(RS485_ADDRESS_ROW1B4,4);	
 
-//	SetAsPeerNode(IP_ADDRESS_ROW2B1,5);
-//	SetAsPeerNode(RS485_ADDRESS_ROW2B2,6);
-//	SetAsPeerNode(RS485_ADDRESS_ROW2B3,7);
-//	SetAsPeerNode(RS485_ADDRESS_ROW2B4,8);
+	SetAsPeerNode(IP_ADDRESS_ROW2B1,5);
+	SetAsPeerNode(RS485_ADDRESS_ROW2B2,6);
+	SetAsPeerNode(RS485_ADDRESS_ROW2B3,7);
+	SetAsPeerNode(RS485_ADDRESS_ROW2B4,8);
 
-//	SetAsPeerNode(IP_ADDRESS_BED1B1,9);
+	SetAsPeerNode(IP_ADDRESS_BED1B1,9);
 
-//	SetAsPeerNode(IP_ADDRESS_BED2B1,10);
-//	SetAsPeerNode(RS485_ADDRESS_BED2B2,11);
-//	SetAsPeerNode(RS485_ADDRESS_BED2B3,12);
+	SetAsPeerNode(IP_ADDRESS_BED2B1,10);
+	SetAsPeerNode(RS485_ADDRESS_BED2B2,11);
+	SetAsPeerNode(RS485_ADDRESS_BED2B3,12);
 }
 
 void loop()
