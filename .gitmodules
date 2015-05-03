@@ -1,3 +1,9 @@
 [submodule "grhUniBoards/libraries/souliss"]
 	path = grhUniBoards/libraries/souliss
 	url = ../souliss.git
+[submodule "libraries/souliss"]
+	path = libraries/souliss
+	url = ../souliss.git
+[submodule "libraries/DHT-sensor-library"]
+	path = libraries/DHT-sensor-library
+	url = ../DHT-sensor-library.git
