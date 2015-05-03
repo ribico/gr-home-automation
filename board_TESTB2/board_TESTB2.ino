@@ -16,18 +16,21 @@
 
 
 
-#include "bconf/DINo_v2.h"
+//#include "bconf/DINo_v2.h"
+#include "bconf/DINo_v2_EthernetBridge_RS485.h"
+#include "conf/SuperNode.h" 
 
+#include "grhSoulissCommon.h"
 #include "Souliss.h"
 #include "SPI.h"
 
+#include "grhLib.h"
 #include "HW_Setup_DINo_v2.h"
 
-#include "grhLib.h"
 
 void setup()
 {
-	OpenSerialOnDebug();
+	OPEN_SERIAL_ON_DEBUG
 
 	DINo_v2_HW_Setup();
 
@@ -43,6 +46,7 @@ void loop()
 { 
 	EXECUTEFAST() {						
 		UPDATEFAST();	
+		SOULSS_FAST_PEER_COMMS
 		
 		FAST_30ms() 
 		{
@@ -62,8 +66,6 @@ void loop()
 			DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_LIVING_4); 
 		}
 		
-		SOULSS_FAST_PEER_COMMS
-
 		FAST_2110ms()
 		{
 			// SOULISS_PROCESS_TIMERS;

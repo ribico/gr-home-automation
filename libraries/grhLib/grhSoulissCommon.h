@@ -13,21 +13,18 @@
 #define MaCaco_SLOT				35 		// MaCaco_SLOT < VNET_MAX_PAYLOAD - MaCaco_HEADER and MaCaco_SLOT  < 255 / 3
 
 
-#if defined(DEBUG)
+#ifdef DEBUG
 	#define MaCaco_DEBUG_INSKETCH
 	#define MaCaco_DEBUG 	1
 	#define VNET_DEBUG_INSKETCH
 	#define VNET_DEBUG 		1
+	#define OPEN_SERIAL_ON_DEBUG	Serial.begin(9600);\
+									while (!Serial) { ; }\
+									Serial.println("Serial started to DEBUG");
+#else
+	#define OPEN_SERIAL_ON_DEBUG
 #endif
 
-inline void OpenSerialOnDebug()
-{
-	#if defined(DEBUG)
-		Serial.begin(9600);
-		while (!Serial) { ; }
-		Serial.println("Serial started to DEBUG");
-	#endif
-}
 
 #define SET_IP_ADDRESS		uint8_t ip_address[4]  = {IP_ADDRESS_1, IP_ADDRESS_2, IP_ADDRESS_3, IP_ADDRESS_4};\
 							uint8_t subnet_mask[4] = {255, 255, 255, 0};\

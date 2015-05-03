@@ -9,33 +9,26 @@
 #define LIGHT_LIVING_4			4
 
 
-//#define DEBUG
+#define DEBUG
 
 
 #include "bconf/DINo_v2.h"
 
+#include "grhSoulissCommon.h"
 #include "Souliss.h"
 #include "SPI.h"
 
-#include "HW_Setup_DINo_v2.h"
-
 #include "grhLib.h"
+#include "HW_Setup_DINo_v2.h"
 
 void setup()
 {
-	#if defined(DEBUG)
-		// Open serial communications and wait for port to open:
-		Serial.begin(9600);
-		while (!Serial) {
-		  ; // wait for serial port to connect. Needed for Leonardo only. If need debug setup() void.
-		}
-		Serial.println("Serial started to DEBUG");
-	#endif
+	OPEN_SERIAL_ON_DEBUG
 
 	DINo_v2_HW_Setup();
 
 	PowerDownEthernet(); // pure RS485 node
-	Souliss_SetAddress(RS485_ADDRESS, SOULISS_SUBNET_MASK, RS485_SUPERNODE);
+	SET_USART_ADDRESS
 
 
 	// DEFINE TYPICALS
@@ -45,7 +38,8 @@ void setup()
 void loop()
 { 
 	EXECUTEFAST() {						
-		UPDATEFAST();	
+		UPDATEFAST();
+		SOULSS_FAST_PEER_COMMS	
 		
 		FAST_30ms() 
 		{
@@ -65,22 +59,6 @@ void loop()
 			DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_LIVING_4); 
 		}
 		
-		// Here we process all communication with other nodes
-		FAST_PeerComms();
-
-		// At first runs, we look for a gateway to join
-		// (not needed if the board is listed in the gateway with SetAsPearNode) 
-		START_PeerJoin();
-		
-		// Periodically check if the peer node has joined the gateway
-		FAST_1110ms() 
-		{
-			if(JoinInProgress())	// If join is in progress, toggle the LED at every turn
-				ToggleLED();
-			else
-				TurnOnLED();		// Once completed, turn ON				
-		}
-
 		FAST_2110ms()
 		{
 			// SOULISS_PROCESS_TIMERS;
@@ -93,6 +71,6 @@ void loop()
 	EXECUTESLOW() 
 	{	
 		UPDATESLOW();
-		SLOW_PeerJoin();
+		SOULSS_SLOW_PEER_COMMS
 	}
 } 
