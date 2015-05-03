@@ -5,12 +5,6 @@
 
 //#define DEBUG
 
-#if defined(DEBUG)
-	#define MaCaco_DEBUG_INSKETCH
-	#define MaCaco_DEBUG 	1
-	#define VNET_DEBUG_INSKETCH
-	#define VNET_DEBUG 		1
-#endif
 
 
 #include "bconf/StandardArduino.h"
@@ -21,7 +15,7 @@
 #include "Souliss.h"
 #include "SPI.h"
 
-#include "grhSoulissNetwork.h"
+#include "grhLib.h"
 //#include "HW_Setup_Mega_2560.h"
 //#include "HW_Setup_DINo_v2.h"
 
