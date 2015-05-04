@@ -257,25 +257,35 @@ inline void ProcessTimers()
 	Timer_SimpleLight(LIGHT_TERRACE_2);
 	Timer_SimpleLight(LIGHT_TERRACE_3);
 	Timer_SimpleLight(LIGHT_TOILET);
+	
 	Souliss_T11_Timer(memory_map, HEATPUMP_REMOTE_SWITCH);
 	Souliss_T11_Timer(memory_map, HEATPUMP_CIRCULATION_PUMP);
 	Souliss_T11_Timer(memory_map, HEATPUMP_ACS_REQUEST);
 	Souliss_T11_Timer(memory_map, HEATPUMP_COOL);
+
 	float temperature_acs = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_ACS_PIN),TEMP_BOILER_ACS_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_BOILER_ACS, &temperature_acs);
+	
 	float temperature_heating = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_HEATING_PIN),TEMP_BOILER_HEATING_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_BOILER_HEATING, &temperature_heating);
+	
 	float temperature_bottom = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_BOTTOM_PIN),TEMP_BOILER_BOTTOM_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_BOILER_BOTTOM, &temperature_bottom);
+	
 	float temperature_heating_flow = NTC_RawADCToCelsius( analogRead(TEMP_HEATING_FLOW_PIN),TEMP_HEATING_FLOW_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_HEATING_FLOW, &temperature_heating_flow);
+	
 	float temperature_heating_return = NTC_RawADCToCelsius( analogRead(TEMP_HEATING_RETURN_PIN),TEMP_HEATING_RETURN_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_HEATING_RETURN, &temperature_heating_return);                  
-	if(mInput(HEATPUMP_AUTO)) {
+	
+	if(mInput(HEATPUMP_AUTO)) 
+	{
 	        if (temperature_acs < SETPOINT_ACS - SETPOINT_DEADBAND)
 				mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OnCmd;
+
 			else if (temperature_acs > SETPOINT_ACS + SETPOINT_DEADBAND)
-				mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OffCmd;\
+				mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OffCmd;
+			
 			if (temperature_heating < SETPOINT_HEATING - SETPOINT_DEADBAND)
 			{
 				mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OnCmd;
@@ -287,6 +297,7 @@ inline void ProcessTimers()
 				mInput(HEATPUMP_COOL) = Souliss_T1n_OnCmd;
 			}
 	}
+
 	if( (mOutput(HEATING_KITCHEN)==Souliss_T1n_Coil) ||
 		(mOutput(HEATING_BATH2)==Souliss_T1n_Coil) ||
 		(mOutput(HEATING_BED3)==Souliss_T1n_Coil) ||
@@ -315,8 +326,9 @@ inline void ProcessTimers()
 	else
 	{
 		mInput(HEATING_MIX_VALVE_SWITCH) = Souliss_T1n_OffCmd;
-		mInput(HEATING_MIX_VALVE_DIRECTION) = Souliss_T1n_OffCmd;
+//		mInput(HEATING_MIX_VALVE_DIRECTION) = Souliss_T1n_OffCmd;
 	}
+
 	Souliss_T11_Timer(memory_map, HEATING_KITCHEN);
 	Souliss_T11_Timer(memory_map, HEATING_BATH2);
 	Souliss_T11_Timer(memory_map, HEATING_BED3);
@@ -327,6 +339,7 @@ inline void ProcessTimers()
 	Souliss_T11_Timer(memory_map, HEATING_LOFT);
 	Souliss_T11_Timer(memory_map, HEATING_MIX_VALVE_SWITCH);
 	Souliss_T11_Timer(memory_map, HEATING_MIX_VALVE_DIRECTION);
+
 }
 
 void setup()
@@ -343,6 +356,21 @@ void setup()
 	// LIST OF NODES
 	SetAsPeerNode(IP_ADDRESS_TESTB2,1);
 	SetAsPeerNode(RS485_ADDRESS_TESTB2,2);
+//	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);
+//	SetAsPeerNode(RS485_ADDRESS_ROW1B2,2);
+	SetAsPeerNode(RS485_ADDRESS_ROW1B3,3);
+	SetAsPeerNode(RS485_ADDRESS_ROW1B4,4);
+
+	SetAsPeerNode(IP_ADDRESS_ROW2B1,5);
+	SetAsPeerNode(RS485_ADDRESS_ROW2B2,6);
+	SetAsPeerNode(RS485_ADDRESS_ROW2B3,7);
+	SetAsPeerNode(RS485_ADDRESS_ROW2B4,8);
+
+	SetAsPeerNode(IP_ADDRESS_BED1B1,9);
+
+	SetAsPeerNode(IP_ADDRESS_BED2B1,10);
+	SetAsPeerNode(RS485_ADDRESS_BED2B2,11);
+	SetAsPeerNode(RS485_ADDRESS_BED2B3,12);
 
 	DefineTypicals();
 }
