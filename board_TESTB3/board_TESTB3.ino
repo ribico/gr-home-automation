@@ -1,3 +1,8 @@
+/*********************
+TEST BOARD DINO with RS485 only acting as Peer
+
+***********************/
+
 #define LIGHT_LIVING_1			1
 #define LIGHT_LIVING_2			2
 #define LIGHT_LIVING_3			3		

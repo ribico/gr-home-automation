@@ -1,4 +1,9 @@
 
+/*********************
+TEST BOARD DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
+
+***********************/
+
 #define LIGHT_LIVING_1			1
 #define LIGHT_LIVING_2			2
 #define LIGHT_LIVING_3			3		

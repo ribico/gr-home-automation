@@ -1,3 +1,8 @@
+/*********************
+TEST BOARD MEGA with Ethernet only acting as GATEWAY
+
+***********************/
+
 
 //#define DEBUG
 
