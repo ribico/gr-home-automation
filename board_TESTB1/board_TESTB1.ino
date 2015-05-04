@@ -1,8 +1,4 @@
 
-#define	IP_ADDRESS_4	IP_ADDRESS_TESTB1
-
-
-
 //#define DEBUG
 
 
@@ -12,32 +8,39 @@
 #include "conf/Gateway.h"
 
 #include "grhSoulissCommon.h"
-#include "Souliss.h"
-#include "SPI.h"
 
-#include "grhLib.h"
-//#include "HW_Setup_Mega_2560.h"
+#include <SPI.h>
+#include <EEPROM.h>
+#include "Souliss.h"
+
+#include "grhSoulissNetwork.h"
+#include "grhSoulissCustom.h"
+#include "HW_Setup_Mega_2560.h"
+
+#define LIGHT1                  0
 
 void setup()
 {
-	OPEN_SERIAL_ON_DEBUG
+	grhOpenSerialOnDebug();
+	Initialize();
+	grhSetIpAddress(IP_ADDRESS_TESTB1);
+	SetAsGateway(IP_ADDRESS_TESTB1);
+	SetAddressingServer();
+	grhInitMEGA();
 
-	//	InitMEGA();
-
-	SET_IP_ADDRESS
-	
-	SetAsGateway(IP_ADDRESS_4);
-
+	// LIST OF NODES
 	SetAsPeerNode(IP_ADDRESS_TESTB2,1);
 	SetAsPeerNode(RS485_ADDRESS_TESTB2,2);
 
+	
+	Set_SimpleLight(LIGHT1); 
 }
 
 void loop()
 { 
-	EXECUTEFAST() {						
+	EXECUTEFAST()
+	{						
 		UPDATEFAST();
-		FAST_GatewayComms();		
 		
 		FAST_30ms() 
 		{
@@ -47,12 +50,15 @@ void loop()
 
 		FAST_50ms() 
 		{
-
+			Logic_SimpleLight(LIGHT1);
 		}
+
+		FAST_GatewayComms();	
 	}
 	
-	EXECUTESLOW() {	
+	EXECUTESLOW()
+	{	
 		UPDATESLOW();
 
-		}
+	}
 } 

@@ -18,22 +18,23 @@
 	#define MaCaco_DEBUG 	1
 	#define VNET_DEBUG_INSKETCH
 	#define VNET_DEBUG 		1
-	#define OPEN_SERIAL_ON_DEBUG	Serial.begin(9600);\
+	#define grhOpenSerialOnDebug()	Serial.begin(9600);\
 									while (!Serial) { ; }\
 									Serial.println("Serial started to DEBUG");
 #else
-	#define OPEN_SERIAL_ON_DEBUG
+	#define grhOpenSerialOnDebug()
 #endif
 
 
-#define SET_IP_ADDRESS		uint8_t ip_address[4]  = {IP_ADDRESS_1, IP_ADDRESS_2, IP_ADDRESS_3, IP_ADDRESS_4};\
+#define grhSetIpAddress(ip4)	uint8_t ip_address[4]  = {IP_ADDRESS_1, IP_ADDRESS_2, IP_ADDRESS_3, ip4};\
 							uint8_t subnet_mask[4] = {255, 255, 255, 0};\
 							uint8_t ip_gateway[4]  = {IP_ADDRESS_1, IP_ADDRESS_2, IP_ADDRESS_3, IP_ADDRESS_4_NETGW};\
 							Souliss_SetIPAddress(ip_address, subnet_mask, ip_gateway);
 
-#define SET_USART_ADDRESS	Souliss_SetAddress(RS485_ADDRESS, SOULISS_SUBNET_MASK, RS485_SUPERNODE);
+#define grhSetUSARTAddress(RS485_ADDRESS, RS485_SUPERNODE)	Souliss_SetAddress(RS485_ADDRESS, SOULISS_SUBNET_MASK, RS485_SUPERNODE);
 
-#define SOULSS_FAST_PEER_COMMS	FAST_PeerComms();\
+
+#define grhFastPeerComms()		FAST_PeerComms();\
 								START_PeerJoin();\
 								FAST_1110ms()\ 
 								{\
@@ -42,5 +43,3 @@
 									else\
 										TurnOnLED();\				
 								}
-
-#define SOULSS_SLOW_PEER_COMMS 	SLOW_PeerJoin();

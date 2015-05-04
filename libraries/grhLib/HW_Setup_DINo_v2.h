@@ -14,7 +14,7 @@
 
 // List QuickCfg.h parameters that want to be configured as standard
 
-void DINo_v2_HW_Setup()
+void grhDINo_v2_HW_Setup()
 {
 	// Init the board
 	InitDINo();

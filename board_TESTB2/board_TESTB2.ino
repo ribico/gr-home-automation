@@ -1,41 +1,37 @@
 
-#define	IP_ADDRESS_4			IP_ADDRESS_TESTB2
-
-#define	RS485_ADDRESS			RS485_ADDRESS_TESTB1
-#define RS485_SUPERNODE			0x0000
-
-
 #define LIGHT_LIVING_1			1
 #define LIGHT_LIVING_2			2
 #define LIGHT_LIVING_3			3		
 #define LIGHT_LIVING_4			4
 
 
-#define DEBUG
+//#define DEBUG
 
 
 
-
-//#include "bconf/DINo_v2.h"
 #include "bconf/DINo_v2_EthernetBridge_RS485.h"
 #include "conf/SuperNode.h" 
 
 #include "grhSoulissCommon.h"
-#include "Souliss.h"
-#include "SPI.h"
 
-#include "grhLib.h"
+#include <SPI.h>
+#include <EEPROM.h>
+#include "Souliss.h"
+
+#include "grhSoulissNetwork.h"
+#include "grhSoulissCustom.h"
 #include "HW_Setup_DINo_v2.h"
 
 
 void setup()
 {
-	OPEN_SERIAL_ON_DEBUG
+	grhOpenSerialOnDebug();
+	delay(10000);
 
-	DINo_v2_HW_Setup();
+	grhDINo_v2_HW_Setup();
 
-	SET_IP_ADDRESS
-	SET_USART_ADDRESS
+	grhSetIpAddress(IP_ADDRESS_TESTB2);
+	grhSetUSARTAddress(RS485_ADDRESS_TESTB1, 0x0000);
 
 
 	// DEFINE TYPICALS
@@ -46,7 +42,6 @@ void loop()
 { 
 	EXECUTEFAST() {						
 		UPDATEFAST();	
-		SOULSS_FAST_PEER_COMMS
 		
 		FAST_30ms() 
 		{
@@ -72,12 +67,13 @@ void loop()
 			Timer_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_4);
 				
 		}			
-				
+		
+		grhFastPeerComms();		
 	}
 	
 	EXECUTESLOW() 
 	{	
 		UPDATESLOW();
-		SOULSS_SLOW_PEER_COMMS
+		SLOW_PeerJoin();
 	}
 } 

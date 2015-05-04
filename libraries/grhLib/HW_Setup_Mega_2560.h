@@ -40,6 +40,6 @@
 #define TurnOnLED()         digitalWrite(STATLED, HIGH)
 #define TurnOffLED()        digitalWrite(STATLED, LOW)
 
-#define InitMEGA()          SetLED();
+#define grhInitMEGA()          SetLED();
 
 #endif
