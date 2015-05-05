@@ -1,3 +1,27 @@
+/*********************
+LOFTB1 BOARD 
+MEGA with Ethernet only acting as GATEWAY
+
+***********************/
+
+//#define DEBUG
+
+#include "bconf/StandardArduino.h"
+#include "conf/ethW5100.h"
+#include "conf/Gateway.h"
+
+#include "grhSoulissCommon.h"
+
+#include <SPI.h>
+#include <EEPROM.h>
+#include "Souliss.h"
+
+#include "grhSoulissNetwork.h"
+#include "grhSoulissCustom.h"
+#include "HW_Setup_Mega_2560.h"
+#include "NTC.h"
+
+
 #define LIGHT_LOFT_1            1                       
 #define LIGHT_LOFT_2            2
 #define LIGHT_TERRACE_1                 3
@@ -83,26 +107,6 @@
 #define SETPOINT_HEATING        29 // °C
 #define SETPOINT_DEADBAND       2
 
-
-
-#define DEBUG
-
-
-
-#include "bconf/StandardArduino.h"
-#include "conf/ethW5100.h"
-#include "conf/Gateway.h"
-
-#include "grhSoulissCommon.h"
-
-#include <SPI.h>
-#include <EEPROM.h>
-#include "Souliss.h"
-
-#include "grhSoulissNetwork.h"
-#include "grhSoulissCustom.h"
-#include "HW_Setup_Mega_2560.h"
-#include "NTC.h"
 
 
 inline void DefinePinMode()
@@ -347,24 +351,30 @@ void setup()
 	DefinePinMode();
 
 	grhOpenSerialOnDebug();
-	Serial.print("MaCaco_NODES : ");
+/*	Serial.print("MaCaco_NODES : ");
 	Serial.println(MaCaco_NODES);
 	Serial.print("MaCaco_SLOT : ");
 	Serial.println(MaCaco_SLOT);	
+	Serial.print("MaCaco_MEMMAP : ");
+	Serial.println(MaCaco_MEMMAP,HEX);*/
 	Initialize();
-	grhSetIpAddress(IP_ADDRESS_TESTB1);
+	grhSetIpAddress(IP_ADDRESS_TESTB1); 
 	SetAsGateway(IP_ADDRESS_TESTB1);
+	TODO(** Modify address to IP_ADDRESS_LOFTB1 **)
 	SetAddressingServer();
 	grhInitMEGA();
 
 	// LIST OF NODES
 	SetAsPeerNode(IP_ADDRESS_TESTB2,1);
 	SetAsPeerNode(RS485_ADDRESS_TESTB2,2);
-//	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);
-//	SetAsPeerNode(RS485_ADDRESS_ROW1B2,2);
-	SetAsPeerNode(RS485_ADDRESS_ROW1B3,3);
+
+	TODO(SetAsPeerNode);
+
+/*	SetAsPeerNode(RS485_ADDRESS_ROW1B3,3);
 	SetAsPeerNode(RS485_ADDRESS_ROW1B4,4);
 
+	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);
+	SetAsPeerNode(RS485_ADDRESS_ROW1B2,2);
 	SetAsPeerNode(IP_ADDRESS_ROW2B1,5);
 	SetAsPeerNode(RS485_ADDRESS_ROW2B2,6);
 	SetAsPeerNode(RS485_ADDRESS_ROW2B3,7);
@@ -375,7 +385,7 @@ void setup()
 	SetAsPeerNode(IP_ADDRESS_BED2B1,10);
 	SetAsPeerNode(RS485_ADDRESS_BED2B2,11);
 	SetAsPeerNode(RS485_ADDRESS_BED2B3,12);
-
+*/
 	DefineTypicals();
 }
 

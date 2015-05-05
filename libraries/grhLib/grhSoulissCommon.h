@@ -10,7 +10,7 @@
 // Define the souliss network dimensions
 #define MaCaco_NODESIZE_INSKETCH
 #define MaCaco_NODES			30		// MaCaco_NODES < 255
-#define MaCaco_SLOT				37 		// MaCaco_SLOT < VNET_MAX_PAYLOAD - MaCaco_HEADER and MaCaco_SLOT  < 255 / 3
+#define MaCaco_SLOT				35 		// MaCaco_SLOT < VNET_MAX_PAYLOAD - MaCaco_HEADER and MaCaco_SLOT  < 255 / 3
 
 #define DO_PRAGMA(x) _Pragma (#x)
 #define TODO(x) DO_PRAGMA(message ("TODO - " #x))
