@@ -85,7 +85,7 @@
 
 
 
-//#define DEBUG
+#define DEBUG
 
 
 
@@ -326,7 +326,7 @@ inline void ProcessTimers()
 	else
 	{
 		mInput(HEATING_MIX_VALVE_SWITCH) = Souliss_T1n_OffCmd;
-//		mInput(HEATING_MIX_VALVE_DIRECTION) = Souliss_T1n_OffCmd;
+		mInput(HEATING_MIX_VALVE_DIRECTION) = Souliss_T1n_OffCmd;
 	}
 
 	Souliss_T11_Timer(memory_map, HEATING_KITCHEN);
@@ -347,6 +347,10 @@ void setup()
 	DefinePinMode();
 
 	grhOpenSerialOnDebug();
+	Serial.print("MaCaco_NODES : ");
+	Serial.println(MaCaco_NODES);
+	Serial.print("MaCaco_SLOT : ");
+	Serial.println(MaCaco_SLOT);	
 	Initialize();
 	grhSetIpAddress(IP_ADDRESS_TESTB1);
 	SetAsGateway(IP_ADDRESS_TESTB1);
