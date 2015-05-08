@@ -36,7 +36,7 @@ MEGA with Ethernet only acting as GATEWAY
 #define TEMP_BOILER_BOTTOM              11
 #define TEMP_BOILER_BOTTOM_H    		12
 
-#define HEATPUMP_AUTO          			13
+#define HEATPUMP_MANUAL_MODE   			13
 #define HEATPUMP_REMOTE_SWITCH          14
 #define HEATPUMP_CIRCULATION_PUMP       15
 #define HEATPUMP_ACS_REQUEST            16
@@ -173,7 +173,7 @@ inline void DefineTypicals()
 	Set_SimpleLight(LIGHT_TERRACE_3);
 	Set_SimpleLight(LIGHT_TOILET);
 
-	Souliss_SetT11(memory_map, HEATPUMP_AUTO);
+	Souliss_SetT11(memory_map, HEATPUMP_MANUAL_MODE);
 	Souliss_SetT11(memory_map, HEATPUMP_REMOTE_SWITCH);
 	Souliss_SetT11(memory_map, HEATPUMP_CIRCULATION_PUMP);
 	Souliss_SetT11(memory_map, HEATPUMP_ACS_REQUEST);
@@ -209,7 +209,7 @@ inline void ProcessLogics()
 	Logic_SimpleLight(LIGHT_TERRACE_3);
 	Logic_SimpleLight(LIGHT_TOILET);
 
-	Souliss_Logic_T11(memory_map, HEATPUMP_AUTO, &data_changed);
+	Souliss_Logic_T11(memory_map, HEATPUMP_MANUAL_MODE, &data_changed);
 	Souliss_Logic_T11(memory_map, HEATPUMP_REMOTE_SWITCH, &data_changed);
 	Souliss_Logic_T11(memory_map, HEATPUMP_CIRCULATION_PUMP, &data_changed);
 	Souliss_Logic_T11(memory_map, HEATPUMP_ACS_REQUEST, &data_changed);
@@ -234,6 +234,7 @@ inline void SetOutputs()
 	LowDigOut(LIGHT_TERRACE_2_PIN, Souliss_T1n_Coil, LIGHT_TERRACE_2);
 	LowDigOut(LIGHT_TERRACE_3_PIN, Souliss_T1n_Coil, LIGHT_TERRACE_3);
 	LowDigOut(LIGHT_TOILET_PIN, Souliss_T1n_Coil, LIGHT_TOILET);
+	
 	LowDigOut(HEATPUMP_REMOTE_SWITCH_PIN, Souliss_T1n_Coil, HEATPUMP_REMOTE_SWITCH);
 	LowDigOut(HEATPUMP_CIRCULATION_PUMP_PIN, Souliss_T1n_Coil, HEATPUMP_CIRCULATION_PUMP);
 	LowDigOut(HEATPUMP_ACS_REQUEST_PIN, Souliss_T1n_Coil, HEATPUMP_ACS_REQUEST);
@@ -288,7 +289,7 @@ inline void ProcessTimers()
 
 	// SLOW LOGICS                
 	
-	if(mOutput(HEATPUMP_AUTO) == Souliss_T1n_OnCoil) 
+	if(mOutput(HEATPUMP_MANUAL_MODE) == Souliss_T1n_OffCoil) 
 	{
 		// control ACS production
 		if (temperature_acs < SETPOINT_ACS - SETPOINT_DEADBAND)
