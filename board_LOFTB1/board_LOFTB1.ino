@@ -173,11 +173,11 @@ inline void DefineTypicals()
 	Set_SimpleLight(LIGHT_TERRACE_3);
 	Set_SimpleLight(LIGHT_TOILET);
 
-	Souliss_SetT11(memory_map, HEATPUMP_MANUAL_MODE);
-	Souliss_SetT11(memory_map, HEATPUMP_REMOTE_SWITCH);
-	Souliss_SetT11(memory_map, HEATPUMP_CIRCULATION_PUMP);
-	Souliss_SetT11(memory_map, HEATPUMP_ACS_REQUEST);
-	Souliss_SetT11(memory_map, HEATPUMP_COOL);
+	Souliss_SetT12(memory_map, HEATPUMP_MANUAL_MODE);
+	Souliss_SetT12(memory_map, HEATPUMP_REMOTE_SWITCH);
+	Souliss_SetT12(memory_map, HEATPUMP_CIRCULATION_PUMP);
+	Souliss_SetT12(memory_map, HEATPUMP_ACS_REQUEST);
+	Souliss_SetT12(memory_map, HEATPUMP_COOL);
 	
 	Set_Temperature(TEMP_BOILER_ACS);
 	Set_Temperature(TEMP_BOILER_HEATING);
@@ -209,11 +209,11 @@ inline void ProcessLogics()
 	Logic_SimpleLight(LIGHT_TERRACE_3);
 	Logic_SimpleLight(LIGHT_TOILET);
 
-	Souliss_Logic_T11(memory_map, HEATPUMP_MANUAL_MODE, &data_changed);
-	Souliss_Logic_T11(memory_map, HEATPUMP_REMOTE_SWITCH, &data_changed);
-	Souliss_Logic_T11(memory_map, HEATPUMP_CIRCULATION_PUMP, &data_changed);
-	Souliss_Logic_T11(memory_map, HEATPUMP_ACS_REQUEST, &data_changed);
-	Souliss_Logic_T11(memory_map, HEATPUMP_COOL, &data_changed);
+	Souliss_Logic_T12(memory_map, HEATPUMP_MANUAL_MODE, &data_changed);
+	Souliss_Logic_T12(memory_map, HEATPUMP_REMOTE_SWITCH, &data_changed);
+	Souliss_Logic_T12(memory_map, HEATPUMP_CIRCULATION_PUMP, &data_changed);
+	Souliss_Logic_T12(memory_map, HEATPUMP_ACS_REQUEST, &data_changed);
+	Souliss_Logic_T12(memory_map, HEATPUMP_COOL, &data_changed);
 
 	Logic_Temperature(TEMP_BOILER_ACS);
 	Logic_Temperature(TEMP_BOILER_HEATING);
@@ -234,7 +234,7 @@ inline void SetOutputs()
 	LowDigOut(LIGHT_TERRACE_2_PIN, Souliss_T1n_Coil, LIGHT_TERRACE_2);
 	LowDigOut(LIGHT_TERRACE_3_PIN, Souliss_T1n_Coil, LIGHT_TERRACE_3);
 	LowDigOut(LIGHT_TOILET_PIN, Souliss_T1n_Coil, LIGHT_TOILET);
-	
+
 	LowDigOut(HEATPUMP_REMOTE_SWITCH_PIN, Souliss_T1n_Coil, HEATPUMP_REMOTE_SWITCH);
 	LowDigOut(HEATPUMP_CIRCULATION_PUMP_PIN, Souliss_T1n_Coil, HEATPUMP_CIRCULATION_PUMP);
 	LowDigOut(HEATPUMP_ACS_REQUEST_PIN, Souliss_T1n_Coil, HEATPUMP_ACS_REQUEST);
@@ -266,10 +266,11 @@ inline void ProcessTimers()
 	Timer_SimpleLight(LIGHT_TERRACE_3);
 	Timer_SimpleLight(LIGHT_TOILET);
 	
-	Souliss_T11_Timer(memory_map, HEATPUMP_REMOTE_SWITCH);
-	Souliss_T11_Timer(memory_map, HEATPUMP_CIRCULATION_PUMP);
-	Souliss_T11_Timer(memory_map, HEATPUMP_ACS_REQUEST);
-	Souliss_T11_Timer(memory_map, HEATPUMP_COOL);
+	Souliss_T12_Timer(memory_map, HEATPUMP_MANUAL_MODE);
+	Souliss_T12_Timer(memory_map, HEATPUMP_REMOTE_SWITCH);
+	Souliss_T12_Timer(memory_map, HEATPUMP_CIRCULATION_PUMP);
+	Souliss_T12_Timer(memory_map, HEATPUMP_ACS_REQUEST);
+	Souliss_T12_Timer(memory_map, HEATPUMP_COOL);
 
 	float temperature_acs = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_ACS_PIN),TEMP_BOILER_ACS_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_BOILER_ACS, &temperature_acs);
