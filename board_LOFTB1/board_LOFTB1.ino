@@ -283,26 +283,33 @@ inline void ProcessTimers()
 	Souliss_ImportAnalog(memory_map, TEMP_HEATING_FLOW, &temperature_heating_flow);
 	
 	float temperature_heating_return = NTC_RawADCToCelsius( analogRead(TEMP_HEATING_RETURN_PIN),TEMP_HEATING_RETURN_PAD_RESISTANCE );
-	Souliss_ImportAnalog(memory_map, TEMP_HEATING_RETURN, &temperature_heating_return);                  
-	
-	if(mInput(HEATPUMP_AUTO)) 
-	{
-	        if (temperature_acs < SETPOINT_ACS - SETPOINT_DEADBAND)
-				mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OnCmd;
+	Souliss_ImportAnalog(memory_map, TEMP_HEATING_RETURN, &temperature_heating_return);  
 
-			else if (temperature_acs > SETPOINT_ACS + SETPOINT_DEADBAND)
-				mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OffCmd;
-			
+
+	// SLOW LOGICS                
+	
+	if(mOutput(HEATPUMP_AUTO) == Souliss_T1n_OnCoil) 
+	{
+		// control ACS production
+		if (temperature_acs < SETPOINT_ACS - SETPOINT_DEADBAND)
+			mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OnCmd;
+		
+		else if (temperature_acs > SETPOINT_ACS + SETPOINT_DEADBAND)
+			mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OffCmd;
+
+		// control water temperature of storage if there's heating requests from any zone
+		// otherwise just don't care about the temperature of the storage
+		if( mOutput(HVAC_ZONES) && mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil )
+		{	
 			if (temperature_heating < SETPOINT_HEATING - SETPOINT_DEADBAND)
-			{
 				mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OnCmd;
-				mInput(HEATPUMP_COOL) = Souliss_T1n_OffCmd;
-			}
+				
 			else if (temperature_heating > SETPOINT_HEATING + SETPOINT_DEADBAND)
-			{
 				mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd;
-				mInput(HEATPUMP_COOL) = Souliss_T1n_OnCmd;
-			}
+		}
+		else
+			mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd;
+
 	}
 
 	// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
