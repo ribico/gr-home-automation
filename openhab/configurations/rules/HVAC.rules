@@ -17,10 +17,10 @@ OpenHAB Auto mode disable low level control in (Souliss Auto)
 rule "HVAC_HP_OH_Auto"
 when
 	Item HP_OH_Auto changed or
-	Item HP_Souliss_Auto changed
+	Item HP_Manual changed
 then
-	if (HP_Souliss_Auto.state == ON && HP_OH_Auto.state == ON)
-		HP_Souliss_Auto.sendCommand(OFF)
+	if (HP_Manual.state == ON && HP_OH_Auto.state == ON)
+		HP_OH_Auto.sendCommand(OFF)
 
 //	logInfo("HVAC_HP_OH_Auto - ", HP_OH_Auto.toString)
 //	logInfo("HVAC_HP_OH_Auto - ", HP_Souliss_Auto.toString)

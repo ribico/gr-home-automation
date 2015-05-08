@@ -121,7 +121,7 @@ Number Temperature_2F_Bedroom3_SP	"Temp Set Point [%.1f °C]" 	<temperature> (gT
 Number Temperature_2F_Bedroom3_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bedroom3)
 Number UR_2F_Bedroom3		"UR Corrente [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Bedroom3,gTechnicView_Node4) {souliss="T53:5:7"}
 
-Switch HP_Souliss_Auto		"Modalità Auto (Souliss)"	<lock> (gTechnicView_Node12,gHPSettings) {souliss="T11:0:13", autoupdate=false}
+Switch HP_Manual		"Modalità Manual (Souliss)"	<lock> (gTechnicView_Node12,gHPSettings) {souliss="T11:0:13", autoupdate=false}
 Switch HP_OH_Auto			"Modalità Auto (OpenHAB)"	<lock> (gHPSettings)
 Switch HP_Remote_Switch		"Remote Switch" 		<inverter> (gTechnicView_Node12,gHPSettings) {souliss="T11:0:14", autoupdate=false}
 Switch HP_Circulation_Pump	"Pompa Interna" 		<smartheater> (gTechnicView_Node12,gHPSettings) {souliss="T11:0:15", autoupdate=false}
@@ -136,14 +136,14 @@ Number HP_Temp_Heating_Ret	"Temp. Ritorno Pavimento [%.1f °C]"	<temperature> (g
 
 Switch Valves_Manual_Mode		"Valvole in Manuale" <lock>
 
-Switch Valve_2F_Kitchen			"Cucina"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T11:0:22", autoupdate=false}
-Switch Valve_2F_Living			"Soggiorno"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T11:0:25", autoupdate=false}
-Switch Valve_2F_Bath1			"Bagno 1"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T11:0:27", autoupdate=false}
-Switch Valve_2F_Bath2			"Bagno 2"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T11:0:23", autoupdate=false}
-Switch Valve_2F_Bedroom1		"Camera 1"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T11:0:28", autoupdate=false}
-Switch Valve_2F_Bedroom2		"Camera 2"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T11:0:26", autoupdate=false}
-Switch Valve_2F_Bedroom3		"Camera 3"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T11:0:24", autoupdate=false}
-Switch Valve_3F_Loft			"Attico"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T11:0:29", autoupdate=false}
+Switch Valve_2F_Bedroom1		"Camera 1"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T1A:0:22:0", autoupdate=false}
+Switch Valve_2F_Bath1			"Bagno 1"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T1A:0:22:1", autoupdate=false}
+Switch Valve_2F_Bedroom2		"Camera 2"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T1A:0:22:2", autoupdate=false}
+Switch Valve_2F_Living			"Soggiorno"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T1A:0:22:3", autoupdate=false}
+Switch Valve_2F_Bedroom3		"Camera 3"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T1A:0:22:4", autoupdate=false}
+Switch Valve_2F_Bath2			"Bagno 2"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T1A:0:22:5", autoupdate=false}
+Switch Valve_2F_Kitchen			"Cucina"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T1A:0:22:6", autoupdate=false}
+Switch Valve_3F_Loft			"Attico"	<heating>  (gTechnicView_Node12,gHVAC_Valves) {souliss="T1A:0:22:7", autoupdate=false}
 	
 
 /* NTP binding demo item */
