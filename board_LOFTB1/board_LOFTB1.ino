@@ -8,7 +8,7 @@ MEGA with Ethernet only acting as GATEWAY
 
 #include "bconf/StandardArduino.h"
 #include "conf/ethW5100.h"
-#include "conf/Gateway.h"
+#include "conf/Gateway_wLastin.h"
 
 #include "grhSoulissCommon.h"
 
@@ -286,6 +286,26 @@ inline void ProcessTimers()
 	
 	float temperature_heating_return = NTC_RawADCToCelsius( analogRead(TEMP_HEATING_RETURN_PIN),TEMP_HEATING_RETURN_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_HEATING_RETURN, &temperature_heating_return);  
+
+
+	// retrieve zone temperatures
+
+	float temp_BED1 	= 	pOutputAsFloat(9,5);
+	float UR_BED1 		= 	pOutputAsFloat(9,7);
+	float temp_BATH1 	=	pOutputAsFloat(12,4); 
+	float UR_BATH1 		=	pOutputAsFloat(12,6); 
+	float temp_BED2 	= 	pOutputAsFloat(10,6);
+	float UR_BED2 		= 	pOutputAsFloat(10,8);
+	float temp_LIVING 	= 	pOutputAsFloat(2,6);
+	float UR_LIVING		= 	pOutputAsFloat(2,8);
+	float temp_BED3 	= 	pOutputAsFloat(5,5);
+	float UR_BED3 		= 	pOutputAsFloat(5,7);
+	float temp_BATH2 	=	pOutputAsFloat(4,6); 
+	float UR_BATH2 		=	pOutputAsFloat(4,8); 
+	float temp_KITCHEN 	=	pOutputAsFloat(7,4); 
+	float UR_KITCHEN	=	pOutputAsFloat(7,6); 
+	float temp_DINING 	=	pOutputAsFloat(3,6); 
+	float UR_DINING		=	pOutputAsFloat(3,8); 
 
 
 	// SLOW LOGICS                
