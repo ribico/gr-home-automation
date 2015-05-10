@@ -13,8 +13,8 @@
  *
  * Schematic:
  *   [Ground] -- [10k-pad-resistor] -- | -- [thermistor] --[Vcc (5 or 3.3v)]
- *                                               |
- *                                          Analog Pin 0
+ *                                     |
+ *                                 Analog Pin 0
  */
 
 /*
