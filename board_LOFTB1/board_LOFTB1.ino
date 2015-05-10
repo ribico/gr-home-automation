@@ -202,6 +202,9 @@ inline void DefineTypicals()
 
 	Souliss_SetT1A(memory_map, HVAC_ZONES);
 	Souliss_SetT1A(memory_map, HEATING_MIX_VALVE);
+
+	// initialize values
+	Souliss_SetInput(memory_map, HEATPUMP_REMOTE_SWITCH, Souliss_T1n_RGBLamp_OnCmd);
 }
 
 inline void ReadInputs()
