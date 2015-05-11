@@ -36,7 +36,7 @@ void setup()
 	grhDINo_v2_HW_Setup();
 
 	grhSetIpAddress(IP_ADDRESS_TESTB2);
-	grhSetUSARTAddress(RS485_ADDRESS_TESTB1, 0x0000);
+	grhSetUSARTAddress(RS485_ADDRESS_TESTB2, 0x0000);
 
 
 	// DEFINE TYPICALS

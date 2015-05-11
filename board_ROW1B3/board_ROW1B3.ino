@@ -50,7 +50,7 @@ inline void DefineTypicals()
 inline void ReadInputs()
 {
 	LightsGroupIn(IN1, LIGHT_DINING_1, LIGHT_DINING_3);
-	DigIn(IN2, Souliss_T1n_ToggleCmd, LIGHT_STAIRS);
+	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_STAIRS, true);
 }
 
 inline void ProcessLogics()

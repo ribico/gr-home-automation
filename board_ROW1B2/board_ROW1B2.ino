@@ -50,7 +50,7 @@ inline void DefineTypicals()
 inline void ReadInputs()
 {
 	LightsGroupIn(IN1, LIGHT_KITCHEN_1, LIGHT_KITCHEN_3);
-	DigIn(IN2, Souliss_T1n_ToggleCmd, LIGHT_GW2);
+	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_GW2, true);
 }
 
 inline void ProcessLogics()
@@ -85,14 +85,12 @@ inline void ProcessTimers()
 void setup()
 {
 	grhOpenSerialOnDebug();
-	delay(10000);
+//	delay(10000);
 
 	grhDINo_v2_HW_Setup();
 
 	PowerDownEthernet(); // pure RS485 node
-	grhSetUSARTAddress(RS485_ADDRESS_TESTB2, RS485_ADDRESS_TESTB1);
-	TODO(change address);
-
+	grhSetUSARTAddress(RS485_ADDRESS_ROW1B2, RS485_ADDRESS_ROW1B1);
 
 	DefineTypicals();
 }

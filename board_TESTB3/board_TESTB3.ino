@@ -32,7 +32,7 @@ void setup()
 	grhDINo_v2_HW_Setup();
 
 	PowerDownEthernet(); // pure RS485 node
-	grhSetUSARTAddress(RS485_ADDRESS_TESTB2, RS485_ADDRESS_TESTB1);
+	grhSetUSARTAddress(RS485_ADDRESS_TESTB3, RS485_ADDRESS_TESTB2);
 
 
 	// DEFINE TYPICALS
