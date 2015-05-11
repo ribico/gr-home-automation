@@ -126,10 +126,16 @@ MEGA with Ethernet only acting as GATEWAY
 #define SETPOINT_DEADBAND       2
 
 
-#define HEATPUMP_AUTO 		(mOutput(HEATPUMP_MANUAL_MODE) == Souliss_T1n_OffCoil)
-#define HEAT_MODE			(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
-#define ZONE_REQUEST		mOutput(HVAC_ZONES)
-#define HEAT_ZONE_REQUEST	(ZONE_REQUEST && HEAT_MODE)
+#define HEATPUMP_AUTO 				(mOutput(HEATPUMP_MANUAL_MODE) == Souliss_T1n_OffCoil)
+#define HEAT_MODE					(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
+#define COOL_MODE					(mOutput(HEATPUMP_COOL) == Souliss_T1n_OnCoil)
+#define ZONE_REQUEST				mOutput(HVAC_ZONES)
+#define HEAT_ZONE_REQUEST			(ZONE_REQUEST && HEAT_MODE)
+#define COOL_ZONE_REQUEST			(ZONE_REQUEST && COOL_MODE)
+#define ACS_PRODUCTION				(mOutput(HEATPUMP_ACS_REQUEST) == Souliss_T1n_OnCoil)
+#define SET_FLOW_TO_BOILER 			mInput(MAIN_3WAY_VALVE) = Souliss_T2n_OpenCmd;
+#define SET_FLOW_TO_DISTRIBUTION 	mInput(MAIN_3WAY_VALVE) = Souliss_T2n_CloseCmd;
+
 
 
 inline void DefinePinMode()
@@ -219,11 +225,11 @@ inline void DefineTypicals()
 	Souliss_SetT1A(memory_map, HVAC_ZONES);
 	Souliss_SetT1A(memory_map, HVAC_VALVES);
 
-	Souliss_SetT21(memory_map, MAIN_3WAY_VALVE);
+	Souliss_SetT22(memory_map, MAIN_3WAY_VALVE);
 
 	// initialize values
 	Souliss_SetInput(memory_map, HEATPUMP_REMOTE_SWITCH, Souliss_T1n_RGBLamp_OnCmd);
-	Souliss_SetInput(memory_map, LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+//	Souliss_SetInput(memory_map, LIGHT_LOFT_1, Souliss_T1n_OnCmd);
 }
 
 inline void ReadInputs()
@@ -236,19 +242,19 @@ inline void ReadInputs()
 	Souliss_LowDigIn(LIGHT_TOILET_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TOILET, true);
 
 
-	if (!digitalRead(MAIN_3WAY_VALVE_BOILER_LIMIT_PIN))
+/*	if (MAIN_3WAY_VALVE_BOILER_LIM)
 		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | MAIN_3WAY_VALVE_BOILER_MASK; // set boiler bit
 
 	else if (mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
 		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & !MAIN_3WAY_VALVE_BOILER_MASK;	// unset boiler bit
 
 
-	if (!digitalRead(MAIN_3WAY_VALVE_DISTRIBUTION_LIMIT_PIN))
+	if (MAIN_3WAY_VALVE_DISTR_LIM)
 		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | MAIN_3WAY_VALVE_DISTRIBUTION_MASK; // set distribution bit
 
 	else if (mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_DISTRIBUTION_MASK)
 		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & !MAIN_3WAY_VALVE_DISTRIBUTION_MASK;	// unset distribution bit
-
+*/
 }
 
 inline void ProcessLogics()
@@ -276,7 +282,7 @@ inline void ProcessLogics()
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
 
-	Souliss_Logic_T21(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
+	Souliss_Logic_T22(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
 
 }
 
@@ -342,21 +348,33 @@ Serial.println(temp_DINING);
 	{
 		// control ACS production
 		if (temperature_acs < SETPOINT_ACS - SETPOINT_DEADBAND)
+		{
+			SET_FLOW_TO_BOILER;
 			mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OnCmd;
+		}
 		
 		else if (temperature_acs > SETPOINT_ACS + SETPOINT_DEADBAND)
 			mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OffCmd;
 
-		// control hot water storage if there's heating requests from any zone
-		// otherwise just don't care about the temperature of the storage
+
 		if( HEAT_ZONE_REQUEST )
 		{	
+			SET_FLOW_TO_BOILER;
+
+			// control hot water storage if there's heating requests from any zone
+			// otherwise just don't care about the temperature of the storage
 			if (temperature_heating < SETPOINT_HEATING - SETPOINT_DEADBAND)
 				mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OnCmd;
 				
 			else if (temperature_heating > SETPOINT_HEATING + SETPOINT_DEADBAND)
 				mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd;
 		}
+
+		else if( COOL_ZONE_REQUEST )
+		{
+			SET_FLOW_TO_DISTRIBUTION;
+		}
+
 		else
 			mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd;
 
@@ -443,7 +461,7 @@ inline void ProcessTimers()
 	Souliss_T12_Timer(memory_map, HEATPUMP_ACS_REQUEST);
 	Souliss_T12_Timer(memory_map, HEATPUMP_COOL);
 
-	Souliss_T21_Timer(memory_map, MAIN_3WAY_VALVE);
+	Souliss_T22_Timer(memory_map, MAIN_3WAY_VALVE);
 }
 
 
