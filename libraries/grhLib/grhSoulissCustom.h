@@ -50,11 +50,17 @@ U8 Souliss_DigInHoldDuration(U8 pin, U8 *memory_map, U8 slot)
 
 U8 Souliss_DigInHoldDuration_Helper(U8 pin, U8 pin_value, U8 *memory_map, U8 firstSlot, U8 lastSlot)
 {
-	if(pin_value && !InPin[pin])
+	if (pin_value == PINRESET) // unpressed button
 	{
-		InPin[pin] = true;
+		InPin[pin] = PINRESET;
+		return MaCaco_NODATACHANGED;
+	}
+
+	// if here the button is pressed
+	if(InPin[pin] == PINRESET) // it was unpressed before
+	{
+		InPin[pin] = PINSET;
 		time = millis();								// Record time
-//		Serial.println("button first press");
 		// this is the first cycle detecting the button press: current input=1, previous input=0
 
 		// verify if some of the lights in the group are ON
@@ -62,7 +68,6 @@ U8 Souliss_DigInHoldDuration_Helper(U8 pin, U8 pin_value, U8 *memory_map, U8 fir
 		{
 			if(memory_map[MaCaco_OUT_s + i] == Souliss_T1n_OnCoil)
 			{
-//				Serial.println("group ON -> turn it OFF");
 				// there's at least one light ON
 				// the user must have been pressing to turn everything OFF
 				// then cycle on all the remaining slots to put set all of them to OFF
@@ -72,20 +77,15 @@ U8 Souliss_DigInHoldDuration_Helper(U8 pin, U8 pin_value, U8 *memory_map, U8 fir
 				return MaCaco_DATACHANGED; 
 			}
 		}
-//		Serial.println("group OFF -> turn it ON");
 
-		// if here all lights were OFF
-/*
-		// the user must have been pressing to turn some lights ON
-		// let's start to turn ON the first light in the group
-		memory_map[MaCaco_IN_s + firstSlot] = Souliss_T1n_OnCmd;
-		return MaCaco_DATACHANGED;
-*/
-		// do nothing to filter false actviations for spikes
+		// do nothing to filter false activations for spikes
 		// the first slot will be set to on on the next cicle
+
+		// if here all lights were OFF (remember it with InPin[pin]=2)
+		InPin[pin] = PINACTIVE;
 		return MaCaco_NODATACHANGED;
 	}
-	else if(pin_value && InPin[pin] && (abs(millis()-time) > 0) && (abs(millis()-time) < STEP_DURATION))
+	else if(InPin[pin]==PINACTIVE && (abs(millis()-time) > 0) && (abs(millis()-time) < STEP_DURATION))
 	{
 		if(memory_map[MaCaco_OUT_s + firstSlot] != Souliss_T1n_OnCoil)
 		{
@@ -96,7 +96,7 @@ U8 Souliss_DigInHoldDuration_Helper(U8 pin, U8 pin_value, U8 *memory_map, U8 fir
 		}
 
 	}	
-	else if(pin_value && InPin[pin] && (abs(millis()-time) > STEP_DURATION))
+	else if(InPin[pin]==PINACTIVE && (abs(millis()-time) > STEP_DURATION))
 	{
 		// this cycle is executed while the button is kept pressed
 		// the current input is 1, the previous input was 1 and some time passed from the first press
@@ -104,10 +104,7 @@ U8 Souliss_DigInHoldDuration_Helper(U8 pin, U8 pin_value, U8 *memory_map, U8 fir
 		U8 powered_lights_count = (U8) ( abs(millis()-time) / STEP_DURATION + 1 );
 		if (powered_lights_count > lastSlot - firstSlot + 1)
 			powered_lights_count = lastSlot - firstSlot + 1;
-
-//		Serial.print("powered_lights_count : ");
-//		Serial.println(powered_lights_count);		
-		
+	
 		U8 MaCaco_STATUS = MaCaco_NODATACHANGED;
 
 		for(U8 i=0; i<powered_lights_count; i++)
@@ -121,8 +118,6 @@ U8 Souliss_DigInHoldDuration_Helper(U8 pin, U8 pin_value, U8 *memory_map, U8 fir
 		}
 		return MaCaco_STATUS;
 	}
-	else if(!pin_value) // the button has been released
-		InPin[pin] = false;
 	
 	return MaCaco_NODATACHANGED;
 }
