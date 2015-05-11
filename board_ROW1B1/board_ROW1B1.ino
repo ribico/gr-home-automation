@@ -61,12 +61,12 @@ inline void ProcessTimers()
 void setup()
 {
 	grhOpenSerialOnDebug();
-	delay(10000);
+//	delay(10000);
 
 	grhDINo_v2_HW_Setup();
 
-	grhSetIpAddress(IP_ADDRESS_TESTB2); TODO(modify address to IP_ADDRESS_ROW1B1);
-	grhSetUSARTAddress(RS485_ADDRESS_TESTB1, 0x0000); TODO(modify address to RS485_ADDRESS_ROW1B1);
+	grhSetIpAddress(IP_ADDRESS_ROW1B1);
+	grhSetUSARTAddress(RS485_ADDRESS_ROW1B1, 0x0000);
 
 	DefineTypicals();
 }

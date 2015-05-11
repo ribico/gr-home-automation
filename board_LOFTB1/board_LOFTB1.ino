@@ -4,7 +4,7 @@ MEGA with Ethernet only acting as GATEWAY
 
 ***********************/
 
-#define DEBUG
+//#define DEBUG
 
 #include "bconf/StandardArduino.h"
 #include "conf/ethW5100.h"
@@ -402,23 +402,18 @@ void setup()
 	Serial.print("MaCaco_MEMMAP : ");
 	Serial.println(MaCaco_MEMMAP,HEX);*/
 	Initialize();
-	grhSetIpAddress(IP_ADDRESS_TESTB1); 
+	grhSetIpAddress(IP_ADDRESS_LOFTB1); 
 	SetAsGateway(IP_ADDRESS_TESTB1);
-	TODO(** Modify address to IP_ADDRESS_LOFTB1 **)
 	SetAddressingServer();
 	grhInitMEGA();
 
 	// LIST OF NODES
-	SetAsPeerNode(IP_ADDRESS_TESTB2,1);
-	SetAsPeerNode(RS485_ADDRESS_TESTB2,2);
-
-	TODO(SetAsPeerNode);
-
-/*	SetAsPeerNode(RS485_ADDRESS_ROW1B3,3);
-	SetAsPeerNode(RS485_ADDRESS_ROW1B4,4);
-
 	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);
 	SetAsPeerNode(RS485_ADDRESS_ROW1B2,2);
+	SetAsPeerNode(RS485_ADDRESS_ROW1B3,3);
+	SetAsPeerNode(RS485_ADDRESS_ROW1B4,4);
+
+
 	SetAsPeerNode(IP_ADDRESS_ROW2B1,5);
 	SetAsPeerNode(RS485_ADDRESS_ROW2B2,6);
 	SetAsPeerNode(RS485_ADDRESS_ROW2B3,7);
@@ -429,7 +424,7 @@ void setup()
 	SetAsPeerNode(IP_ADDRESS_BED2B1,10);
 	SetAsPeerNode(RS485_ADDRESS_BED2B2,11);
 	SetAsPeerNode(RS485_ADDRESS_BED2B3,12);
-*/
+
 	DefineTypicals();
 }
 
