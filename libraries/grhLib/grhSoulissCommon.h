@@ -46,3 +46,6 @@
 									else\
 										TurnOnLED();\				
 								}
+
+#define SHUTTER_SHORT_TIMEOUT		(Souliss_T2n_Timer_Off + 11)
+#define SHUTTER_LONG_TIMEOUT		(Souliss_T2n_Timer_Off + 17)
