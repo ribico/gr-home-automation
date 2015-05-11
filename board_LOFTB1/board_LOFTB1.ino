@@ -267,25 +267,42 @@ inline void ProcessSlowLogics()
 
 
 	// retrieve zone temperatures
-/*
-	float temp_BED1 	= 	pOutputAsFloat(9,5);
-	float UR_BED1 		= 	pOutputAsFloat(9,7);
-	float temp_BATH1 	=	pOutputAsFloat(12,4); 
-	float UR_BATH1 		=	pOutputAsFloat(12,6); 
-	float temp_BED2 	= 	pOutputAsFloat(10,6);
-	float UR_BED2 		= 	pOutputAsFloat(10,8);
-	float temp_LIVING 	= 	pOutputAsFloat(2,6);
-	float UR_LIVING		= 	pOutputAsFloat(2,8);
-	float temp_BED3 	= 	pOutputAsFloat(5,5);
-	float UR_BED3 		= 	pOutputAsFloat(5,7);
-	float temp_BATH2 	=	pOutputAsFloat(4,6); 
-	float UR_BATH2 		=	pOutputAsFloat(4,8); 
+
+	float temp_BED1 	= 	pOutputAsFloat(9,4);
+	float UR_BED1 		= 	pOutputAsFloat(9,6);
+	float temp_BATH1 	=	pOutputAsFloat(12,3); 
+	float UR_BATH1 		=	pOutputAsFloat(12,5); 
+	float temp_BED2 	= 	pOutputAsFloat(10,5);
+	float UR_BED2 		= 	pOutputAsFloat(10,7);
+	float temp_LIVING 	= 	pOutputAsFloat(2,5);
+	float UR_LIVING		= 	pOutputAsFloat(2,7);
+	float temp_BED3 	= 	pOutputAsFloat(5,4);
+	float UR_BED3 		= 	pOutputAsFloat(5,6);
+	float temp_BATH2 	=	pOutputAsFloat(4,5); 
+	float UR_BATH2 		=	pOutputAsFloat(4,7); 
 	float temp_KITCHEN 	=	pOutputAsFloat(7,4); 
 	float UR_KITCHEN	=	pOutputAsFloat(7,6); 
-	float temp_DINING 	=	pOutputAsFloat(3,6); 
-	float UR_DINING		=	pOutputAsFloat(3,8); 
-*/              
-	
+	float temp_DINING 	=	pOutputAsFloat(3,5); 
+	float UR_DINING		=	pOutputAsFloat(3,7); 
+
+/*
+Serial.print("temp_BED1: ");
+Serial.print(temp_BED1);
+Serial.print("\ttemp_BATH1: ");
+Serial.print(temp_BATH1);
+Serial.print("\ttemp_BED2: ");
+Serial.print(temp_BED2);
+Serial.print("\ttemp_LIVING: ");
+Serial.print(temp_LIVING);
+Serial.print("\ttemp_BED3: ");
+Serial.print(temp_BED3);
+Serial.print("\ttemp_BATH2: ");
+Serial.print(temp_BATH2);
+Serial.print("\ttemp_KITCHEN: ");
+Serial.print(temp_KITCHEN);
+Serial.print("\ttemp_DINING: ");
+Serial.println(temp_DINING);
+*/
 	if( HEATPUMP_AUTO ) 
 	{
 		// control ACS production
