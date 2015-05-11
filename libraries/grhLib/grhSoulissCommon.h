@@ -49,3 +49,5 @@
 
 #define SHUTTER_SHORT_TIMEOUT		(Souliss_T2n_Timer_Off + 11)
 #define SHUTTER_LONG_TIMEOUT		(Souliss_T2n_Timer_Off + 17)
+#define MAIN_3WAY_VALVE_TIMEOUT		(Souliss_T2n_Timer_Off + 5)
+

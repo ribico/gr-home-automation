@@ -59,10 +59,13 @@ MEGA with Ethernet only acting as GATEWAY
 #	define HVAC_MASK_KITCHEN		0x40
 #	define HVAC_MASK_LOFT			0x80
 
-#define HEATING_MIX_VALVE 						25
-#	define HEATING_MIX_VALVE_SWITCH_MASK		0x01
-#	define HEATING_MIX_VALVE_DIRECTION_MASK		0x02
+#define HVAC_VALVES 							25
+#	define MAIN_3WAY_VALVE_BOILER_MASK			0x01
+#	define MAIN_3WAY_VALVE_DISTRIBUTION_MASK	0x02
+#	define HEATING_MIX_VALVE_SWITCH_MASK		0x04
+#	define HEATING_MIX_VALVE_DIRECTION_MASK		0x08
 
+#define MAIN_3WAY_VALVE				26
 
 
 
@@ -81,16 +84,22 @@ MEGA with Ethernet only acting as GATEWAY
 #define TEMP_FANCOIL_FLOW_PAD_RESISTANCE      9830 // measured
 
 
-// DEFINE OUTPUT PINs
-// ** DO NOT FORGET TO SET pinMode to OUTPUT **
-#define HEATING_MIX_VALVE_SWITCH_PIN			28
-#define HEATING_MIX_VALVE_DIRECTION_PIN			29
+// DEFINE INPUT PIs
 #define LIGHT_LOFT_1_PIN                        30
 #define LIGHT_LOFT_2_PIN                        31
 #define LIGHT_TERRACE_1_PIN                     32
 #define LIGHT_TERRACE_2_PIN                     33
 #define LIGHT_TERRACE_3_PIN                     34
 #define LIGHT_TOILET_PIN                        35
+#define MAIN_3WAY_VALVE_BOILER_LIMIT_PIN		9
+#define MAIN_3WAY_VALVE_DISTRIBUTION_LIMIT_PIN	8
+
+// DEFINE OUTPUT PINs
+// ** DO NOT FORGET TO SET pinMode to OUTPUT **
+#define MAIN_3WAY_VALVE_BOILER_PIN				26
+#define MAIN_3WAY_VALVE_DISTRIBUTION_PIN		27
+#define HEATING_MIX_VALVE_SWITCH_PIN			28
+#define HEATING_MIX_VALVE_DIRECTION_PIN			29
 #define HEATPUMP_REMOTE_SWITCH_PIN              36
 #define HEATPUMP_CIRCULATION_PUMP_PIN   		37
 #define HEATPUMP_ACS_REQUEST_PIN                38
@@ -132,6 +141,11 @@ inline void DefinePinMode()
 	pinMode(LIGHT_TERRACE_3_PIN_IN, INPUT_PULLUP);
 	pinMode(LIGHT_TOILET_PIN_IN, INPUT_PULLUP);
 
+	pinMode(MAIN_3WAY_VALVE_DISTRIBUTION_LIMIT_PIN, INPUT_PULLUP);
+	pinMode(MAIN_3WAY_VALVE_BOILER_LIMIT_PIN, INPUT_PULLUP);
+
+	digitalWrite(MAIN_3WAY_VALVE_BOILER_PIN, HIGH);
+	digitalWrite(MAIN_3WAY_VALVE_DISTRIBUTION_PIN, HIGH);
 	digitalWrite(HEATING_MIX_VALVE_SWITCH_PIN, HIGH);
 	digitalWrite(HEATING_MIX_VALVE_DIRECTION_PIN, HIGH);
 	digitalWrite(LIGHT_LOFT_1_PIN, HIGH);
@@ -153,6 +167,8 @@ inline void DefinePinMode()
 	digitalWrite(ZONE_SWITCH_LIVING_PIN, HIGH);
 	digitalWrite(ZONE_SWITCH_LOFT_PIN, HIGH);
 	
+	pinMode(MAIN_3WAY_VALVE_BOILER_PIN, OUTPUT);
+	pinMode(MAIN_3WAY_VALVE_DISTRIBUTION_PIN, OUTPUT);
 	pinMode(HEATING_MIX_VALVE_SWITCH_PIN, OUTPUT);
 	pinMode(HEATING_MIX_VALVE_DIRECTION_PIN, OUTPUT);
 
@@ -201,10 +217,13 @@ inline void DefineTypicals()
 	Set_Temperature(TEMP_FANCOIL_FLOW);
 
 	Souliss_SetT1A(memory_map, HVAC_ZONES);
-	Souliss_SetT1A(memory_map, HEATING_MIX_VALVE);
+	Souliss_SetT1A(memory_map, HVAC_VALVES);
+
+	Souliss_SetT21(memory_map, MAIN_3WAY_VALVE);
 
 	// initialize values
 	Souliss_SetInput(memory_map, HEATPUMP_REMOTE_SWITCH, Souliss_T1n_RGBLamp_OnCmd);
+	Souliss_SetInput(memory_map, LIGHT_LOFT_1, Souliss_T1n_OnCmd);
 }
 
 inline void ReadInputs()
@@ -215,6 +234,20 @@ inline void ReadInputs()
 	Souliss_LowDigIn(LIGHT_TERRACE_2_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_2, true);
 	Souliss_LowDigIn(LIGHT_TERRACE_3_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_3, true);
 	Souliss_LowDigIn(LIGHT_TOILET_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TOILET, true);
+
+
+	if (!digitalRead(MAIN_3WAY_VALVE_BOILER_LIMIT_PIN))
+		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | MAIN_3WAY_VALVE_BOILER_MASK; // set boiler bit
+
+	else if (mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
+		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & !MAIN_3WAY_VALVE_BOILER_MASK;	// unset boiler bit
+
+
+	if (!digitalRead(MAIN_3WAY_VALVE_DISTRIBUTION_LIMIT_PIN))
+		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | MAIN_3WAY_VALVE_DISTRIBUTION_MASK; // set distribution bit
+
+	else if (mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_DISTRIBUTION_MASK)
+		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & !MAIN_3WAY_VALVE_DISTRIBUTION_MASK;	// unset distribution bit
 
 }
 
@@ -241,7 +274,9 @@ inline void ProcessLogics()
 	Logic_Temperature(TEMP_FANCOIL_FLOW);
 
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
-	Souliss_Logic_T1A(memory_map, HEATING_MIX_VALVE, &data_changed);
+	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
+
+	Souliss_Logic_T21(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
 
 }
 
@@ -337,23 +372,23 @@ Serial.println(temp_DINING);
 		if (temperature_floor_flow > SETPOINT_HEATING + SETPOINT_DEADBAND)
 		{
 			// mix valve on, direction relay off
-			mInput(HEATING_MIX_VALVE) = HEATING_MIX_VALVE_SWITCH_MASK; 
+			mInput(HVAC_VALVES) = HEATING_MIX_VALVE_SWITCH_MASK; 
 		}	
 		else if (temperature_floor_flow < SETPOINT_HEATING - SETPOINT_DEADBAND)
 		{
 			// mix valve on, direction relay on
-			mInput(HEATING_MIX_VALVE) = HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK;
+			mInput(HVAC_VALVES) = HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK;
 		}
 		else
 		{
 			// mix valve off (hold the position)
-			mInput(HEATING_MIX_VALVE) = 0x0;
+			mInput(HVAC_VALVES) = 0x0;
 		}		
 	}
 	else
 	{
 		// heating is off, keep the mix valve off.
-		mInput(HEATING_MIX_VALVE) = 0x0;
+		mInput(HVAC_VALVES) = 0x0;
 	}
 
 }
@@ -385,9 +420,12 @@ inline void SetOutputs()
 
 	// heating mix valve on/off and direction
 	digitalWrite(HEATING_MIX_VALVE_SWITCH_PIN, 		
-		!(mOutput(HEATING_MIX_VALVE) & HEATING_MIX_VALVE_SWITCH_MASK) );
+		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK) );
 	digitalWrite(HEATING_MIX_VALVE_DIRECTION_PIN, 
-		!(mOutput(HEATING_MIX_VALVE) & HEATING_MIX_VALVE_DIRECTION_MASK) );
+		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_DIRECTION_MASK) );
+
+	LowDigOut(MAIN_3WAY_VALVE_BOILER_PIN, Souliss_T2n_Coil_Open, MAIN_3WAY_VALVE);
+	LowDigOut(MAIN_3WAY_VALVE_DISTRIBUTION_PIN, Souliss_T2n_Coil_Close, MAIN_3WAY_VALVE);
 }
 
 inline void ProcessTimers()
@@ -404,6 +442,8 @@ inline void ProcessTimers()
 	Souliss_T12_Timer(memory_map, HEATPUMP_CIRCULATION_PUMP);
 	Souliss_T12_Timer(memory_map, HEATPUMP_ACS_REQUEST);
 	Souliss_T12_Timer(memory_map, HEATPUMP_COOL);
+
+	Souliss_T21_Timer(memory_map, MAIN_3WAY_VALVE);
 }
 
 
