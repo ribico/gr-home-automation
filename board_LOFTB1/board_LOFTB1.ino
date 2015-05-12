@@ -29,8 +29,8 @@ MEGA with Ethernet only acting as GATEWAY
 #define LIGHT_TERRACE_3                 5
 #define LIGHT_TOILET                    6
 
-#define TEMP_BOILER_ACS                 7
-#define TEMP_BOILER_ACS_H               8
+#define TEMP_BOILER_SANITARY            7
+#define TEMP_BOILER_SANITARY_H          8
 #define TEMP_BOILER_HEATING             9
 #define TEMP_BOILER_HEATING_H   		10
 #define TEMP_BOILER_BOTTOM              11
@@ -39,7 +39,7 @@ MEGA with Ethernet only acting as GATEWAY
 #define HEATPUMP_MANUAL_MODE   			13
 #define HEATPUMP_REMOTE_SWITCH          14
 #define HEATPUMP_CIRCULATION_PUMP       15
-#define HEATPUMP_ACS_REQUEST            16
+#define HEATPUMP_SANITARY_REQUEST       16
 #define HEATPUMP_COOL                	17      
 
 #define TEMP_FLOOR_FLOW 			18      // floor heating system water temp
@@ -61,27 +61,30 @@ MEGA with Ethernet only acting as GATEWAY
 
 #define HVAC_VALVES 							25
 #	define MAIN_3WAY_VALVE_BOILER_MASK			0x01
-#	define MAIN_3WAY_VALVE_DISTRIBUTION_MASK	0x02
+#	define MAIN_3WAY_VALVE_COLLECTOR_MASK	0x02
 #	define HEATING_MIX_VALVE_SWITCH_MASK		0x04
 #	define HEATING_MIX_VALVE_DIRECTION_MASK		0x08
 
 #define MAIN_3WAY_VALVE				26
 
+#define PUMP_BOILER_FLOOR 			27
+#define PUMP_COLLECTOR_FANCOIL 		28
+#define PUMP_COLLECTOR_FLOOR 		29
 
 
-#define TEMP_BOILER_ACS_PIN 	A0       // analog pin used
-#define TEMP_BOILER_HEATING_PIN A1       // analog pin used
-#define TEMP_BOILER_BOTTOM_PIN  A2       // analog pin used
-#define TEMP_FLOOR_FLOW_PIN   	A3       // analog pin used
-#define TEMP_FLOOR_RETURN_PIN 	A4       // analog pin used
-#define TEMP_FANCOIL_FLOW_PIN 	A5       // analog pin used
+#define TEMP_BOILER_SANITARY_PIN 	A0       // analog pin used
+#define TEMP_BOILER_HEATING_PIN 	A1       // analog pin used
+#define TEMP_BOILER_BOTTOM_PIN  	A2       // analog pin used
+#define TEMP_FLOOR_FLOW_PIN   		A3       // analog pin used
+#define TEMP_FLOOR_RETURN_PIN 		A4       // analog pin used
+#define TEMP_FANCOIL_FLOW_PIN 		A5       // analog pin used
 
-#define TEMP_BOILER_ACS_PAD_RESISTANCE          9800 // measured
+#define TEMP_BOILER_SANITARY_PAD_RESISTANCE 	9800 // measured
 #define TEMP_BOILER_HEATING_PAD_RESISTANCE      9800 // measured
 #define TEMP_BOILER_BOTTOM_PAD_RESISTANCE       9800 // measured
-#define TEMP_FLOOR_FLOW_PAD_RESISTANCE        9830 // measured
-#define TEMP_FLOOR_RETURN_PAD_RESISTANCE      9820 // measured
-#define TEMP_FANCOIL_FLOW_PAD_RESISTANCE      9830 // measured
+#define TEMP_FLOOR_FLOW_PAD_RESISTANCE        	9830 // measured
+#define TEMP_FLOOR_RETURN_PAD_RESISTANCE      	9820 // measured
+#define TEMP_FANCOIL_FLOW_PAD_RESISTANCE      	9830 // measured
 
 
 // DEFINE INPUT PIs
@@ -92,17 +95,20 @@ MEGA with Ethernet only acting as GATEWAY
 #define LIGHT_TERRACE_3_PIN                     34
 #define LIGHT_TOILET_PIN                        35
 #define MAIN_3WAY_VALVE_BOILER_LIMIT_PIN		9
-#define MAIN_3WAY_VALVE_DISTRIBUTION_LIMIT_PIN	8
+#define MAIN_3WAY_VALVE_COLLECTOR_LIMIT_PIN	8
 
 // DEFINE OUTPUT PINs
 // ** DO NOT FORGET TO SET pinMode to OUTPUT **
+#define PUMP_BOILER_FLOOR_PIN					23
+#define PUMP_COLLECTOR_FANCOIL_PIN				24
+#define PUMP_COLLECTOR_FLOOR_PIN				25
 #define MAIN_3WAY_VALVE_BOILER_PIN				26
-#define MAIN_3WAY_VALVE_DISTRIBUTION_PIN		27
+#define MAIN_3WAY_VALVE_COLLECTOR_PIN			27
 #define HEATING_MIX_VALVE_SWITCH_PIN			28
 #define HEATING_MIX_VALVE_DIRECTION_PIN			29
 #define HEATPUMP_REMOTE_SWITCH_PIN              36
 #define HEATPUMP_CIRCULATION_PUMP_PIN   		37
-#define HEATPUMP_ACS_REQUEST_PIN                38
+#define HEATPUMP_SANITARY_REQUEST_PIN           38
 #define HEATPUMP_COOL_PIN                       39
 #define ZONE_SWITCH_BED_1_PIN                   40
 #define ZONE_SWITCH_BED_2_PIN                   41
@@ -121,7 +127,7 @@ MEGA with Ethernet only acting as GATEWAY
 
 
 
-#define SETPOINT_ACS            42 // °C
+#define SETPOINT_SANITARY       42 // °C
 #define SETPOINT_HEATING        29 // °C
 #define SETPOINT_DEADBAND       2
 
@@ -129,12 +135,24 @@ MEGA with Ethernet only acting as GATEWAY
 #define HEATPUMP_AUTO 				(mOutput(HEATPUMP_MANUAL_MODE) == Souliss_T1n_OffCoil)
 #define HEAT_MODE					(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
 #define COOL_MODE					(mOutput(HEATPUMP_COOL) == Souliss_T1n_OnCoil)
+
 #define ZONE_REQUEST				mOutput(HVAC_ZONES)
 #define HEAT_ZONE_REQUEST			(ZONE_REQUEST && HEAT_MODE)
 #define COOL_ZONE_REQUEST			(ZONE_REQUEST && COOL_MODE)
-#define ACS_PRODUCTION				(mOutput(HEATPUMP_ACS_REQUEST) == Souliss_T1n_OnCoil)
-#define SET_FLOW_TO_BOILER 			mInput(MAIN_3WAY_VALVE) = Souliss_T2n_OpenCmd;
-#define SET_FLOW_TO_DISTRIBUTION 	mInput(MAIN_3WAY_VALVE) = Souliss_T2n_CloseCmd;
+
+#define ZONE_REQUEST_CMD			mInput(HVAC_ZONES)
+#define HEAT_ZONE_REQUEST_CMD		(ZONE_REQUEST_CMD && HEAT_MODE)
+#define COOL_ZONE_REQUEST_CMD		(ZONE_REQUEST_CMD && COOL_MODE)
+#define SANITARY_REQUEST_CMD 		(mInput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCmd)
+
+#define SANITARY_PRODUCTION			(mOutput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCoil)
+#define HOT_WATER_PRODUCTION		(HEAT_MODE && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
+#define COOL_WATER_PRODUCTION		(COOL_MODE && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
+
+#define FLOW_TO_BOILER 				(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
+#define FLOW_TO_COLLECTOR			(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK)
+#define SET_FLOW_TO_BOILER 			mInput(MAIN_3WAY_VALVE) = Souliss_T2n_OpenCmd_SW
+#define SET_FLOW_TO_COLLECTOR	 	mInput(MAIN_3WAY_VALVE) = Souliss_T2n_CloseCmd_SW
 
 
 
@@ -147,11 +165,15 @@ inline void DefinePinMode()
 	pinMode(LIGHT_TERRACE_3_PIN_IN, INPUT_PULLUP);
 	pinMode(LIGHT_TOILET_PIN_IN, INPUT_PULLUP);
 
-	pinMode(MAIN_3WAY_VALVE_DISTRIBUTION_LIMIT_PIN, INPUT_PULLUP);
+	pinMode(MAIN_3WAY_VALVE_COLLECTOR_LIMIT_PIN, INPUT_PULLUP);
 	pinMode(MAIN_3WAY_VALVE_BOILER_LIMIT_PIN, INPUT_PULLUP);
 
+	// set all pin to HIGH before switching to OUTPUT mode to avoid false relays activation
+	digitalWrite(PUMP_BOILER_FLOOR_PIN, HIGH);
+	digitalWrite(PUMP_COLLECTOR_FANCOIL_PIN, HIGH);
+	digitalWrite(PUMP_COLLECTOR_FLOOR_PIN, HIGH);
 	digitalWrite(MAIN_3WAY_VALVE_BOILER_PIN, HIGH);
-	digitalWrite(MAIN_3WAY_VALVE_DISTRIBUTION_PIN, HIGH);
+	digitalWrite(MAIN_3WAY_VALVE_COLLECTOR_PIN, HIGH);
 	digitalWrite(HEATING_MIX_VALVE_SWITCH_PIN, HIGH);
 	digitalWrite(HEATING_MIX_VALVE_DIRECTION_PIN, HIGH);
 	digitalWrite(LIGHT_LOFT_1_PIN, HIGH);
@@ -162,7 +184,7 @@ inline void DefinePinMode()
 	digitalWrite(LIGHT_TOILET_PIN, HIGH);
 	digitalWrite(HEATPUMP_REMOTE_SWITCH_PIN, HIGH);
 	digitalWrite(HEATPUMP_CIRCULATION_PUMP_PIN, HIGH);
-	digitalWrite(HEATPUMP_ACS_REQUEST_PIN, HIGH);
+	digitalWrite(HEATPUMP_SANITARY_REQUEST_PIN, HIGH);
 	digitalWrite(HEATPUMP_COOL_PIN, HIGH);
 	digitalWrite(ZONE_SWITCH_BED_1_PIN, HIGH);
 	digitalWrite(ZONE_SWITCH_BED_2_PIN, HIGH);
@@ -173,8 +195,12 @@ inline void DefinePinMode()
 	digitalWrite(ZONE_SWITCH_LIVING_PIN, HIGH);
 	digitalWrite(ZONE_SWITCH_LOFT_PIN, HIGH);
 	
+	pinMode(PUMP_BOILER_FLOOR_PIN, OUTPUT);
+	pinMode(PUMP_COLLECTOR_FANCOIL_PIN, OUTPUT);
+	pinMode(PUMP_COLLECTOR_FLOOR_PIN, OUTPUT);
+
 	pinMode(MAIN_3WAY_VALVE_BOILER_PIN, OUTPUT);
-	pinMode(MAIN_3WAY_VALVE_DISTRIBUTION_PIN, OUTPUT);
+	pinMode(MAIN_3WAY_VALVE_COLLECTOR_PIN, OUTPUT);
 	pinMode(HEATING_MIX_VALVE_SWITCH_PIN, OUTPUT);
 	pinMode(HEATING_MIX_VALVE_DIRECTION_PIN, OUTPUT);
 
@@ -187,7 +213,7 @@ inline void DefinePinMode()
 
 	pinMode(HEATPUMP_REMOTE_SWITCH_PIN, OUTPUT);
 	pinMode(HEATPUMP_CIRCULATION_PUMP_PIN, OUTPUT);
-	pinMode(HEATPUMP_ACS_REQUEST_PIN, OUTPUT);
+	pinMode(HEATPUMP_SANITARY_REQUEST_PIN, OUTPUT);
 	pinMode(HEATPUMP_COOL_PIN, OUTPUT);
 
 	pinMode(ZONE_SWITCH_BED_1_PIN, OUTPUT);
@@ -212,10 +238,10 @@ inline void DefineTypicals()
 	Souliss_SetT12(memory_map, HEATPUMP_MANUAL_MODE);
 	Souliss_SetT12(memory_map, HEATPUMP_REMOTE_SWITCH);
 	Souliss_SetT12(memory_map, HEATPUMP_CIRCULATION_PUMP);
-	Souliss_SetT12(memory_map, HEATPUMP_ACS_REQUEST);
+	Souliss_SetT12(memory_map, HEATPUMP_SANITARY_REQUEST);
 	Souliss_SetT12(memory_map, HEATPUMP_COOL);
 	
-	Set_Temperature(TEMP_BOILER_ACS);
+	Set_Temperature(TEMP_BOILER_SANITARY);
 	Set_Temperature(TEMP_BOILER_HEATING);
 	Set_Temperature(TEMP_BOILER_BOTTOM);
 	Set_Temperature(TEMP_FLOOR_FLOW);
@@ -227,9 +253,13 @@ inline void DefineTypicals()
 
 	Souliss_SetT22(memory_map, MAIN_3WAY_VALVE);
 
+	Souliss_SetT12(memory_map, PUMP_BOILER_FLOOR);
+	Souliss_SetT12(memory_map, PUMP_COLLECTOR_FANCOIL);
+	Souliss_SetT12(memory_map, PUMP_COLLECTOR_FLOOR);
+
 	// initialize values
 	Souliss_SetInput(memory_map, HEATPUMP_REMOTE_SWITCH, Souliss_T1n_RGBLamp_OnCmd);
-//	Souliss_SetInput(memory_map, LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+	Souliss_SetInput(memory_map, LIGHT_LOFT_1, Souliss_T1n_OnCmd);
 }
 
 inline void ReadInputs()
@@ -241,24 +271,43 @@ inline void ReadInputs()
 	Souliss_LowDigIn(LIGHT_TERRACE_3_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_3, true);
 	Souliss_LowDigIn(LIGHT_TOILET_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TOILET, true);
 
+	
+	mInput(HVAC_VALVES) = mOutput(HVAC_VALVES);
 
-/*	if (MAIN_3WAY_VALVE_BOILER_LIM)
-		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | MAIN_3WAY_VALVE_BOILER_MASK; // set boiler bit
+	if (!digitalRead(MAIN_3WAY_VALVE_BOILER_LIMIT_PIN))
+		mInput(HVAC_VALVES) |= MAIN_3WAY_VALVE_BOILER_MASK; // set boiler bit
 
-	else if (mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
-		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & !MAIN_3WAY_VALVE_BOILER_MASK;	// unset boiler bit
+	else
+		mInput(HVAC_VALVES) &= ~MAIN_3WAY_VALVE_BOILER_MASK;	// unset boiler bit
 
+	// use mInput because the T1A Logic has not been called yet
+	if (!digitalRead(MAIN_3WAY_VALVE_COLLECTOR_LIMIT_PIN))
+		mInput(HVAC_VALVES) |= MAIN_3WAY_VALVE_COLLECTOR_MASK; // set distribution bit
 
-	if (MAIN_3WAY_VALVE_DISTR_LIM)
-		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | MAIN_3WAY_VALVE_DISTRIBUTION_MASK; // set distribution bit
+	else
+		mInput(HVAC_VALVES) &= ~MAIN_3WAY_VALVE_COLLECTOR_MASK;	// unset distribution bit
 
-	else if (mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_DISTRIBUTION_MASK)
-		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & !MAIN_3WAY_VALVE_DISTRIBUTION_MASK;	// unset distribution bit
-*/
 }
 
 inline void ProcessLogics()
 {
+
+	// cross logics between slots
+	// to be executed before slots standard logics
+	if( SANITARY_REQUEST_CMD ) // always performed in auto-mode
+		SET_FLOW_TO_BOILER;
+
+	if( HEATPUMP_AUTO ) // not executed in in manual mode
+	{ 
+		if (HEAT_ZONE_REQUEST && !FLOW_TO_BOILER)
+			SET_FLOW_TO_BOILER;
+
+		else if (COOL_ZONE_REQUEST && !FLOW_TO_COLLECTOR)
+			SET_FLOW_TO_COLLECTOR;
+	}
+
+
+	// standar slots logics
 	Logic_SimpleLight(LIGHT_LOFT_1);
 	Logic_SimpleLight(LIGHT_LOFT_2);
 	Logic_SimpleLight(LIGHT_TERRACE_1);
@@ -269,10 +318,10 @@ inline void ProcessLogics()
 	Souliss_Logic_T12(memory_map, HEATPUMP_MANUAL_MODE, &data_changed);
 	Souliss_Logic_T12(memory_map, HEATPUMP_REMOTE_SWITCH, &data_changed);
 	Souliss_Logic_T12(memory_map, HEATPUMP_CIRCULATION_PUMP, &data_changed);
-	Souliss_Logic_T12(memory_map, HEATPUMP_ACS_REQUEST, &data_changed);
+	Souliss_Logic_T12(memory_map, HEATPUMP_SANITARY_REQUEST, &data_changed);
 	Souliss_Logic_T12(memory_map, HEATPUMP_COOL, &data_changed);
 
-	Logic_Temperature(TEMP_BOILER_ACS);
+	Logic_Temperature(TEMP_BOILER_SANITARY);
 	Logic_Temperature(TEMP_BOILER_HEATING);
 	Logic_Temperature(TEMP_BOILER_BOTTOM);
 	Logic_Temperature(TEMP_FLOOR_FLOW);
@@ -284,12 +333,15 @@ inline void ProcessLogics()
 
 	Souliss_Logic_T22(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
 
+	Souliss_Logic_T12(memory_map, PUMP_BOILER_FLOOR, &data_changed);
+	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FANCOIL, &data_changed);
+	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FLOOR, &data_changed);	
 }
 
 inline void ProcessSlowLogics()
 {
-	float temperature_acs = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_ACS_PIN),TEMP_BOILER_ACS_PAD_RESISTANCE );
-	Souliss_ImportAnalog(memory_map, TEMP_BOILER_ACS, &temperature_acs);
+	float temperature_sanitary = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_SANITARY_PIN),TEMP_BOILER_SANITARY_PAD_RESISTANCE );
+	Souliss_ImportAnalog(memory_map, TEMP_BOILER_SANITARY, &temperature_sanitary);
 	
 	float temperature_heating = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_HEATING_PIN),TEMP_BOILER_HEATING_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_BOILER_HEATING, &temperature_heating);
@@ -346,15 +398,12 @@ Serial.println(temp_DINING);
 */
 	if( HEATPUMP_AUTO ) 
 	{
-		// control ACS production
-		if (temperature_acs < SETPOINT_ACS - SETPOINT_DEADBAND)
-		{
-			SET_FLOW_TO_BOILER;
-			mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OnCmd;
-		}
+		// control SANITARY production
+		if ( !SANITARY_PRODUCTION && (temperature_sanitary < SETPOINT_SANITARY - SETPOINT_DEADBAND) )
+			mInput(HEATPUMP_SANITARY_REQUEST) = Souliss_T1n_OnCmd;
 		
-		else if (temperature_acs > SETPOINT_ACS + SETPOINT_DEADBAND)
-			mInput(HEATPUMP_ACS_REQUEST) = Souliss_T1n_OffCmd;
+		else if ( SANITARY_PRODUCTION && (temperature_sanitary > SETPOINT_SANITARY + SETPOINT_DEADBAND) )
+			mInput(HEATPUMP_SANITARY_REQUEST) = Souliss_T1n_OffCmd;
 
 
 		if( HEAT_ZONE_REQUEST )
@@ -363,22 +412,23 @@ Serial.println(temp_DINING);
 
 			// control hot water storage if there's heating requests from any zone
 			// otherwise just don't care about the temperature of the storage
-			if (temperature_heating < SETPOINT_HEATING - SETPOINT_DEADBAND)
+			if ( !HOT_WATER_PRODUCTION && (temperature_heating < SETPOINT_HEATING - SETPOINT_DEADBAND) )
 				mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OnCmd;
 				
-			else if (temperature_heating > SETPOINT_HEATING + SETPOINT_DEADBAND)
+			else if ( HOT_WATER_PRODUCTION && (temperature_heating > SETPOINT_HEATING + SETPOINT_DEADBAND) )
 				mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd;
 		}
 
 		else if( COOL_ZONE_REQUEST )
 		{
-			SET_FLOW_TO_DISTRIBUTION;
+			SET_FLOW_TO_COLLECTOR;
 		}
 
-		else
+		else if( HOT_WATER_PRODUCTION )
 			mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd;
 
 	}
+
 
 	// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
 	// but only HEATPUMP is set to HEAT (HEATPUMP_COOL == OffCoil) and any zone request is active
@@ -390,24 +440,26 @@ Serial.println(temp_DINING);
 		if (temperature_floor_flow > SETPOINT_HEATING + SETPOINT_DEADBAND)
 		{
 			// mix valve on, direction relay off
-			mInput(HVAC_VALVES) = HEATING_MIX_VALVE_SWITCH_MASK; 
+			mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK; 
 		}	
 		else if (temperature_floor_flow < SETPOINT_HEATING - SETPOINT_DEADBAND)
 		{
 			// mix valve on, direction relay on
-			mInput(HVAC_VALVES) = HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK;
+			mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK);
 		}
 		else
 		{
 			// mix valve off (hold the position)
-			mInput(HVAC_VALVES) = 0x0;
+			mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK;
 		}		
 	}
 	else
 	{
 		// heating is off, keep the mix valve off.
-		mInput(HVAC_VALVES) = 0x0;
+		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK;
 	}
+
+
 
 }
 
@@ -423,7 +475,7 @@ inline void SetOutputs()
 
 	LowDigOut(HEATPUMP_REMOTE_SWITCH_PIN, Souliss_T1n_Coil, HEATPUMP_REMOTE_SWITCH);
 	LowDigOut(HEATPUMP_CIRCULATION_PUMP_PIN, Souliss_T1n_Coil, HEATPUMP_CIRCULATION_PUMP);
-	LowDigOut(HEATPUMP_ACS_REQUEST_PIN, Souliss_T1n_Coil, HEATPUMP_ACS_REQUEST);
+	LowDigOut(HEATPUMP_SANITARY_REQUEST_PIN, Souliss_T1n_Coil, HEATPUMP_SANITARY_REQUEST);
 	LowDigOut(HEATPUMP_COOL_PIN, Souliss_T1n_Coil, HEATPUMP_COOL);
 
 	// HVAC zone valves
@@ -443,7 +495,11 @@ inline void SetOutputs()
 		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_DIRECTION_MASK) );
 
 	LowDigOut(MAIN_3WAY_VALVE_BOILER_PIN, Souliss_T2n_Coil_Open, MAIN_3WAY_VALVE);
-	LowDigOut(MAIN_3WAY_VALVE_DISTRIBUTION_PIN, Souliss_T2n_Coil_Close, MAIN_3WAY_VALVE);
+	LowDigOut(MAIN_3WAY_VALVE_COLLECTOR_PIN, Souliss_T2n_Coil_Close, MAIN_3WAY_VALVE);
+
+	LowDigOut(PUMP_BOILER_FLOOR_PIN, Souliss_T1n_Coil, PUMP_BOILER_FLOOR);	
+	LowDigOut(PUMP_COLLECTOR_FANCOIL_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FANCOIL);	
+	LowDigOut(PUMP_COLLECTOR_FLOOR_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FLOOR);	
 }
 
 inline void ProcessTimers()
@@ -458,10 +514,14 @@ inline void ProcessTimers()
 	Souliss_T12_Timer(memory_map, HEATPUMP_MANUAL_MODE);
 	Souliss_T12_Timer(memory_map, HEATPUMP_REMOTE_SWITCH);
 	Souliss_T12_Timer(memory_map, HEATPUMP_CIRCULATION_PUMP);
-	Souliss_T12_Timer(memory_map, HEATPUMP_ACS_REQUEST);
+	Souliss_T12_Timer(memory_map, HEATPUMP_SANITARY_REQUEST);
 	Souliss_T12_Timer(memory_map, HEATPUMP_COOL);
 
 	Souliss_T22_Timer(memory_map, MAIN_3WAY_VALVE);
+
+	Souliss_T12_Timer(memory_map, PUMP_BOILER_FLOOR);
+	Souliss_T12_Timer(memory_map, PUMP_COLLECTOR_FANCOIL);
+	Souliss_T12_Timer(memory_map, PUMP_COLLECTOR_FLOOR);
 }
 
 
