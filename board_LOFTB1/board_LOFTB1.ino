@@ -294,7 +294,7 @@ inline void ProcessLogics()
 
 	// cross logics between slots
 	// to be executed before slots standard logics
-	if( SANITARY_REQUEST_CMD ) // always performed in auto-mode
+	if( SANITARY_REQUEST_CMD ) // always performed (also in manual mode)
 		SET_FLOW_TO_BOILER;
 
 	if( HEATPUMP_AUTO ) // not executed in in manual mode
