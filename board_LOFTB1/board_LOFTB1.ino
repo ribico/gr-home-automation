@@ -132,29 +132,6 @@ MEGA with Ethernet only acting as GATEWAY
 #define SETPOINT_DEADBAND       2
 
 
-#define HEATPUMP_AUTO 				(mOutput(HEATPUMP_MANUAL_MODE) == Souliss_T1n_OffCoil)
-#define HEAT_MODE					(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
-#define COOL_MODE					(mOutput(HEATPUMP_COOL) == Souliss_T1n_OnCoil)
-
-#define ZONE_REQUEST				mOutput(HVAC_ZONES)
-#define HEAT_ZONE_REQUEST			(ZONE_REQUEST && HEAT_MODE)
-#define COOL_ZONE_REQUEST			(ZONE_REQUEST && COOL_MODE)
-
-#define ZONE_REQUEST_CMD			mInput(HVAC_ZONES)
-#define HEAT_ZONE_REQUEST_CMD		(ZONE_REQUEST_CMD && HEAT_MODE)
-#define COOL_ZONE_REQUEST_CMD		(ZONE_REQUEST_CMD && COOL_MODE)
-#define SANITARY_REQUEST_CMD 		(mInput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCmd)
-
-#define SANITARY_PRODUCTION			(mOutput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCoil)
-#define HOT_WATER_PRODUCTION		(HEAT_MODE && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
-#define COOL_WATER_PRODUCTION		(COOL_MODE && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
-
-#define FLOW_TO_BOILER 				(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
-#define FLOW_TO_COLLECTOR			(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK)
-#define SET_FLOW_TO_BOILER 			mInput(MAIN_3WAY_VALVE) = Souliss_T2n_OpenCmd_SW
-#define SET_FLOW_TO_COLLECTOR	 	mInput(MAIN_3WAY_VALVE) = Souliss_T2n_CloseCmd_SW
-
-
 
 inline void DefinePinMode()
 {
@@ -289,24 +266,51 @@ inline void ReadInputs()
 
 }
 
+#define IsHpLogicAuto()				(mOutput(HEATPUMP_MANUAL_MODE) == Souliss_T1n_OffCoil)
+#define IsHeatMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
+#define IsCoolMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OnCoil)
+
+#define IsZoneOpen()				mOutput(HVAC_ZONES)
+#define IsHeating()					(IsZoneOpen() && IsHeatMode())
+#define IsCooling()					(IsZoneOpen() && IsCoolMode())
+
+//#define IsZoneRequest()					mInput(HVAC_ZONES)
+//#define IsZoneHeatRequest()				(IsZoneRequest() && HEAT_MODE)
+//#define IsZoneCoolRequest()				(IsZoneRequest() && COOL_MODE)
+//#define IsSanitaryWaterRequest() 		(mInput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCmd)
+
+#define IsSanitaryWaterInProduction()	(mOutput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCoil)
+#define IsHotWaterInProduction()		(IsHeatMode() && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
+#define IsCoolWaterInProduction()		(IsCoolMode() && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
+
+#define SanitaryWaterOn()				(mInput(HEATPUMP_SANITARY_REQUEST) = Souliss_T1n_OnCmd)	
+#define SanitaryWaterOff()				(mInput(HEATPUMP_SANITARY_REQUEST) = Souliss_T1n_OffCmd)	
+
+#define IsHpCirculationOn()				(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil)
+#define HpCirculationOn()				(mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OnCmd)
+#define HpCirculationOff()				(mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd)
+
+#define IsHpFlowToBoiler()				(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
+#define IsHpFlowToCollector()			(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK)
+#define SetHpFlowToBoiler()				mInput(MAIN_3WAY_VALVE) = Souliss_T2n_OpenCmd_SW
+#define SetHpFlowToCollector()	 		mInput(MAIN_3WAY_VALVE) = Souliss_T2n_CloseCmd_SW
+
+#define IsPumpBoilerToFloorOn()			(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OnCoil)
+#define IsPumpCollectorToFloorOn()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OnCoil)
+#define IsPumpCollectorToFancoilOn()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OnCoil)
+#define PumpBoilerToFloorOn()			(mInput(PUMP_BOILER_FLOOR) = Souliss_T1n_OnCmd)
+#define PumpBoilerToFloorOff()			(mInput(PUMP_BOILER_FLOOR) = Souliss_T1n_OffCmd)
+#define PumpCollectorToFloorOn()		(mInput(PUMP_COLLECTOR_FLOOR) = Souliss_T1n_OnCmd)
+#define PumpCollectorToFloorOff()		(mInput(PUMP_COLLECTOR_FLOOR) = Souliss_T1n_OffCmd)
+#define PumpCollectorToFancoilOn() 		(mInput(PUMP_COLLECTOR_FANCOIL) = Souliss_T1n_OnCmd)
+#define PumpCollectorToFancoilOff() 	(mInput(PUMP_COLLECTOR_FANCOIL) = Souliss_T1n_OffCmd)
+
+#define MixValveOn_ColdDirection()		(mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK)
+#define MixValveOn_HotDirection()		(mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) )
+#define MixValveOff()					(mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK)
+
 inline void ProcessLogics()
 {
-
-	// cross logics between slots
-	// to be executed before slots standard logics
-	if( SANITARY_REQUEST_CMD ) // always performed (also in manual mode)
-		SET_FLOW_TO_BOILER;
-
-	if( HEATPUMP_AUTO ) // not executed in in manual mode
-	{ 
-		if (HEAT_ZONE_REQUEST && !FLOW_TO_BOILER)
-			SET_FLOW_TO_BOILER;
-
-		else if (COOL_ZONE_REQUEST && !FLOW_TO_COLLECTOR)
-			SET_FLOW_TO_COLLECTOR;
-	}
-
-
 	// standar slots logics
 	Logic_SimpleLight(LIGHT_LOFT_1);
 	Logic_SimpleLight(LIGHT_LOFT_2);
@@ -396,71 +400,87 @@ Serial.print(temp_KITCHEN);
 Serial.print("\ttemp_DINING: ");
 Serial.println(temp_DINING);
 */
-	if( HEATPUMP_AUTO ) 
+
+	if( IsHpLogicAuto() ) 
 	{
 		// control SANITARY production
-		if ( !SANITARY_PRODUCTION && (temperature_sanitary < SETPOINT_SANITARY - SETPOINT_DEADBAND) )
-			mInput(HEATPUMP_SANITARY_REQUEST) = Souliss_T1n_OnCmd;
+		if ( !IsSanitaryWaterInProduction() && (temperature_sanitary < SETPOINT_SANITARY - SETPOINT_DEADBAND) )
+		{
+			if( !IsHpFlowToBoiler() )
+				SetHpFlowToBoiler();
+
+			SanitaryWaterOn();
+		}
 		
-		else if ( SANITARY_PRODUCTION && (temperature_sanitary > SETPOINT_SANITARY + SETPOINT_DEADBAND) )
-			mInput(HEATPUMP_SANITARY_REQUEST) = Souliss_T1n_OffCmd;
+		else if ( IsSanitaryWaterInProduction() && (temperature_sanitary > SETPOINT_SANITARY + SETPOINT_DEADBAND) )
+			SanitaryWaterOff();
 
 
-		if( HEAT_ZONE_REQUEST )
+		// take care of the hot water storage temperature when heating from the boiler
+		if( IsHeating() ) 
 		{	
-			SET_FLOW_TO_BOILER;
+			if( !IsPumpBoilerToFloorOn() )
+			{
+				PumpBoilerToFloorOn();
+				PumpCollectorToFloorOff();
+				PumpCollectorToFancoilOff();
+			}
 
 			// control hot water storage if there's heating requests from any zone
 			// otherwise just don't care about the temperature of the storage
-			if ( !HOT_WATER_PRODUCTION && (temperature_heating < SETPOINT_HEATING - SETPOINT_DEADBAND) )
-				mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OnCmd;
+			if ( !IsHotWaterInProduction() && (temperature_heating < SETPOINT_HEATING - SETPOINT_DEADBAND) )
+			{
+				// should produce some hot water here
+				SetHpFlowToBoiler();
+				HpCirculationOn();
+			}
 				
-			else if ( HOT_WATER_PRODUCTION && (temperature_heating > SETPOINT_HEATING + SETPOINT_DEADBAND) )
-				mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd;
+			else if ( IsHotWaterInProduction() && (temperature_heating > SETPOINT_HEATING + SETPOINT_DEADBAND) )
+				HpCirculationOff();
 		}
 
-		else if( COOL_ZONE_REQUEST )
+		else if( IsCooling() )
 		{
-			SET_FLOW_TO_COLLECTOR;
+			// when cooling never use the boiler
+			if( !IsSanitaryWaterInProduction() )
+				SetHpFlowToCollector();
 		}
 
-		else if( HOT_WATER_PRODUCTION )
-			mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd;
+		
+		if( !IsHeating() && !IsCooling() )
+			HpCirculationOff();
 
-	}
+	
 
-
-	// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
-	// but only HEATPUMP is set to HEAT (HEATPUMP_COOL == OffCoil) and any zone request is active
-	if( HEAT_ZONE_REQUEST )
-	{
-		// at least one zone is open
-		// and the heatpump is not set to COOL mode
-
-		if (temperature_floor_flow > SETPOINT_HEATING + SETPOINT_DEADBAND)
+		// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
+		// but only HEATPUMP is set to HEAT (HEATPUMP_COOL == OffCoil) and any zone request is active
+		if( IsHeating() && IsPumpBoilerToFloorOn() )
 		{
-			// mix valve on, direction relay off
-			mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK; 
-		}	
-		else if (temperature_floor_flow < SETPOINT_HEATING - SETPOINT_DEADBAND)
-		{
-			// mix valve on, direction relay on
-			mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK);
+			// at least one zone is open
+			// and the heatpump is not set to COOL mode
+
+			if (temperature_floor_flow > SETPOINT_HEATING + SETPOINT_DEADBAND)
+			{
+				// mix valve on, direction relay off
+				MixValveOn_ColdDirection(); 
+			}	
+			else if (temperature_floor_flow < SETPOINT_HEATING - SETPOINT_DEADBAND)
+			{
+				// mix valve on, direction relay on
+				MixValveOn_HotDirection();
+			}
+			else
+			{
+				// mix valve off (hold the position)
+				MixValveOff();
+			}		
 		}
 		else
 		{
-			// mix valve off (hold the position)
-			mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK;
-		}		
+			// heating is off, keep the mix valve off.
+			MixValveOff();
+		}
 	}
-	else
-	{
-		// heating is off, keep the mix valve off.
-		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK;
-	}
-
-
-
 }
 
 
