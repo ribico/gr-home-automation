@@ -18,66 +18,13 @@ MEGA with Ethernet only acting as GATEWAY
 
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
+#include "grhFancoils.h"
 #include "HW_Setup_Mega_2560.h"
 #include "NTC.h"
 
-
-#define LIGHT_LOFT_1            		1                       
-#define LIGHT_LOFT_2            		2
-#define LIGHT_TERRACE_1                 3
-#define LIGHT_TERRACE_2                 4
-#define LIGHT_TERRACE_3                 5
-#define LIGHT_TOILET                    6
-
-#define TEMP_BOILER_SANITARY            7
-#define TEMP_BOILER_SANITARY_H          8
-#define TEMP_BOILER_HEATING             9
-#define TEMP_BOILER_HEATING_H   		10
-#define TEMP_BOILER_BOTTOM              11
-#define TEMP_BOILER_BOTTOM_H    		12
-
-#define HEATPUMP_MANUAL_MODE   			13
-#define HEATPUMP_REMOTE_SWITCH          14
-#define HEATPUMP_CIRCULATION_PUMP       15
-#define HEATPUMP_SANITARY_REQUEST       16
-#define HEATPUMP_COOL                	17      
-
-#define TEMP_FLOOR_FLOW 			18      // floor heating system water temp
-#define TEMP_FLOOR_FLOW_H 			19
-#define TEMP_FLOOR_RETURN  			20      // floor heating system water return temp
-#define TEMP_FLOOR_RETURN_H 		21
-#define TEMP_FANCOIL_FLOW  			22      // floor heating system water return temp
-#define TEMP_FANCOIL_FLOW_H 		23
-
-#define HVAC_ZONES					24
-#	define HVAC_MASK_BED1			0x01
-#	define HVAC_MASK_BATH1			0x02
-#	define HVAC_MASK_BED2			0x04
-#	define HVAC_MASK_LIVING			0x08
-#	define HVAC_MASK_BED3			0x10
-#	define HVAC_MASK_BATH2			0x20
-#	define HVAC_MASK_KITCHEN		0x40
-#	define HVAC_MASK_LOFT			0x80
-
-#define HVAC_VALVES 							25
-#	define MAIN_3WAY_VALVE_BOILER_MASK			0x01
-#	define MAIN_3WAY_VALVE_COLLECTOR_MASK	0x02
-#	define HEATING_MIX_VALVE_SWITCH_MASK		0x04
-#	define HEATING_MIX_VALVE_DIRECTION_MASK		0x08
-
-#define MAIN_3WAY_VALVE				26
-
-#define PUMP_BOILER_FLOOR 			27
-#define PUMP_COLLECTOR_FANCOIL 		28
-#define PUMP_COLLECTOR_FLOOR 		29
-
-
-#define TEMP_BOILER_SANITARY_PIN 	A0       // analog pin used
-#define TEMP_BOILER_HEATING_PIN 	A1       // analog pin used
-#define TEMP_BOILER_BOTTOM_PIN  	A2       // analog pin used
-#define TEMP_FLOOR_FLOW_PIN   		A3       // analog pin used
-#define TEMP_FLOOR_RETURN_PIN 		A4       // analog pin used
-#define TEMP_FANCOIL_FLOW_PIN 		A5       // analog pin used
+#include "board_LOFTB1_PinMapping.h"
+#include "board_LOFTB1_Slots.h"
+#include "board_LOFTB1_SpeakEasy.h"
 
 #define TEMP_BOILER_SANITARY_PAD_RESISTANCE 	9800 // measured
 #define TEMP_BOILER_HEATING_PAD_RESISTANCE      9800 // measured
@@ -85,46 +32,6 @@ MEGA with Ethernet only acting as GATEWAY
 #define TEMP_FLOOR_FLOW_PAD_RESISTANCE        	9830 // measured
 #define TEMP_FLOOR_RETURN_PAD_RESISTANCE      	9820 // measured
 #define TEMP_FANCOIL_FLOW_PAD_RESISTANCE      	9830 // measured
-
-
-// DEFINE INPUT PIs
-#define LIGHT_LOFT_1_PIN                        30
-#define LIGHT_LOFT_2_PIN                        31
-#define LIGHT_TERRACE_1_PIN                     32
-#define LIGHT_TERRACE_2_PIN                     33
-#define LIGHT_TERRACE_3_PIN                     34
-#define LIGHT_TOILET_PIN                        35
-#define MAIN_3WAY_VALVE_BOILER_LIMIT_PIN		9
-#define MAIN_3WAY_VALVE_COLLECTOR_LIMIT_PIN	8
-
-// DEFINE OUTPUT PINs
-// ** DO NOT FORGET TO SET pinMode to OUTPUT **
-#define PUMP_BOILER_FLOOR_PIN					23
-#define PUMP_COLLECTOR_FANCOIL_PIN				24
-#define PUMP_COLLECTOR_FLOOR_PIN				25
-#define MAIN_3WAY_VALVE_BOILER_PIN				26
-#define MAIN_3WAY_VALVE_COLLECTOR_PIN			27
-#define HEATING_MIX_VALVE_SWITCH_PIN			28
-#define HEATING_MIX_VALVE_DIRECTION_PIN			29
-#define HEATPUMP_REMOTE_SWITCH_PIN              36
-#define HEATPUMP_CIRCULATION_PUMP_PIN   		37
-#define HEATPUMP_SANITARY_REQUEST_PIN           38
-#define HEATPUMP_COOL_PIN                       39
-#define ZONE_SWITCH_BED_1_PIN                   40
-#define ZONE_SWITCH_BED_2_PIN                   41
-#define ZONE_SWITCH_BED_3_PIN                   42
-#define ZONE_SWITCH_BATH_1_PIN                  43
-#define ZONE_SWITCH_BATH_2_PIN                  44
-#define ZONE_SWITCH_KITCHEN_PIN                 45
-#define ZONE_SWITCH_LIVING_PIN                  46
-#define ZONE_SWITCH_LOFT_PIN                    47
-#define LIGHT_LOFT_1_PIN_IN                     48
-#define LIGHT_LOFT_2_PIN_IN                     49
-#define LIGHT_TERRACE_1_PIN_IN                  50
-#define LIGHT_TERRACE_2_PIN_IN                  51
-#define LIGHT_TERRACE_3_PIN_IN                  52
-#define LIGHT_TOILET_PIN_IN                     53
-
 
 
 #define SETPOINT_SANITARY       42 // °C
@@ -266,43 +173,6 @@ inline void ReadInputs()
 
 }
 
-#define IsHpLogicAuto()				(mOutput(HEATPUMP_MANUAL_MODE) == Souliss_T1n_OffCoil)
-#define IsHeatMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
-#define IsCoolMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OnCoil)
-
-#define IsZoneOpen()				mOutput(HVAC_ZONES)
-#define IsHeating()					(IsZoneOpen() && IsHeatMode())
-#define IsCooling()					(IsZoneOpen() && IsCoolMode())
-
-#define IsSanitaryWaterInProduction()	(mOutput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCoil)
-#define IsHotWaterInProduction()		(IsHeatMode() && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
-#define IsCoolWaterInProduction()		(IsCoolMode() && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
-
-#define SanitaryWaterOn()				(mInput(HEATPUMP_SANITARY_REQUEST) = Souliss_T1n_OnCmd)	
-#define SanitaryWaterOff()				(mInput(HEATPUMP_SANITARY_REQUEST) = Souliss_T1n_OffCmd)	
-
-#define IsHpCirculationOn()				(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil)
-#define HpCirculationOn()				(mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OnCmd)
-#define HpCirculationOff()				(mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd)
-
-#define IsHpFlowToBoiler()				(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
-#define IsHpFlowToCollector()			(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK)
-#define SetHpFlowToBoiler()				mInput(MAIN_3WAY_VALVE) = Souliss_T2n_OpenCmd_SW
-#define SetHpFlowToCollector()	 		mInput(MAIN_3WAY_VALVE) = Souliss_T2n_CloseCmd_SW
-
-#define IsPumpBoilerToFloorOn()			(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OnCoil)
-#define IsPumpCollectorToFloorOn()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OnCoil)
-#define IsPumpCollectorToFancoilOn()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OnCoil)
-#define PumpBoilerToFloorOn()			(mInput(PUMP_BOILER_FLOOR) = Souliss_T1n_OnCmd)
-#define PumpBoilerToFloorOff()			(mInput(PUMP_BOILER_FLOOR) = Souliss_T1n_OffCmd)
-#define PumpCollectorToFloorOn()		(mInput(PUMP_COLLECTOR_FLOOR) = Souliss_T1n_OnCmd)
-#define PumpCollectorToFloorOff()		(mInput(PUMP_COLLECTOR_FLOOR) = Souliss_T1n_OffCmd)
-#define PumpCollectorToFancoilOn() 		(mInput(PUMP_COLLECTOR_FANCOIL) = Souliss_T1n_OnCmd)
-#define PumpCollectorToFancoilOff() 	(mInput(PUMP_COLLECTOR_FANCOIL) = Souliss_T1n_OffCmd)
-
-#define MixValveOn_ColdDirection()		(mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK)
-#define MixValveOn_HotDirection()		(mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) )
-#define MixValveOff()					(mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK)
 
 inline void ProcessLogics()
 {
@@ -545,12 +415,7 @@ void setup()
 	DefinePinMode();
 
 	grhOpenSerialOnDebug();
-/*	Serial.print("MaCaco_NODES : ");
-	Serial.println(MaCaco_NODES);
-	Serial.print("MaCaco_SLOT : ");
-	Serial.println(MaCaco_SLOT);	
-	Serial.print("MaCaco_MEMMAP : ");
-	Serial.println(MaCaco_MEMMAP,HEX);*/
+
 	Initialize();
 	grhSetIpAddress(IP_ADDRESS_LOFTB1); 
 	SetAsGateway(IP_ADDRESS_TESTB1);
