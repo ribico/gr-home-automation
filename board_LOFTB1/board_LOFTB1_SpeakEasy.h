@@ -25,12 +25,12 @@
 #define IsPumpBoilerToFloorOn()			(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OnCoil)
 #define IsPumpCollectorToFloorOn()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OnCoil)
 #define IsPumpCollectorToFancoilOn()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OnCoil)
-#define PumpBoilerToFloorOn()			SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_OnCmd)
-#define PumpBoilerToFloorOff()			SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_OffCmd)
-#define PumpCollectorToFloorOn()		SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_OnCmd)
-#define PumpCollectorToFloorOff()		SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_OffCmd)
-#define PumpCollectorToFancoilOn() 		SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_OnCmd)
-#define PumpCollectorToFancoilOff() 	SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_OffCmd)
+#define PumpBoilerToFloorOn()			if(!IsPumpBoilerToFloorOn()) 		SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_OnCmd)
+#define PumpBoilerToFloorOff()			if(IsPumpBoilerToFloorOn()) 		SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_OffCmd)
+#define PumpCollectorToFloorOn()		if(!IsPumpCollectorToFloorOn())		SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_OnCmd)
+#define PumpCollectorToFloorOff()		if(IsPumpCollectorToFloorOn())		SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_OffCmd)
+#define PumpCollectorToFancoilOn() 		if(!IsPumpCollectorToFancoilOn())	SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_OnCmd)
+#define PumpCollectorToFancoilOff() 	if(IsPumpCollectorToFancoilOn())	SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_OffCmd)
 
 #define MixValveOn_ColdDirection()		SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK)
 #define MixValveOn_HotDirection()		SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) );
