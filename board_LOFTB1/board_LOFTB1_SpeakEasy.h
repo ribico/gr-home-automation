@@ -10,28 +10,28 @@
 #define IsHotWaterInProduction()		(IsHeatMode() && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
 #define IsCoolWaterInProduction()		(IsCoolMode() && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
 
-#define SanitaryWaterOn()				(mInput(HEATPUMP_SANITARY_REQUEST) = Souliss_T1n_OnCmd)	
-#define SanitaryWaterOff()				(mInput(HEATPUMP_SANITARY_REQUEST) = Souliss_T1n_OffCmd)	
+#define SanitaryWaterOn()				SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OnCmd)	
+#define SanitaryWaterOff()				SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OffCmd)	
 
 #define IsHpCirculationOn()				(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil)
-#define HpCirculationOn()				(mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OnCmd)
-#define HpCirculationOff()				(mInput(HEATPUMP_CIRCULATION_PUMP) = Souliss_T1n_OffCmd)
+#define HpCirculationOn()				SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OnCmd)
+#define HpCirculationOff()				SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OffCmd)
 
 #define IsHpFlowToBoiler()				(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
 #define IsHpFlowToCollector()			(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK)
-#define SetHpFlowToBoiler()				mInput(MAIN_3WAY_VALVE) = Souliss_T2n_OpenCmd_SW
-#define SetHpFlowToCollector()	 		mInput(MAIN_3WAY_VALVE) = Souliss_T2n_CloseCmd_SW
+#define SetHpFlowToBoiler()				if(!IsHpFlowToBoiler()) 	SetInput(MAIN_3WAY_VALVE, Souliss_T2n_OpenCmd_SW)
+#define SetHpFlowToCollector()	 		if(!IsHpFlowToCollector()) 	SetInput(MAIN_3WAY_VALVE, Souliss_T2n_CloseCmd_SW)
 
 #define IsPumpBoilerToFloorOn()			(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OnCoil)
 #define IsPumpCollectorToFloorOn()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OnCoil)
 #define IsPumpCollectorToFancoilOn()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OnCoil)
-#define PumpBoilerToFloorOn()			(mInput(PUMP_BOILER_FLOOR) = Souliss_T1n_OnCmd)
-#define PumpBoilerToFloorOff()			(mInput(PUMP_BOILER_FLOOR) = Souliss_T1n_OffCmd)
-#define PumpCollectorToFloorOn()		(mInput(PUMP_COLLECTOR_FLOOR) = Souliss_T1n_OnCmd)
-#define PumpCollectorToFloorOff()		(mInput(PUMP_COLLECTOR_FLOOR) = Souliss_T1n_OffCmd)
-#define PumpCollectorToFancoilOn() 		(mInput(PUMP_COLLECTOR_FANCOIL) = Souliss_T1n_OnCmd)
-#define PumpCollectorToFancoilOff() 	(mInput(PUMP_COLLECTOR_FANCOIL) = Souliss_T1n_OffCmd)
+#define PumpBoilerToFloorOn()			SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_OnCmd)
+#define PumpBoilerToFloorOff()			SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_OffCmd)
+#define PumpCollectorToFloorOn()		SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_OnCmd)
+#define PumpCollectorToFloorOff()		SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_OffCmd)
+#define PumpCollectorToFancoilOn() 		SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_OnCmd)
+#define PumpCollectorToFancoilOff() 	SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_OffCmd)
 
-#define MixValveOn_ColdDirection()		(mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK)
-#define MixValveOn_HotDirection()		(mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) )
-#define MixValveOff()					(mInput(HVAC_VALVES) = mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK)
+#define MixValveOn_ColdDirection()		SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK)
+#define MixValveOn_HotDirection()		SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) );
+#define MixValveOff()					SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK)
