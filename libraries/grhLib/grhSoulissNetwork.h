@@ -4,11 +4,12 @@
 		|->WiFi-> SoulissApp
 		|->eth-> OpenHab on RaspberryPI (192.168.1.2)
 		|-----------------------------------------------------------------
-		|->eth-> ROW1B1 (gw) ->485-> ROW1B2 ->485-> ROW1B3 ->485-> ROW1B4
-		|->eth-> ROW2B1 ->485-> ROW2B2 ->485-> ROW2B3 ->485-> ROW2B4 
+	 	|->eth-> LOFTB1 (gw)
+		|->eth-> ROW1B1 ->485-> ROW1B2 ->485-> ROW1B3 ->485-> ROW1B4
+		|->eth-> ROW2B1 ->485-> ROW2B2 ->485-> ROW2B3 ->485-> ROW2B4 ->485-> GTW1B1 ->485-> GTW2B1 
 		|->eth-> BED1B1
-	 	|->eth-> BED2B1 ->485-> BED2B2 ->485-> BED2B3 
-	 	|->eth-> LOFTB1
+	 	|->eth-> BED2B1 ->485-> BED2B2 ->485-> BED2B3
+
 ***************************************************************************/
 
 #ifndef GR_SOULISS_NETWORK_H
@@ -40,6 +41,8 @@
 #define RS485_ADDRESS_ROW2B2		0xD202
 #define RS485_ADDRESS_ROW2B3		0xD203
 #define RS485_ADDRESS_ROW2B4		0xD204
+#define RS485_ADDRESS_GTW1B1		0xD205
+#define RS485_ADDRESS_GTW2B1		0xD206
 
 #define RS485_ADDRESS_BED2B1		0xD401
 #define RS485_ADDRESS_BED2B2		0xD402

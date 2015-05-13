@@ -274,11 +274,6 @@ inline void ReadInputs()
 #define IsHeating()					(IsZoneOpen() && IsHeatMode())
 #define IsCooling()					(IsZoneOpen() && IsCoolMode())
 
-//#define IsZoneRequest()					mInput(HVAC_ZONES)
-//#define IsZoneHeatRequest()				(IsZoneRequest() && HEAT_MODE)
-//#define IsZoneCoolRequest()				(IsZoneRequest() && COOL_MODE)
-//#define IsSanitaryWaterRequest() 		(mInput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCmd)
-
 #define IsSanitaryWaterInProduction()	(mOutput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCoil)
 #define IsHotWaterInProduction()		(IsHeatMode() && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
 #define IsCoolWaterInProduction()		(IsCoolMode() && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
@@ -579,6 +574,9 @@ void setup()
 	SetAsPeerNode(IP_ADDRESS_BED2B1,10);
 	SetAsPeerNode(RS485_ADDRESS_BED2B2,11);
 	SetAsPeerNode(RS485_ADDRESS_BED2B3,12);
+
+	SetAsPeerNode(RS485_ADDRESS_GTW1B1,13);
+	SetAsPeerNode(RS485_ADDRESS_GTW2B1,14);
 
 	DefineTypicals();
 }
