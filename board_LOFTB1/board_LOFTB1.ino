@@ -142,8 +142,8 @@ inline void DefineTypicals()
 	Souliss_SetT12(memory_map, PUMP_COLLECTOR_FLOOR);
 
 	// initialize values
-	Souliss_SetInput(memory_map, HEATPUMP_REMOTE_SWITCH, Souliss_T1n_RGBLamp_OnCmd);
-	Souliss_SetInput(memory_map, LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_RGBLamp_OnCmd);
+	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
 }
 
 inline void ReadInputs()
