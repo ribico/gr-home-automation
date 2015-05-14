@@ -25,7 +25,7 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 #define LIGHT_BATH1_1		1			
 #define LIGHT_BATH1_2		2
 #define LIGHT_BATH1_3		3
-#define LIGHT_GW1			4
+#define LIGHT_STORAGE		4
 
 //--------------------------------------
 // USED FOR DHT SENSOR
@@ -42,7 +42,7 @@ float th=0;
 inline void DefineTypicals()
 {
 	Set_LightsGroup(LIGHT_BATH1_1, LIGHT_BATH1_3);
-	Set_SimpleLight(LIGHT_GW1);
+	Set_SimpleLight(LIGHT_STORAGE);
 
 	Set_Temperature(TEMPERATURE);
 	Set_Humidity(HUMIDITY);
@@ -52,13 +52,13 @@ inline void DefineTypicals()
 inline void ReadInputs()
 {
 	LightsGroupIn(IN1, LIGHT_BATH1_1, LIGHT_BATH1_3);
-	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_GW1, true);
+	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_STORAGE, true);
 }
 
 inline void ProcessLogics()
 {
 	Logic_LightsGroup(LIGHT_BATH1_1, LIGHT_BATH1_3);
-	Logic_SimpleLight(LIGHT_GW1);
+	Logic_SimpleLight(LIGHT_STORAGE);
 
 	Logic_Humidity(HUMIDITY);
 	Logic_Temperature(TEMPERATURE);	
@@ -69,13 +69,13 @@ inline void SetOutputs()
 	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_BATH1_1);
 	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_BATH1_2);
 	DigOut(RELAY3, Souliss_T1n_Coil, LIGHT_BATH1_3);
-	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_GW1);
+	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_STORAGE);
 }
 
 inline void ProcessTimers()
 {
 	Timer_LightsGroup(LIGHT_BATH1_1, LIGHT_BATH1_3);
-	Timer_SimpleLight(LIGHT_GW1);
+	Timer_SimpleLight(LIGHT_STORAGE);
 
 	th = dht.readHumidity();
 	ImportAnalog(HUMIDITY, &th);
