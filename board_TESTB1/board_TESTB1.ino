@@ -4,7 +4,7 @@ TEST BOARD MEGA with Ethernet only acting as GATEWAY
 ***********************/
 
 
-//#define DEBUG
+#define DEBUG
 
 
 
@@ -22,7 +22,9 @@ TEST BOARD MEGA with Ethernet only acting as GATEWAY
 #include "grhSoulissCustom.h"
 #include "HW_Setup_Mega_2560.h"
 
-#define LIGHT1                  0
+#define ANALOGDAQ               0           // This is the memory slot used for the execution of the logic in network_address1
+#define DEADBAND                0.05        // Deadband value 5%  
+
 
 void setup()
 {
@@ -34,11 +36,10 @@ void setup()
 	grhInitMEGA();
 
 	// LIST OF NODES
-	SetAsPeerNode(IP_ADDRESS_TESTB2,1);
-	SetAsPeerNode(RS485_ADDRESS_TESTB2,2);
+//	SetAsPeerNode(IP_ADDRESS_TESTB2,1);
+//	SetAsPeerNode(RS485_ADDRESS_TESTB2,2);
 
-	
-	Set_SimpleLight(LIGHT1); 
+    Set_Thermostat(ANALOGDAQ);          // Set a logic for the thermostat
 }
 
 void loop()
@@ -55,7 +56,10 @@ void loop()
 
 		FAST_50ms() 
 		{
-			Logic_SimpleLight(LIGHT1);
+			float temp = 20.0;
+    		Souliss_ImportAnalog(memory_map, ANALOGDAQ+1, &temp);
+
+            Logic_Thermostat(ANALOGDAQ);
 		}
 
 		FAST_GatewayComms();	
