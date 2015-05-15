@@ -60,10 +60,7 @@ inline void ReadInputs()
 
 	U8 ret = Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, REMOTE_LIGHT_GW1, true);
 	if( ret != MaCaco_NODATACHANGED )
-	{
-		Serial.println("REMOTE INPUT");
 		RemoteInput(RS485_ADDRESS_GTW1B1, 4, ret);
-	}
 }
 
 inline void ProcessLogics()

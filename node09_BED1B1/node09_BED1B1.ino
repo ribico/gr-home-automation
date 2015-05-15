@@ -61,10 +61,7 @@ inline void ReadInputs()
 
 	U8 ret = Souliss_DigIn(IN4, Souliss_T1n_ToggleCmd, memory_map, REMOTE_LIGHT_GW1, true);
 	if( ret != MaCaco_NODATACHANGED )
-	{
 		RemoteInput(RS485_ADDRESS_GTW1B1, 4, ret);
-		Serial.println("REMOTE INTPUT");
-	}
 }
 
 inline void ProcessLogics()
@@ -109,7 +106,7 @@ void setup()
 	grhDINo_v2_HW_Setup();
 
 	grhSetIpAddress(IP_ADDRESS_BED1B1);
-//	grhSetUSARTAddress(RS485_ADDRESS_BED1B1, 0x0000);
+	grhSetUSARTAddress(RS485_ADDRESS_BED1B1, 0x0000);
 
 	DefineTypicals();
 }
