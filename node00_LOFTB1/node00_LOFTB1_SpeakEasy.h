@@ -7,8 +7,8 @@
 #define IsCooling()					(IsZoneOpen() && IsCoolMode())
 
 #define IsSanitaryWaterInProduction()	(mOutput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCoil)
-#define IsHotWaterInProduction()		(IsHeatMode() && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
-#define IsCoolWaterInProduction()		(IsCoolMode() && (mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil))
+#define IsHotWaterInProduction()		(IsHeatMode() && IsHpCirculationOn())
+#define IsCoolWaterInProduction()		(IsCoolMode() && IsHpCirculationOn())
 
 #define SanitaryWaterOn()				SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OnCmd)	
 #define SanitaryWaterOff()				SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OffCmd)	
