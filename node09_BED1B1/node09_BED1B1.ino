@@ -4,7 +4,7 @@ BOARD ROW1B1
 DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 
 ***********************/
-//#define DEBUG
+#define DEBUG
 
 #include "bconf/DINo_v2_EthernetBridge_RS485.h"
 #include "conf/SuperNode.h" 
@@ -33,6 +33,8 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 #define HUMIDITY			6
 #define HUMIDITY_1			7
 
+#define REMOTE_LIGHT_GW1	8
+
 #include <DHT.h>
 DHT dht(ONE_WIRE_PIN, DHT22);
 float th=0;
@@ -47,13 +49,22 @@ inline void DefineTypicals()
 	Set_Temperature(TEMPERATURE);
 	Set_Humidity(HUMIDITY);
 	dht.begin();	
+
+	Set_SimpleLight(REMOTE_LIGHT_GW1);
 }
 
 inline void ReadInputs()
 {
-	Souliss_DigIn(IN1, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BALCONY1, true);\
-	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BEDROOM1, true);\
+	Souliss_DigIn(IN1, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BALCONY1, true);
+	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BEDROOM1, true);
 	DigInWindowToggle(IN3, WINDOW_BEDROOM1);
+
+	U8 ret = Souliss_DigIn(IN4, Souliss_T1n_ToggleCmd, memory_map, REMOTE_LIGHT_GW1, true);
+	if( ret != MaCaco_NODATACHANGED )
+	{
+		RemoteInput(RS485_ADDRESS_GTW1B1, 4, ret);
+		Serial.println("REMOTE INTPUT");
+	}
 }
 
 inline void ProcessLogics()
@@ -63,7 +74,7 @@ inline void ProcessLogics()
 	Souliss_Logic_T22(memory_map, WINDOW_BEDROOM1, &data_changed, SHUTTER_LONG_TIMEOUT);
 
 	Logic_Humidity(HUMIDITY);
-	Logic_Temperature(TEMPERATURE);	
+	Logic_Temperature(TEMPERATURE);		
 }
 
 inline void SetOutputs()

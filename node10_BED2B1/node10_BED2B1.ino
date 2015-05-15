@@ -4,7 +4,7 @@ BOARD ROW1B1
 DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 
 ***********************/
-//#define DEBUG
+#define DEBUG
 
 #include "bconf/DINo_v2_EthernetBridge_RS485.h"
 #include "conf/SuperNode.h" 
@@ -22,10 +22,10 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 
 
 
-#define LIGHT_BATH1_1		1			
+#define LIGHT_BATH1_1		1		
 #define LIGHT_BATH1_2		2
 #define LIGHT_BATH1_3		3
-#define LIGHT_STORAGE		4
+#define LIGHT_LIVING		4
 
 //--------------------------------------
 // USED FOR DHT SENSOR
@@ -33,6 +33,8 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 #define TEMPERATURE_1		6
 #define HUMIDITY			7
 #define HUMIDITY_1			8
+
+#define REMOTE_LIGHT_GW1	9
 
 #include <DHT.h>
 DHT dht(ONE_WIRE_PIN, DHT22);
@@ -42,23 +44,32 @@ float th=0;
 inline void DefineTypicals()
 {
 	Set_LightsGroup(LIGHT_BATH1_1, LIGHT_BATH1_3);
-	Set_SimpleLight(LIGHT_STORAGE);
+	Set_SimpleLight(LIGHT_LIVING);
 
 	Set_Temperature(TEMPERATURE);
 	Set_Humidity(HUMIDITY);
 	dht.begin();	
+
+	Set_SimpleLight(REMOTE_LIGHT_GW1);
 }
 
 inline void ReadInputs()
 {
 	LightsGroupIn(IN1, LIGHT_BATH1_1, LIGHT_BATH1_3);
-	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_STORAGE, true);
+	Souliss_DigIn(IN3, Souliss_T1n_ToggleCmd, memory_map, LIGHT_LIVING, true);
+
+	U8 ret = Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, REMOTE_LIGHT_GW1, true);
+	if( ret != MaCaco_NODATACHANGED )
+	{
+		Serial.println("REMOTE INPUT");
+		RemoteInput(RS485_ADDRESS_GTW1B1, 4, ret);
+	}
 }
 
 inline void ProcessLogics()
 {
 	Logic_LightsGroup(LIGHT_BATH1_1, LIGHT_BATH1_3);
-	Logic_SimpleLight(LIGHT_STORAGE);
+	Logic_SimpleLight(LIGHT_LIVING);
 
 	Logic_Humidity(HUMIDITY);
 	Logic_Temperature(TEMPERATURE);	
@@ -69,13 +80,13 @@ inline void SetOutputs()
 	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_BATH1_1);
 	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_BATH1_2);
 	DigOut(RELAY3, Souliss_T1n_Coil, LIGHT_BATH1_3);
-	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_STORAGE);
+	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_LIVING);
 }
 
 inline void ProcessTimers()
 {
 	Timer_LightsGroup(LIGHT_BATH1_1, LIGHT_BATH1_3);
-	Timer_SimpleLight(LIGHT_STORAGE);
+	Timer_SimpleLight(LIGHT_LIVING);
 
 	th = dht.readHumidity();
 	ImportAnalog(HUMIDITY, &th);
