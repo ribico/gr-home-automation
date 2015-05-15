@@ -30,11 +30,13 @@ inline void DefineTypicals()
 	Set_T12(FAN_SPEED2);
 	Set_T12(FAN_SPEED3);
 	Set_SimpleLight(LIGHT_GW);
+
+	SetInput(LIGHT_GW, Souliss_T1n_OnCmd); // Led connected on NC Relay
 }
 
 inline void ReadInputs()
 {
-
+	// input only coming from other boards
 }
 
 inline void ProcessLogics()
