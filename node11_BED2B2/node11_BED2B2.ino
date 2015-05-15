@@ -49,8 +49,8 @@ inline void DefineTypicals()
 inline void ReadInputs()
 {
 	LightsGroupIn(IN1, LIGHT_BEDROOM2_1, LIGHT_BEDROOM2_4);
-	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BEDROOM2_2, true);
-	Souliss_DigIn(IN3, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BEDROOM2_3, true);
+	Souliss_DigIn(IN3, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BEDROOM2_2, true);
+	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BEDROOM2_3, true);
 }
 
 inline void ProcessLogics()
