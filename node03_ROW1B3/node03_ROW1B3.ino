@@ -64,8 +64,8 @@ inline void ProcessLogics()
 inline void SetOutputs()
 {
 	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_DINING_1);
-	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_DINING_2);
-	DigOut(RELAY3, Souliss_T1n_Coil, LIGHT_DINING_3);
+	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_DINING_3);
+	DigOut(RELAY3, Souliss_T1n_Coil, LIGHT_DINING_2);
 	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_STAIRS);
 }
 

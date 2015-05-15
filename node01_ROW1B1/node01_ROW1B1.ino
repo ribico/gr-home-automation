@@ -21,38 +21,42 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 
 
 
-
 #define LIGHT_LIVING_1			1
 #define LIGHT_LIVING_2			2
 #define LIGHT_LIVING_3			3		
 #define LIGHT_LIVING_4			4
+#define LIGHT_LIVING_5			5
 
 inline void DefineTypicals()
 {
-	Set_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_4);
+	Set_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_5);
 }
 
 inline void ReadInputs()
 {
-	LightsGroupIn(IN1, LIGHT_LIVING_1, LIGHT_LIVING_4);
+	if( LightsGroupIn(IN1, LIGHT_LIVING_1, LIGHT_LIVING_5) == MaCaco_DATACHANGED)
+	{
+		RemoteInput(RS485_ADDRESS_ROW1B3, 4, mInput(LIGHT_LIVING_1));		
+	}
 }
 
 inline void ProcessLogics()
 {
-	Logic_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_4);
+	Logic_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_5);
 }
 
 inline void SetOutputs()
 {
-	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_LIVING_1);
-	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_LIVING_2);
-	DigOut(RELAY3, Souliss_T1n_Coil, LIGHT_LIVING_3);
-	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_LIVING_4); 
+	// LIGHT_LIVING_1 is remote on RS485_ADDRESS_ROW1B3 -> LIGHT_STAIRS
+	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_LIVING_2);
+	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_LIVING_3);
+	DigOut(RELAY3, Souliss_T1n_Coil, LIGHT_LIVING_4);
+	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_LIVING_5); 
 }
 
 inline void ProcessTimers()
 {
-	Timer_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_4);
+	Timer_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_5);
 }
 
 
