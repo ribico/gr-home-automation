@@ -132,107 +132,7 @@ U8 Souliss_LowDigInHoldDuration(U8 pin, U8 *memory_map, U8 firstSlot, U8 lastSlo
 	Souliss_DigInHoldDuration_Helper(pin, !digitalRead(pin), memory_map, firstSlot, lastSlot);
 }
 
-/**************************************************************************
-/*!
-	Link an hardware pin to the shared memory map, active on rising edge
-	It filters any pin activations shorter than duration [milliseconds]
-*/	
-/**************************************************************************/
-U8 custom_DigInFiltered(U8 pin, U8 value, U8 *memory_map, U8 slot, U16 duration)
-{
-	// If pin is on, set the "value"
-	if(digitalRead(pin) && !InPin[pin])
-	{
-		// pin just pressed
-		time = millis();								// Record time
-		InPin[pin] = true;
-		
-		return MaCaco_NODATACHANGED;
-	}
-	else if(!digitalRead(pin) && InPin[pin] && (abs(millis()-time) <= duration))
-	{
-		// pin released before duration => fitler this !
-	
-		InPin[pin] = false;
-		return MaCaco_NODATACHANGED;
-	}
-	else if(!digitalRead(pin) && InPin[pin] && (abs(millis()-time) > duration))
-	{
-		// pin released after duration => Write input value in memory map
-		if(memory_map)	memory_map[MaCaco_IN_s + slot] = value;
-	
-		InPin[pin] = false;
-		return value;
-	}
-	
-	return MaCaco_NODATACHANGED;
-}
 
-/**************************************************************************
-/*!
-	Link an hardware pin to the shared memory map, active on rising edge
-	It filters any pin activations shorter than duration [milliseconds]
-	Manually toggle the input since Souliss_Logic_T22 does not implement
-	toggle of output
-*/	
-/**************************************************************************/
-U8 custom_DigInFiltered_T22Toggle(U8 pin, U8 *memory_map, U8 slot, U16 duration)
-{
-	if (custom_DigInFiltered(pin, Souliss_T2n_ToggleCmd, memory_map, slot, duration) == MaCaco_NODATACHANGED)
-		return MaCaco_NODATACHANGED;
-
-	// if here the button press has been detected
-	if((memory_map[MaCaco_OUT_s + slot] == Souliss_T2n_Coil_Close) || 
-		(memory_map[MaCaco_OUT_s + slot] == Souliss_T2n_LimSwitch_Close))
-	{
-		memory_map[MaCaco_IN_s + slot] = Souliss_T2n_OpenCmd_SW;
-	}
-	else if((memory_map[MaCaco_OUT_s + slot] == Souliss_T2n_Coil_Open) || 
-		(memory_map[MaCaco_OUT_s + slot] == Souliss_T2n_LimSwitch_Open))
-	{
-		memory_map[MaCaco_IN_s + slot] = Souliss_T2n_CloseCmd_SW;
-	}
-	else
-		memory_map[MaCaco_IN_s + slot] = Souliss_T2n_OpenCmd_SW;
-
-
-}
-
-
-
-/*!
-	A slots group is defined as a pool of consequent slots plus an additional slot 
-
-	The group is dinamically divided into two parts (part1 and part2).
-	part1 slots consists of the first powered_lights_count slots in the group,
-	part2 consists of all the remaining slots
-
-	All IN slots of part1 are set to Souliss_T1n_OnCmd
-	All IN slots of part2 are set to Souliss_T1n_OffCmd
-
-	Logic_SimpleLight is finally executed for each slot in the group.
-
-	@group the slot defining number of lights to be powered
-	@offset number of first relay handled by this board (if the group has relays on different boards)
-	@firstSlot the slot in the defined group with the lower slot index
-	@lastSlot the slot in the defined group with the higher slot index
-*/
-/**************************************************************************/
-/*void Souliss_Logic_T11Group(U8 *memory_map, U8 group, U8 offset, U8 firstSlot, U8 lastSlot, U8 *trigger)
-{
-	if (memory_map[MaCaco_OUT_s + group] == MaCaco_DATACHANGED) // changed by pressing the physical push button
-	{
-		for(U8 i=firstSlot; i<=lastSlot; i++)
-			memory_map[MaCaco_IN_s + i] = (i < memory_map[MaCaco_AUXIN_s + group] - offset + firstSlot) ?  Souliss_T1n_OnCmd : Souliss_T1n_OffCmd;
-	
-		memory_map[MaCaco_OUT_s + group] = MaCaco_NODATACHANGED; // reset
-	}
-
-	// cycle upon all OUT slots of the groups
-	for(U8 i=firstSlot; i<=lastSlot; i++)
-		Souliss_Logic_T11(memory_map, i, trigger);	
-}
-*/
 void Souliss_Logic_T11Group(U8 *memory_map, U8 firstSlot, U8 lastSlot, U8 *trigger)
 {
 	// cycle upon all OUT slots of the groups
@@ -267,9 +167,7 @@ void Souliss_SetT11Group(U8 *memory_map, U8 firstSlot, U8 lastSlot)
 #define LightsGroupIn(pin, firstSlot, lastSlot) Souliss_DigInHoldDuration(pin, memory_map, firstSlot, lastSlot)
 #define LowLightsGroupIn(pin, firstSlot, lastSlot) Souliss_LowDigInHoldDuration(pin, memory_map, firstSlot, lastSlot)
 
-#define WINDOW_DELAY 500
-#define DigInWindow(pin, value, slot) custom_DigInFiltered(pin, value, memory_map, slot, WINDOW_DELAY)
-#define DigInWindowToggle(pin, slot) custom_DigInFiltered_T22Toggle(pin, memory_map, slot, WINDOW_DELAY)
-//#define DigInFiltered(pin, value, slot) Souliss_DigIn(pin, value, memory_map, slot, true)
+#define WINDOW_DELAY 800
+#define DigInWindowToggle(pin, slot) Souliss_DigInHold(pin, Souliss_T2n_StopCmd, Souliss_T2n_ToggleCmd, memory_map, slot, WINDOW_DELAY)
 
 #endif
