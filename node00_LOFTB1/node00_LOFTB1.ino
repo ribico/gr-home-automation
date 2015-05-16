@@ -49,8 +49,8 @@ MEGA with Ethernet only acting as GATEWAY
 
 inline void DefinePinMode()
 {
-	pinMode(LIGHT_LOFT_1_PIN_IN, INPUT_PULLUP);
-	pinMode(LIGHT_LOFT_2_PIN_IN, INPUT_PULLUP);
+	pinMode(LIGHT_STAIRS_PIN_IN, INPUT_PULLUP);
+	pinMode(LIGHT_LOFT_PIN_IN, INPUT_PULLUP);
 	pinMode(LIGHT_TERRACE_1_PIN_IN, INPUT_PULLUP);
 	pinMode(LIGHT_TERRACE_2_PIN_IN, INPUT_PULLUP);
 	pinMode(LIGHT_TERRACE_3_PIN_IN, INPUT_PULLUP);
@@ -119,6 +119,7 @@ inline void DefinePinMode()
 
 inline void DefineTypicals()
 {
+	Set_SimpleLight(LIGHT_STAIRS);
 	Set_SimpleLight(LIGHT_LOFT_1);
 	Set_SimpleLight(LIGHT_LOFT_2);
 	Set_SimpleLight(LIGHT_TERRACE_1);
@@ -150,40 +151,40 @@ inline void DefineTypicals()
 
 	// initialize values
 	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_RGBLamp_OnCmd);
-	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+//	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
 }
 
 inline void ReadInputs()
 {
-	Souliss_LowDigIn(LIGHT_LOFT_1_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_LOFT_1, true);
-	Souliss_LowDigIn(LIGHT_LOFT_2_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_LOFT_2, true);
+	U8 ret = Souliss_LowDigIn(LIGHT_STAIRS_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_STAIRS, true);
+	if( ret != MaCaco_NODATACHANGED)
+		RemoteInput(RS485_ADDRESS_ROW1B3, 4, mInput(LIGHT_STAIRS));
+
+	Souliss_LowDigIn(LIGHT_LOFT_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_LOFT_1, true);
 	Souliss_LowDigIn(LIGHT_TERRACE_1_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_1, true);
 	Souliss_LowDigIn(LIGHT_TERRACE_2_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_2, true);
 	Souliss_LowDigIn(LIGHT_TERRACE_3_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_3, true);
 	Souliss_LowDigIn(LIGHT_TOILET_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TOILET, true);
 
 	
-	mInput(HVAC_VALVES) = mOutput(HVAC_VALVES);
+	mInput(HVAC_VALVES) = mOutput(HVAC_VALVES); 
 
 	if (!digitalRead(MAIN_3WAY_VALVE_BOILER_LIMIT_PIN))
-		SetInput(mInput(HVAC_VALVES), mInput(HVAC_VALVES) | MAIN_3WAY_VALVE_BOILER_MASK); // set boiler bit
-
+		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) | MAIN_3WAY_VALVE_BOILER_MASK); // set boiler bit
 	else
-		SetInput(mInput(HVAC_VALVES), mInput(HVAC_VALVES) & ~MAIN_3WAY_VALVE_BOILER_MASK);	// unset boiler bit
-
+		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) & ~MAIN_3WAY_VALVE_BOILER_MASK);	// unset boiler bit
 
 	if (!digitalRead(MAIN_3WAY_VALVE_COLLECTOR_LIMIT_PIN))
-		SetInput(mInput(HVAC_VALVES), mInput(HVAC_VALVES) | MAIN_3WAY_VALVE_COLLECTOR_MASK); // set distribution bit
-
+		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) | MAIN_3WAY_VALVE_COLLECTOR_MASK); // set distribution bit
 	else
-		SetInput(mInput(HVAC_VALVES), mInput(HVAC_VALVES) & ~MAIN_3WAY_VALVE_COLLECTOR_MASK);	// unset distribution bit
-
+		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) & ~MAIN_3WAY_VALVE_COLLECTOR_MASK);	// unset distribution bit
 }
 
 
 inline void ProcessLogics()
 {
 	// standar slots logics
+	Logic_SimpleLight(LIGHT_STAIRS);
 	Logic_SimpleLight(LIGHT_LOFT_1);
 	Logic_SimpleLight(LIGHT_LOFT_2);
 	Logic_SimpleLight(LIGHT_TERRACE_1);
