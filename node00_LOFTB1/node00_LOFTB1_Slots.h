@@ -1,3 +1,4 @@
+#define LIGHT_STAIRS					0
 #define LIGHT_LOFT_1            		1                       
 #define LIGHT_LOFT_2            		2
 #define LIGHT_TERRACE_1                 3
