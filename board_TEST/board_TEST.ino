@@ -1,61 +1,53 @@
-/*
-  Analog input, analog output, serial output
+#include <SPI.h>
+               #include <Ethernet.h>
+                
+               // Be sure this address is unique in your network
+               byte mac[] = { 0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x19 };        
+               char APIKEY[] = "449cc02191bf06bed2e8c6d432a874e20944d817"; // Put here your API key
+               char CHANNEL[] = "grhSouliss";                              // and here your channel name
+ 
+               char serverName[] = "api.pushetta.com";
+               boolean lastConnected = false; 
+               EthernetClient client;
+                
+               void setup() {
+                 Serial.begin(9600);
 
- Reads an analog input pin, maps the result to a range from 0 to 255
- and uses the result to set the pulsewidth modulation (PWM) of an output pin.
- Also prints the results to the serial monitor.
+                 if (Ethernet.begin(mac) == 0) {
+                   while(true);                          // no point in carrying on, so do nothing forever
+                 }
+               
+                 delay(1000);                          // give the Ethernet shield a second to initialize
+               }
+                
+               void loop()
+               {
+                     sendToPushetta(CHANNEL, "Hello world!");
+                     delay(60000); 
+               }
+                
+                
+               //Function for sending the request to Pushetta
+               void sendToPushetta(char channel[], String text){
+                 client.stop();
+                
+                 if (client.connect(serverName, 80)) 
+                 {                   
+                   client.print("POST /api/pushes/");
+                   client.print(channel);
+                   client.println("/ HTTP/1.1");
+                   client.print("Host: ");
+                   client.println(serverName);
+                   client.print("Authorization: Token ");
+                   client.println(APIKEY);
+                   client.println("Content-Type: application/json");
+                   client.print("Content-Length: ");
+                   client.println(text.length()+46);
+                   client.println();
+                   client.print("{ \"body\" : \"");
+                   client.print(text);
+                   client.println("\", \"message_type\" : \"text/plain\" }");
+                   client.println(); 
+                 } 
 
- The circuit:
- * potentiometer connected to analog pin 0.
-   Center pin of the potentiometer goes to the analog pin.
-   side pins of the potentiometer go to +5V and ground
- * LED connected from digital pin 9 to ground
-
- created 29 Dec. 2008
- modified 9 Apr 2012
- by Tom Igoe
-
- This example code is in the public domain.
-
- */
-#include "NTC.h"
-
-// These constants won't change.  They're used to give names
-// to the pins used:
-
-
-void setup() {
-  // initialize serial communications at 9600 bps:
-  Serial.begin(9600);
-}
-
-void loop() {
-	float temp = NTC_RawADCToCelsius( analogRead(A0) );
-	Serial.print("temp A0 = ");
-	Serial.print(temp);
-
-	temp = NTC_RawADCToCelsius( analogRead(A1) );
-	Serial.print("\t temp A1 = ");
-	Serial.print(temp);
-
-	temp = NTC_RawADCToCelsius( analogRead(A2) );
-	Serial.print("\t temp A2 = ");
-	Serial.print(temp);
-
-	temp = NTC_RawADCToCelsius( analogRead(A3) );
-	Serial.print("\t temp A3 = ");
-	Serial.print(temp);
-
-	temp = NTC_RawADCToCelsius( analogRead(A4) );
-	Serial.print("\t temp A4 = ");
-	Serial.print(temp);
-
-	temp = NTC_RawADCToCelsius( analogRead(A5) );
-	Serial.print("\t temp A5 = ");
-	Serial.println(temp);
-
-  // wait 2 milliseconds before the next loop
-  // for the analog-to-digital converter to settle
-  // after the last reading:
-  delay(100);
-}
+             }
