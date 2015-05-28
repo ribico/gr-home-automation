@@ -223,12 +223,12 @@ sitemap default label="Main Menu"
 				Text item=HP_Temp_Fancoil_Flow				
 				Text label="Impostazioni" icon="settings"
 				{
-					Switch item=HP_Remote_Switch
-					Switch item=HP_OH_Auto
-					Switch item=HP_Manual
+					Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
+					Switch item=HP_OH_Auto mappings=[ON="Attive", OFF="Disattive"]
+					Switch item=HP_Manual mappings=[OFF="Auto (Souliss)", ON="MAN/OH"]
 					Switch item=HP_Circulation_Pump
-					Switch item=HP_Sanitary_Request
-					Switch item=HP_Heat_Cool
+					Switch item=HP_Sanitary_Request label="ACS" mappings=[ON="In Produzione"]
+					Switch item=HP_Heat_Cool label="Modalità" mappings=[OFF="Caldo", ON="Freddo"]
 				}
 			}
 			Text label="Zone HVAC" icon="climate"

@@ -123,8 +123,8 @@ Number Temperature_2F_Bedroom3_SP	"Temp Set Point [%.1f °C]" 	<temperature> (gT
 Number Temperature_2F_Bedroom3_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bedroom3)
 Number UR_2F_Bedroom3		"UR Corrente [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Bedroom3,gTechnicView_Node5) {souliss="T53:5:6"}
 
-Switch HP_Manual			"Logiche Souliss Disabilitate"	<lock> (gTechnicView_Node13,gHPSettings) {souliss="T11:0:13", autoupdate=false}
-Switch HP_OH_Auto			"Logiche OpenHAB Abilitate"	<lock> (gHPSettings)
+Switch HP_Manual			"Logiche PDC"	<lock> (gTechnicView_Node13,gHPSettings) {souliss="T11:0:13", autoupdate=false}
+Switch HP_OH_Auto			"Logiche OpenHAB"	<lock> (gHPSettings)
 Switch HP_Remote_Switch		"Remote Switch" 		<inverter> (gTechnicView_Node0,gHPSettings) {souliss="T11:0:14", autoupdate=false}
 Switch HP_Circulation_Pump	"Pompa Interna" 		<smartheater> (gTechnicView_Node0,gHPSettings) {souliss="T11:0:15", autoupdate=false}
 Switch HP_Sanitary_Request		"Richiesta ACS" 		<smartheater> (gTechnicView_Node0,gHPSettings) {souliss="T11:0:16", autoupdate=false}
