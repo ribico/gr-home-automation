@@ -30,8 +30,6 @@ inline void DefineTypicals()
 	Set_T12(FAN_SPEED2);
 	Set_T12(FAN_SPEED3);
 	Set_SimpleLight(LIGHT_GW);
-
-	SetInput(LIGHT_GW, Souliss_T1n_OnCmd); // LED connected on NC Relay
 }
 
 inline void ReadInputs()
@@ -53,7 +51,7 @@ inline void SetOutputs()
 	DigOut(RELAY1, Souliss_T2n_Coil_Close,  FAN_SPEED1);
 	DigOut(RELAY2, Souliss_T2n_Coil_Close, FAN_SPEED2);
 	DigOut(RELAY3, Souliss_T2n_Coil_Close,  FAN_SPEED3);
-	DigOut(RELAY4, Souliss_T2n_Coil_Close, LIGHT_GW);
+	LowDigOut(RELAY4, Souliss_T2n_Coil_Close, LIGHT_GW);
 }
 
 inline void ProcessTimers()
