@@ -224,8 +224,7 @@ sitemap default label="Main Menu"
 				Text label="Impostazioni" icon="settings"
 				{
 					Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
-					Switch item=HP_OH_Auto mappings=[ON="Attive", OFF="Disattive"]
-					Switch item=HP_Manual mappings=[OFF="Auto (Souliss)", ON="MAN/OH"]
+					Switch item=HP_Logics mappings=[0="Manuale", 1="Base (Souliss)", 2="Avanzate (OpenHAB)"]
 					Switch item=HP_Circulation_Pump
 					Switch item=HP_Sanitary_Request label="ACS" mappings=[ON="In Produzione"]
 					Switch item=HP_Heat_Cool label="Modalità" mappings=[OFF="Caldo", ON="Freddo"]
