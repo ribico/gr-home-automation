@@ -34,17 +34,18 @@ MEGA with Ethernet only acting as GATEWAY
 #define TEMP_FANCOIL_FLOW_PAD_RESISTANCE      	9830 // measured
 
 
-#define SETPOINT_SANITARY_WATER 	42 // °C
-#define SETPOINT_HEATING_WATER		28 // °C
-#define SETPOINT_DEADBAND       	2
+#define SETPOINT_TEMP_SANITARY_WATER 	42 // °C
+#define SETPOINT_TEMP_HEATING_WATER		28 // °C
+#define SETPOINT_TEMP_DEADBAND       	2
+#define SETPOINT_TEMP_DEADBAND_SMALL	0.2
 
 #define SETPOINT_UR_1				65
 #define SETPOINT_UR_2				75
 #define SETPOINT_UR_3				85
 
-#define SETPOINT_COOL_TEMP			25
-#define SETPOINT_HEAT_TEMP			19
-#define SETPOINT_HEAT_TEMP_DEADBAND	0.5
+//#define SETPOINT_COOL_TEMP			25
+//#define SETPOINT_HEAT_TEMP			19
+
 
 
 inline void DefinePinMode()
@@ -149,8 +150,10 @@ inline void DefineTypicals()
 	Souliss_SetT12(memory_map, PUMP_COLLECTOR_FANCOIL);
 	Souliss_SetT12(memory_map, PUMP_COLLECTOR_FLOOR);
 
+	Set_Temperature(TEMP_AMBIENCE_SET_POINT);
+
 	// initialize values
-	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_RGBLamp_OnCmd);
+	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
 //	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
 }
 
@@ -204,6 +207,7 @@ inline void ProcessLogics()
 	Logic_Temperature(TEMP_FLOOR_FLOW);
 	Logic_Temperature(TEMP_FLOOR_RETURN);
 	Logic_Temperature(TEMP_FANCOIL_FLOW);
+	Logic_Temperature(TEMP_AMBIENCE_SET_POINT);
 
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
@@ -260,6 +264,7 @@ inline void ProcessSlowLogics()
 
 	float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
 
+	float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
 /*
 Serial.print("temp_BED1: ");
 Serial.print(temp_BED1);
@@ -278,126 +283,122 @@ Serial.print(temp_KITCHEN);
 Serial.print("\ttemp_DINING: ");
 Serial.println(temp_DINING);
 */
-/*
+
+
 	mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
 
 	// activate zones according to setpoint
 	if( IsHeatMode() )
 	{
-		float setpoint_temp = SETPOINT_HEAT_TEMP; 
-		TODO("SETPOINT_HEAT_TEMP should not be fixed");
-
-		if( temp_BED1 < setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_BED1 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
-		else if( temp_BED1 > setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_BED1 > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED1);
 
-		if( temp_BATH1 < setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_BATH1 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BATH1);
-		else if( temp_BATH1 > setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_BATH1 > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
 
-		if( temp_BED2 < setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_BED2 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED2);
-		else if( temp_BED2 > setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_BED2 > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
 
-		if( temp_LIVING < setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_LIVING < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-		else if( temp_LIVING > setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_LIVING > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
 
-		if( temp_BED3 < setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_BED3 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED3);
-		else if( temp_BED3 > setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_BED3 > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED3);
 
-		if( temp_BATH2 < setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_BATH2 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BATH2);
-		else if( temp_BATH2 > setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_BATH2 > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH2);
 
-		if( temp_KITCHEN < setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_KITCHEN < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
-		else if( temp_KITCHEN > setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_KITCHEN > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
 	}
 	else if( IsCoolMode() )
 	{
-		float setpoint_temp = SETPOINT_COOL_TEMP; 
-		TODO("SETPOINT_COOL_TEMP should not be fixed");
-
 		// do not cool baths floor
 		SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
 		SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH2);
 
-		if( temp_BED1 > setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_BED1 > setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
-		else if( temp_BED1 < setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_BED1 < setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED1);
 
-		if( temp_BED2 > setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_BED2 > setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED2);
-		else if( temp_BED2 < setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_BED2 < setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
 
-		if( temp_LIVING > setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_LIVING > setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-		else if( temp_LIVING < setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_LIVING < setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
 
-		if( temp_BED3 > setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_BED3 > setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED3);
-		else if( temp_BED3 < setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_BED3 < setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED3);
 
-		if( temp_KITCHEN < setpoint_temp - SETPOINT_HEAT_TEMP_DEADBAND)
+		if( temp_KITCHEN < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
-		else if( temp_KITCHEN > setpoint_temp + SETPOINT_HEAT_TEMP_DEADBAND)
+		else if( temp_KITCHEN > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
 	}
-*/
+
 
 	if( IsSanitaryWaterInProduction() )
 		SetHpFlowToBoiler();
 
 	// control SANITARY production hysteresys
-	if( !IsSanitaryWaterInProduction() && (temperature_sanitary < SETPOINT_SANITARY_WATER - SETPOINT_DEADBAND) )
+	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterRequested() )
 		SanitaryWaterOn();
 	
-	else if ( IsSanitaryWaterInProduction() && (temperature_sanitary > SETPOINT_SANITARY_WATER + SETPOINT_DEADBAND) )
+	else if ( IsSanitaryWaterInProduction() &&  IsSanitaryWaterNotRequested() )
 		SanitaryWaterOff();
 
 
 	if( IsHeating() ) 
 	{	
-		PumpBoilerToFloorOn();	// using hot water from boiler
+		PumpBoilerToFloorOn();	// using hot water from boiler only
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
 
 		// control hot water storage if there's heating requests from any zone
 		// otherwise just don't care about the temperature of the storage
-		if ( !IsHotWaterInProduction() && (temperature_heating < SETPOINT_HEATING_WATER - SETPOINT_DEADBAND) )
+		if ( !IsHotWaterInProduction() && IsHotWaterRequested() )
 		{
 			// should produce some hot water here
 			SetHpFlowToBoiler(); // only needed when activating HP Circulation pump
 			HpCirculationOn();
 		}
 			
-		else if ( IsHotWaterInProduction() && (temperature_heating > SETPOINT_HEATING_WATER + SETPOINT_DEADBAND) )
+		else if ( IsHotWaterInProduction() && IsHotWaterNotRequested() )
 			HpCirculationOff();
 	}
 
 	else if( IsCooling() && !IsSanitaryWaterInProduction() )
 	{
-		SetHpFlowToCollector();	// always needed in cooling
-		HpCirculationOn();
-
 		PumpBoilerToFloorOff(); // do not use boiler water
+		SetHpFlowToCollector();	// always needed in cooling
+		HpCirculationOn();	// Cold water needed
+		PumpCollectorToFloorOn();
 
+		// check umidity average to eventually activate fancoils
 		if( UR_AVE <= SETPOINT_UR_1 )
 		{
-			PumpCollectorToFloorOff();
+			PumpCollectorToFancoilOff();
 			FancoilGW1_Off();
 			FancoilGW2_Off();
 		}
@@ -420,7 +421,6 @@ Serial.println(temp_DINING);
 			FancoilGW2_Speed3();
 		}
 
-		PumpCollectorToFloorOn();
 	}
 
 	
@@ -436,12 +436,12 @@ Serial.println(temp_DINING);
 		// at least one zone is open
 		// and the heatpump is not set to COOL mode
 
-		if (temperature_floor_flow > SETPOINT_HEATING_WATER + SETPOINT_DEADBAND)
+		if ( IsHotWaterTooHot() )
 		{
 			// mix valve on, direction relay off
 			MixValveOn_ColdDirection(); 
 		}	
-		else if (temperature_floor_flow < SETPOINT_HEATING_WATER - SETPOINT_DEADBAND)
+		else if ( IsHotWaterTooCold() )
 		{
 			// mix valve on, direction relay on
 			MixValveOn_HotDirection();
