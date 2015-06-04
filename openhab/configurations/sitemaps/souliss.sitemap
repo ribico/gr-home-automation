@@ -213,22 +213,17 @@ sitemap default label="Main Menu"
 		Group item=gRolleshutters
 		Text label="Clima" icon="climate"
 		{
-			Text label="Pompa di Calore" icon="climate"
+			Text label="Impostazioni" icon="climate"
 			{
-				Text item=HP_Temp_Sanitary
-				Text item=HP_Temp_Heating
-				Text item=HP_Temp_Bottom
-				Text item=HP_Temp_Heating_Flow
-				Text item=HP_Temp_Heating_Ret				
-				Text item=HP_Temp_Fancoil_Flow				
-				Text label="Impostazioni" icon="settings"
-				{
-					Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
-					Switch item=HP_Logics mappings=[0="Manuale", 1="Base (Souliss)", 2="Avanzate (OpenHAB)"]
-					Switch item=HP_Circulation_Pump
-					Switch item=HP_Sanitary_Request label="ACS" mappings=[ON="In Produzione"]
-					Switch item=HP_Heat_Cool label="Modalità" mappings=[OFF="Caldo", ON="Freddo"]
-				}
+				Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
+				Switch item=HP_Logics mappings=[0="Manuale", 1="Base (Souliss)", 2="Avanzate (OpenHAB)"]
+				Switch item=HP_Circulation_Pump
+				Switch item=HP_Sanitary_Request label="ACS" mappings=[ON="In Produzione"]
+				Switch item=HP_Heat_Cool label="Modalità" mappings=[OFF="Caldo", ON="Freddo"]
+				Switch item=HVAC_3way_Valve mappings=[ON="Flusso al Boiler", OFF="Flusso al Collettore"]
+				Switch item=HVAC_Pump_Boiler_Floor
+				Switch item=HVAC_Pump_Collector_Fancoil
+				Switch item=HVAC_Pump_Collector_Floor
 			}
 			Text label="Zone HVAC" icon="climate"
 			{
@@ -403,6 +398,11 @@ sitemap default label="Main Menu"
 
 			Text label="Temperature" icon="temperature"
 			{
+				Frame label="Set Point"
+				{
+					Setpoint item=HVAC_Temp_SetPoint step=0.5 minValue=15 maxValue=30
+				}
+
 				Frame label="Temperature di zona"
 				{
 					Text item=Temperature_2F_Living label="Soggiorno [%.1f °C]"
@@ -415,6 +415,15 @@ sitemap default label="Main Menu"
 					Text item=Temperature_2F_Bedroom3 label="Camera 3 [%.1f °C]"	
 				}
 
+				Frame label="HVAC"
+				{
+					Text item=HP_Temp_Sanitary
+					Text item=HP_Temp_Heating
+					Text item=HP_Temp_Bottom
+					Text item=HP_Temp_Heating_Flow
+					Text item=HP_Temp_Heating_Ret				
+					Text item=HP_Temp_Fancoil_Flow		
+				}
 			}
 
 			Text label="Valvole Zone HVAC" icon="climate"
