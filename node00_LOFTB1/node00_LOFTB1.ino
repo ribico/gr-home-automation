@@ -39,9 +39,9 @@ MEGA with Ethernet only acting as GATEWAY
 #define SETPOINT_TEMP_DEADBAND       	2
 #define SETPOINT_TEMP_DEADBAND_SMALL	0.2
 
-#define SETPOINT_UR_1				65
-#define SETPOINT_UR_2				75
-#define SETPOINT_UR_3				85
+#define SETPOINT_UR_1				55
+#define SETPOINT_UR_2				65
+#define SETPOINT_UR_3				75
 
 //#define SETPOINT_COOL_TEMP			25
 //#define SETPOINT_HEAT_TEMP			19
@@ -152,9 +152,14 @@ inline void DefineTypicals()
 
 	Set_Temperature(TEMP_AMBIENCE_SET_POINT);
 
+	Souliss_SetT12(memory_map, HVAC_MODE);
+
 	// initialize values
 	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
-//	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+	float set_point = 26; TODO("Should come from user interface");
+	Souliss_ImportAnalog(memory_map, TEMP_AMBIENCE_SET_POINT, &set_point);
+
 }
 
 inline void ReadInputs()
@@ -171,6 +176,7 @@ inline void ReadInputs()
 
 	
 	mInput(HVAC_VALVES) = mOutput(HVAC_VALVES); 
+
 
 	if (!digitalRead(MAIN_3WAY_VALVE_BOILER_LIMIT_PIN))
 		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) | MAIN_3WAY_VALVE_BOILER_MASK); // set boiler bit
@@ -209,14 +215,14 @@ inline void ProcessLogics()
 	Logic_Temperature(TEMP_FANCOIL_FLOW);
 	Logic_Temperature(TEMP_AMBIENCE_SET_POINT);
 
-	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
-	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
-
 	Souliss_Logic_T22(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
 
 	Souliss_Logic_T12(memory_map, PUMP_BOILER_FLOOR, &data_changed);
 	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FANCOIL, &data_changed);
 	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FLOOR, &data_changed);	
+	Souliss_Logic_T12(memory_map, HVAC_MODE, &data_changed);	
+
+	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
 }
 
 inline void ProcessSlowLogics()
@@ -285,10 +291,13 @@ Serial.println(temp_DINING);
 */
 
 
-	mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
+	if( IsHvacOn() )
+		mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
+	else
+		mInput(HVAC_ZONES) = 0; // close all valves
 
 	// activate zones according to setpoint
-	if( IsHeatMode() )
+	if( IsHvacOn() && IsHeatMode() )
 	{
 		if( temp_BED1 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
@@ -324,8 +333,9 @@ Serial.println(temp_DINING);
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
 		else if( temp_KITCHEN > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
+
 	}
-	else if( IsCoolMode() )
+	else if( IsHvacOn() && IsCoolMode() )
 	{
 		// do not cool baths floor
 		SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
@@ -423,6 +433,14 @@ Serial.println(temp_DINING);
 
 	}
 
+	if( !IsHeating() )
+		PumpBoilerToFloorOff();
+
+	if( !IsCooling() )
+	{
+		PumpCollectorToFloorOff();
+		PumpCollectorToFancoilOff();
+	}
 	
 	if( !IsHeating() && !IsCooling() )
 		HpCirculationOff();
@@ -457,11 +475,16 @@ Serial.println(temp_DINING);
 		// heating is off, keep the mix valve off.
 		MixValveOff();
 	}
+
+	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
+
 }
 
 
 inline void SetOutputs()
 {
+
+
 	LowDigOut(LIGHT_LOFT_1_PIN, Souliss_T1n_Coil, LIGHT_LOFT_1);
 	LowDigOut(LIGHT_LOFT_2_PIN, Souliss_T1n_Coil, LIGHT_LOFT_2);
 	LowDigOut(LIGHT_TERRACE_1_PIN, Souliss_T1n_Coil, LIGHT_TERRACE_1);

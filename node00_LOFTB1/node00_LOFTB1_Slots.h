@@ -50,3 +50,5 @@
 
 #define TEMP_AMBIENCE_SET_POINT		30
 #define TEMP_AMBIENCE_SET_POINT_H	31
+
+#define HVAC_MODE					32
