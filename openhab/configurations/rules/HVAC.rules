@@ -24,3 +24,243 @@ then
 //	logInfo("HVAC_HP_Logics - ", HP_Logics.toString)
 //	logInfo("HVAC_HP_Manual - ", HP_Manual.toString)
 end
+
+
+rule "HVAC_HVAC_Mode"
+when
+	System started or
+	Item HVAC_Function changed
+then
+	if( HVAC_Function.state == 0)
+	{
+		HVAC_Mode.sendCommand(OFF)
+	}
+	else if( HVAC_Function.state == 1 )
+	{
+		HVAC_Mode.sendCommand(ON)
+		HP_Heat_Cool.sendCommand(ON)
+	}
+	else if( HVAC_Function.state == 2 )
+	{
+		HVAC_Mode.sendCommand(ON)
+		HP_Heat_Cool.sendCommand(OFF)
+	}
+
+
+//	logInfo("HVAC_HP_Logics - ", HP_Logics.toString)
+//	logInfo("HVAC_HP_Manual - ", HP_Manual.toString)
+end
+
+
+
+
+
+
+rule "HVAC_Living"
+when 
+//	Time cron "* * * * * ?" or
+	System started or
+	Item Temperature_2F_Living_SP changed or
+    Item Temperature_2F_Living changed or
+    item UR_2F_Living changed or
+then
+
+
+	try { 
+		var set_point = Temperature_2F_Living_SP.state as DecimalType
+		var current_temp = Temperature_2F_Living.state as DecimalType
+		var current_ur = UR_2F_Living.state as DecimalType
+//		logInfo("HVAC_Living", set_point.toString)
+//		logInfo("HVAC_Living", current_temp.toString)
+
+		// calculate dew point
+		Temperature_2F_Living_DP.sendCommand(current_temp-(100-current_ur)/5)
+
+	}
+	catch (Exception e) // temperature set point undefined
+	{ 
+		Temperature_2F_Living_SP.sendCommand(Default_Room_Temp_SP) 
+	}
+	
+end
+
+
+
+rule "HVAC_Kitchen"
+when 
+	System started or
+	Item Temperature_2F_Kitchen_SP changed or
+    Item Temperature_2F_Kitchen changed or
+    item UR_2F_Kitchen changed or
+    Valves_Manual_Mode changed from ON to OFF
+then
+
+
+	try { 
+		var Number set_point = Temperature_2F_Kitchen_SP.state as DecimalType
+		var Number current_temp = Temperature_2F_Kitchen.state as DecimalType
+		var Number current_ur = UR_2F_Kitchen.state as DecimalType
+
+		// calculate dew point
+		Temperature_2F_Kitchen_DP.sendCommand(current_temp-(100-current_ur)/5)
+
+	}
+	catch (Exception e) // temperature set point undefined
+	{ 
+		Temperature_2F_Kitchen_SP.sendCommand(Default_Room_Temp_SP) 
+	}
+
+end
+
+rule "HVAC_Dining"
+when 
+	System started or
+    Item Temperature_2F_Dining changed or
+    item UR_2F_Dining changed
+then
+
+
+	try { 
+		var Number current_temp = Temperature_2F_Kitchen.state as DecimalType
+		var Number current_ur = UR_2F_Kitchen.state as DecimalType
+
+		// calculate dew point
+		Temperature_2F_Dining_DP.sendCommand(current_temp-(100-current_ur)/5)
+
+	}
+	catch (Exception e)
+	{ 
+	}
+
+end
+
+rule "HVAC_Bedroom1"
+when 
+	System started or
+	Item Temperature_2F_Bedroom1_SP changed or
+    Item Temperature_2F_Bedroom1 changed or
+    item UR_2F_Bedroom1 changed or
+    Valves_Manual_Mode changed from ON to OFF
+then
+
+
+	try { 
+		var Number set_point = Temperature_2F_Bedroom1_SP.state as DecimalType
+		var Number current_temp = Temperature_2F_Bedroom1.state as DecimalType
+		var Number current_ur = UR_2F_Bedroom1.state as DecimalType
+
+		// calculate dew point
+		Temperature_2F_Bedroom1_DP.sendCommand(current_temp-(100-current_ur)/5)
+
+	}
+	catch (Exception e) // temperature set point undefined
+	{ 
+		Temperature_2F_Bedroom1_SP.sendCommand(Default_Room_Temp_SP) 
+	}
+
+end
+
+
+rule "HVAC_Bedroom2"
+when 
+	System started or
+	Item Temperature_2F_Bedroom2_SP changed or
+    Item Temperature_2F_Bedroom2 changed or
+    item UR_2F_Bedroom2 changed or
+    Valves_Manual_Mode changed from ON to OFF
+then
+
+
+	try { 
+		var Number set_point = Temperature_2F_Bedroom2_SP.state as DecimalType
+		var Number current_temp = Temperature_2F_Bedroom2.state as DecimalType
+		var Number current_ur = UR_2F_Bedroom2.state as DecimalType
+
+		// calculate dew point
+		Temperature_2F_Bedroom2_DP.sendCommand(current_temp-(100-current_ur)/5)
+
+	}
+	catch (Exception e) // temperature set point undefined
+	{ 
+		Temperature_2F_Bedroom2_SP.sendCommand(Default_Room_Temp_SP) 
+	}
+
+end
+
+
+rule "HVAC_Bedroom3"
+when 
+	System started or
+	Item Temperature_2F_Bedroom3_SP changed or
+    Item Temperature_2F_Bedroom3 changed or
+    item UR_2F_Bedroom3 changed or
+    Valves_Manual_Mode changed from ON to OFF
+then
+
+
+	try { 
+		var Number set_point = Temperature_2F_Bedroom3_SP.state as DecimalType
+		var Number current_temp = Temperature_2F_Bedroom3.state as DecimalType
+		var Number current_ur = UR_2F_Bedroom3.state as DecimalType
+
+		// calculate dew point
+		Temperature_2F_Bedroom3_DP.sendCommand(current_temp-(100-current_ur)/5)
+
+	}
+	catch (Exception e) // temperature set point undefined
+	{ 
+		Temperature_2F_Bedroom3_SP.sendCommand(Default_Room_Temp_SP) 
+	}
+
+end
+
+rule "HVAC_Bath1"
+when 
+	System started or
+	Item Temperature_2F_Bath1_SP changed or
+    Item Temperature_2F_Bath1 changed or
+    item UR_2F_Bath1 changed or
+    Valves_Manual_Mode changed from ON to OFF
+then
+	try { 
+		var Number set_point = Temperature_2F_Bath1_SP.state as DecimalType
+		var Number current_temp = Temperature_2F_Bath1.state as DecimalType
+		var Number current_ur = UR_2F_Bath1.state as DecimalType
+
+		// calculate dew point
+		Temperature_2F_Bath1_DP.sendCommand(current_temp-(100-current_ur)/5)
+
+	}
+	catch (Exception e) // temperature set point undefined
+	{ 
+		Temperature_2F_Bath1_SP.sendCommand(Default_Room_Temp_SP) 
+	}
+
+end
+
+
+rule "HVAC_Bath2"
+when 
+	System started or
+	Item Temperature_2F_Bath2_SP changed or
+    Item Temperature_2F_Bath2 changed or
+    item UR_2F_Bath2 changed or
+    Valves_Manual_Mode changed from ON to OFF
+then
+
+
+	try { 
+		var Number set_point = Temperature_2F_Bath2_SP.state as DecimalType
+		var Number current_temp = Temperature_2F_Bath2.state as DecimalType
+		var Number current_ur = UR_2F_Bath2.state as DecimalType
+
+		// calculate dew point
+		Temperature_2F_Bath2_DP.sendCommand(current_temp-(100-current_ur)/5)
+
+	}
+	catch (Exception e) // temperature set point undefined
+	{ 
+		Temperature_2F_Bath2_SP.sendCommand(Default_Room_Temp_SP) 
+	}
+
+end
