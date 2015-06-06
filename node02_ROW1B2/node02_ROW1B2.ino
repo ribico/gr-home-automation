@@ -53,8 +53,8 @@ inline void ReadInputs()
 inline void ProcessLogics()
 {
 	Logic_LightsGroup(LIGHT_KITCHEN_1, LIGHT_KITCHEN_3);
-	Logic_Humidity(HUMIDITY);
-	Logic_Temperature(TEMPERATURE);
+	grh_Logic_Humidity(HUMIDITY);
+	grh_Logic_Temperature(TEMPERATURE);
 }
 
 inline void SetOutputs()

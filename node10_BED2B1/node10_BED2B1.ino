@@ -68,8 +68,8 @@ inline void ProcessLogics()
 	Logic_LightsGroup(LIGHT_BATH1_1, LIGHT_BATH1_3);
 	Logic_SimpleLight(LIGHT_LIVING);
 
-	Logic_Humidity(HUMIDITY);
-	Logic_Temperature(TEMPERATURE);	
+	grh_Logic_Humidity(HUMIDITY);
+	grh_Logic_Temperature(TEMPERATURE);	
 }
 
 inline void SetOutputs()

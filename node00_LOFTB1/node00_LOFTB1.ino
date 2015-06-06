@@ -36,8 +36,8 @@ MEGA with Ethernet only acting as GATEWAY
 
 #define SETPOINT_TEMP_SANITARY_WATER 	42 // °C
 #define SETPOINT_TEMP_HEATING_WATER		28 // °C
-#define SETPOINT_TEMP_DEADBAND       	2
-#define SETPOINT_TEMP_DEADBAND_SMALL	0.2
+#define SETPOINT_TEMP_DEADBAND       	2	// °C
+#define SETPOINT_TEMP_DEADBAND_SMALL	0.2	// °C
 
 #define SETPOINT_UR_1				55
 #define SETPOINT_UR_2				65
@@ -207,13 +207,13 @@ inline void ProcessLogics()
 	Souliss_Logic_T12(memory_map, HEATPUMP_SANITARY_REQUEST, &data_changed);
 	Souliss_Logic_T12(memory_map, HEATPUMP_COOL, &data_changed);
 
-	Logic_Temperature(TEMP_BOILER_SANITARY);
-	Logic_Temperature(TEMP_BOILER_HEATING);
-	Logic_Temperature(TEMP_BOILER_BOTTOM);
-	Logic_Temperature(TEMP_FLOOR_FLOW);
-	Logic_Temperature(TEMP_FLOOR_RETURN);
-	Logic_Temperature(TEMP_FANCOIL_FLOW);
-	Logic_Temperature(TEMP_AMBIENCE_SET_POINT);
+	grh_Logic_Temperature(TEMP_BOILER_SANITARY);
+	grh_Logic_Temperature(TEMP_BOILER_HEATING);
+	grh_Logic_Temperature(TEMP_BOILER_BOTTOM);
+	grh_Logic_Temperature(TEMP_FLOOR_FLOW);
+	grh_Logic_Temperature(TEMP_FLOOR_RETURN);
+	grh_Logic_Temperature(TEMP_FANCOIL_FLOW);
+	grh_Logic_Temperature(TEMP_AMBIENCE_SET_POINT);
 
 	Souliss_Logic_T22(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
 

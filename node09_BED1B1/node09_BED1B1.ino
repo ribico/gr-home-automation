@@ -70,8 +70,8 @@ inline void ProcessLogics()
 	Logic_SimpleLight(LIGHT_BEDROOM1);
 	Souliss_Logic_T22(memory_map, WINDOW_BEDROOM1, &data_changed, SHUTTER_LONG_TIMEOUT);
 
-	Logic_Humidity(HUMIDITY);
-	Logic_Temperature(TEMPERATURE);		
+	grh_Logic_Humidity(HUMIDITY);
+	grh_Logic_Temperature(TEMPERATURE);		
 }
 
 inline void SetOutputs()

@@ -51,3 +51,5 @@
 #define SHUTTER_LONG_TIMEOUT		(Souliss_T2n_Timer_Off + 17)
 #define MAIN_3WAY_VALVE_TIMEOUT		(Souliss_T2n_Timer_Off + 5)
 
+#define	grh_Logic_Temperature(slot)		Souliss_Logic_T52(memory_map, slot, 0.01, &data_changed)
+#define	grh_Logic_Humidity(slot)		Souliss_Logic_T53(memory_map, slot, 0.02, &data_changed)

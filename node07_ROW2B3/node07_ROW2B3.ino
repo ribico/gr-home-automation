@@ -56,8 +56,8 @@ inline void ProcessLogics()
 	Souliss_Logic_T22(memory_map, WINDOW_BED3, &data_changed, SHUTTER_SHORT_TIMEOUT);
 	Souliss_Logic_T22(memory_map, WINDOW_BATH2, &data_changed, SHUTTER_SHORT_TIMEOUT);
 
-	Logic_Humidity(HUMIDITY);
-	Logic_Temperature(TEMPERATURE);
+	grh_Logic_Humidity(HUMIDITY);
+	grh_Logic_Temperature(TEMPERATURE);
 }
 
 inline void SetOutputs()
