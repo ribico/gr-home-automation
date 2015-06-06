@@ -47,7 +47,16 @@ then
 	}
 end
 
-
+rule "HVAC_HVAC_Mode_bis"
+when
+	System started or
+	Item HVAC_Mode changed
+then
+	if( HVAC_Mode.state == OFF)
+	{
+		HVAC_Function.sendCommand(0)
+	}
+end
 
 
 rule "HVAC_Living"
