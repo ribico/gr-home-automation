@@ -33,12 +33,14 @@ inline void DefineTypicals()
 	Set_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_6);
 }
 
-inline void ReadInputs()
+inline void ReadInputs(U16 phase_fast)
 {
-	if( LightsGroupIn(IN1, LIGHT_LIVING_1, LIGHT_LIVING_6) == MaCaco_DATACHANGED)
+	if( LightsGroupIn(IN1, LIGHT_LIVING_1, LIGHT_LIVING_6) == MaCaco_DATACHANGED )
 	{
-		RemoteInput(RS485_ADDRESS_ROW1B3, 4, mInput(LIGHT_LIVING_5));
-		RemoteInput(RS485_ADDRESS_ROW1B4, 1, mInput(LIGHT_LIVING_6));
+		if(phase_fast % 2)
+			RemoteInput(RS485_ADDRESS_ROW1B3, 4, mInput(LIGHT_LIVING_5)); // -> LIGHT_STAIRS
+		else
+			RemoteInput(RS485_ADDRESS_ROW1B4, 1, mInput(LIGHT_LIVING_6)); // -> LIGHT_ENTRANCE_1
 	}
 }
 
@@ -83,7 +85,7 @@ void loop()
 		
 		FAST_30ms() 
 		{
-			ReadInputs();
+			ReadInputs(phase_fast);
 		} 
 
 		FAST_50ms() 
