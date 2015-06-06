@@ -38,20 +38,14 @@ then
 	else if( HVAC_Function.state == 1 )
 	{
 		HVAC_Mode.sendCommand(ON)
-		HP_Heat_Cool.sendCommand(ON)
+		HP_Heat_Cool.sendCommand(OFF)
 	}
 	else if( HVAC_Function.state == 2 )
 	{
 		HVAC_Mode.sendCommand(ON)
-		HP_Heat_Cool.sendCommand(OFF)
+		HP_Heat_Cool.sendCommand(ON)
 	}
-
-
-//	logInfo("HVAC_HP_Logics - ", HP_Logics.toString)
-//	logInfo("HVAC_HP_Manual - ", HP_Manual.toString)
 end
-
-
 
 
 

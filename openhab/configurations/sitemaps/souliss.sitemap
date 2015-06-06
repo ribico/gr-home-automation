@@ -224,38 +224,41 @@ sitemap default label="Main Menu"
 				}
 				Text icon="boy1" label="Manuale"
 				{
-					Frame label="Pompe"
-					{
-						Switch item=HP_Circulation_Pump
-						Switch item=HVAC_Pump_Boiler_Floor
-						Switch item=HVAC_Pump_Collector_Fancoil
-						Switch item=HVAC_Pump_Collector_Floor
-					}
 					Frame label="Modalità"
 					{
 						Switch item=HP_Sanitary_Request label="ACS"
 						Switch item=HP_Heat_Cool label="Clima" mappings=[OFF="Caldo", ON="Freddo"]
 						Switch item=HVAC_Mode label="Climatizzazione"					
 					}
-					Frame label="Valvole"
+					Text label="Pompe"
 					{
-						Switch item=HVAC_3way_Valve
+						Switch item=HP_Circulation_Pump
+						Switch item=HVAC_Pump_Boiler_Floor
+						Switch item=HVAC_Pump_Collector_Fancoil
+						Switch item=HVAC_Pump_Collector_Floor
+					}
+					Text label="Valvole"
+					{
+						Frame label="Valvole sul Boiler"
+						{
+							Switch item=HVAC_3way_Valve
+						}
+						Frame label="Valvole di Zona"
+						{
+							Switch item=Valve_2F_Kitchen
+							Switch item=Valve_2F_Living
+							Switch item=Valve_2F_Bath1
+							Switch item=Valve_2F_Bath2
+							Switch item=Valve_2F_Bedroom1
+							Switch item=Valve_2F_Bedroom2
+							Switch item=Valve_2F_Bedroom3
+							Switch item=Valve_3F_Loft		
+						}
 					}
 
-					Frame label="Valvole di Zona"
+					Text label="Fancoil"
 					{
-						Switch item=Valve_2F_Kitchen
-						Switch item=Valve_2F_Living
-						Switch item=Valve_2F_Bath1
-						Switch item=Valve_2F_Bath2
-						Switch item=Valve_2F_Bedroom1
-						Switch item=Valve_2F_Bedroom2
-						Switch item=Valve_2F_Bedroom3
-						Switch item=Valve_3F_Loft		
-					}
-				
-					Frame label="Fancoil" icon="climate"
-					{
+					
 						Frame label="Fancoil 1"
 						{
 							Switch item=Fancoil_2F_GW1_Speed1
@@ -269,7 +272,6 @@ sitemap default label="Main Menu"
 							Switch item=Fancoil_2F_GW2_Speed2
 							Switch item=Fancoil_2F_GW2_Speed3
 						}
-
 					}
 				}
 			}
@@ -455,9 +457,9 @@ sitemap default label="Main Menu"
 					}
 					Frame label="Distribuzione"
 					{
-						Text item=HP_Temp_Heating_Flow
+						Text item=HP_Temp_Heating_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red",HVAC_Pump_Collector_Floor==ON="blue"]
 						Text item=HP_Temp_Heating_Ret				
-						Text item=HP_Temp_Fancoil_Flow		
+						Text item=HP_Temp_Fancoil_Flow labelcolor=[HVAC_Pump_Collector_Fancoil==ON="blue"]
 					}
 				}
 			}

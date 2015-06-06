@@ -143,7 +143,7 @@ Number HP_Temp_Bottom		"Temp. Accumulo Basso [%.1f °C]"	<temperature> (gTechnic
 Number HP_Temp_Heating_Flow	"Temp. Mandata Pavimento [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:18"}
 Number HP_Temp_Heating_Ret	"Temp. Ritorno Pavimento [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:20"}
 Number HP_Temp_Fancoil_Flow	"Temp. Mandata Fancoil [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:22"}
-Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima) {souliss="T52:0:30"}
+Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima)
 
 Switch Valve_2F_Bedroom1		"Camera 1"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:0", autoupdate=false}
 Switch Valve_2F_Bath1			"Bagno 1"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:1", autoupdate=false}
