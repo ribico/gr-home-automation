@@ -254,29 +254,36 @@ inline void ProcessSlowLogics()
 
 
 	// control SANITARY production hysteresys
-	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterRequested() )
-		SanitaryWaterOn();
-	
-	else if ( IsSanitaryWaterInProduction() &&  IsSanitaryWaterNotRequested() )
-		SanitaryWaterOff();
-
-	if( IsSanitaryWaterInProduction() )
+	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
 	{
 		SetHpFlowToBoiler();
+		SanitaryWaterOn();
 		return; // exit here, following code is for heating/cooling and we are currently producin Sanitary Water
 	}
+	else if ( IsSanitaryWaterInProduction() &&  IsSanitaryWaterHot() )
+		SanitaryWaterOff();
 
 
 
 	if( !IsHvacOn() )
 	{
-		mInput(HVAC_ZONES) = 0; // no heating/cooling close all zone valves
+		// no heating/cooling -> close all zone valves
+		mInput(HVAC_ZONES) = 0;
+		Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
+
+		// turn all pumps and valves off
+		PumpBoilerToFloorOff();
+		PumpCollectorToFloorOff();
+		PumpCollectorToFancoilOff();
+		FancoilGW1_Off();
+		FancoilGW2_Off();		
+		HpCirculationOff();	
+		HeatingMixValveOff();	
+
 		return;
 	}
 
 	// if here the system is requested to heat or cool the apartment
-
-
 	// retrieve zone temperatures from remote nodes
 
 	float temp_BED1 	= 	pOutputAsFloat(9,4);
@@ -388,54 +395,45 @@ inline void ProcessSlowLogics()
 
 		// control hot water storage if there's heating requests from any zone
 		// otherwise just don't care about the temperature of the storage
-		if ( !IsHotWaterInProduction() && IsHotWaterRequested() )
+		if ( !IsHotWaterInProduction() && IsHotWaterCold() )
 		{
 			// should produce some hot water here
 			SetHpFlowToBoiler(); // only needed when activating HP Circulation pump
 			HpCirculationOn();
 		}
-		else if ( IsHotWaterInProduction() && IsHotWaterNotRequested() )
-			HpCirculationOff();
+		else if ( IsHotWaterInProduction() && IsHotWaterHot() )
+			HpCirculationOff(); // stop producing hot water
 
 
 		// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
-		if ( IsHotWaterTooHot() )
-			HotMixValveOn_ColdDirection(); // mix valve on, direction relay off
+		if ( IsHeatingWaterTooHot() )
+			HeatingMixValveOn_ColdDirection(); // mix valve on, direction relay off
 		
-		else if ( IsHotWaterTooCold() )
-			HotMixValveOn_HotDirection(); // mix valve on, direction relay on
+		else if ( IsHeatingWaterTooCold() )
+			HeatingMixValveOn_HotDirection(); // mix valve on, direction relay on
 		
 		else
-			HotMixValveOff(); // mix valve off (hold the position)
+			HeatingMixValveOff(); // mix valve off (hold the position)
 
 	}
 
 	else if( IsCooling() )
 	{
 		PumpBoilerToFloorOff(); // do not use boiler water
+		HeatingMixValveOff();
+
 		SetHpFlowToCollector();	// always needed in cooling
 		HpCirculationOn();	// Cold water needed
 		PumpCollectorToFloorOn();
-		HotMixValveOff();
+
+		// activate always fancoils when cooling
+		PumpCollectorToFancoilOn();
+		FancoilGW1_Speed1();
+		FancoilGW2_Speed1();
 
 		// check umidity average to eventually activate fancoils
 
-		// commented in order to activate always fancoils when cooling
-/*		if( UR_AVE <= SETPOINT_UR_1 )
-		{
-			PumpCollectorToFancoilOff();
-			FancoilGW1_Off();
-			FancoilGW2_Off();
-		}
-		else if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2)
-*/
-		if( UR_AVE <= SETPOINT_UR_2)
-		{
-			PumpCollectorToFancoilOn();
-			FancoilGW1_Speed1();
-			FancoilGW2_Speed1();
-		}
-		else if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3)
+ 		if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3)
 		{
 			PumpCollectorToFancoilOn();
 			FancoilGW1_Speed2();
@@ -458,7 +456,7 @@ inline void ProcessSlowLogics()
 		FancoilGW1_Off();
 		FancoilGW2_Off();		
 		HpCirculationOff();	
-		HotMixValveOff();	
+		HeatingMixValveOff();	
 	}
 
 }
