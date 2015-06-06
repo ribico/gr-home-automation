@@ -11,10 +11,10 @@
 #define IsHotWaterInProduction()		(IsHeatMode() && IsHpCirculationOn())
 #define IsCoolWaterInProduction()		(IsCoolMode() && IsHpCirculationOn())
 
-#define IsSanitaryWaterRequested()		(temperature_sanitary < SETPOINT_TEMP_SANITARY_WATER - SETPOINT_TEMP_DEADBAND)
-#define IsSanitaryWaterNotRequested()	(temperature_sanitary > SETPOINT_TEMP_SANITARY_WATER + SETPOINT_TEMP_DEADBAND)
-#define IsHotWaterRequested()			(temperature_heating < SETPOINT_TEMP_HEATING_WATER - SETPOINT_TEMP_DEADBAND)
-#define IsHotWaterNotRequested()		(temperature_heating > SETPOINT_TEMP_HEATING_WATER + SETPOINT_TEMP_DEADBAND)
+#define IsSanitaryWaterRequested()		(temperature_sanitary < SETPOINT_TEMP_SANITARY_WATER_MIN)
+#define IsSanitaryWaterNotRequested()	(temperature_sanitary > SETPOINT_TEMP_SANITARY_WATER_MAX)
+#define IsHotWaterRequested()			(temperature_heating < SETPOINT_TEMP_HEATING_WATER_MIN)
+#define IsHotWaterNotRequested()		(temperature_heating > SETPOINT_TEMP_HEATING_WATER_MAX)
 
 #define SanitaryWaterOn()				SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OnCmd)	
 #define SanitaryWaterOff()				SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OffCmd)	
@@ -38,10 +38,10 @@
 #define PumpCollectorToFancoilOn() 		if(!IsPumpCollectorToFancoilOn())	SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_OnCmd)
 #define PumpCollectorToFancoilOff() 	if(IsPumpCollectorToFancoilOn())	SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_OffCmd)
 
-#define IsHotWaterTooHot()				(temperature_floor_flow > SETPOINT_TEMP_HEATING_WATER + SETPOINT_TEMP_DEADBAND)
-#define IsHotWaterTooCold()				(temperature_floor_flow < SETPOINT_TEMP_HEATING_WATER - SETPOINT_TEMP_DEADBAND)
-#define MixValveOn_ColdDirection()		SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK)
-#define MixValveOn_HotDirection()		SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) )
-#define MixValveOff()					SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK & ~HEATING_MIX_VALVE_DIRECTION_MASK)
+#define IsHotWaterTooHot()				(temperature_floor_flow > SETPOINT_TEMP_HEATING_WATER_MAX)
+#define IsHotWaterTooCold()				(temperature_floor_flow < SETPOINT_TEMP_HEATING_WATER_MIN)
+#define HotMixValveOn_ColdDirection()		SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK)
+#define HotMixValveOn_HotDirection()		SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) )
+#define HotMixValveOff()					SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK & ~HEATING_MIX_VALVE_DIRECTION_MASK)
 
 #define IsHvacOn()						(mOutput(HVAC_MODE) == Souliss_T1n_OnCoil)

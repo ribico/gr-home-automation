@@ -34,9 +34,11 @@ MEGA with Ethernet only acting as GATEWAY
 #define TEMP_FANCOIL_FLOW_PAD_RESISTANCE      	9830 // measured
 
 
-#define SETPOINT_TEMP_SANITARY_WATER 	42 // °C
-#define SETPOINT_TEMP_HEATING_WATER		28 // °C
-#define SETPOINT_TEMP_DEADBAND       	2	// °C
+#define SETPOINT_TEMP_SANITARY_WATER_MAX 	45 // °C
+#define SETPOINT_TEMP_SANITARY_WATER_MIN 	40 // °C
+#define SETPOINT_TEMP_HEATING_WATER_MIN		26 // °C
+#define SETPOINT_TEMP_HEATING_WATER_MAX		30 // °C
+
 #define SETPOINT_TEMP_DEADBAND_SMALL	0.2	// °C
 
 #define SETPOINT_UR_1				55
@@ -249,7 +251,33 @@ inline void ProcessSlowLogics()
 	if( !IsHpLogicAuto() )
 		return; 
 
-	// retrieve zone temperatures
+
+
+	// control SANITARY production hysteresys
+	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterRequested() )
+		SanitaryWaterOn();
+	
+	else if ( IsSanitaryWaterInProduction() &&  IsSanitaryWaterNotRequested() )
+		SanitaryWaterOff();
+
+	if( IsSanitaryWaterInProduction() )
+	{
+		SetHpFlowToBoiler();
+		return; // exit here, following code is for heating/cooling and we are currently producin Sanitary Water
+	}
+
+
+
+	if( !IsHvacOn() )
+	{
+		mInput(HVAC_ZONES) = 0; // no heating/cooling close all zone valves
+		return;
+	}
+
+	// if here the system is requested to heat or cool the apartment
+
+
+	// retrieve zone temperatures from remote nodes
 
 	float temp_BED1 	= 	pOutputAsFloat(9,4);
 	float UR_BED1 		= 	pOutputAsFloat(9,6);
@@ -271,33 +299,12 @@ inline void ProcessSlowLogics()
 	float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
 
 	float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
-/*
-Serial.print("temp_BED1: ");
-Serial.print(temp_BED1);
-Serial.print("\ttemp_BATH1: ");
-Serial.print(temp_BATH1);
-Serial.print("\ttemp_BED2: ");
-Serial.print(temp_BED2);
-Serial.print("\ttemp_LIVING: ");
-Serial.print(temp_LIVING);
-Serial.print("\ttemp_BED3: ");
-Serial.print(temp_BED3);
-Serial.print("\ttemp_BATH2: ");
-Serial.print(temp_BATH2);
-Serial.print("\ttemp_KITCHEN: ");
-Serial.print(temp_KITCHEN);
-Serial.print("\ttemp_DINING: ");
-Serial.println(temp_DINING);
-*/
 
 
-	if( IsHvacOn() )
-		mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
-	else
-		mInput(HVAC_ZONES) = 0; // close all valves
+	mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
 
 	// activate zones according to setpoint
-	if( IsHvacOn() && IsHeatMode() )
+	if( IsHeatMode() )
 	{
 		if( temp_BED1 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
@@ -335,7 +342,7 @@ Serial.println(temp_DINING);
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
 
 	}
-	else if( IsHvacOn() && IsCoolMode() )
+	else if( IsCoolMode() )
 	{
 		// do not cool baths floor
 		SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
@@ -367,16 +374,8 @@ Serial.println(temp_DINING);
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
 	}
 
+	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 
-	if( IsSanitaryWaterInProduction() )
-		SetHpFlowToBoiler();
-
-	// control SANITARY production hysteresys
-	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterRequested() )
-		SanitaryWaterOn();
-	
-	else if ( IsSanitaryWaterInProduction() &&  IsSanitaryWaterNotRequested() )
-		SanitaryWaterOff();
 
 
 	if( IsHeating() ) 
@@ -384,6 +383,8 @@ Serial.println(temp_DINING);
 		PumpBoilerToFloorOn();	// using hot water from boiler only
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
+		FancoilGW1_Off();
+		FancoilGW2_Off();
 
 		// control hot water storage if there's heating requests from any zone
 		// otherwise just don't care about the temperature of the storage
@@ -393,17 +394,29 @@ Serial.println(temp_DINING);
 			SetHpFlowToBoiler(); // only needed when activating HP Circulation pump
 			HpCirculationOn();
 		}
-			
 		else if ( IsHotWaterInProduction() && IsHotWaterNotRequested() )
 			HpCirculationOff();
+
+
+		// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
+		if ( IsHotWaterTooHot() )
+			HotMixValveOn_ColdDirection(); // mix valve on, direction relay off
+		
+		else if ( IsHotWaterTooCold() )
+			HotMixValveOn_HotDirection(); // mix valve on, direction relay on
+		
+		else
+			HotMixValveOff(); // mix valve off (hold the position)
+
 	}
 
-	else if( IsCooling() && !IsSanitaryWaterInProduction() )
+	else if( IsCooling() )
 	{
 		PumpBoilerToFloorOff(); // do not use boiler water
 		SetHpFlowToCollector();	// always needed in cooling
 		HpCirculationOn();	// Cold water needed
 		PumpCollectorToFloorOn();
+		HotMixValveOff();
 
 		// check umidity average to eventually activate fancoils
 
@@ -437,52 +450,16 @@ Serial.println(temp_DINING);
 
 	}
 
-	if( !IsHeating() )
-		PumpBoilerToFloorOff();
-
-	if( !IsCooling() )
+	else
 	{
+		PumpBoilerToFloorOff();
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
 		FancoilGW1_Off();
 		FancoilGW2_Off();		
+		HpCirculationOff();	
+		HotMixValveOff();	
 	}
-	
-	if( !IsHeating() && !IsCooling() )
-		HpCirculationOff();
-
-
-
-	// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
-	// but only HEATPUMP is set to HEAT (HEATPUMP_COOL == OffCoil) and any zone request is active
-	if( IsHeating() && IsPumpBoilerToFloorOn() )
-	{
-		// at least one zone is open
-		// and the heatpump is not set to COOL mode
-
-		if ( IsHotWaterTooHot() )
-		{
-			// mix valve on, direction relay off
-			MixValveOn_ColdDirection(); 
-		}	
-		else if ( IsHotWaterTooCold() )
-		{
-			// mix valve on, direction relay on
-			MixValveOn_HotDirection();
-		}
-		else
-		{
-			// mix valve off (hold the position)
-			MixValveOff();
-		}		
-	}
-	else
-	{
-		// heating is off, keep the mix valve off.
-		MixValveOff();
-	}
-
-	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 
 }
 
