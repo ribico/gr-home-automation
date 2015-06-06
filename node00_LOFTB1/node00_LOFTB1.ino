@@ -452,7 +452,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		HpCirculationOff();	
 		HeatingMixValveOff();	
 	}
-
 }
 
 
