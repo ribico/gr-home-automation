@@ -227,7 +227,7 @@ inline void ProcessLogics()
 	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
 }
 
-inline void ProcessSlowLogics()
+inline void ProcessSlowLogics(U16 phase_fast)
 {
 	float temperature_sanitary = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_SANITARY_PIN),TEMP_BOILER_SANITARY_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_BOILER_SANITARY, &temperature_sanitary);
@@ -275,8 +275,7 @@ inline void ProcessSlowLogics()
 		PumpBoilerToFloorOff();
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
-		FancoilGW1_Off();
-		FancoilGW2_Off();		
+		Fancoil_Off(phase_fast%2);	
 		HpCirculationOff();	
 		HeatingMixValveOff();	
 
@@ -390,8 +389,7 @@ inline void ProcessSlowLogics()
 		PumpBoilerToFloorOn();	// using hot water from boiler only
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
-		FancoilGW1_Off();
-		FancoilGW2_Off();
+		Fancoil_Off(phase_fast%2);
 
 		// control hot water storage if there's heating requests from any zone
 		// otherwise just don't care about the temperature of the storage
@@ -428,22 +426,19 @@ inline void ProcessSlowLogics()
 
 		// activate always fancoils when cooling
 		PumpCollectorToFancoilOn();
-		FancoilGW1_Speed1();
-		FancoilGW2_Speed1();
+		Fancoil_Speed1(phase_fast%2);
 
 		// check umidity average to eventually activate fancoils
 
  		if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3)
 		{
 			PumpCollectorToFancoilOn();
-			FancoilGW1_Speed2();
-			FancoilGW2_Speed2();
+			Fancoil_Speed2(phase_fast%2);
 		}
 		else if( UR_AVE > SETPOINT_UR_3)
 		{
 			PumpCollectorToFancoilOn();
-			FancoilGW1_Speed3();
-			FancoilGW2_Speed3();
+			Fancoil_Speed3(phase_fast%2);
 		}
 
 	}
@@ -453,8 +448,7 @@ inline void ProcessSlowLogics()
 		PumpBoilerToFloorOff();
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
-		FancoilGW1_Off();
-		FancoilGW2_Off();		
+		Fancoil_Off(phase_fast%2);		
 		HpCirculationOff();	
 		HeatingMixValveOff();	
 	}
@@ -588,7 +582,7 @@ void loop()
 		FAST_2110ms()
 		{
 			ProcessTimers();
-			ProcessSlowLogics();
+			ProcessSlowLogics(phase_fast);
 		}
 
 		FAST_GatewayComms();	

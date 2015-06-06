@@ -1,59 +1,18 @@
 #ifndef GRH_FANCOILS_H
 #define GRH_FANCOILS_H
 
-inline void FancoilGW1_Speed1()
+inline void Fancoil_Cmds(U8 addr, U8 cmd1, U8 cmd2, U8 cmd3)
 {
-	RemoteInput(RS485_ADDRESS_GTW1B1, 0, Souliss_T1n_OnCmd);
-	RemoteInput(RS485_ADDRESS_GTW1B1, 1, Souliss_T1n_OffCmd);
-	RemoteInput(RS485_ADDRESS_GTW1B1, 2, Souliss_T1n_OffCmd);
+	U8 cmd_buff[] = {cmd1, cmd2, cmd3};
+	RemoteInputs(addr, 0, cmd_buff, 3);
 }	
 
-inline void FancoilGW1_Speed2()
-{
-	RemoteInput(RS485_ADDRESS_GTW1B1, 0, Souliss_T1n_OnCmd);
-	RemoteInput(RS485_ADDRESS_GTW1B1, 1, Souliss_T1n_OnCmd);
-	RemoteInput(RS485_ADDRESS_GTW1B1, 2, Souliss_T1n_OffCmd);
-}	
+#define FANCOIL_ADDR(idx)	(idx % 2) ? RS485_ADDRESS_GTW1B1 : RS485_ADDRESS_GTW2B1
 
-inline void FancoilGW1_Speed3()
-{
-	RemoteInput(RS485_ADDRESS_GTW1B1, 0, Souliss_T1n_OnCmd);
-	RemoteInput(RS485_ADDRESS_GTW1B1, 1, Souliss_T1n_OnCmd);
-	RemoteInput(RS485_ADDRESS_GTW1B1, 2, Souliss_T1n_OnCmd);
-}	
+#define Fancoil_Off(idx)	Fancoil_Cmds(FANCOIL_ADDR(idx), Souliss_T1n_OffCmd, Souliss_T1n_OffCmd, Souliss_T1n_OffCmd)
+#define Fancoil_Speed1(idx)	Fancoil_Cmds(FANCOIL_ADDR(idx), Souliss_T1n_OnCmd, Souliss_T1n_OffCmd, Souliss_T1n_OffCmd)
+#define Fancoil_Speed2(idx)	Fancoil_Cmds(FANCOIL_ADDR(idx), Souliss_T1n_OnCmd, Souliss_T1n_OnCmd, Souliss_T1n_OffCmd)
+#define Fancoil_Speed3(idx)	Fancoil_Cmds(FANCOIL_ADDR(idx), Souliss_T1n_OnCmd, Souliss_T1n_OnCmd, Souliss_T1n_OnCmd)
 
-inline void FancoilGW1_Off()
-{
-	RemoteInput(RS485_ADDRESS_GTW1B1, 0, Souliss_T1n_OffCmd);
-	RemoteInput(RS485_ADDRESS_GTW1B1, 1, Souliss_T1n_OffCmd);
-	RemoteInput(RS485_ADDRESS_GTW1B1, 2, Souliss_T1n_OffCmd);
-}	
 
-inline void FancoilGW2_Speed1()
-{
-	RemoteInput(RS485_ADDRESS_GTW2B1, 0, Souliss_T1n_OnCmd);
-	RemoteInput(RS485_ADDRESS_GTW2B1, 1, Souliss_T1n_OffCmd);
-	RemoteInput(RS485_ADDRESS_GTW2B1, 2, Souliss_T1n_OffCmd);
-}	
-
-inline void FancoilGW2_Speed2()
-{
-	RemoteInput(RS485_ADDRESS_GTW2B1, 0, Souliss_T1n_OnCmd);
-	RemoteInput(RS485_ADDRESS_GTW2B1, 1, Souliss_T1n_OnCmd);
-	RemoteInput(RS485_ADDRESS_GTW2B1, 2, Souliss_T1n_OffCmd);
-}	
-
-inline void FancoilGW2_Speed3()
-{
-	RemoteInput(RS485_ADDRESS_GTW2B1, 0, Souliss_T1n_OnCmd);
-	RemoteInput(RS485_ADDRESS_GTW2B1, 1, Souliss_T1n_OnCmd);
-	RemoteInput(RS485_ADDRESS_GTW2B1, 2, Souliss_T1n_OnCmd);
-}	
-
-inline void FancoilGW2_Off()
-{
-	RemoteInput(RS485_ADDRESS_GTW2B1, 0, Souliss_T1n_OffCmd);
-	RemoteInput(RS485_ADDRESS_GTW2B1, 1, Souliss_T1n_OffCmd);
-	RemoteInput(RS485_ADDRESS_GTW2B1, 2, Souliss_T1n_OffCmd);
-}
 #endif
