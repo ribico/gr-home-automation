@@ -406,13 +406,17 @@ Serial.println(temp_DINING);
 		PumpCollectorToFloorOn();
 
 		// check umidity average to eventually activate fancoils
-		if( UR_AVE <= SETPOINT_UR_1 )
+
+		// commented in order to activate always fancoils when cooling
+/*		if( UR_AVE <= SETPOINT_UR_1 )
 		{
 			PumpCollectorToFancoilOff();
 			FancoilGW1_Off();
 			FancoilGW2_Off();
 		}
 		else if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2)
+*/
+		if( UR_AVE <= SETPOINT_UR_2)
 		{
 			PumpCollectorToFancoilOn();
 			FancoilGW1_Speed1();
@@ -440,6 +444,8 @@ Serial.println(temp_DINING);
 	{
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
+		FancoilGW1_Off();
+		FancoilGW2_Off();		
 	}
 	
 	if( !IsHeating() && !IsCooling() )
