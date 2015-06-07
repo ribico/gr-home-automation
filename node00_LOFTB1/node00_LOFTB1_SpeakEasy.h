@@ -20,8 +20,8 @@
 #define SanitaryWaterOff()				SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OffCmd)	
 
 #define IsHpCirculationOn()				(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil)
-#define HpCirculationOn()				SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OnCmd)
-#define HpCirculationOff()				SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OffCmd)
+#define HpCirculationOn()				if(!IsHpCirculationOn()) SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OnCmd)
+#define HpCirculationOff()				if(IsHpCirculationOn()) SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OffCmd)
 
 #define IsHpFlowToBoiler()				(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
 #define IsHpFlowToCollector()			(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK)
