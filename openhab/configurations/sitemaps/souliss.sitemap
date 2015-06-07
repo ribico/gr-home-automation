@@ -1,4 +1,4 @@
-sitemap default label="Main Menu"
+sitemap default label="Full"
 {
 	Frame {
 
@@ -227,6 +227,7 @@ sitemap default label="Main Menu"
 					Frame label="Modalità"
 					{
 						Switch item=HP_Sanitary_Request label="ACS"
+						Switch item=HP_Manual label="Logiche" mappings=[ON="Manuale", OFF="Auto"]
 						Switch item=HP_Heat_Cool label="Clima" mappings=[OFF="Caldo", ON="Freddo"]
 						Switch item=HVAC_Mode label="Climatizzazione"					
 					}

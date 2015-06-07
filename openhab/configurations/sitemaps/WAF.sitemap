@@ -1,0 +1,43 @@
+sitemap WAF label="WAF"
+{
+	Frame {
+		Group item=gLights icon="light-off"
+		Group item=gRolleshutters
+
+		Text label="Climatizzatore" icon="climate"
+		{
+			Switch item=HVAC_Function mappings=[0="OFF", 1="Caldo", 2="Freddo"]
+			Setpoint item=HVAC_Temp_SetPoint label="SetPoint Clima [%.1f °C]" step=0.5 minValue=15 maxValue=30
+
+			Frame label="Situazione Corrente"
+			{
+				Text icon="temperature" label="Temperature"
+				{
+					Text item=Temperature_2F_Living label="Soggiorno [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=Temperature_2F_Kitchen label="Cucina [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=Temperature_2F_Dining label="Pranzo [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=Temperature_2F_Bath1 label="Bagno 1 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=Temperature_2F_Bath2 label="Bagno 2 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=Temperature_2F_Bedroom1 label="Camera 1 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=Temperature_2F_Bedroom2 label="Camera 2 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=Temperature_2F_Bedroom3 label="Camera 3 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+				}
+					
+				Text icon="humidity" label="Umidità"
+				{
+					Text item=UR_2F_Living label="Soggiorno [%.1f %%]"
+					Text item=UR_2F_Kitchen label="Cucina [%.1f %%]" 
+					Text item=UR_2F_Dining label="Pranzo [%.1f %%]" 
+					Text item=UR_2F_Bath1 label="Bagno 1 [%.1f %%]" 
+					Text item=UR_2F_Bath2 label="Bagno 2 [%.1f %%]" 
+					Text item=UR_2F_Bedroom1 label="Camera 1 [%.1f %%]" 
+					Text item=UR_2F_Bedroom2 label="Camera 2 [%.1f %%]" 
+					Text item=UR_2F_Bedroom3 label="Camera 3 [%.1f %%]" 
+				}
+			}
+
+		}
+
+	}
+
+}
