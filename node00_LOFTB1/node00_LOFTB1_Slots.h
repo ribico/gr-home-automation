@@ -52,3 +52,48 @@
 #define TEMP_AMBIENCE_SET_POINT_H	31
 
 #define HVAC_MODE					32
+
+
+inline void DefineTypicals()
+{
+	Set_SimpleLight(LIGHT_STAIRS);
+	Set_SimpleLight(LIGHT_LOFT_1);
+	Set_SimpleLight(LIGHT_LOFT_2);
+	Set_SimpleLight(LIGHT_TERRACE_1);
+	Set_SimpleLight(LIGHT_TERRACE_2);
+	Set_SimpleLight(LIGHT_TERRACE_3);
+	Set_SimpleLight(LIGHT_TOILET);
+
+	Souliss_SetT12(memory_map, HEATPUMP_MANUAL_MODE);
+	Souliss_SetT12(memory_map, HEATPUMP_REMOTE_SWITCH);
+	Souliss_SetT12(memory_map, HEATPUMP_CIRCULATION_PUMP);
+	Souliss_SetT12(memory_map, HEATPUMP_SANITARY_REQUEST);
+	Souliss_SetT12(memory_map, HEATPUMP_COOL);
+	
+	Set_Temperature(TEMP_BOILER_SANITARY);
+	Set_Temperature(TEMP_BOILER_HEATING);
+	Set_Temperature(TEMP_BOILER_BOTTOM);
+	Set_Temperature(TEMP_FLOOR_FLOW);
+	Set_Temperature(TEMP_FLOOR_RETURN);
+	Set_Temperature(TEMP_FANCOIL_FLOW);
+
+	Souliss_SetT1A(memory_map, HVAC_ZONES);
+	Souliss_SetT1A(memory_map, HVAC_VALVES);
+
+	Souliss_SetT22(memory_map, MAIN_3WAY_VALVE);
+
+	Souliss_SetT12(memory_map, PUMP_BOILER_FLOOR);
+	Souliss_SetT12(memory_map, PUMP_COLLECTOR_FANCOIL);
+	Souliss_SetT12(memory_map, PUMP_COLLECTOR_FLOOR);
+
+	Set_Temperature(TEMP_AMBIENCE_SET_POINT);
+
+	Souliss_SetT12(memory_map, HVAC_MODE);
+
+	// initialize values
+	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
+//	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+	float set_point = 26; TODO("Should come from user interface");
+	Souliss_ImportAnalog(memory_map, TEMP_AMBIENCE_SET_POINT, &set_point);
+
+}
