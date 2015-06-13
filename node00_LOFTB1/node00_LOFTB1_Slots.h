@@ -13,7 +13,7 @@
 #define TEMP_BOILER_BOTTOM              11
 #define TEMP_BOILER_BOTTOM_H    		12
 
-#define HEATPUMP_MANUAL_MODE   			13
+#define FLOOR_MODE 			  			13
 #define HEATPUMP_REMOTE_SWITCH          14
 #define HEATPUMP_CIRCULATION_PUMP       15
 #define HEATPUMP_SANITARY_REQUEST       16
@@ -51,7 +51,7 @@
 #define TEMP_AMBIENCE_SET_POINT		30
 #define TEMP_AMBIENCE_SET_POINT_H	31
 
-#define HVAC_MODE					32
+#define FANCOIL_MODE				32
 
 
 inline void DefineTypicals()
@@ -64,7 +64,7 @@ inline void DefineTypicals()
 	Set_SimpleLight(LIGHT_TERRACE_3);
 	Set_SimpleLight(LIGHT_TOILET);
 
-	Souliss_SetT12(memory_map, HEATPUMP_MANUAL_MODE);
+	Souliss_SetT12(memory_map, FLOOR_MODE);
 	Souliss_SetT12(memory_map, HEATPUMP_REMOTE_SWITCH);
 	Souliss_SetT12(memory_map, HEATPUMP_CIRCULATION_PUMP);
 	Souliss_SetT12(memory_map, HEATPUMP_SANITARY_REQUEST);
@@ -88,7 +88,7 @@ inline void DefineTypicals()
 
 	Set_Temperature(TEMP_AMBIENCE_SET_POINT);
 
-	Souliss_SetT12(memory_map, HVAC_MODE);
+	Souliss_SetT12(memory_map, FANCOIL_MODE);
 
 	// initialize values
 	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
