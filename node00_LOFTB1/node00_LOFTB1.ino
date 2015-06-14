@@ -135,7 +135,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	float temperature_fancoil_flow = NTC_RawADCToCelsius( analogRead(TEMP_FANCOIL_FLOW_PIN),TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
 
-
 	// control SANITARY production hysteresys
 	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
 	{
@@ -312,13 +311,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
 		float temp_AVE = (temp_BED1+temp_BED2+temp_LIVING+temp_BED3+temp_KITCHEN+temp_DINING) / 6;
 		float dew_point_AVE = temp_AVE-(100-UR_AVE)/5;
-
-		Serial.print("UR : ");
-		Serial.print(UR_AVE);
-		Serial.print("\ttemp : ");
-		Serial.print(temp_AVE);
-		Serial.print("DP : ");
-		Serial.println(dew_point_AVE);
 
 		if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 || 
 			temperature_floor_flow <= dew_point_AVE ) // floor condentation risk
