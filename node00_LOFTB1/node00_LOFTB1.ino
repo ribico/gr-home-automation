@@ -141,7 +141,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	{
 		SetHpFlowToBoiler();
 		SanitaryWaterOn();
-		return; // exit here, following code is for heating/cooling and we are currently producin Sanitary Water
+		return; // exit here, following code is for heating/cooling and we are currently producing Sanitary Water
 	}
 	else if ( IsSanitaryWaterInProduction() &&  IsSanitaryWaterHot() )
 		SanitaryWaterOff();
@@ -172,15 +172,15 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		return;
 	}
 
-
+	// if here either Floor or Fancoils are ON
 
 	if( IsFloorOn() )
 	{
-		// turn the heating/cooling on on ALL zones
+		// MANUAL MODE -> activate all zones without cheching current temperature
 
 		if( IsHeatMode() )
 		{
-			// activate all zones, pumps for heating
+			// activate all zones
 			mInput(HVAC_ZONES) = 	HVAC_MASK_BED1 | 
 									HVAC_MASK_BATH1 | 
 									HVAC_MASK_BED2 | 
@@ -193,7 +193,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		}
 		else if( IsCoolMode() )
 		{
-			// activate all zones except bathrooms, pumps for cooling
+			// activate all zones except bathrooms
 			mInput(HVAC_ZONES) = 	HVAC_MASK_BED1 | 
 									HVAC_MASK_BED2 | 
 									HVAC_MASK_LIVING | 
@@ -205,15 +205,14 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	}
 	else if( IsFloorAuto() )
 	{
-		// if here the system is requested to heat or cool the apartment in Auto mode
-		// retrieve zone temperatures from remote nodes
+		// AUTO MODE -> activate only needed zones
 
 		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
 
 
 		mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
 
-		// activate zones according to setpoint
+		// activate zones according to measured temperature according to setpoint
 		if( IsHeatMode() )
 		{
 			if( temp_BED1 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
@@ -320,8 +319,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 		return;
 	}
-
-	if( IsCooling() ) // cooling at least one zone
+	else if( IsCooling() ) // cooling at least one zone
 	{
 		PumpBoilerToFloorOff(); // do not use boiler water
 		HeatingMixValveOff();
@@ -341,8 +339,11 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	{
 		// check umidity average to eventually activate fancoils
 		float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
+		float temp_AVE = (temp_BED1+temp_BED2+temp_LIVING+temp_BED3+temp_KITCHEN+temp_DINING) / 6;
+		float dew_point_AVE = temp_AVE-(100-UR_AVE)/5;
 
-		if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2)
+		if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 || 
+			temperature_floor_flow <= dew_point_AVE ) // floor condentation risk
  		{
 			PumpCollectorToFancoilOn();
 			Fancoil_Speed1(phase_fast%2);
@@ -357,8 +358,8 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			PumpCollectorToFancoilOn();
 			Fancoil_Speed3(phase_fast%2);
 		}
-
 	}
+
 }
 
 
