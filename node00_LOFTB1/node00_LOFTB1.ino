@@ -41,8 +41,8 @@ MEGA with Ethernet only acting as GATEWAY
 
 #define SETPOINT_TEMP_DEADBAND_SMALL	0.2	// °C
 
-#define SETPOINT_UR_1				55
-#define SETPOINT_UR_2				65
+#define SETPOINT_UR_1				60
+#define SETPOINT_UR_2				70
 #define SETPOINT_UR_3				75
 
 //#define SETPOINT_COOL_TEMP			25
