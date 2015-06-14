@@ -176,35 +176,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 	if( IsFloorOn() )
 	{
-		// MANUAL MODE -> activate all zones without cheching current temperature
-
-		if( IsHeatMode() )
-		{
-			// activate all zones
-			mInput(HVAC_ZONES) = 	HVAC_MASK_BED1 | 
-									HVAC_MASK_BATH1 | 
-									HVAC_MASK_BED2 | 
-									HVAC_MASK_LIVING | 
-									HVAC_MASK_BED3 |
-									HVAC_MASK_BATH2 |
-									HVAC_MASK_KITCHEN |
-									HVAC_MASK_LOFT;
-
-		}
-		else if( IsCoolMode() )
-		{
-			// activate all zones except bathrooms
-			mInput(HVAC_ZONES) = 	HVAC_MASK_BED1 | 
-									HVAC_MASK_BED2 | 
-									HVAC_MASK_LIVING | 
-									HVAC_MASK_BED3 |
-									HVAC_MASK_KITCHEN |
-									HVAC_MASK_LOFT;
-
-		}
-	}
-	else if( IsFloorAuto() )
-	{
 		// AUTO MODE -> activate only needed zones
 
 		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
@@ -328,19 +299,26 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		HpCirculationOn();	// Cold water needed
 		PumpCollectorToFloorOn();
 	}
-
-
-	if( IsFancoilOn() )
+	else
 	{
-		PumpCollectorToFancoilOn();
-		Fancoil_Speed1(phase_fast%2);
+		HpCirculationOff();	
+		return;		
 	}
-	else if( IsFancoilAuto() && IsCoolMode() )
+
+
+	if( IsFancoilOn() && IsCoolMode() )
 	{
 		// check umidity average to eventually activate fancoils
 		float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
 		float temp_AVE = (temp_BED1+temp_BED2+temp_LIVING+temp_BED3+temp_KITCHEN+temp_DINING) / 6;
 		float dew_point_AVE = temp_AVE-(100-UR_AVE)/5;
+
+		Serial.print("UR : ");
+		Serial.print(UR_AVE);
+		Serial.print("\ttemp : ");
+		Serial.print(temp_AVE);
+		Serial.print("DP : ");
+		Serial.println(dew_point_AVE);
 
 		if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 || 
 			temperature_floor_flow <= dew_point_AVE ) // floor condentation risk
@@ -358,6 +336,11 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			PumpCollectorToFancoilOn();
 			Fancoil_Speed3(phase_fast%2);
 		}
+	}
+	else
+	{
+		PumpCollectorToFancoilOff();
+		Fancoil_Off(phase_fast%2);			
 	}
 
 }
