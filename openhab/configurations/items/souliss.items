@@ -123,19 +123,17 @@ Number Temperature_2F_Bedroom3_SP	"Temp Set Point [%.1f °C]" 	<temperature> (gT
 Number Temperature_2F_Bedroom3_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bedroom3)
 Number UR_2F_Bedroom3		"UR Corrente [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Bedroom3,gTechnicView_Node5) {souliss="T53:5:6"}
 
-Switch HP_Manual			"Logiche PDC"	<lock> (gTechnicView_Node13,gHPSettings) {souliss="T11:0:13", autoupdate=false}
-Number HP_Logics			"Logiche di Controllo"	<lock> (gHPSettings)
-Switch HP_Remote_Switch		"Remote Switch" 		<inverter> (gTechnicView_Node0,gHPSettings) {souliss="T11:0:14", autoupdate=false}
-Switch HP_Circulation_Pump	"Pompa Interna" 		(gTechnicView_Node0,gHPSettings) {souliss="T11:0:15", autoupdate=false}
-Switch HP_Sanitary_Request	"Richiesta ACS" 		(gTechnicView_Node0,gHPSettings) {souliss="T11:0:16", autoupdate=false}
-Switch HP_Heat_Cool			"Modalità Freddo" 		<climate> (gTechnicView_Node0,gHPSettings) {souliss="T11:0:17", autoupdate=false}
+Switch Floor_Mode			"Logiche Pavimento"		<lock> (gTechnicView_Node13,gHPSettings) {souliss="T12:0:13", autoupdate=false}
+Switch HP_Remote_Switch		"Remote Switch" 		<inverter> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:14", autoupdate=false}
+Switch HP_Circulation_Pump	"Pompa Interna" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:15", autoupdate=false}
+Switch HP_Sanitary_Request	"Richiesta ACS" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:16", autoupdate=false}
+Switch HP_Heat_Cool			"Modalità Freddo" 		<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:17", autoupdate=false}
 
 Rollershutter HVAC_3way_Valve		"Valvola a 3 Vie"			(gTechnicView_Node0) {souliss="T22:0:26", autoupdate=false}
-Switch HVAC_Pump_Boiler_Floor		"Pompa Boiler->Pavimento"	(gTechnicView_Node0) {souliss="T11:0:27", autoupdate=false}
-Switch HVAC_Pump_Collector_Fancoil	"Pompa Collettore->Fancoil"	(gTechnicView_Node0) {souliss="T11:0:28", autoupdate=false}
-Switch HVAC_Pump_Collector_Floor	"Pompa Collettore->Pavimento"	(gTechnicView_Node0) {souliss="T11:0:29", autoupdate=false}
-Number HVAC_Function		"Climatizzazione"	<lock> (gHPSettings)
-Switch HVAC_Mode			"Clima ON/OFF" 			<climate> (gTechnicView_Node0,gHPSettings) {souliss="T11:0:32", autoupdate=false}
+Switch HVAC_Pump_Boiler_Floor		"Pompa Boiler->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:27", autoupdate=false}
+Switch HVAC_Pump_Collector_Fancoil	"Pompa Collettore->Fancoil"	(gTechnicView_Node0) {souliss="T12:0:28", autoupdate=false}
+Switch HVAC_Pump_Collector_Floor	"Pompa Collettore->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:29", autoupdate=false}
+Switch Fancoil_Mode			"Logiche Fancoil" 	<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:32", autoupdate=false}
 
 Number HP_Temp_Sanitary		"Temp. ACS [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:7"}
 Number HP_Temp_Heating		"Temp. Accumulo Alto [%.1f °C]"		<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:9"}

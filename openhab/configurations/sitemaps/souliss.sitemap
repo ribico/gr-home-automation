@@ -215,11 +215,12 @@ sitemap default label="Full"
 		{
 			Text label="Impostazioni" icon="climate"
 			{
+				Switch item=Floor_Mode label="Pavimento"
+				Switch item=Fancoil_Mode label="Fancoil"					
+
 				Frame label="Auto"
 				{
 					Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
-					Switch item=HP_Logics mappings=[0="Manuale", 1="Base (Souliss)", 2="Avanzate (OpenHAB)"]
-					Switch item=HVAC_Function mappings=[0="OFF", 1="Caldo", 2="Freddo"]
 					Setpoint item=HVAC_Temp_SetPoint step=0.5 minValue=15 maxValue=30
 				}
 				Text icon="boy1" label="Manuale"
@@ -227,9 +228,9 @@ sitemap default label="Full"
 					Frame label="Modalità"
 					{
 						Switch item=HP_Sanitary_Request label="ACS"
-						Switch item=HP_Manual label="Logiche" mappings=[ON="Manuale", OFF="Auto"]
+						Switch item=Floor_Mode label="Pavimento"
+						Switch item=Fancoil_Mode label="Fancoil"					
 						Switch item=HP_Heat_Cool label="Clima" mappings=[OFF="Caldo", ON="Freddo"]
-						Switch item=HVAC_Mode label="Climatizzazione"					
 					}
 					Text label="Pompe"
 					{

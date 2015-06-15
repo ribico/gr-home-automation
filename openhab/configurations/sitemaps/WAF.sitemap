@@ -6,8 +6,10 @@ sitemap WAF label="WAF"
 
 		Text label="Climatizzatore" icon="climate"
 		{
-			Switch item=HVAC_Function mappings=[0="OFF", 1="Caldo", 2="Freddo"]
 			Setpoint item=HVAC_Temp_SetPoint label="SetPoint Clima [%.1f °C]" step=0.5 minValue=15 maxValue=30
+			Switch item=Floor_Mode label="Pavimento"
+			Switch item=Fancoil_Mode label="Fancoil"					
+
 
 			Frame label="Situazione Corrente"
 			{

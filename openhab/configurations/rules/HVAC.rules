@@ -6,57 +6,6 @@ OpenHAB Auto mode disable low level control in (Souliss Auto)
 
 ******************************************************/
 
-rule "HVAC_HP_Logics"
-when
-	System started or
-	Item HP_Logics changed
-then
-	if( HP_Logics.state == 0 || HP_Logics.state == 2) // fully Manual or logics handled by OpenHAB
-	{
-		HP_Manual.sendCommand(ON)
-	}
-	else if( HP_Logics.state == 1 )
-	{
-		HP_Manual.sendCommand(OFF)
-	}
-
-
-//	logInfo("HVAC_HP_Logics - ", HP_Logics.toString)
-//	logInfo("HVAC_HP_Manual - ", HP_Manual.toString)
-end
-
-
-rule "HVAC_HVAC_Mode"
-when
-	System started or
-	Item HVAC_Function changed
-then
-	if( HVAC_Function.state == 0)
-	{
-		HVAC_Mode.sendCommand(OFF)
-	}
-	else if( HVAC_Function.state == 1 )
-	{
-		HVAC_Mode.sendCommand(ON)
-		HP_Heat_Cool.sendCommand(OFF)
-	}
-	else if( HVAC_Function.state == 2 )
-	{
-		HVAC_Mode.sendCommand(ON)
-		HP_Heat_Cool.sendCommand(ON)
-	}
-end
-
-rule "HVAC_HVAC_Mode_bis"
-when
-	System started or
-	Item HVAC_Mode changed
-then
-	if( HVAC_Mode.state == OFF)
-	{
-		HVAC_Function.sendCommand(0)
-	}
-end
 
 
 rule "HVAC_Living"
