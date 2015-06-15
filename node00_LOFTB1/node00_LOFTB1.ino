@@ -309,11 +309,8 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	{
 		// check umidity average to eventually activate fancoils
 		float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
-		float temp_AVE = (temp_BED1+temp_BED2+temp_LIVING+temp_BED3+temp_KITCHEN+temp_DINING) / 6;
-		float dew_point_AVE = temp_AVE-(100-UR_AVE)/5;
 
-		if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 || 
-			temperature_floor_flow <= dew_point_AVE ) // floor condentation risk
+		if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
  		{
 			PumpCollectorToFancoilOn();
 			Fancoil_Speed1(phase_fast%2);
@@ -328,6 +325,18 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			PumpCollectorToFancoilOn();
 			Fancoil_Speed3(phase_fast%2);
 		}
+	}
+	else if( IsFancoilOff() && IsCoolMode() ) // condensation risk -> check floor dew point
+	{
+		float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
+		float temp_AVE = (temp_BED1+temp_BED2+temp_LIVING+temp_BED3+temp_KITCHEN+temp_DINING) / 6;
+		float dew_point_AVE = temp_AVE-(100-UR_AVE)/5;
+
+		if( temperature_floor_flow <= dew_point_AVE ) // floor condentation risk
+ 		{
+			PumpCollectorToFancoilOn();
+			Fancoil_Speed1(phase_fast%2);
+ 		}
 	}
 	else
 	{
