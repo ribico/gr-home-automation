@@ -52,6 +52,7 @@
 #define TEMP_AMBIENCE_SET_POINT_H	31
 
 #define FANCOIL_MODE				32
+#define HP_SETPOINT_2				33
 
 
 inline void DefineTypicals()
@@ -89,6 +90,7 @@ inline void DefineTypicals()
 	Set_Temperature(TEMP_AMBIENCE_SET_POINT);
 
 	Souliss_SetT12(memory_map, FANCOIL_MODE);
+	Souliss_SetT12(memory_map, HP_SETPOINT_2);
 
 	// initialize values
 	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);

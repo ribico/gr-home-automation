@@ -111,6 +111,7 @@ inline void ProcessLogics()
 	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FANCOIL, &data_changed);
 	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FLOOR, &data_changed);	
 	Souliss_Logic_T12(memory_map, FANCOIL_MODE, &data_changed);	
+	Souliss_Logic_T12(memory_map, HP_SETPOINT_2, &data_changed);	
 
 	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
 }
@@ -167,6 +168,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 	if ( IsFloorOff() && IsFancoilOff() )
 	{
+		HpSetpoint1(); // simply turn off the relay
 		HpCirculationOff();	
 		return;
 	}
@@ -270,6 +272,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		if ( !IsHotWaterInProduction() && IsHotWaterCold() )
 		{
 			// should produce some hot water here
+			HpSetpoint1();
 			SetHpFlowToBoiler(); // only needed when activating HP Circulation pump
 			HpCirculationOn();
 		}
@@ -294,12 +297,14 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		PumpBoilerToFloorOff(); // do not use boiler water
 		HeatingMixValveOff();
 
+		HpSetpoint1();
 		SetHpFlowToCollector();	// always needed in cooling
 		HpCirculationOn();	// Cold water needed
 		PumpCollectorToFloorOn();
 	}
 	else
 	{
+		HpSetpoint1(); // simply turn off setpoint 2 relay
 		HpCirculationOff();	
 		return;		
 	}
@@ -310,21 +315,21 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		// check umidity average to eventually activate fancoils
 		float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
 
+		if( UR_AVE > SETPOINT_UR_1 )
+		{
+			HpSetpoint1(); // is it enough ? maybe setpoint2 is needed.
+			PumpCollectorToFancoilOn();
+		}
+
 		if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
- 		{
-			PumpCollectorToFancoilOn();
-			Fancoil_Speed1(phase_fast%2);
- 		}
- 		if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3)
-		{
-			PumpCollectorToFancoilOn();
+ 			Fancoil_Speed1(phase_fast%2);
+ 		
+ 		else if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3)
 			Fancoil_Speed2(phase_fast%2);
-		}
+
 		else if( UR_AVE > SETPOINT_UR_3)
-		{
-			PumpCollectorToFancoilOn();
 			Fancoil_Speed3(phase_fast%2);
-		}
+
 	}
 	else if( IsFancoilOff() && IsCoolMode() ) // condensation risk -> check floor dew point
 	{
@@ -334,12 +339,16 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 		if( temperature_floor_flow <= dew_point_AVE ) // floor condentation risk
  		{
+			PumpBoilerToFloorOff();
+
+ 			HpSetpoint2();
 			PumpCollectorToFancoilOn();
 			Fancoil_Speed1(phase_fast%2);
  		}
 	}
 	else
 	{
+		HpSetpoint1();
 		PumpCollectorToFancoilOff();
 		Fancoil_Off(phase_fast%2);			
 	}
@@ -385,6 +394,8 @@ inline void SetOutputs()
 	LowDigOut(PUMP_BOILER_FLOOR_PIN, Souliss_T1n_Coil, PUMP_BOILER_FLOOR);	
 	LowDigOut(PUMP_COLLECTOR_FANCOIL_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FANCOIL);	
 	LowDigOut(PUMP_COLLECTOR_FLOOR_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FLOOR);	
+
+	LowDigOut(HP_SETPOINT_2_PIN, Souliss_T1n_Coil, HP_SETPOINT_2);
 }
 
 inline void ProcessTimers()
@@ -409,6 +420,7 @@ inline void ProcessTimers()
 	Souliss_T12_Timer(memory_map, PUMP_COLLECTOR_FLOOR);
 
 	Souliss_T12_Timer(memory_map, FANCOIL_MODE);
+	Souliss_T12_Timer(memory_map, HP_SETPOINT_2);
 }
 
 

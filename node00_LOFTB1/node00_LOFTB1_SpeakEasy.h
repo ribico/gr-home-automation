@@ -50,6 +50,11 @@
 #define HeatingMixValveOn_HotDirection()	SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) )
 #define HeatingMixValveOff()				SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK & ~HEATING_MIX_VALVE_DIRECTION_MASK)
 
+#define	IsHpSetpoint1()					(mOutput(HP_SETPOINT_2) == Souliss_T1n_OffCoil)
+#define	IsHpSetpoint2()					(mOutput(HP_SETPOINT_2) == Souliss_T1n_OnCoil)
+#define	HpSetpoint1()					if(IsHpSetpoint2()) SetInput(HP_SETPOINT_2, Souliss_T1n_OffCmd)
+#define	HpSetpoint2()					if(IsHpSetpoint1()) SetInput(HP_SETPOINT_2, Souliss_T1n_OnCmd)
+
 #define temp_BED1	pOutputAsFloat(9,4)
 #define UR_BED1		pOutputAsFloat(9,6)
 #define temp_BATH1	pOutputAsFloat(12,3) 

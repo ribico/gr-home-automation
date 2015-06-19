@@ -21,6 +21,8 @@
 
 // DEFINE OUTPUT PINs
 // ** DO NOT FORGET TO SET pinMode to OUTPUT **
+#define HP_SETPOINT_2_PIN						22
+
 #define PUMP_BOILER_FLOOR_PIN					23
 #define PUMP_COLLECTOR_FANCOIL_PIN				24
 #define PUMP_COLLECTOR_FLOOR_PIN				25
@@ -64,6 +66,7 @@ inline void DefinePinMode()
 	pinMode(MAIN_3WAY_VALVE_BOILER_LIMIT_PIN, INPUT_PULLUP);
 
 	// set all pin to HIGH before switching to OUTPUT mode to avoid false relays activation
+	digitalWrite(HP_SETPOINT_2_PIN, HIGH);
 	digitalWrite(PUMP_BOILER_FLOOR_PIN, HIGH);
 	digitalWrite(PUMP_COLLECTOR_FANCOIL_PIN, HIGH);
 	digitalWrite(PUMP_COLLECTOR_FLOOR_PIN, HIGH);
@@ -90,6 +93,8 @@ inline void DefinePinMode()
 	digitalWrite(ZONE_SWITCH_LIVING_PIN, HIGH);
 	digitalWrite(ZONE_SWITCH_LOFT_PIN, HIGH);
 	
+	pinMode(HP_SETPOINT_2_PIN, OUTPUT);
+
 	pinMode(PUMP_BOILER_FLOOR_PIN, OUTPUT);
 	pinMode(PUMP_COLLECTOR_FANCOIL_PIN, OUTPUT);
 	pinMode(PUMP_COLLECTOR_FLOOR_PIN, OUTPUT);
