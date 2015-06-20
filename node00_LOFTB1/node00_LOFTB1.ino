@@ -306,8 +306,12 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	}
 	else
 	{
+		// not heating and not cooling
 		HpSetpoint1(); // simply turn off setpoint 2 relay
 		HpCirculationOff();	
+		PumpCollectorToFloorOff();
+		PumpBoilerToFloorOff();
+		HeatingMixValveOff();
 		return;		
 	}
 
@@ -341,7 +345,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 		if( temperature_floor_flow <= dew_point_AVE ) // floor condentation risk
  		{
-			PumpBoilerToFloorOff();
+			PumpCollectorToFloorOff();
 
  			HpSetpoint2();
 			PumpCollectorToFancoilOn();
