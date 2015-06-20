@@ -180,6 +180,8 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		// AUTO MODE -> activate only needed zones
 
 		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
+		float max_temp = setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL;
+		float min_temp = setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL;
 
 
 		mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
@@ -187,39 +189,39 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		// activate zones according to measured temperature according to setpoint
 		if( IsHeatMode() )
 		{
-			if( temp_BED1 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_BED1 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
-			else if( temp_BED1 > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_BED1 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED1);
 
-			if( temp_BATH1 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_BATH1 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BATH1);
-			else if( temp_BATH1 > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_BATH1 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
 
-			if( temp_BED2 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_BED2 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED2);
-			else if( temp_BED2 > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_BED2 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
 
-			if( temp_LIVING < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_LIVING < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-			else if( temp_LIVING > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_LIVING > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
 
-			if( temp_BED3 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_BED3 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED3);
-			else if( temp_BED3 > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_BED3 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED3);
 
-			if( temp_BATH2 < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_BATH2 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BATH2);
-			else if( temp_BATH2 > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_BATH2 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH2);
 
-			if( temp_KITCHEN < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_KITCHEN < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
-			else if( temp_KITCHEN > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_KITCHEN > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
 
 		}
@@ -229,29 +231,29 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
 			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH2);
 
-			if( temp_BED1 > setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_BED1 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
-			else if( temp_BED1 < setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_BED1 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED1);
 
-			if( temp_BED2 > setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_BED2 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED2);
-			else if( temp_BED2 < setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_BED2 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
 
-			if( temp_LIVING > setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_LIVING > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-			else if( temp_LIVING < setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_LIVING < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
 
-			if( temp_BED3 > setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_BED3 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED3);
-			else if( temp_BED3 < setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_BED3 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED3);
 
-			if( temp_KITCHEN < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL)
+			if( temp_KITCHEN > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
-			else if( temp_KITCHEN > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL)
+			else if( temp_KITCHEN < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
 		}
 	}
