@@ -29,8 +29,8 @@
 #define HpCirculationOn()				if(!IsHpCirculationOn()) SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OnCmd)
 #define HpCirculationOff()				if(IsHpCirculationOn()) SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OffCmd)
 
-#define IsHpFlowToBoiler()				(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
-#define IsHpFlowToCollector()			(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK)
+#define IsHpFlowToBoiler()				(mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_State_Open)
+#define IsHpFlowToCollector()			(mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_State_Close)
 #define SetHpFlowToBoiler()				if(!IsHpFlowToBoiler()) 	SetInput(MAIN_3WAY_VALVE, Souliss_T2n_OpenCmd_SW)
 #define SetHpFlowToCollector()	 		if(!IsHpFlowToCollector()) 	SetInput(MAIN_3WAY_VALVE, Souliss_T2n_CloseCmd_SW)
 

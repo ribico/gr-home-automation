@@ -324,6 +324,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		if( UR_AVE > SETPOINT_UR_1 )
 		{
 			HpSetpoint1(); // is it enough ? maybe setpoint2 is needed.
+			SetHpFlowToCollector();
 			PumpCollectorToFancoilOn();
 		}
 
@@ -348,6 +349,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			PumpCollectorToFloorOff();
 
  			HpSetpoint2();
+			SetHpFlowToCollector();
 			PumpCollectorToFancoilOn();
 			Fancoil_Speed1(phase_fast%2);
  		}
