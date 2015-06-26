@@ -274,14 +274,13 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
 		Fancoil_Off(phase_fast%2);
+		HpSetpoint1();
 
 		// control hot water storage if there's heating requests from any zone
 		// otherwise just don't care about the temperature of the storage
 		if ( !IsHotWaterInProduction() && IsHotWaterCold() )
 		{
 			// should produce some hot water here
-			HpSetpoint1();
-			
 			if(IsHpFlowToBoiler())
 				HpCirculationOn();
 			else
