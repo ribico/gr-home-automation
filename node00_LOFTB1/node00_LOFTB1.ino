@@ -139,11 +139,15 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	// control SANITARY production hysteresys
 	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
 	{
+		PumpCollectorToFloorOff();
+		PumpCollectorToFancoilOff();
 		SetHpFlowToBoiler();
-		SanitaryWaterOn();
+
+		if (IsHpFlowToBoiler()) // avoid heat production if the 3WAY valve did not move to boiler
+			SanitaryWaterOn();
 		return; // exit here, following code is for heating/cooling and we are currently producing Sanitary Water
 	}
-	else if ( IsSanitaryWaterInProduction() &&  IsSanitaryWaterHot() )
+	else if ( IsSanitaryWaterInProduction() && IsSanitaryWaterHot() )
 		SanitaryWaterOff();
 
 
@@ -276,7 +280,9 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			// should produce some hot water here
 			HpSetpoint1();
 			SetHpFlowToBoiler(); // only needed when activating HP Circulation pump
-			HpCirculationOn();
+			
+			if(IsHpFlowToBoiler())
+				HpCirculationOn();
 		}
 		else if ( IsHotWaterInProduction() && IsHotWaterHot() )
 			HpCirculationOff(); // stop producing hot water
@@ -301,8 +307,12 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 		HpSetpoint1();
 		SetHpFlowToCollector();	// always needed in cooling
-		HpCirculationOn();	// Cold water needed
-		PumpCollectorToFloorOn();
+
+		if(IsHpFlowToCollector())
+		{
+			HpCirculationOn();	// Cold water needed
+			PumpCollectorToFloorOn();
+		}
 	}
 	else
 	{
@@ -325,7 +335,12 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		{
 			HpSetpoint1(); // is it enough ? maybe setpoint2 is needed.
 			SetHpFlowToCollector();
-			PumpCollectorToFancoilOn();
+			
+			if(IsHpFlowToCollector())
+			{
+				HpCirculationOn();
+				PumpCollectorToFancoilOn();
+			}
 		}
 
 		if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
@@ -350,7 +365,11 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
  			HpSetpoint2();
 			SetHpFlowToCollector();
-			PumpCollectorToFancoilOn();
+			if(IsHpFlowToCollector())
+			{
+				HpCirculationOn();
+				PumpCollectorToFancoilOn();
+			}
 			Fancoil_Speed1(phase_fast%2);
  		}
 	}
