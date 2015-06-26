@@ -141,10 +141,12 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	{
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
-		SetHpFlowToBoiler();
 
 		if (IsHpFlowToBoiler()) // avoid heat production if the 3WAY valve did not move to boiler
 			SanitaryWaterOn();
+		else
+			SetHpFlowToBoiler();
+
 		return; // exit here, following code is for heating/cooling and we are currently producing Sanitary Water
 	}
 	else if ( IsSanitaryWaterInProduction() && IsSanitaryWaterHot() )
@@ -279,10 +281,11 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		{
 			// should produce some hot water here
 			HpSetpoint1();
-			SetHpFlowToBoiler(); // only needed when activating HP Circulation pump
 			
 			if(IsHpFlowToBoiler())
 				HpCirculationOn();
+			else
+				SetHpFlowToBoiler(); // only needed when activating HP Circulation pump
 		}
 		else if ( IsHotWaterInProduction() && IsHotWaterHot() )
 			HpCirculationOff(); // stop producing hot water
@@ -304,15 +307,16 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	{
 		PumpBoilerToFloorOff(); // do not use boiler water
 		HeatingMixValveOff();
-
 		HpSetpoint1();
-		SetHpFlowToCollector();	// always needed in cooling
 
 		if(IsHpFlowToCollector())
 		{
 			HpCirculationOn();	// Cold water needed
 			PumpCollectorToFloorOn();
 		}
+		else
+			SetHpFlowToCollector();	// always needed in cooling
+
 	}
 	else
 	{
@@ -334,13 +338,15 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		if( UR_AVE > SETPOINT_UR_1 )
 		{
 			HpSetpoint1(); // is it enough ? maybe setpoint2 is needed.
-			SetHpFlowToCollector();
 			
 			if(IsHpFlowToCollector())
 			{
 				HpCirculationOn();
 				PumpCollectorToFancoilOn();
 			}
+			else
+				SetHpFlowToCollector();
+
 		}
 
 		if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
@@ -362,14 +368,16 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		if( temperature_floor_flow <= dew_point_AVE ) // floor condentation risk
  		{
 			PumpCollectorToFloorOff();
-
  			HpSetpoint2();
-			SetHpFlowToCollector();
+
 			if(IsHpFlowToCollector())
 			{
 				HpCirculationOn();
 				PumpCollectorToFancoilOn();
 			}
+			else
+				SetHpFlowToCollector();
+
 			Fancoil_Speed1(phase_fast%2);
  		}
 	}
