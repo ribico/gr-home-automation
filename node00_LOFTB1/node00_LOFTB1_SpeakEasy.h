@@ -35,8 +35,11 @@
 #define SetHpFlowToCollector()	 		if(!IsHpFlowToCollector()) 	SetInput(MAIN_3WAY_VALVE, Souliss_T2n_CloseCmd_SW)
 
 #define IsPumpBoilerToFloorOn()			(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OnCoil)
+#define IsPumpBoilerToFloorOff()		(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OffCoil)
 #define IsPumpCollectorToFloorOn()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OnCoil)
+#define IsPumpCollectorToFloorOff()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OffCoil)
 #define IsPumpCollectorToFancoilOn()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OnCoil)
+#define IsPumpCollectorToFancoilOff()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OffCoil)
 #define PumpBoilerToFloorOn()			if(!IsPumpBoilerToFloorOn()) 		SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_OnCmd)
 #define PumpBoilerToFloorOff()			if(IsPumpBoilerToFloorOn()) 		SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_OffCmd)
 #define PumpCollectorToFloorOn()		if(!IsPumpCollectorToFloorOn())		SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_OnCmd)

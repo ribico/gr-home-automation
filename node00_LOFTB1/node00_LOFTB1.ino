@@ -139,7 +139,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	// control SANITARY production hysteresys
 	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
 	{
-		if (IsHpFlowToBoiler() && !IsPumpCollectorToFloorOn() && !IsPumpCollectorToFancoilOn())
+		if (IsHpFlowToBoiler() && IsPumpCollectorToFloorOff() && IsPumpCollectorToFancoilOff())
 		{
 			SanitaryWaterOn();
 		}
