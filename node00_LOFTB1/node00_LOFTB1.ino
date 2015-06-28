@@ -321,7 +321,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
-		HpSetpoint1();
+		// when cooling HpSetpoint 1 or 2 are choosen according to UR level (code below)
 
 		if(IsHpFlowToCollector() && IsPumpBoilerToFloorOff())
 		{
