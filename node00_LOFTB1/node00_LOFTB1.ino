@@ -139,15 +139,23 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	// control SANITARY production hysteresys
 	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
 	{
-		if (IsHpFlowToBoiler() && IsPumpCollectorToFloorOff() && IsPumpCollectorToFancoilOff())
+		// no heating/cooling -> close all zone valves
+		mInput(HVAC_ZONES) = 0;
+		Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
+
+		if (IsHpFlowToBoiler() && IsPumpCollectorToFloorOff() && IsPumpCollectorToFancoilOff() && IsPumpBoilerToFloorOff())
 		{
 			SanitaryWaterOn();
 		}
 		else
 		{
-			// avoid heat production if the 3WAY valve did not move to boiler	
+			// stop all heating/cooling activities when procucting sanitary water	
 			PumpCollectorToFloorOff();
 			PumpCollectorToFancoilOff();
+			PumpBoilerToFloorOff();
+			HeatingMixValveOff();			
+	
+			// upstream to boiler
 			SetHpFlowToBoiler();
 		}
 
@@ -274,11 +282,18 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 	if( IsHeating() ) // heating at least one zone
 	{	
-		PumpBoilerToFloorOn();	// using hot water from boiler only
-		PumpCollectorToFloorOff();
-		PumpCollectorToFancoilOff();
-		Fancoil_Off(phase_fast%2);
 		HpSetpoint1();
+
+		if( IsPumpCollectorToFloorOff() && IsPumpCollectorToFancoilOff() )
+		{
+			PumpBoilerToFloorOn();	// using hot water from boiler only
+		}
+		else
+		{
+			PumpCollectorToFloorOff();
+			PumpCollectorToFancoilOff();
+			Fancoil_Off(phase_fast%2);
+		}
 
 		// control hot water storage if there's heating requests from any zone
 		// otherwise just don't care about the temperature of the storage
@@ -303,22 +318,22 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		
 		else
 			HeatingMixValveOff(); // mix valve off (hold the position)
-
-		return;
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
-		PumpBoilerToFloorOff(); // do not use boiler water
-		HeatingMixValveOff();
 		HpSetpoint1();
 
-		if(IsHpFlowToCollector())
+		if(IsHpFlowToCollector() && IsPumpBoilerToFloorOff())
 		{
 			HpCirculationOn();	// Cold water needed
 			PumpCollectorToFloorOn();
 		}
 		else
+		{
 			SetHpFlowToCollector();	// always needed in cooling
+			PumpBoilerToFloorOff(); // do not use boiler water
+			HeatingMixValveOff();
+		}
 
 	}
 	else
