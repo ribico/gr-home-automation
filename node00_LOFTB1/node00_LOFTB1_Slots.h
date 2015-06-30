@@ -27,6 +27,7 @@
 #define TEMP_FANCOIL_FLOW_H 		23
 
 #define HVAC_ZONES					24
+#	define HVAC_MASK_NO_ZONES		0x00
 #	define HVAC_MASK_BED1			0x01
 #	define HVAC_MASK_BATH1			0x02
 #	define HVAC_MASK_BED2			0x04

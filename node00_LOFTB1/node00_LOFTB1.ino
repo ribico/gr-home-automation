@@ -139,61 +139,44 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	// control SANITARY production hysteresys
 	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
 	{
-		// no heating/cooling -> close all zone valves
-		mInput(HVAC_ZONES) = 0;
-		Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
+		if( IsHeating() || IsCooling() || 
+			IsPumpCollectorToFloorOn() || IsPumpCollectorToFancoilOn() || IsPumpBoilerToFloorOn() ||
+			IsHpFlowToCollector() )
+		{
+			// no heating/cooling -> close all zone valves
+			mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
+			Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 
-		if (IsHpFlowToBoiler() && IsPumpCollectorToFloorOff() && IsPumpCollectorToFancoilOff() && IsPumpBoilerToFloorOff())
-		{
-			SanitaryWaterOn();
-		}
-		else
-		{
 			// stop all heating/cooling activities when procucting sanitary water	
 			PumpCollectorToFloorOff();
 			PumpCollectorToFancoilOff();
 			PumpBoilerToFloorOff();
 			HeatingMixValveOff();			
-	
+
 			// upstream to boiler
 			SetHpFlowToBoiler();
 		}
+		else		
+			SanitaryWaterOn(); // start producing Sanitary Water
 
-		return; // exit here, following code is for heating/cooling and we are currently producing Sanitary Water
 	}
 	else if ( IsSanitaryWaterInProduction() && IsSanitaryWaterHot() )
 		SanitaryWaterOff();
 
-
+	if( IsSanitaryWaterInProduction() )
+		return; // exit here, following code is for heating/cooling and we are currently producing Sanitary Water
 
 	if( IsFloorOff() )
 	{
 		// no heating/cooling -> close all zone valves
-		mInput(HVAC_ZONES) = 0;
-		Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
+		mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
 
 		// turn all pumps and valves off
 		PumpBoilerToFloorOff();
 		PumpCollectorToFloorOff();
 		HeatingMixValveOff();			
 	}
-
-	if( IsFancoilOff() )
-	{
-		PumpCollectorToFancoilOff();
-		Fancoil_Off(phase_fast%2);	
-	}
-
-	if ( IsFloorOff() && IsFancoilOff() )
-	{
-		HpSetpoint1(); // simply turn off the relay
-		HpCirculationOff();	
-		return;
-	}
-
-	// if here either Floor or Fancoils are ON
-
-	if( IsFloorOn() )
+	else if( IsFloorOn() )
 	{
 		// AUTO MODE -> activate only needed zones
 
@@ -201,10 +184,9 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		float max_temp = setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL;
 		float min_temp = setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL;
 
-
+		// activate zones according to measured temperature according to setpoint
 		mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
 
-		// activate zones according to measured temperature according to setpoint
 		if( IsHeatMode() )
 		{
 			if( temp_BED1 < min_temp)
@@ -241,7 +223,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
 			else if( temp_KITCHEN > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
-
 		}
 		else if( IsCoolMode() )
 		{
@@ -276,17 +257,24 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		}
 	}
 
+	// process zones logics both for floor on and off
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
-
-
 
 	if( IsHeating() ) // heating at least one zone
 	{	
-		HpSetpoint1();
-
-		if( IsPumpCollectorToFloorOff() && IsPumpCollectorToFancoilOff() )
+		if( IsPumpCollectorToFloorOff() && IsPumpCollectorToFancoilOff() && IsFancoilOff() )
 		{
-			PumpBoilerToFloorOn();	// using hot water from boiler only
+			PumpBoilerToFloorOn();	// using hot water from boiler only, collector pumps off
+	
+			// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
+			if ( IsHeatingWaterTooHot() )
+				HeatingMixValveOn_ColdDirection(); // mix valve on, direction relay off
+			
+			else if ( IsHeatingWaterTooCold() )
+				HeatingMixValveOn_HotDirection(); // mix valve on, direction relay on
+			
+			else
+				HeatingMixValveOff(); // mix valve off (hold the position)
 		}
 		else
 		{
@@ -301,32 +289,27 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		{
 			// should produce some hot water here
 			if(IsHpFlowToBoiler())
+			{
+				HpSetpoint1(); // always setpoint 1, explicit call it here.
 				HpCirculationOn();
+			}
 			else
 				SetHpFlowToBoiler(); // only needed when activating HP Circulation pump
 		}
 		else if ( IsHotWaterInProduction() && IsHotWaterHot() )
 			HpCirculationOff(); // stop producing hot water
-
-
-		// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
-		if ( IsHeatingWaterTooHot() )
-			HeatingMixValveOn_ColdDirection(); // mix valve on, direction relay off
-		
-		else if ( IsHeatingWaterTooCold() )
-			HeatingMixValveOn_HotDirection(); // mix valve on, direction relay on
-		
-		else
-			HeatingMixValveOff(); // mix valve off (hold the position)
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
 		// when cooling HpSetpoint 1 or 2 are choosen according to UR level (code below)
 
-		if(IsHpFlowToCollector() && IsPumpBoilerToFloorOff())
+		if( IsHpFlowToCollector() && IsPumpBoilerToFloorOff() )
 		{
 			HpCirculationOn();	// Cold water needed
 			PumpCollectorToFloorOn();
+
+			TODO("adjust heating mix valve position in order to prevent condensation");
+	
 		}
 		else
 		{
@@ -335,6 +318,79 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			HeatingMixValveOff();
 		}
 
+		if( IsFancoilOn() ) // reduce UR gradually
+		{
+			// check umidity average to eventually activate fancoils
+			float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
+
+			if( UR_AVE > SETPOINT_UR_1 )
+			{
+				HpSetpoint1(); // is it enough ? maybe setpoint2 is needed.
+				
+				if(IsHpFlowToCollector())
+					PumpCollectorToFancoilOn();
+				else
+					SetHpFlowToCollector();
+			}
+
+			if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
+			{
+				HpSetpoint1(); // is it enough ? maybe setpoint2 is needed.
+	 			Fancoil_Speed1(phase_fast%2);
+			}
+	 		else if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3)
+	 		{
+				HpSetpoint1(); // is it enough ? maybe setpoint2 is needed.	 			
+				Fancoil_Speed2(phase_fast%2);
+			}
+			else if( UR_AVE > SETPOINT_UR_3)
+			{
+				HpSetpoint2();			
+				Fancoil_Speed3(phase_fast%2);
+			}
+			else
+			{
+				HpSetpoint1();
+				PumpCollectorToFancoilOff();
+				Fancoil_Off(phase_fast%2);							
+			}
+		}
+		else if( IsFancoilOff() ) // condensation risk -> check floor dew point
+		{
+			float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
+			float temp_AVE = (temp_BED1+temp_BED2+temp_LIVING+temp_BED3+temp_KITCHEN+temp_DINING) / 6;
+			float dew_point_AVE = temp_AVE-(100-UR_AVE)/5;
+
+			if( temperature_floor_flow <= dew_point_AVE ) // floor condentation risk
+	 		{
+				if(IsHpFlowToCollector() && IsPumpCollectorToFloorOff())
+				{
+		 			HpSetpoint2();
+					HpCirculationOn();
+					PumpCollectorToFancoilOn();
+				}
+				else
+				{
+					SetHpFlowToCollector();
+					PumpCollectorToFloorOff();
+				}
+
+				Fancoil_Speed1(phase_fast%2);
+	 		}
+	 		else
+	 		{
+				HpSetpoint1();
+				PumpCollectorToFancoilOff();
+				Fancoil_Off(phase_fast%2);				 			
+	 		}
+		}
+		else
+		{
+			// fancoil not on and not off ?!? this should be never executed
+			HpSetpoint1();
+			PumpCollectorToFancoilOff();
+			Fancoil_Off(phase_fast%2);			
+		}
 	}
 	else
 	{
@@ -346,66 +402,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		HeatingMixValveOff();
 		return;		
 	}
-
-
-	if( IsFancoilOn() && IsCoolMode() )
-	{
-		// check umidity average to eventually activate fancoils
-		float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
-
-		if( UR_AVE > SETPOINT_UR_1 )
-		{
-			HpSetpoint1(); // is it enough ? maybe setpoint2 is needed.
-			
-			if(IsHpFlowToCollector())
-			{
-				HpCirculationOn();
-				PumpCollectorToFancoilOn();
-			}
-			else
-				SetHpFlowToCollector();
-
-		}
-
-		if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
- 			Fancoil_Speed1(phase_fast%2);
- 		
- 		else if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3)
-			Fancoil_Speed2(phase_fast%2);
-
-		else if( UR_AVE > SETPOINT_UR_3)
-			Fancoil_Speed3(phase_fast%2);
-
-	}
-	else if( IsFancoilOff() && IsCoolMode() ) // condensation risk -> check floor dew point
-	{
-		float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
-		float temp_AVE = (temp_BED1+temp_BED2+temp_LIVING+temp_BED3+temp_KITCHEN+temp_DINING) / 6;
-		float dew_point_AVE = temp_AVE-(100-UR_AVE)/5;
-
-		if( temperature_floor_flow <= dew_point_AVE ) // floor condentation risk
- 		{
-			PumpCollectorToFloorOff();
- 			HpSetpoint2();
-
-			if(IsHpFlowToCollector())
-			{
-				HpCirculationOn();
-				PumpCollectorToFancoilOn();
-			}
-			else
-				SetHpFlowToCollector();
-
-			Fancoil_Speed1(phase_fast%2);
- 		}
-	}
-	else
-	{
-		HpSetpoint1();
-		PumpCollectorToFancoilOff();
-		Fancoil_Off(phase_fast%2);			
-	}
-
 }
 
 
