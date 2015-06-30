@@ -155,6 +155,8 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 			// upstream to boiler
 			SetHpFlowToBoiler();
+
+			return; // should not exectute follwing code that could modify the HVAC status
 		}
 		else		
 			SanitaryWaterOn(); // start producing Sanitary Water
