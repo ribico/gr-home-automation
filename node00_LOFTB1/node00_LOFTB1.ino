@@ -158,9 +158,8 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 			return; // should not exectute follwing code that could modify the HVAC status
 		}
-		else		
-			SanitaryWaterOn(); // start producing Sanitary Water
-
+		
+		SanitaryWaterOn(); // start producing Sanitary Water
 	}
 	else if ( IsSanitaryWaterInProduction() && IsSanitaryWaterHot() )
 		SanitaryWaterOff();
