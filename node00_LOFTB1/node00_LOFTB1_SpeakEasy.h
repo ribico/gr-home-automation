@@ -22,17 +22,19 @@
 #define IsHotWaterCold()				(temperature_heating < SETPOINT_TEMP_HEATING_WATER_MIN)
 #define IsHotWaterHot()					(temperature_heating > SETPOINT_TEMP_HEATING_WATER_MAX)
 
-#define SanitaryWaterOn()				SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OnCmd)	
-#define SanitaryWaterOff()				SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OffCmd)	
+#define SanitaryWaterOn()				if(!IsSanitaryWaterInProduction()) SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OnCmd)	
+#define SanitaryWaterOff()				if(IsSanitaryWaterInProduction()) SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OffCmd)	
 
 #define IsHpCirculationOn()				(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil)
 #define HpCirculationOn()				if(!IsHpCirculationOn()) SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OnCmd)
 #define HpCirculationOff()				if(IsHpCirculationOn()) SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OffCmd)
 
-#define IsHpFlowToBoiler()				(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK)
-#define IsHpFlowToCollector()			(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK)
-#define SetHpFlowToBoiler()				if(!IsHpFlowToBoiler()) 	SetInput(MAIN_3WAY_VALVE, Souliss_T2n_OpenCmd_SW)
-#define SetHpFlowToCollector()	 		if(!IsHpFlowToCollector()) 	SetInput(MAIN_3WAY_VALVE, Souliss_T2n_CloseCmd_SW)
+#define IsHpFlowToBoiler()				((mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK) && (mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_State_Open))
+#define IsHpFlowToCollector()			((mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK) && (mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_State_Close))
+#define Is3WayValveMovingToBoiler()		(mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_Coil_Open)
+#define Is3WayValveMovingToCollector()	(mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_Coil_Close)
+#define SetHpFlowToBoiler()				if(!IsHpFlowToBoiler() && !Is3WayValveMovingToBoiler()) 	SetInput(MAIN_3WAY_VALVE, Souliss_T2n_OpenCmd_SW)
+#define SetHpFlowToCollector()	 		if(!IsHpFlowToCollector() && !Is3WayValveMovingToCollector()) 	SetInput(MAIN_3WAY_VALVE, Souliss_T2n_CloseCmd_SW)
 
 #define IsPumpBoilerToFloorOn()			(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OnCoil)
 #define IsPumpBoilerToFloorOff()		(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OffCoil)

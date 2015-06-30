@@ -34,8 +34,8 @@ MEGA with Ethernet only acting as GATEWAY
 #define TEMP_FANCOIL_FLOW_PAD_RESISTANCE      	9830 // measured
 
 
-#define SETPOINT_TEMP_SANITARY_WATER_MAX 	45 // °C
 #define SETPOINT_TEMP_SANITARY_WATER_MIN 	40 // °C
+#define SETPOINT_TEMP_SANITARY_WATER_MAX 	45 // °C
 #define SETPOINT_TEMP_HEATING_WATER_MIN		26 // °C
 #define SETPOINT_TEMP_HEATING_WATER_MAX		30 // °C
 
@@ -140,8 +140,8 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
 	{
 		if( IsHeating() || IsCooling() || 
-			IsPumpCollectorToFloorOn() || IsPumpCollectorToFancoilOn() || IsPumpBoilerToFloorOn() ||
-			IsHpFlowToCollector() )
+			!IsPumpCollectorToFloorOff() || !IsPumpCollectorToFancoilOff() || !IsPumpBoilerToFloorOff() ||
+			!IsHpFlowToBoiler() )
 		{
 			// no heating/cooling -> close all zone valves
 			mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
@@ -155,20 +155,19 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 			// upstream to boiler
 			SetHpFlowToBoiler();
-
-			return; // should not exectute follwing code that could modify the HVAC status
+			return;
 		}
-		
+
 		SanitaryWaterOn(); // start producing Sanitary Water
+		return; // should not exectute follwing code that could modify the HVAC status
 	}
-	else if ( IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
+	else if ( IsSanitaryWaterInProduction() && !IsSanitaryWaterHot() )
 	{
 		return; // exit here, following code is for heating/cooling and we are currently producing Sanitary Water
 	}
-	else if ( IsSanitaryWaterInProduction() && IsSanitaryWaterHot() )
-	{
-		SanitaryWaterOff();
-	}	
+
+	// if here there's no need to produce Sanitary Water
+	SanitaryWaterOff();
 
 
 	if( IsFloorOff() )
