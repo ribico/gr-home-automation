@@ -161,11 +161,15 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		
 		SanitaryWaterOn(); // start producing Sanitary Water
 	}
-	else if ( IsSanitaryWaterInProduction() && IsSanitaryWaterHot() )
-		SanitaryWaterOff();
-
-	if( IsSanitaryWaterInProduction() )
+	else if ( IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
+	{
 		return; // exit here, following code is for heating/cooling and we are currently producing Sanitary Water
+	}
+	else if ( IsSanitaryWaterInProduction() && IsSanitaryWaterHot() )
+	{
+		SanitaryWaterOff();
+	}	
+
 
 	if( IsFloorOff() )
 	{
