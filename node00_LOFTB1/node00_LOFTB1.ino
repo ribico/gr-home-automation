@@ -4,7 +4,7 @@ MEGA with Ethernet only acting as GATEWAY
 
 ***********************/
 
-#define DEBUG
+//#define DEBUG
 
 #include "bconf/StandardArduino.h"
 #include "conf/ethW5100.h"
@@ -48,7 +48,9 @@ MEGA with Ethernet only acting as GATEWAY
 //#define SETPOINT_COOL_TEMP			25
 //#define SETPOINT_HEAT_TEMP			19
 
-
+#define COLLECTOR_FLOOR_MIX_VALVE_MIN	0
+#define COLLECTOR_FLOOR_MIX_VALVE_MAX	220
+U8 gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
 
 
 
@@ -115,8 +117,6 @@ inline void ProcessLogics()
 
 	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
 }
-
-bool gbCondensationRisk = false;
 
 inline void ProcessSlowLogics(U16 phase_fast)
 {
@@ -310,33 +310,49 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
-		float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
-		float temp_AVE = (temp_BED1+temp_BED2+temp_LIVING+temp_BED3+temp_KITCHEN+temp_DINING) / 6;
-		float dew_point_AVE = temp_AVE-(100-UR_AVE)/5 + 5.0; TODO("Remove 5.0");
+		float UR_MAX = UR_BED1;
+		if(UR_MAX < UR_BED2) UR_MAX = UR_BED2;
+		if(UR_MAX < UR_LIVING) UR_MAX = UR_LIVING;
+		if(UR_MAX < UR_BED3) UR_MAX = UR_BED3;
+		if(UR_MAX < UR_KITCHEN) UR_MAX = UR_KITCHEN;
+		if(UR_MAX < UR_DINING) UR_MAX = UR_DINING;
 
-		Serial.print("DEW_POINT_AVE: ");
-		Serial.println(dew_point_AVE);
+		float temp_MAX = temp_BED1;
+		if(temp_MAX < temp_BED2) temp_MAX = temp_BED2;
+		if(temp_MAX < temp_LIVING) temp_MAX = temp_LIVING;
+		if(temp_MAX < temp_BED3) temp_MAX = temp_BED3;
+		if(temp_MAX < temp_KITCHEN) temp_MAX = temp_KITCHEN;
+		if(temp_MAX < temp_DINING) temp_MAX = temp_DINING;
 
-		// floor condentation risk detection with hysteresys
-		if( !gbCondensationRisk && temperature_floor_flow <= dew_point_AVE )	
-			gbCondensationRisk = true;
+		float dew_point_MAX = temp_MAX-(100-UR_MAX)/5;
+		float setpoint_cooling_water = dew_point_MAX;
 
-		else if( gbCondensationRisk && temperature_floor_flow > (dew_point_AVE + 3.0) )
-			gbCondensationRisk = false;
+		// always use setpoint 2 when cooling
+		HpSetpoint2();
 
-
-
-		// when cooling HpSetpoint 1 or 2 are choosen according to UR level (code below)
-
-		if( IsHpFlowToCollector() && IsPumpBoilerToFloorOff() && !gbCondensationRisk)
+		if( IsHpFlowToCollector() && IsPumpBoilerToFloorOff())
 		{
 			HpCirculationOn();	// Cold water needed
 			PumpCollectorToFloorOn();
 
-			TODO("adjust heating mix valve position in order to prevent condensation");
+			// control the collector-floor mix valve to keep the setpoint
+			// simple proportional control
+			float error = setpoint_cooling_water - temperature_floor_flow;
+
+			if(gCollectorToFloorMixValvePos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
+				gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
+
+			else if(gCollectorToFloorMixValvePos - error < COLLECTOR_FLOOR_MIX_VALVE_MIN)
+				gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MIN;
+			
+			else
+				gCollectorToFloorMixValvePos -= (U8) error;
+
+			analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, gCollectorToFloorMixValvePos);
 		}
 		else
 		{
+			HpCirculationOff();
 			SetHpFlowToCollector();	// always needed in cooling
 			PumpCollectorToFloorOff(); // keep the pump off
 			PumpBoilerToFloorOff(); // do not use boiler water
@@ -344,24 +360,12 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		}
 
 
-		if( IsFancoilOn() || gbCondensationRisk )
+		if( IsFancoilOn())
 		{
 			// check umidity average to eventually activate fancoils
 			float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
 
-			// setpoint2 (9°C) neded in case of high umidity
-			if( gbCondensationRisk || UR_AVE > SETPOINT_UR_3 )
-			{
-				Serial.println("1 - SETPOINT 2");
-				HpSetpoint2();
-			}
-			else
-			{
-				Serial.println("2 - SETPOINT 1");
-				HpSetpoint1();
-			}
-
-			if( gbCondensationRisk || UR_AVE > SETPOINT_UR_1 )
+			if( UR_AVE > SETPOINT_UR_1 )
 			{
 				if(IsHpFlowToCollector())
 				{
@@ -384,7 +388,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	 		else if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3 )
 				Fancoil_Speed2(phase_fast%2);
 
-			else if( UR_AVE > SETPOINT_UR_3 || gbCondensationRisk)
+			else if( UR_AVE > SETPOINT_UR_3 )
 				Fancoil_Speed3(phase_fast%2);
 
 			else
@@ -392,9 +396,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		}
 		else
 		{
-			// fancoil off and NOT condensation risk
-			Serial.println("3 - SETPOINT 1");
-			HpSetpoint1();
 			PumpCollectorToFancoilOff();
 			Fancoil_Off(phase_fast%2);			
 		}
@@ -402,13 +403,13 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	else
 	{
 		// not heating and not cooling
-		Serial.println("4 - SETPOINT 1");
 		HpSetpoint1(); // simply turn off setpoint 2 relay
 		HpCirculationOff();	
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
 		PumpBoilerToFloorOff();
 		HeatingMixValveOff();
+		Fancoil_Off(phase_fast%2);	
 		return;		
 	}
 }
