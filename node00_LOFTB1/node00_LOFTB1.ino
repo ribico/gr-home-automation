@@ -336,8 +336,8 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			PumpCollectorToFloorOn();
 
 			// control the collector-floor mix valve to keep the setpoint
-			// simple proportional control
-			float error = setpoint_cooling_water - temperature_floor_flow;
+			// simple proportional control on return floor temperature
+			float error = setpoint_cooling_water - temperature_floor_return;
 
 			if(gCollectorToFloorMixValvePos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
 				gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
@@ -360,7 +360,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		}
 
 
-		if( IsFancoilOn())
+		if( IsFancoilAuto() )
 		{
 			// check umidity average to eventually activate fancoils
 			float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
@@ -393,6 +393,20 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 			else
 				Fancoil_Off(phase_fast%2);
+		}
+		else if( IsFancoilOn() )
+		{
+			if(IsHpFlowToCollector())
+			{
+				HpCirculationOn();
+				PumpCollectorToFancoilOn();
+			}
+			else
+			{
+				HpCirculationOff();
+				SetHpFlowToCollector();
+			}
+	 		Fancoil_Speed1(phase_fast%2);
 		}
 		else
 		{

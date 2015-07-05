@@ -4,7 +4,7 @@
 
 #define IsFancoilOn()				(mOutput(FANCOIL_MODE) == Souliss_T1n_OnCoil)
 #define IsFancoilOff()				(mOutput(FANCOIL_MODE) == Souliss_T1n_OffCoil)
-//#define IsFancoilAuto()				(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoState)
+#define IsFancoilAuto()				(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoState)
 
 #define IsHeatMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
 #define IsCoolMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OnCoil)
