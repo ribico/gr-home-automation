@@ -8,8 +8,8 @@
 #define LIGHT_TERRACE_3_PIN_IN                  52
 #define LIGHT_TOILET_PIN_IN                     53
 
-#define TEMP_BOILER_SANITARY_PIN 	A0       // analog pin used
-#define TEMP_BOILER_HEATING_PIN 	A1       // analog pin used
+#define TEMP_BOILER_SANITARY_PIN 	A8 //A0       // analog pin used
+#define TEMP_BOILER_HEATING_PIN 	A9 //A1       // analog pin used
 #define TEMP_BOILER_BOTTOM_PIN  	A2       // analog pin used
 #define TEMP_FLOOR_FLOW_PIN   		A3       // analog pin used
 #define TEMP_FLOOR_RETURN_PIN 		A4       // analog pin used
