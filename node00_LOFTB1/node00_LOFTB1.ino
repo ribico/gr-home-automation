@@ -400,13 +400,14 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			{
 				HpCirculationOn();
 				PumpCollectorToFancoilOn();
+		 		Fancoil_Speed1(phase_fast%2);
 			}
 			else
 			{
 				HpCirculationOff();
 				SetHpFlowToCollector();
+				Fancoil_Off(phase_fast%2);
 			}
-	 		Fancoil_Speed1(phase_fast%2);
 		}
 		else
 		{
