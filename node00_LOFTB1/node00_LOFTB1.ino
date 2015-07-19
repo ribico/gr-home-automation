@@ -52,7 +52,7 @@ MEGA with Ethernet only acting as GATEWAY
 #define COLLECTOR_FLOOR_MIX_VALVE_MIN	0
 #define COLLECTOR_FLOOR_MIX_VALVE_MAX	200
 U8 gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
-
+bool gbFancoilsOn = false;
 
 
 inline void ReadInputs()
@@ -314,64 +314,66 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
 		HpSetpoint2();
 
+		// set gbFancoilsOn
 		if( IsFancoilsAuto() )
 		{
-			// check umidity average to eventually activate fancoils
-			float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
+			// check umidity max to eventually activate fancoils
+			float UR_MAX = UR_BED1;
+			UR_MAX = max(UR_MAX, UR_BED2);
+			UR_MAX = max(UR_MAX, UR_LIVING);
+			UR_MAX = max(UR_MAX, UR_BED3);
+			UR_MAX = max(UR_MAX, UR_KITCHEN);
+			UR_MAX = max(UR_MAX, UR_DINING);
 
-			if( IsPumpCollectorToFancoilOff() && (UR_AVE > SETPOINT_UR_1) )
-			{
-				if(IsHpFlowToCollector())
-				{
-					HpCirculationOn();
-					PumpCollectorToFancoilOn();
-					Fancoil_Speed1(phase_fast%2); TODO("remove from here to control fancoils speed with hysteresys");
-				}
-				else
-				{
-					HpCirculationOff();
-					SetHpFlowToCollector();
-				}
-			}
-			else if( IsPumpCollectorToFancoilOn() && (UR_AVE < SETPOINT_UR_1 - SETPOINT_UR_DEADBAND) )
-			{
-				PumpCollectorToFancoilOff();
-				Fancoil_Off(phase_fast%2); TODO("remove from here to control fancoils speed with hysteresys");
-			}
-/*			// choose the right fancoil fan speed
-			if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
-	 			Fancoil_Speed1(phase_fast%2);
-
-	 		else if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3 )
-				Fancoil_Speed2(phase_fast%2);
-
-			else if( UR_AVE > SETPOINT_UR_3 )
-				Fancoil_Speed3(phase_fast%2);
-
-			else
-				Fancoil_Off(phase_fast%2);
-	*/
+			if( !gbFancoilsOn && (UR_MAX > SETPOINT_UR_1) )
+				gbFancoilsOn = true;
+			else if(gbFancoilsOn && (UR_MAX < SETPOINT_UR_1 - SETPOINT_UR_DEADBAND) )
+				gbFancoilsOn = false;
 		}
 		else if( IsFancoilsOn() )
+			gbFancoilsOn = true;
+
+		else
+			gbFancoilsOn = false;
+
+		// manage valves and pumps according to gbFancoilsOn
+		if( gbFancoilsOn )
 		{
 			if(IsHpFlowToCollector())
 			{
 				HpCirculationOn();
 				PumpCollectorToFancoilOn();
-		 		Fancoil_Speed1(phase_fast%2);
 			}
 			else
 			{
 				HpCirculationOff();
 				SetHpFlowToCollector();
-				Fancoil_Off(phase_fast%2);
 			}
 		}
 		else
-		{
 			PumpCollectorToFancoilOff();
-			Fancoil_Off(phase_fast%2);
+
+		// control fancoils according to gbFancoilsOn value
+		if( gbFancoilsOn )
+		{
+			Fancoil_Speed1(phase_fast%2); TODO("adjust fancoils speed with UR hysteresys");
 		}
+		else
+			Fancoil_Off(phase_fast%2);
+
+/*			// choose the right fancoil fan speed
+	if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
+		Fancoil_Speed1(phase_fast%2);
+
+	else if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3 )
+		Fancoil_Speed2(phase_fast%2);
+
+	else if( UR_AVE > SETPOINT_UR_3 )
+		Fancoil_Speed3(phase_fast%2);
+
+	else
+		Fancoil_Off(phase_fast%2);
+*/
 
 		// floor control
 		if( IsHpFlowToCollector() && IsPumpBoilerToFloorOff())
