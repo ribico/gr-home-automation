@@ -1,7 +1,7 @@
 #ifndef GRH_FANCOILS_H
 #define GRH_FANCOILS_H
 
-int fancoils_status[2];
+//int fancoils_status[2];
 
 static U8 FANCOIL_OFF[] = {Souliss_T1n_OffCmd, Souliss_T1n_OffCmd, Souliss_T1n_OffCmd};
 static U8 FANCOIL_SPEED1[] = {Souliss_T1n_OnCmd, Souliss_T1n_OffCmd, Souliss_T1n_OffCmd};
@@ -13,7 +13,7 @@ inline void Fancoil_Cmds(U8 idx, U8 status)
 //	if (fancoils_status[idx] == status)
 //		return;
 
-	fancoils_status[idx] = status;
+//	fancoils_status[idx] = status;
 
 	U16 addr = (idx % 2) ? RS485_ADDRESS_GTW1B1 : RS485_ADDRESS_GTW2B1;
 
