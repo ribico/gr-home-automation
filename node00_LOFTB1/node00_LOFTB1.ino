@@ -44,6 +44,7 @@ MEGA with Ethernet only acting as GATEWAY
 #define SETPOINT_UR_1				60
 #define SETPOINT_UR_2				70
 #define SETPOINT_UR_3				75
+#define SETPOINT_UR_DEADBAND	3
 
 //#define SETPOINT_COOL_TEMP			25
 //#define SETPOINT_HEAT_TEMP			19
@@ -315,13 +316,14 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			// check umidity average to eventually activate fancoils
 			float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
 
-			if( UR_AVE > SETPOINT_UR_1 )
+			if( IsPumpCollectorToFancoilOff() && (UR_AVE > SETPOINT_UR_1) )
 			{
 				if(IsHpFlowToCollector())
 				{
 					HpSetpoint2();
 					HpCirculationOn();
 					PumpCollectorToFancoilOn();
+					Fancoil_Speed1(phase_fast%2); TODO("remove from here to control fancoils speed with hysteresys");
 				}
 				else
 				{
@@ -329,12 +331,13 @@ inline void ProcessSlowLogics(U16 phase_fast)
 					SetHpFlowToCollector();
 				}
 			}
-			else
+			else if( IsPumpCollectorToFancoilOn() && (UR_AVE < SETPOINT_UR_1 - SETPOINT_UR_DEADBAND) )
 			{
 				HpSetpoint1();
 				PumpCollectorToFancoilOff();
+				Fancoil_Off(phase_fast%2); TODO("remove from here to control fancoils speed with hysteresys");
 			}
-			// choose the right fancoil fan speed
+/*			// choose the right fancoil fan speed
 			if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
 	 			Fancoil_Speed1(phase_fast%2);
 
@@ -346,6 +349,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 			else
 				Fancoil_Off(phase_fast%2);
+	*/
 		}
 		else if( IsFancoilsOn() )
 		{
