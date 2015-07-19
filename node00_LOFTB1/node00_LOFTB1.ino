@@ -399,7 +399,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 			// control the collector-floor mix valve to keep the setpoint
 			// simple proportional control on return floor temperature
-			float error = setpoint_cooling_water - temperature_floor_return;
+			float error = setpoint_cooling_water - (temperature_floor_flow + temperature_floor_return)/2;
 
 			if(gCollectorToFloorMixValvePos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
 				gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
