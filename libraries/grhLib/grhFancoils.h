@@ -10,8 +10,8 @@ static U8 FANCOIL_SPEED3[] = {Souliss_T1n_OnCmd, Souliss_T1n_OnCmd, Souliss_T1n_
 
 inline void Fancoil_Cmds(U8 idx, U8 status)
 {
-	if (fancoils_status[idx] == status)
-		return;
+//	if (fancoils_status[idx] == status)
+//		return;
 
 	fancoils_status[idx] = status;
 
@@ -47,7 +47,7 @@ inline void Fancoil_Cmds(U8 idx, U8 status)
 		RemoteInputs(addr, 1, FANCOIL_SPEED2, 3);
 		break;
 	}
-}	
+}
 
 
 #define Fancoil_Off(idx)	Fancoil_Cmds(idx, 0)
