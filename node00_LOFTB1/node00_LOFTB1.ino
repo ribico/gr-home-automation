@@ -1,5 +1,5 @@
 /*********************
-LOFTB1 BOARD 
+LOFTB1 BOARD
 MEGA with Ethernet only acting as GATEWAY
 
 ***********************/
@@ -66,8 +66,8 @@ inline void ReadInputs()
 	Souliss_LowDigIn(LIGHT_TERRACE_3_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_3, true);
 	Souliss_LowDigIn(LIGHT_TOILET_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TOILET, true);
 
-	
-	mInput(HVAC_VALVES) = mOutput(HVAC_VALVES); 
+
+	mInput(HVAC_VALVES) = mOutput(HVAC_VALVES);
 
 
 	if (!digitalRead(MAIN_3WAY_VALVE_BOILER_LIMIT_PIN))
@@ -111,9 +111,9 @@ inline void ProcessLogics()
 
 	Souliss_Logic_T12(memory_map, PUMP_BOILER_FLOOR, &data_changed);
 	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FANCOIL, &data_changed);
-	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FLOOR, &data_changed);	
-	Souliss_Logic_T12(memory_map, FANCOIL_MODE, &data_changed);	
-	Souliss_Logic_T12(memory_map, HP_SETPOINT_2, &data_changed);	
+	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FLOOR, &data_changed);
+	Souliss_Logic_T12(memory_map, FANCOIL_MODE, &data_changed);
+	Souliss_Logic_T12(memory_map, HP_SETPOINT_2, &data_changed);
 
 	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
 }
@@ -122,18 +122,18 @@ inline void ProcessSlowLogics(U16 phase_fast)
 {
 	float temperature_sanitary = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_SANITARY_PIN),TEMP_BOILER_SANITARY_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_BOILER_SANITARY, &temperature_sanitary);
-	
+
 	float temperature_heating = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_HEATING_PIN),TEMP_BOILER_HEATING_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_BOILER_HEATING, &temperature_heating);
-	
+
 	float temperature_bottom = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_BOTTOM_PIN),TEMP_BOILER_BOTTOM_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_BOILER_BOTTOM, &temperature_bottom);
-	
+
 	float temperature_floor_flow = NTC_RawADCToCelsius( analogRead(TEMP_FLOOR_FLOW_PIN),TEMP_FLOOR_FLOW_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_FLOOR_FLOW, &temperature_floor_flow);
-	
+
 	float temperature_floor_return = NTC_RawADCToCelsius( analogRead(TEMP_FLOOR_RETURN_PIN),TEMP_FLOOR_RETURN_PAD_RESISTANCE );
-	Souliss_ImportAnalog(memory_map, TEMP_FLOOR_RETURN, &temperature_floor_return);  
+	Souliss_ImportAnalog(memory_map, TEMP_FLOOR_RETURN, &temperature_floor_return);
 
 	float temperature_fancoil_flow = NTC_RawADCToCelsius( analogRead(TEMP_FANCOIL_FLOW_PIN),TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
@@ -141,7 +141,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	// control SANITARY production hysteresys
 	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
 	{
-		if( IsHeating() || IsCooling() || 
+		if( IsHeating() || IsCooling() ||
 			!IsPumpCollectorToFloorOff() || !IsPumpCollectorToFancoilOff() || !IsPumpBoilerToFloorOff() ||
 			!IsHpFlowToBoiler() )
 		{
@@ -149,11 +149,11 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
 			Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 
-			// stop all heating/cooling activities when procucting sanitary water	
+			// stop all heating/cooling activities when procucting sanitary water
 			PumpCollectorToFloorOff();
 			PumpCollectorToFancoilOff();
 			PumpBoilerToFloorOff();
-			HeatingMixValveOff();		
+			HeatingMixValveOff();
 
 			// upstream to boiler
 			SetHpFlowToBoiler();
@@ -180,7 +180,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		// turn all pumps and valves off
 		PumpBoilerToFloorOff();
 		PumpCollectorToFloorOff();
-		HeatingMixValveOff();			
+		HeatingMixValveOff();
 	}
 	else if( IsFloorOn() )
 	{
@@ -267,18 +267,18 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 
 	if( IsHeating() ) // heating at least one zone
-	{	
-		if( IsPumpCollectorToFloorOff() && IsPumpCollectorToFancoilOff() && IsFancoilOff() )
+	{
+		if( IsPumpCollectorToFloorOff() && IsPumpCollectorToFancoilOff() && IsFancoilsOff() )
 		{
 			PumpBoilerToFloorOn();	// using hot water from boiler only, collector pumps off
-	
+
 			// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
 			if ( IsHeatingWaterTooHot() )
 				HeatingMixValveOn_ColdDirection(); // mix valve on, direction relay off
-			
+
 			else if ( IsHeatingWaterTooCold() )
 				HeatingMixValveOn_HotDirection(); // mix valve on, direction relay on
-			
+
 			else
 				HeatingMixValveOff(); // mix valve off (hold the position)
 		}
@@ -344,7 +344,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 			else if(gCollectorToFloorMixValvePos - error < COLLECTOR_FLOOR_MIX_VALVE_MIN)
 				gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MIN;
-			
+
 			else
 				gCollectorToFloorMixValvePos -= (U8) error;
 
@@ -360,7 +360,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		}
 
 
-		if( IsFancoilAuto() )
+		if( IsFancoilsAuto() )
 		{
 			// check umidity average to eventually activate fancoils
 			float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
@@ -394,7 +394,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			else
 				Fancoil_Off(phase_fast%2);
 		}
-		else if( IsFancoilOn() )
+		else if( IsFancoilsOn() )
 		{
 			if(IsHpFlowToCollector())
 			{
@@ -412,20 +412,20 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		else
 		{
 			PumpCollectorToFancoilOff();
-			Fancoil_Off(phase_fast%2);			
+			Fancoil_Off(phase_fast%2);
 		}
 	}
 	else
 	{
 		// not heating and not cooling
 		HpSetpoint1(); // simply turn off setpoint 2 relay
-		HpCirculationOff();	
+		HpCirculationOff();
 		PumpCollectorToFloorOff();
 		PumpCollectorToFancoilOff();
 		PumpBoilerToFloorOff();
 		HeatingMixValveOff();
-		Fancoil_Off(phase_fast%2);	
-		return;		
+		Fancoil_Off(phase_fast%2);
+		return;
 	}
 }
 
@@ -457,17 +457,17 @@ inline void SetOutputs()
 	digitalWrite(ZONE_SWITCH_LOFT_PIN, 		!(mOutput(HVAC_ZONES) & HVAC_MASK_LOFT)		);
 
 	// heating mix valve on/off and direction
-	digitalWrite(HEATING_MIX_VALVE_SWITCH_PIN, 		
+	digitalWrite(HEATING_MIX_VALVE_SWITCH_PIN,
 		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK) );
-	digitalWrite(HEATING_MIX_VALVE_DIRECTION_PIN, 
+	digitalWrite(HEATING_MIX_VALVE_DIRECTION_PIN,
 		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_DIRECTION_MASK) );
 
 	LowDigOut(MAIN_3WAY_VALVE_BOILER_PIN, Souliss_T2n_Coil_Open, MAIN_3WAY_VALVE);
 	LowDigOut(MAIN_3WAY_VALVE_COLLECTOR_PIN, Souliss_T2n_Coil_Close, MAIN_3WAY_VALVE);
 
-	LowDigOut(PUMP_BOILER_FLOOR_PIN, Souliss_T1n_Coil, PUMP_BOILER_FLOOR);	
-	LowDigOut(PUMP_COLLECTOR_FANCOIL_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FANCOIL);	
-	LowDigOut(PUMP_COLLECTOR_FLOOR_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FLOOR);	
+	LowDigOut(PUMP_BOILER_FLOOR_PIN, Souliss_T1n_Coil, PUMP_BOILER_FLOOR);
+	LowDigOut(PUMP_COLLECTOR_FANCOIL_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FANCOIL);
+	LowDigOut(PUMP_COLLECTOR_FLOOR_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FLOOR);
 
 	LowDigOut(HP_SETPOINT_2_PIN, Souliss_T1n_Coil, HP_SETPOINT_2);
 }
@@ -480,7 +480,7 @@ inline void ProcessTimers()
 	Timer_SimpleLight(LIGHT_TERRACE_2);
 	Timer_SimpleLight(LIGHT_TERRACE_3);
 	Timer_SimpleLight(LIGHT_TOILET);
-	
+
 	Souliss_T12_Timer(memory_map, FLOOR_MODE);
 	Souliss_T12_Timer(memory_map, HEATPUMP_REMOTE_SWITCH);
 	Souliss_T12_Timer(memory_map, HEATPUMP_CIRCULATION_PUMP);
@@ -505,7 +505,7 @@ void setup()
 	grhOpenSerialOnDebug();
 
 	Initialize();
-	grhSetIpAddress(IP_ADDRESS_LOFTB1); 
+	grhSetIpAddress(IP_ADDRESS_LOFTB1);
 	SetAsGateway(IP_ADDRESS_TESTB1);
 	SetAddressingServer();
 	grhInitMEGA();
@@ -542,17 +542,17 @@ void setup()
 
 
 void loop()
-{ 
+{
 	EXECUTEFAST()
-	{						
+	{
 		UPDATEFAST();
-		
-		FAST_30ms() 
+
+		FAST_30ms()
 		{
 			ReadInputs();
-		} 
+		}
 
-		FAST_50ms() 
+		FAST_50ms()
 		{
 			ProcessLogics();
 			SetOutputs();
@@ -564,11 +564,11 @@ void loop()
 			ProcessSlowLogics(phase_fast);
 		}
 
-		FAST_GatewayComms();	
+		FAST_GatewayComms();
 	}
-	
+
 	EXECUTESLOW()
-	{	
+	{
 		UPDATESLOW();
 	}
-} 
+}
