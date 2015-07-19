@@ -310,30 +310,86 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
-		float UR_MAX = UR_BED1;
-		if(UR_MAX < UR_BED2) UR_MAX = UR_BED2;
-		if(UR_MAX < UR_LIVING) UR_MAX = UR_LIVING;
-		if(UR_MAX < UR_BED3) UR_MAX = UR_BED3;
-		if(UR_MAX < UR_KITCHEN) UR_MAX = UR_KITCHEN;
-		if(UR_MAX < UR_DINING) UR_MAX = UR_DINING;
+		if( IsFancoilsAuto() )
+		{
+			// check umidity average to eventually activate fancoils
+			float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
 
-		float temp_MAX = temp_BED1;
-		if(temp_MAX < temp_BED2) temp_MAX = temp_BED2;
-		if(temp_MAX < temp_LIVING) temp_MAX = temp_LIVING;
-		if(temp_MAX < temp_BED3) temp_MAX = temp_BED3;
-		if(temp_MAX < temp_KITCHEN) temp_MAX = temp_KITCHEN;
-		if(temp_MAX < temp_DINING) temp_MAX = temp_DINING;
+			if( UR_AVE > SETPOINT_UR_1 )
+			{
+				if(IsHpFlowToCollector())
+				{
+					HpSetpoint2();
+					HpCirculationOn();
+					PumpCollectorToFancoilOn();
+				}
+				else
+				{
+					HpCirculationOff();
+					SetHpFlowToCollector();
+				}
+			}
+			else
+			{
+				HpSetpoint1();
+				PumpCollectorToFancoilOff();
+			}
+			// choose the right fancoil fan speed
+			if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
+	 			Fancoil_Speed1(phase_fast%2);
 
-		float dew_point_MAX = temp_MAX-(100-UR_MAX)/5;
-		float setpoint_cooling_water = dew_point_MAX;
+	 		else if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3 )
+				Fancoil_Speed2(phase_fast%2);
 
-		// always use setpoint 2 when cooling
-		HpSetpoint2();
+			else if( UR_AVE > SETPOINT_UR_3 )
+				Fancoil_Speed3(phase_fast%2);
+
+			else
+				Fancoil_Off(phase_fast%2);
+		}
+		else if( IsFancoilsOn() )
+		{
+			HpSetpoint2();
+			if(IsHpFlowToCollector())
+			{
+				HpCirculationOn();
+				PumpCollectorToFancoilOn();
+		 		Fancoil_Speed1(phase_fast%2);
+			}
+			else
+			{
+				HpCirculationOff();
+				SetHpFlowToCollector();
+				Fancoil_Off(phase_fast%2);
+			}
+		}
+		else
+		{
+			HpSetpoint1();
+			PumpCollectorToFancoilOff();
+			Fancoil_Off(phase_fast%2);
+		}
 
 		if( IsHpFlowToCollector() && IsPumpBoilerToFloorOff())
 		{
 			HpCirculationOn();	// Cold water needed
 			PumpCollectorToFloorOn();
+
+			float dew_point_BED1 = temp_BED1-(100-UR_BED1)/5;
+			float dew_point_BED2 = temp_BED2-(100-UR_BED2)/5;
+			float dew_point_LIVING = temp_LIVING-(100-UR_LIVING)/5;
+			float dew_point_BED3 = temp_BED3-(100-UR_BED3)/5;
+			float dew_point_KITCHEN = temp_KITCHEN-(100-UR_KITCHEN)/5;
+			float dew_point_DINING = temp_DINING-(100-UR_DINING)/5;
+
+			float dew_point_MAX = dew_point_BED1;
+			dew_point_MAX = max(dew_point_MAX, dew_point_BED2);
+			dew_point_MAX = max(dew_point_MAX, dew_point_LIVING);
+			dew_point_MAX = max(dew_point_MAX, dew_point_BED3);
+			dew_point_MAX = max(dew_point_MAX, dew_point_KITCHEN);
+			dew_point_MAX = max(dew_point_MAX, dew_point_DINING);
+
+			float setpoint_cooling_water = dew_point_MAX;
 
 			// control the collector-floor mix valve to keep the setpoint
 			// simple proportional control on return floor temperature
@@ -357,62 +413,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			PumpCollectorToFloorOff(); // keep the pump off
 			PumpBoilerToFloorOff(); // do not use boiler water
 			HeatingMixValveOff();
-		}
-
-
-		if( IsFancoilsAuto() )
-		{
-			// check umidity average to eventually activate fancoils
-			float UR_AVE = (UR_BED1+UR_BED2+UR_LIVING+UR_BED3+UR_KITCHEN+UR_DINING) / 6;
-
-			if( UR_AVE > SETPOINT_UR_1 )
-			{
-				if(IsHpFlowToCollector())
-				{
-					HpCirculationOn();
-					PumpCollectorToFancoilOn();
-				}
-				else
-				{
-					HpCirculationOff();
-					SetHpFlowToCollector();
-				}
-			}
-			else
-				PumpCollectorToFancoilOff();
-
-			// choose the right fancoil fan speed
-			if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
-	 			Fancoil_Speed1(phase_fast%2);
-
-	 		else if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3 )
-				Fancoil_Speed2(phase_fast%2);
-
-			else if( UR_AVE > SETPOINT_UR_3 )
-				Fancoil_Speed3(phase_fast%2);
-
-			else
-				Fancoil_Off(phase_fast%2);
-		}
-		else if( IsFancoilsOn() )
-		{
-			if(IsHpFlowToCollector())
-			{
-				HpCirculationOn();
-				PumpCollectorToFancoilOn();
-		 		Fancoil_Speed1(phase_fast%2);
-			}
-			else
-			{
-				HpCirculationOff();
-				SetHpFlowToCollector();
-				Fancoil_Off(phase_fast%2);
-			}
-		}
-		else
-		{
-			PumpCollectorToFancoilOff();
-			Fancoil_Off(phase_fast%2);
 		}
 	}
 	else
