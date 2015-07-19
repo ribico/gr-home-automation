@@ -50,7 +50,7 @@ MEGA with Ethernet only acting as GATEWAY
 //#define SETPOINT_HEAT_TEMP			19
 
 #define COLLECTOR_FLOOR_MIX_VALVE_MIN	0
-#define COLLECTOR_FLOOR_MIX_VALVE_MAX	220
+#define COLLECTOR_FLOOR_MIX_VALVE_MAX	200
 U8 gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
 
 
@@ -311,6 +311,9 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
+		// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
+		HpSetpoint2();
+
 		if( IsFancoilsAuto() )
 		{
 			// check umidity average to eventually activate fancoils
@@ -320,7 +323,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			{
 				if(IsHpFlowToCollector())
 				{
-					HpSetpoint2();
 					HpCirculationOn();
 					PumpCollectorToFancoilOn();
 					Fancoil_Speed1(phase_fast%2); TODO("remove from here to control fancoils speed with hysteresys");
@@ -333,7 +335,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			}
 			else if( IsPumpCollectorToFancoilOn() && (UR_AVE < SETPOINT_UR_1 - SETPOINT_UR_DEADBAND) )
 			{
-				HpSetpoint1();
 				PumpCollectorToFancoilOff();
 				Fancoil_Off(phase_fast%2); TODO("remove from here to control fancoils speed with hysteresys");
 			}
@@ -353,7 +354,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		}
 		else if( IsFancoilsOn() )
 		{
-			HpSetpoint2();
 			if(IsHpFlowToCollector())
 			{
 				HpCirculationOn();
@@ -369,11 +369,11 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		}
 		else
 		{
-			HpSetpoint1();
 			PumpCollectorToFancoilOff();
 			Fancoil_Off(phase_fast%2);
 		}
 
+		// floor control
 		if( IsHpFlowToCollector() && IsPumpBoilerToFloorOff())
 		{
 			HpCirculationOn();	// Cold water needed
