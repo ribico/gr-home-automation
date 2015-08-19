@@ -80,48 +80,48 @@ Group gHPSettings		"Impostazioni PDC"		<settings>		(gHP)
 Group gHVAC_Valves		"Valvole"				<climate>		(gClima)
 
 Number Temperature_2F_Entrance	"Ingresso Temp [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Entrance,gTechnicView_Node6) {souliss="T52:6:3"}
-Number UR_2F_Entrance		"Ingresso UR [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Entrance,gTechnicView_Node6) {souliss="T53:6:5"}
+Number UR_2F_Entrance		"Ingresso UR [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Entrance,gTechnicView_Node6) {souliss="T53:6:5"}
 
 Number Temperature_2F_Living	"Temp Corrente[%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Living,gTechnicView_Node2) {souliss="T52:2:5"}
 Number Temperature_2F_Living_SP	"Temp Set Point [%.1f °C]" 	<temperature> (g2F_Living)
 Number Temperature_2F_Living_DP	"Temp di Rugiada [%.1f °C]" <temperature> (g2F_Living)
-Number UR_2F_Living		"UR Corrente[%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Living,gTechnicView_Node2) {souliss="T53:2:7"}
+Number UR_2F_Living		"UR Corrente[%.1f %%]" 	<humidity> (gUR,gClima,g2F_Living,gTechnicView_Node2) {souliss="T53:2:7"}
 
 
 Number Temperature_2F_Kitchen		"Temp Corrente [%.1f °C]" 	<temperature> (gTemperatures,g2F_Kitchen,gTechnicView_Node7) {souliss="T52:7:3"}
 Number Temperature_2F_Kitchen_SP	"Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Kitchen)
 Number Temperature_2F_Kitchen_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Kitchen)
-Number UR_2F_Kitchen				"UR Corrente [%.1f &#37;]" 	<humidity> (gUR,g2F_Kitchen,gTechnicView_Node7) {souliss="T53:7:5"}
+Number UR_2F_Kitchen				"UR Corrente [%.1f %%]" 	<humidity> (gUR,g2F_Kitchen,gTechnicView_Node7) {souliss="T53:7:5"}
 
 Number Temperature_2F_Dining	"Temp Corrente [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Dining,gTechnicView_Node3) {souliss="T52:3:5"}
 Number Temperature_2F_Dining_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Dining)
-Number UR_2F_Dining		"UR Corrente [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Dining,gTechnicView_Node3) {souliss="T53:3:7"}
+Number UR_2F_Dining		"UR Corrente [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Dining,gTechnicView_Node3) {souliss="T53:3:7"}
 
 Number Temperature_2F_Bath1	"Temp Corrente [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Bath1,gTechnicView_Node12) {souliss="T52:12:3"}
 Number Temperature_2F_Bath1_SP	"Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bath1)
 Number Temperature_2F_Bath1_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bath1)
-Number UR_2F_Bath1		"UR Corrente [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Bath1,gTechnicView_Node12) {souliss="T53:12:5"}
+Number UR_2F_Bath1		"UR Corrente [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bath1,gTechnicView_Node12) {souliss="T53:12:5"}
 
 Number Temperature_2F_Bath2	"Bagno2 Temp [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Bath2,gTechnicView_Node4) {souliss="T52:4:5"}
 Number Temperature_2F_Bath2_SP	"Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bath2)
 Number Temperature_2F_Bath2_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bath2)
-Number UR_2F_Bath2		"Bagno2 UR [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Bath2,gTechnicView_Node4) {souliss="T53:4:7"}
+Number UR_2F_Bath2		"Bagno2 UR [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bath2,gTechnicView_Node4) {souliss="T53:4:7"}
 
 Number Temperature_2F_Bedroom1	"Temp Corrente [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Bedroom1,gTechnicView_Node9) {souliss="T52:9:4"}
 Number Temperature_2F_Bedroom1_SP	"Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bedroom1)
 Number Temperature_2F_Bedroom1_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bedroom1)
-Number UR_2F_Bedroom1		"UR Corrente [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Bedroom1,gTechnicView_Node9) {souliss="T53:9:6"}
+Number UR_2F_Bedroom1		"UR Corrente [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bedroom1,gTechnicView_Node9) {souliss="T53:9:6"}
 
 
 Number Temperature_2F_Bedroom2	"Temp Corrente [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Bedroom2,gTechnicView_Node10) {souliss="T52:10:5"}
 Number Temperature_2F_Bedroom2_SP	"Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bedroom2)
 Number Temperature_2F_Bedroom2_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bedroom2)
-Number UR_2F_Bedroom2		"UR Corrente [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Bedroom2,gTechnicView_Node10) {souliss="T53:10:7"}
+Number UR_2F_Bedroom2		"UR Corrente [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bedroom2,gTechnicView_Node10) {souliss="T53:10:7"}
 
 Number Temperature_2F_Bedroom3	"Temp Corrente[%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Bedroom3,gTechnicView_Node5) {souliss="T52:5:4"}
 Number Temperature_2F_Bedroom3_SP	"Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bedroom3)
 Number Temperature_2F_Bedroom3_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bedroom3)
-Number UR_2F_Bedroom3		"UR Corrente [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Bedroom3,gTechnicView_Node5) {souliss="T53:5:6"}
+Number UR_2F_Bedroom3		"UR Corrente [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bedroom3,gTechnicView_Node5) {souliss="T53:5:6"}
 
 Switch Floor_Mode			"Logiche Pavimento"		<lock> (gTechnicView_Node13,gHPSettings) {souliss="T12:0:13", autoupdate=false}
 Switch HP_Remote_Switch		"Remote Switch" 		<inverter> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:14", autoupdate=false}
@@ -134,7 +134,9 @@ Rollershutter HVAC_3way_Valve		"Valvola a 3 Vie"			(gTechnicView_Node0) {souliss
 Switch HVAC_Pump_Boiler_Floor		"Pompa Boiler->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:27", autoupdate=false}
 Switch HVAC_Pump_Collector_Fancoil	"Pompa Collettore->Fancoil"	(gTechnicView_Node0) {souliss="T12:0:28", autoupdate=false}
 Switch HVAC_Pump_Collector_Floor	"Pompa Collettore->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:29", autoupdate=false}
-Switch Fancoil_Mode			"Logiche Fancoil" 	<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:32", autoupdate=false}
+
+Switch Fancoil_Mode			  "Fancoil" 	<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:30:switch", autoupdate=false}
+Switch Fancoil_Mode_auto  "Fancoil Auto" 	<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:30:automode", autoupdate=false}
 
 Number HP_Temp_Sanitary		"Temp. ACS [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:7"}
 Number HP_Temp_Heating		"Temp. Accumulo Alto [%.1f °C]"		<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:9"}
@@ -142,7 +144,8 @@ Number HP_Temp_Bottom		"Temp. Accumulo Basso [%.1f °C]"	<temperature> (gTechnic
 Number HP_Temp_Heating_Flow	"Temp. Mandata Pavimento [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:18"}
 Number HP_Temp_Heating_Ret	"Temp. Ritorno Pavimento [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:20"}
 Number HP_Temp_Fancoil_Flow	"Temp. Mandata Fancoil [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:22"}
-Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima)
+Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima) {souliss="T52:0:32", autoupdate=false}
+Rollershutter HVAC_Temp_SP 	"Temp. Ambiente SetPoint" 	<temperature> (gTechnicView_Node0,gClima) {souliss="T22:0:34", autoupdate=false}
 
 Switch Valve_2F_Bedroom1		"Camera 1"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:0", autoupdate=false}
 Switch Valve_2F_Bath1			"Bagno 1"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:1", autoupdate=false}

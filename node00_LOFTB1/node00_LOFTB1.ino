@@ -117,27 +117,43 @@ inline void ProcessLogics()
 	Souliss_Logic_T12(memory_map, HP_SETPOINT_2, &data_changed);
 
 	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
+
+	// use a T21 for increasing/decreasing ambience temp setpoint
+	float ambience_setpoint = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
+	if(mInput(TEMP_SETPOINT_IN) == Souliss_T2n_OpenCmd_SW)
+	{
+		mInput(TEMP_SETPOINT_IN) = Souliss_T2n_RstCmd;
+		ambience_setpoint += 0.5;
+		ImportAnalog(TEMP_AMBIENCE_SET_POINT, &ambience_setpoint);
+	}
+	if(mInput(TEMP_SETPOINT_IN) == Souliss_T2n_CloseCmd_SW)
+	{
+		mInput(TEMP_SETPOINT_IN) = Souliss_T2n_RstCmd;
+		ambience_setpoint -= 0.5;
+		ImportAnalog(TEMP_AMBIENCE_SET_POINT, &ambience_setpoint);
+	}
+
 }
 
 inline void ProcessSlowLogics(U16 phase_fast)
 {
 	float temperature_sanitary = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_SANITARY_PIN),TEMP_BOILER_SANITARY_PAD_RESISTANCE );
-	Souliss_ImportAnalog(memory_map, TEMP_BOILER_SANITARY, &temperature_sanitary);
+	ImportAnalog(TEMP_BOILER_SANITARY, &temperature_sanitary);
 
 	float temperature_heating = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_HEATING_PIN),TEMP_BOILER_HEATING_PAD_RESISTANCE );
-	Souliss_ImportAnalog(memory_map, TEMP_BOILER_HEATING, &temperature_heating);
+	ImportAnalog(TEMP_BOILER_HEATING, &temperature_heating);
 
 	float temperature_bottom = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_BOTTOM_PIN),TEMP_BOILER_BOTTOM_PAD_RESISTANCE );
-	Souliss_ImportAnalog(memory_map, TEMP_BOILER_BOTTOM, &temperature_bottom);
+	ImportAnalog(TEMP_BOILER_BOTTOM, &temperature_bottom);
 
 	float temperature_floor_flow = NTC_RawADCToCelsius( analogRead(TEMP_FLOOR_FLOW_PIN),TEMP_FLOOR_FLOW_PAD_RESISTANCE );
-	Souliss_ImportAnalog(memory_map, TEMP_FLOOR_FLOW, &temperature_floor_flow);
+	ImportAnalog(TEMP_FLOOR_FLOW, &temperature_floor_flow);
 
 	float temperature_floor_return = NTC_RawADCToCelsius( analogRead(TEMP_FLOOR_RETURN_PIN),TEMP_FLOOR_RETURN_PAD_RESISTANCE );
-	Souliss_ImportAnalog(memory_map, TEMP_FLOOR_RETURN, &temperature_floor_return);
+	ImportAnalog(TEMP_FLOOR_RETURN, &temperature_floor_return);
 
 	float temperature_fancoil_flow = NTC_RawADCToCelsius( analogRead(TEMP_FANCOIL_FLOW_PIN),TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
-	Souliss_ImportAnalog(memory_map, TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
+	ImportAnalog(TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
 
 	// control SANITARY production hysteresys in case of Auto Mode
 	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )

@@ -49,12 +49,13 @@
 #define PUMP_COLLECTOR_FANCOIL 		28
 #define PUMP_COLLECTOR_FLOOR 		29
 
-#define TEMP_AMBIENCE_SET_POINT		30
-#define TEMP_AMBIENCE_SET_POINT_H	31
+#define FANCOIL_MODE				30
+#define HP_SETPOINT_2				31
 
-#define FANCOIL_MODE				32
-#define HP_SETPOINT_2				33
+#define TEMP_AMBIENCE_SET_POINT		32
+#define TEMP_AMBIENCE_SET_POINT_H	33
 
+#define TEMP_SETPOINT_IN	34
 
 inline void DefineTypicals()
 {
@@ -93,10 +94,12 @@ inline void DefineTypicals()
 	Souliss_SetT12(memory_map, FANCOIL_MODE);
 	Souliss_SetT12(memory_map, HP_SETPOINT_2);
 
-	// initialize values
-	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
-//	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
-	float set_point = 26; TODO("Should come from user interface");
-	Souliss_ImportAnalog(memory_map, TEMP_AMBIENCE_SET_POINT, &set_point);
+	Souliss_SetT22(memory_map, TEMP_SETPOINT_IN);
 
+	// initialize values
+//	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
+//	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+
+	float set_point = 19; // winter initial setup
+	ImportAnalog(TEMP_AMBIENCE_SET_POINT, &set_point);
 }
