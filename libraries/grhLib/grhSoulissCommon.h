@@ -10,8 +10,8 @@
 // Define the souliss network dimensions
 #define MaCaco_NODESIZE_INSKETCH
 #define MaCaco_NODES			30		// MaCaco_NODES < 255
-#define MaCaco_SLOT				35 		// MaCaco_SLOT < VNET_MAX_PAYLOAD (def 46) - MaCaco_HEADER (def 5) = 41
-										// and MaCaco_SLOT  < 255 / 3 = 
+#define MaCaco_SLOT				40 		// MaCaco_SLOT < VNET_MAX_PAYLOAD (def 46) - MaCaco_HEADER (def 5) = 41
+																// and MaCaco_SLOT  < 255 / 3 = 85
 
 #define DO_PRAGMA(x) _Pragma (#x)
 #define TODO(x) DO_PRAGMA(message ("TODO - " #x))
@@ -40,12 +40,12 @@
 
 #define grhFastPeerComms()		FAST_PeerComms();\
 								START_PeerJoin();\
-								FAST_1110ms()\ 
+								FAST_1110ms()\
 								{\
 									if(JoinInProgress())\
 										ToggleLED();\
 									else\
-										TurnOnLED();\				
+										TurnOnLED();\
 								}
 
 #define SHUTTER_SHORT_TIMEOUT		(Souliss_T2n_Timer_Off + 11)
