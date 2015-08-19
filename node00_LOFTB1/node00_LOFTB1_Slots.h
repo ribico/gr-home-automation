@@ -16,8 +16,8 @@
 #define FLOOR_MODE 			  			13
 #define HEATPUMP_REMOTE_SWITCH          14
 #define HEATPUMP_CIRCULATION_PUMP       15
-#define HEATPUMP_SANITARY_REQUEST       16
-#define HEATPUMP_COOL                	17      
+#define HEATPUMP_SANITARY_WATER       16
+#define HEATPUMP_COOL                	17
 
 #define TEMP_FLOOR_FLOW 			18      // floor heating system water temp
 #define TEMP_FLOOR_FLOW_H 			19
@@ -69,9 +69,9 @@ inline void DefineTypicals()
 	Souliss_SetT12(memory_map, FLOOR_MODE);
 	Souliss_SetT12(memory_map, HEATPUMP_REMOTE_SWITCH);
 	Souliss_SetT12(memory_map, HEATPUMP_CIRCULATION_PUMP);
-	Souliss_SetT12(memory_map, HEATPUMP_SANITARY_REQUEST);
+	Souliss_SetT12(memory_map, HEATPUMP_SANITARY_WATER);
 	Souliss_SetT12(memory_map, HEATPUMP_COOL);
-	
+
 	Set_Temperature(TEMP_BOILER_SANITARY);
 	Set_Temperature(TEMP_BOILER_HEATING);
 	Set_Temperature(TEMP_BOILER_BOTTOM);

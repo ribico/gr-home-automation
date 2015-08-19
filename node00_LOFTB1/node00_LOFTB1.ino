@@ -97,7 +97,7 @@ inline void ProcessLogics()
 	Souliss_Logic_T12(memory_map, FLOOR_MODE, &data_changed);
 	Souliss_Logic_T12(memory_map, HEATPUMP_REMOTE_SWITCH, &data_changed);
 	Souliss_Logic_T12(memory_map, HEATPUMP_CIRCULATION_PUMP, &data_changed);
-	Souliss_Logic_T12(memory_map, HEATPUMP_SANITARY_REQUEST, &data_changed);
+	Souliss_Logic_T12(memory_map, HEATPUMP_SANITARY_WATER, &data_changed);
 	Souliss_Logic_T12(memory_map, HEATPUMP_COOL, &data_changed);
 
 	grh_Logic_Temperature(TEMP_BOILER_SANITARY);
@@ -139,38 +139,30 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	float temperature_fancoil_flow = NTC_RawADCToCelsius( analogRead(TEMP_FANCOIL_FLOW_PIN),TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
 	Souliss_ImportAnalog(memory_map, TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
 
-	// control SANITARY production hysteresys
-	if( !IsSanitaryWaterInProduction() && IsSanitaryWaterCold() )
+	// control SANITARY production hysteresys in case of Auto Mode
+	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
+		SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
+
+	// if SANITARY WATER is in production then stop all heating/cooling pumps
+	// and move the upstream to boiler
+	if ( IsSanitaryWaterOn() || IsSanitaryWaterAutoOn()	)
 	{
-		if( IsHeating() || IsCooling() ||
-			!IsPumpCollectorToFloorOff() || !IsPumpCollectorToFancoilOff() || !IsPumpBoilerToFloorOff() ||
-			!IsHpFlowToBoiler() )
-		{
-			// no heating/cooling -> close all zone valves
-			mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
-			Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
+		// no heating/cooling -> close all zone valves
+		mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
+		Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 
-			// stop all heating/cooling activities when procucting sanitary water
-			PumpCollectorToFloorOff();
-			PumpCollectorToFancoilOff();
-			PumpBoilerToFloorOff();
-			HeatingMixValveOff();
+		// stop all heating/cooling activities when producing sanitary water
+		PumpCollectorToFloorOff();
+		PumpCollectorToFancoilOff();
+		PumpBoilerToFloorOff();
+		HeatingMixValveOff();
 
-			// upstream to boiler
-			SetHpFlowToBoiler();
-			return;
-		}
+		// upstream to boiler
+		SetHpFlowToBoiler();
 
-		SanitaryWaterOn(); // start producing Sanitary Water
 		return; // should not exectute follwing code that could modify the HVAC status
 	}
-	else if ( IsSanitaryWaterInProduction() && !IsSanitaryWaterHot() )
-	{
-		return; // exit here, following code is for heating/cooling and we are currently producing Sanitary Water
-	}
 
-	// if here there's no need to produce Sanitary Water
-	SanitaryWaterOff();
 
 
 	if( IsFloorOff() )
@@ -449,7 +441,7 @@ inline void SetOutputs()
 
 	LowDigOut(HEATPUMP_REMOTE_SWITCH_PIN, Souliss_T1n_Coil, HEATPUMP_REMOTE_SWITCH);
 	LowDigOut(HEATPUMP_CIRCULATION_PUMP_PIN, Souliss_T1n_Coil, HEATPUMP_CIRCULATION_PUMP);
-	LowDigOut(HEATPUMP_SANITARY_REQUEST_PIN, Souliss_T1n_Coil, HEATPUMP_SANITARY_REQUEST);
+	nLowDigOut(HEATPUMP_SANITARY_REQUEST_PIN, Souliss_T1n_OnCoil|Souliss_T1n_AutoOnCoil, HEATPUMP_SANITARY_WATER);
 	LowDigOut(HEATPUMP_COOL_PIN, Souliss_T1n_Coil, HEATPUMP_COOL);
 
 	// HVAC zone valves
@@ -490,7 +482,7 @@ inline void ProcessTimers()
 	Souliss_T12_Timer(memory_map, FLOOR_MODE);
 	Souliss_T12_Timer(memory_map, HEATPUMP_REMOTE_SWITCH);
 	Souliss_T12_Timer(memory_map, HEATPUMP_CIRCULATION_PUMP);
-	Souliss_T12_Timer(memory_map, HEATPUMP_SANITARY_REQUEST);
+	Souliss_T12_Timer(memory_map, HEATPUMP_SANITARY_WATER);
 	Souliss_T12_Timer(memory_map, HEATPUMP_COOL);
 
 	Souliss_T22_Timer(memory_map, MAIN_3WAY_VALVE);

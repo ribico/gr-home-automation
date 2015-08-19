@@ -4,7 +4,7 @@
 
 #define IsFancoilsOn()				(mOutput(FANCOIL_MODE) == Souliss_T1n_OnCoil)
 #define IsFancoilsOff()				(mOutput(FANCOIL_MODE) == Souliss_T1n_OffCoil)
-#define IsFancoilsAuto()				(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoState)
+#define IsFancoilsAuto()			(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoState)
 
 #define IsHeatMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
 #define IsCoolMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OnCoil)
@@ -13,7 +13,12 @@
 #define IsHeating()					(IsZoneOpen() && IsHeatMode())
 #define IsCooling()					(IsZoneOpen() && IsCoolMode())
 
-#define IsSanitaryWaterInProduction()	(mOutput(HEATPUMP_SANITARY_REQUEST) == Souliss_T1n_OnCoil)
+#define IsSanitaryWaterOn()	        (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_OnCoil)
+#define IsSanitaryWaterAuto()	      (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoState)
+#define IsSanitaryWaterAutoOn()	    (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOnCoil)
+#define IsSanitaryWaterAutoOff()	  (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOffCoil)
+#define SanitaryWaterAutoOnCmd()    SetInput(HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd + 2 /*cycles*/)
+
 #define IsHotWaterInProduction()		(IsHeatMode() && IsHpCirculationOn())
 #define IsCoolWaterInProduction()		(IsCoolMode() && IsHpCirculationOn())
 
@@ -22,8 +27,6 @@
 #define IsHotWaterCold()				(temperature_heating < SETPOINT_TEMP_HEATING_WATER_MIN)
 #define IsHotWaterHot()					(temperature_heating > SETPOINT_TEMP_HEATING_WATER_MAX)
 
-#define SanitaryWaterOn()				if(!IsSanitaryWaterInProduction()) SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OnCmd)
-#define SanitaryWaterOff()				if(IsSanitaryWaterInProduction()) SetInput(HEATPUMP_SANITARY_REQUEST, Souliss_T1n_OffCmd)
 
 #define IsHpCirculationOn()				(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil)
 #define HpCirculationOn()				if(!IsHpCirculationOn()) SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OnCmd)
