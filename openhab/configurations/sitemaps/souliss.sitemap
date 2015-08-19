@@ -5,7 +5,7 @@ sitemap default label="Full"
 		Text label="Attico e Terrazzo" icon="attic"
 		{
 			Text label="Loft" icon="bedroom"
-			{	
+			{
 				Switch item=Light_3F_Loft_1 label="Luce 1"
 				Switch item=Light_3F_Loft_2 label="Luce 2"
 				Switch item=Light_3F_Toilet label="Luce Bagno"
@@ -13,28 +13,28 @@ sitemap default label="Full"
 			}
 
 			Text label="Terrazzo" icon="terrace"
-			{	
+			{
 				Switch item=Light_3F_Terrace_1 label="Luce 1"
 				Switch item=Light_3F_Terrace_2 label="Luce 2"
 				Switch item=Light_3F_Terrace_3 label="Luce 3"
 
 			}
-		
+
 		}
 
 		Text label="Secondo Piano" icon="firstfloor"
 		{
 			Text label="Ingresso" icon="door"
-			{	
+			{
 				Switch item=Light_2F_Stairs label="Applique"
 			}
 
 			Text label="Salotto" icon="sofa"
-			{	
+			{
 				Switch item=Light_2F_Living_1 label="Luce 1"
 				Switch item=Light_2F_Living_2 label="Luce 2"
 				Switch item=Light_2F_Living_3 label="Luce 3"
-				Switch item=Light_2F_Living_4 label="Luce 4"			 
+				Switch item=Light_2F_Living_4 label="Luce 4"
 				Switch item=Windows_2F_Living label="Tapparella"
 
 				Text label="Clima" icon="climate"
@@ -46,14 +46,14 @@ sitemap default label="Full"
 					Text label="Impostazioni" icon="settings"
 					{
 						Setpoint item=Temperature_2F_Living_SP step=0.5 minValue=15 maxValue=30
-						Switch item=Valve_2F_Living label="Valvola Zona"					
+						Switch item=Valve_2F_Living label="Valvola Zona"
 					}
 				}
 			}
 
 
 			Text label="Cucina" icon="kitchen"
-			{	
+			{
 				Switch item=Light_2F_Kitchen_1 label="Sotto Pensile"
 				Switch item=Light_2F_Kitchen_2 label="Soffitto"
 				Switch item=Light_2F_Kitchen_3 label="Applique"
@@ -74,7 +74,7 @@ sitemap default label="Full"
 			}
 
 			Text label="Pranzo" icon="table"
-			{	
+			{
 				Switch item=Light_2F_Dining_1 label="Striscia LED"
 				Switch item=Light_2F_Dining_2 label="Soffitto"
 				Switch item=Light_2F_Dining_3 label="Applique"
@@ -89,7 +89,7 @@ sitemap default label="Full"
 			}
 
 			Text label="Camera 1" icon="bedroom"
-			{	
+			{
 				Switch item=Light_2F_Bedroom1 label="Soffitto"
 				Switch item=Windows_2F_Bedroom1 label="Tapparella"
 
@@ -108,7 +108,7 @@ sitemap default label="Full"
 			}
 
 			Text label="Camera 2" icon="bedroom"
-			{	
+			{
 				Switch item=Light_2F_Bedroom2_1 label="Striscia LED"
 				Switch item=Light_2F_Bedroom2_2 label="Comodino DX"
 				Switch item=Light_2F_Bedroom2_3 label="Comodino SX"
@@ -124,13 +124,13 @@ sitemap default label="Full"
 					Text label="Impostazioni" icon="settings"
 					{
 						Setpoint item=Temperature_2F_Bedroom2_SP step=0.5 minValue=15 maxValue=30
-						Switch item=Valve_2F_Bedroom2 label="Valvola Zona"					
-					}					
+						Switch item=Valve_2F_Bedroom2 label="Valvola Zona"
+					}
 				}
 			}
 
 			Text label="Camera 3" icon="bedroom"
-			{	
+			{
 				Switch item=Light_2F_Bedroom3 label="Soffitto"
 				Switch item=Windows_2F_Bedroom3 label="Tapparella"
 
@@ -143,25 +143,25 @@ sitemap default label="Full"
 					Text label="Impostazioni" icon="settings"
 					{
 						Setpoint item=Temperature_2F_Bedroom3_SP step=0.5 minValue=15 maxValue=30
-						Switch item=Valve_2F_Bedroom3 label="Valvola Zona"					
+						Switch item=Valve_2F_Bedroom3 label="Valvola Zona"
 					}
 				}
 			}
 
 			Text label="Disimpegno 1" icon="corridor"
-			{	
+			{
 				Switch item=Light_2F_GW1 label="Soffitto"
 
 			}
 
 			Text label="Disimpegno 2" icon="corridor"
-			{	
+			{
 				Switch item=Light_2F_GW2 label="Soffitto"
 
 			}
 
 			Text label="Bagno 1" icon="bath"
-			{	
+			{
 				Switch item=Light_2F_Bath1_1 label="Specchio"
 				Switch item=Light_2F_Bath1_2 label="Soffitto"
 				Switch item=Light_2F_Bath1_3 label="Lavanderia"
@@ -176,13 +176,13 @@ sitemap default label="Full"
 					Text label="Impostazioni" icon="settings"
 					{
 						Setpoint item=Temperature_2F_Bath1_SP step=0.5 minValue=15 maxValue=30
-						Switch item=Valve_2F_Bath1 label="Valvola Zona"					
+						Switch item=Valve_2F_Bath1 label="Valvola Zona"
 					}
 				}
 			}
 
 			Text label="Bagno 2" icon="bath"
-			{	
+			{
 				Switch item=Light_2F_Bath2_1 label="Specchio"
 				Switch item=Light_2F_Bath2_2 label="Soffitto"
 				Switch item=Windows_2F_Bath2 label="Tapparella"
@@ -196,13 +196,13 @@ sitemap default label="Full"
 					Text label="Impostazioni" icon="settings"
 					{
 						Setpoint item=Temperature_2F_Bath2_SP step=0.5 minValue=15 maxValue=30
-						Switch item=Valve_2F_Bath2 label="Valvola Zona"					
+						Switch item=Valve_2F_Bath2 label="Valvola Zona"
 					}
 				}
 			}
 		}
 	}
-	
+
 
 
 
@@ -216,20 +216,26 @@ sitemap default label="Full"
 			Text label="Impostazioni" icon="climate"
 			{
 				Switch item=Floor_Mode label="Pavimento"
-				Switch item=Fancoil_Mode label="Fancoil"					
+				Switch item=Fancoil_Mode label="Fancoil"
 
 				Frame label="Auto"
 				{
 					Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
 					Setpoint item=HVAC_Temp_SetPoint step=0.5 minValue=15 maxValue=30
 				}
-				Text icon="boy1" label="Manuale"
+
+				Frame label="ACS"
+				{
+					Switch item=HP_Sanitary_Request_auto label="Auto/Man" mappings=[ON="Auto", OFF="Manual"]
+					Switch item=HP_Sanitary_Request label="Manuale" mappings=[ON="ON", OFF="OFF"]
+				}
+
+				Text icon="boy1" label="Avanzate"
 				{
 					Frame label="Modalità"
 					{
-						Switch item=HP_Sanitary_Request label="ACS"
 						Switch item=Floor_Mode label="Pavimento"
-						Switch item=Fancoil_Mode label="Fancoil"					
+						Switch item=Fancoil_Mode label="Fancoil"
 						Switch item=HP_Heat_Cool label="Clima" mappings=[OFF="Caldo", ON="Freddo"]
 					}
 					Text label="Pompe"
@@ -254,13 +260,13 @@ sitemap default label="Full"
 							Switch item=Valve_2F_Bedroom1
 							Switch item=Valve_2F_Bedroom2
 							Switch item=Valve_2F_Bedroom3
-							Switch item=Valve_3F_Loft		
+							Switch item=Valve_3F_Loft
 						}
 					}
 
 					Text label="Fancoil"
 					{
-					
+
 						Frame label="Fancoil 1"
 						{
 							Switch item=Fancoil_2F_GW1_Speed1
@@ -460,7 +466,7 @@ sitemap default label="Full"
 					Frame label="Distribuzione"
 					{
 						Text item=HP_Temp_Heating_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red",HVAC_Pump_Collector_Floor==ON="blue"]
-						Text item=HP_Temp_Heating_Ret				
+						Text item=HP_Temp_Heating_Ret
 						Text item=HP_Temp_Fancoil_Flow labelcolor=[HVAC_Pump_Collector_Fancoil==ON="blue"]
 					}
 				}

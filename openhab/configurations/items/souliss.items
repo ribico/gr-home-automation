@@ -126,7 +126,8 @@ Number UR_2F_Bedroom3		"UR Corrente [%.1f &#37;]" 	<humidity> (gUR,gClima,g2F_Be
 Switch Floor_Mode			"Logiche Pavimento"		<lock> (gTechnicView_Node13,gHPSettings) {souliss="T12:0:13", autoupdate=false}
 Switch HP_Remote_Switch		"Remote Switch" 		<inverter> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:14", autoupdate=false}
 Switch HP_Circulation_Pump	"Pompa Interna" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:15", autoupdate=false}
-Switch HP_Sanitary_Request	"Richiesta ACS" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:16", autoupdate=false}
+Switch HP_Sanitary_Request	"ACS" 		        (gTechnicView_Node0,gHPSettings) {souliss="T12:0:16:switch", autoupdate=false}
+Switch HP_Sanitary_Request_auto	"ACS Auto" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:16:automode", autoupdate=false}
 Switch HP_Heat_Cool			"Modalità Freddo" 		<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:17", autoupdate=false}
 
 Rollershutter HVAC_3way_Valve		"Valvola a 3 Vie"			(gTechnicView_Node0) {souliss="T22:0:26", autoupdate=false}
