@@ -24,51 +24,51 @@ Group	g3F_Terrace		"Terrazzo"			<terrace>	(g3F)
 
 Group	gLights			"Luci"				<light-off>	(All)
 Group:Switch:OR(ON, OFF) 		gLights 		"All Lights [(%d)]"		<light-off> (All)
-Switch Light_2F_Entrance_1	"Ingresso Luce 1" 	(g2F_Entrance,gTechnicView_Node4,gLights) {souliss="T11:4:1", autoupdate=false}
-Switch Light_2F_Entrance_2	"Ingresso Luce 2" 	(g2F_Entrance,gTechnicView_Node4,gLights) {souliss="T11:4:2", autoupdate=false}
-Switch Light_2F_Living_1	"Salotto Luce 1" 	(g2F_Living,gTechnicView_Node1,gLights) {souliss="T11:1:0", autoupdate=false}
-Switch Light_2F_Living_2	"Salotto Luce 2" 	(g2F_Living,gTechnicView_Node1,gLights) {souliss="T11:1:1", autoupdate=false}
-Switch Light_2F_Living_3	"Salotto Luce 3" 	(g2F_Living,gTechnicView_Node1,gLights) {souliss="T11:1:2", autoupdate=false}
-Switch Light_2F_Living_4	"Salotto Luce 4" 	(g2F_Living,gTechnicView_Node1,gLights) {souliss="T11:1:3", autoupdate=false}
-Switch Light_2F_Stairs		"Scala Luce" 		(g2F_Living,gTechnicView_Node3,gLights) {souliss="T11:3:4", autoupdate=false}
-Switch Light_2F_Kitchen_1	"Cucina Luce 1" 	(g2F_Kitchen,gTechnicView_Node2,gLights) {souliss="T11:2:1", autoupdate=false}
-Switch Light_2F_Kitchen_2	"Cucina Luce 2" 	(g2F_Kitchen,gTechnicView_Node2,gLights) {souliss="T11:2:2", autoupdate=false}
-Switch Light_2F_Kitchen_3	"Cucina Luce 3" 	(g2F_Kitchen,gTechnicView_Node2,gLights) {souliss="T11:2:3", autoupdate=false}
-Switch Light_2F_Dining_1	"Pranzo Luce 1" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:1", autoupdate=false}
-Switch Light_2F_Dining_2	"Pranzo Luce 2" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:2", autoupdate=false}
-Switch Light_2F_Dining_3	"Pranzo Luce 3" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:3", autoupdate=false}
-Switch Light_2F_Bedroom1	"Camera1 Luce" 		(g2F_Bedroom1,gTechnicView_Node9,gLights) {souliss="T11:9:2", autoupdate=false}
-Switch Light_2F_Bedroom2_1	"Camera2 Luce 1"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:1", autoupdate=false}
-Switch Light_2F_Bedroom2_2	"Camera2 Luce 2"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:2", autoupdate=false}
-Switch Light_2F_Bedroom2_3	"Camera2 Luce 3"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:3", autoupdate=false}
-Switch Light_2F_Bedroom2_4	"Camera2 Luce 4"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:4", autoupdate=false}
-Switch Light_2F_Bedroom3	"Camera3 Luce" 		(g2F_Bedroom3,gTechnicView_Node5,gLights) {souliss="T11:5:2", autoupdate=false}
-Switch Light_2F_GW1			"Disimpegno1 Luce" 	(g2F_GW1,gTechnicView_Node13,gLights) {souliss="T11:13:4", autoupdate=false}
-Switch Light_2F_GW2			"Disimpegno2 Luce" 	(g2F_GW2,gTechnicView_Node14,gLights) {souliss="T11:14:4", autoupdate=false}
-Switch Light_2F_Balcony_1	"Balcone1 Luce" 	(g2F_Balcony1,gTechnicView_Node9,gLights) {souliss="T11:9:1", autoupdate=false}
-Switch Light_2F_Balcony_2	"Balcone2 Luce" 	(g2F_Balcony2,gTechnicView_Node5,gLights) {souliss="T11:5:1", autoupdate=false}
-Switch Light_2F_Bath1_1		"Bagno1 Luce 1" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:1", autoupdate=false}
-Switch Light_2F_Bath1_2		"Bagno1 Luce 2" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:2", autoupdate=false}
-Switch Light_2F_Bath1_3		"Bagno1 Luce 3" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:3", autoupdate=false}
-Switch Light_2F_Bath2_1		"Bagno2 Luce 1" 	(g2F_Bath2,gTechnicView_Node4,gLights) {souliss="T11:4:3", autoupdate=false}
-Switch Light_2F_Bath2_2		"Bagno2 Luce 2" 	(g2F_Bath2,gTechnicView_Node4,gLights) {souliss="T11:4:4", autoupdate=false}
-Switch Light_3F_Loft_1			"Attico Luce 1" 	(g3F_Loft,gTechnicView_Node0,gLights) {souliss="T11:0:1", autoupdate=false}
-Switch Light_3F_Loft_2			"Attico Luce 2" 	(g3F_Loft,gTechnicView_Node0,gLights) {souliss="T11:0:2", autoupdate=false}
-Switch Light_3F_Terrace_1		"Terrazzo Luce 1" 	(g3F_Terrace,gTechnicView_Node0,gLights) {souliss="T11:0:3", autoupdate=false}
-Switch Light_3F_Terrace_2		"Terrazzo Luce 2" 	(g3F_Terrace,gTechnicView_Node0,gLights) {souliss="T11:0:4", autoupdate=false}
-Switch Light_3F_Terrace_3		"Terrazzo Luce 3" 	(g3F_Terrace,gTechnicView_Node0,gLights) {souliss="T11:0:5", autoupdate=false}
-Switch Light_3F_Toilet			"Bagno3 Luce 1" 	(g3F_Loft,gTechnicView_Node0,gLights) {souliss="T11:0:6", autoupdate=false}
+Switch Light_2F_Entrance_1	"Ingresso Luce 1" 	(g2F_Entrance,gTechnicView_Node4,gLights) {souliss="T11:4:1"}
+Switch Light_2F_Entrance_2	"Ingresso Luce 2" 	(g2F_Entrance,gTechnicView_Node4,gLights) {souliss="T11:4:2"}
+Switch Light_2F_Living_1	"Salotto Luce 1" 	(g2F_Living,gTechnicView_Node1,gLights) {souliss="T11:1:0"}
+Switch Light_2F_Living_2	"Salotto Luce 2" 	(g2F_Living,gTechnicView_Node1,gLights) {souliss="T11:1:1"}
+Switch Light_2F_Living_3	"Salotto Luce 3" 	(g2F_Living,gTechnicView_Node1,gLights) {souliss="T11:1:2"}
+Switch Light_2F_Living_4	"Salotto Luce 4" 	(g2F_Living,gTechnicView_Node1,gLights) {souliss="T11:1:3"}
+Switch Light_2F_Stairs		"Scala Luce" 		(g2F_Living,gTechnicView_Node3,gLights) {souliss="T11:3:4"}
+Switch Light_2F_Kitchen_1	"Cucina Luce 1" 	(g2F_Kitchen,gTechnicView_Node2,gLights) {souliss="T11:2:1"}
+Switch Light_2F_Kitchen_2	"Cucina Luce 2" 	(g2F_Kitchen,gTechnicView_Node2,gLights) {souliss="T11:2:2"}
+Switch Light_2F_Kitchen_3	"Cucina Luce 3" 	(g2F_Kitchen,gTechnicView_Node2,gLights) {souliss="T11:2:3"}
+Switch Light_2F_Dining_1	"Pranzo Luce 1" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:1"}
+Switch Light_2F_Dining_2	"Pranzo Luce 2" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:2"}
+Switch Light_2F_Dining_3	"Pranzo Luce 3" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:3"}
+Switch Light_2F_Bedroom1	"Camera1 Luce" 		(g2F_Bedroom1,gTechnicView_Node9,gLights) {souliss="T11:9:2"}
+Switch Light_2F_Bedroom2_1	"Camera2 Luce 1"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:1"}
+Switch Light_2F_Bedroom2_2	"Camera2 Luce 2"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:2"}
+Switch Light_2F_Bedroom2_3	"Camera2 Luce 3"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:3"}
+Switch Light_2F_Bedroom2_4	"Camera2 Luce 4"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:4"}
+Switch Light_2F_Bedroom3	"Camera3 Luce" 		(g2F_Bedroom3,gTechnicView_Node5,gLights) {souliss="T11:5:2"}
+Switch Light_2F_GW1			"Disimpegno1 Luce" 	(g2F_GW1,gTechnicView_Node13,gLights) {souliss="T11:13:4"}
+Switch Light_2F_GW2			"Disimpegno2 Luce" 	(g2F_GW2,gTechnicView_Node14,gLights) {souliss="T11:14:4"}
+Switch Light_2F_Balcony_1	"Balcone1 Luce" 	(g2F_Balcony1,gTechnicView_Node9,gLights) {souliss="T11:9:1"}
+Switch Light_2F_Balcony_2	"Balcone2 Luce" 	(g2F_Balcony2,gTechnicView_Node5,gLights) {souliss="T11:5:1"}
+Switch Light_2F_Bath1_1		"Bagno1 Luce 1" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:1"}
+Switch Light_2F_Bath1_2		"Bagno1 Luce 2" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:2"}
+Switch Light_2F_Bath1_3		"Bagno1 Luce 3" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:3"}
+Switch Light_2F_Bath2_1		"Bagno2 Luce 1" 	(g2F_Bath2,gTechnicView_Node4,gLights) {souliss="T11:4:3"}
+Switch Light_2F_Bath2_2		"Bagno2 Luce 2" 	(g2F_Bath2,gTechnicView_Node4,gLights) {souliss="T11:4:4"}
+Switch Light_3F_Loft_1			"Attico Luce 1" 	(g3F_Loft,gTechnicView_Node0,gLights) {souliss="T11:0:1"}
+Switch Light_3F_Loft_2			"Attico Luce 2" 	(g3F_Loft,gTechnicView_Node0,gLights) {souliss="T11:0:2"}
+Switch Light_3F_Terrace_1		"Terrazzo Luce 1" 	(g3F_Terrace,gTechnicView_Node0,gLights) {souliss="T11:0:3"}
+Switch Light_3F_Terrace_2		"Terrazzo Luce 2" 	(g3F_Terrace,gTechnicView_Node0,gLights) {souliss="T11:0:4"}
+Switch Light_3F_Terrace_3		"Terrazzo Luce 3" 	(g3F_Terrace,gTechnicView_Node0,gLights) {souliss="T11:0:5"}
+Switch Light_3F_Toilet			"Bagno3 Luce 1" 	(g3F_Loft,gTechnicView_Node0,gLights) {souliss="T11:0:6"}
 
 
 Group gRolleshutters	"Tapparelle"	<rollershutter> (All)
-Rollershutter Windows_2F_Living 	"Salotto Tapparella" 	(g2F_Living,gTechnicView_Node6,gRolleshutters) {souliss="T22:6:1", autoupdate=false}
-Rollershutter Windows_2F_Kitchen 	"Cucina Tapparella"		(g2F_Kitchen,gTechnicView_Node6,gRolleshutters) {souliss="T22:6:2", autoupdate=false}
-Rollershutter Windows_2F_Dining 	"Pranzo Tapparella" 	(g2F_Dining,gTechnicView_Node5,gRolleshutters) {souliss="T22:5:3", autoupdate=false}
-Rollershutter Windows_2F_Bath1 	"Bagno1 Tapparella" 	(g2F_Bath1,gTechnicView_Node12,gRolleshutters) {souliss="T22:12:1", autoupdate=false}
-Rollershutter Windows_2F_Bath2 	"Bagno2 Tapparella"		(g2F_Bath2,gTechnicView_Node7,gRolleshutters) {souliss="T22:7:2", autoupdate=false}
-Rollershutter Windows_2F_Bedroom1 	"Camera1 Tapparella" 	(g2F_Bedroom1,gTechnicView_Node9,gRolleshutters) {souliss="T22:9:3", autoupdate=false}
-Rollershutter Windows_2F_Bedroom2 	"Camera2 Tapparella" 	(g2F_Bedroom2,gTechnicView_Node12,gRolleshutters) {souliss="T22:12:2", autoupdate=false}
-Rollershutter Windows_2F_Bedroom3 	"Camera3 Tapparella" 	(g2F_Bedroom3,gTechnicView_Node7,gRolleshutters) {souliss="T22:7:1", autoupdate=false}
+Rollershutter Windows_2F_Living 	"Salotto Tapparella" 	(g2F_Living,gTechnicView_Node6,gRolleshutters) {souliss="T22:6:1"}
+Rollershutter Windows_2F_Kitchen 	"Cucina Tapparella"		(g2F_Kitchen,gTechnicView_Node6,gRolleshutters) {souliss="T22:6:2"}
+Rollershutter Windows_2F_Dining 	"Pranzo Tapparella" 	(g2F_Dining,gTechnicView_Node5,gRolleshutters) {souliss="T22:5:3"}
+Rollershutter Windows_2F_Bath1 	"Bagno1 Tapparella" 	(g2F_Bath1,gTechnicView_Node12,gRolleshutters) {souliss="T22:12:1"}
+Rollershutter Windows_2F_Bath2 	"Bagno2 Tapparella"		(g2F_Bath2,gTechnicView_Node7,gRolleshutters) {souliss="T22:7:2"}
+Rollershutter Windows_2F_Bedroom1 	"Camera1 Tapparella" 	(g2F_Bedroom1,gTechnicView_Node9,gRolleshutters) {souliss="T22:9:3"}
+Rollershutter Windows_2F_Bedroom2 	"Camera2 Tapparella" 	(g2F_Bedroom2,gTechnicView_Node12,gRolleshutters) {souliss="T22:12:2"}
+Rollershutter Windows_2F_Bedroom3 	"Camera3 Tapparella" 	(g2F_Bedroom3,gTechnicView_Node7,gRolleshutters) {souliss="T22:7:1"}
 
 
 Group gClima			"Clima"					<climate> 		(All)
@@ -123,20 +123,20 @@ Number Temperature_2F_Bedroom3_SP	"Temp Set Point [%.1f °C]" 	<temperature> (gT
 Number Temperature_2F_Bedroom3_DP	"Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bedroom3)
 Number UR_2F_Bedroom3		"UR Corrente [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bedroom3,gTechnicView_Node5) {souliss="T53:5:6"}
 
-Switch Floor_Mode			"Logiche Pavimento"		<lock> (gTechnicView_Node13,gHPSettings) {souliss="T12:0:13", autoupdate=false}
-Switch HP_Remote_Switch		"Remote Switch" 		<inverter> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:14", autoupdate=false}
-Switch HP_Circulation_Pump	"Pompa Interna" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:15", autoupdate=false}
-Switch HP_Sanitary_Request	"ACS" 		        (gTechnicView_Node0,gHPSettings) {souliss="T12:0:16:switch", autoupdate=false}
-Switch HP_Sanitary_Request_auto	"ACS Auto" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:16:automode", autoupdate=false}
-Switch HP_Heat_Cool			"Modalità Freddo" 		<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:17", autoupdate=false}
+Switch Floor_Mode			"Logiche Pavimento"		<lock> (gTechnicView_Node13,gHPSettings) {souliss="T12:0:13:switch"}
+Switch HP_Remote_Switch		"Remote Switch" 		<inverter> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:14:switch"}
+Switch HP_Circulation_Pump	"Pompa Interna" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:15:switch"}
+Switch HP_Sanitary_Request	"ACS" 		        (gTechnicView_Node0,gHPSettings) {souliss="T12:0:16:switch"}
+Switch HP_Sanitary_Request_auto	"ACS Auto" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:16:automode"}
+Switch HP_Heat_Cool			"Modalità Freddo" 		<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:17:switch"}
 
-Rollershutter HVAC_3way_Valve		"Valvola a 3 Vie"			(gTechnicView_Node0) {souliss="T22:0:26", autoupdate=false}
-Switch HVAC_Pump_Boiler_Floor		"Pompa Boiler->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:27", autoupdate=false}
-Switch HVAC_Pump_Collector_Fancoil	"Pompa Collettore->Fancoil"	(gTechnicView_Node0) {souliss="T12:0:28", autoupdate=false}
-Switch HVAC_Pump_Collector_Floor	"Pompa Collettore->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:29", autoupdate=false}
+Rollershutter HVAC_3way_Valve		"Valvola a 3 Vie"			(gTechnicView_Node0) {souliss="T22:0:26"}
+Switch HVAC_Pump_Boiler_Floor		"Pompa Boiler->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:27:switch"}
+Switch HVAC_Pump_Collector_Fancoil	"Pompa Collettore->Fancoil"	(gTechnicView_Node0) {souliss="T12:0:28:switch"}
+Switch HVAC_Pump_Collector_Floor	"Pompa Collettore->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:29:switch"}
 
-Switch Fancoil_Mode			  "Fancoil" 	<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:30:switch", autoupdate=false}
-Switch Fancoil_Mode_auto  "Fancoil Auto" 	<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:30:automode", autoupdate=false}
+Switch Fancoil_Mode			  "Fancoil" 	<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:30:switch"}
+Switch Fancoil_Mode_auto  "Fancoil Auto" 	<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:30:automode"}
 
 Number HP_Temp_Sanitary		"Temp. ACS [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:7"}
 Number HP_Temp_Heating		"Temp. Accumulo Alto [%.1f °C]"		<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:9"}
@@ -144,25 +144,25 @@ Number HP_Temp_Bottom		"Temp. Accumulo Basso [%.1f °C]"	<temperature> (gTechnic
 Number HP_Temp_Heating_Flow	"Temp. Mandata Pavimento [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:18"}
 Number HP_Temp_Heating_Ret	"Temp. Ritorno Pavimento [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:20"}
 Number HP_Temp_Fancoil_Flow	"Temp. Mandata Fancoil [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:22"}
-Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima) {souliss="T52:0:32", autoupdate=false}
-Rollershutter HVAC_Temp_SP 	"Temp. Ambiente SetPoint" 	<temperature> (gTechnicView_Node0,gClima) {souliss="T22:0:34", autoupdate=false}
+Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima) {souliss="T52:0:32"}
+Rollershutter HVAC_Temp_SP 	"Temp. Ambiente SetPoint" 	<temperature> (gTechnicView_Node0,gClima) {souliss="T22:0:34"}
 
-Switch Valve_2F_Bedroom1		"Camera 1"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:0", autoupdate=false}
-Switch Valve_2F_Bath1			"Bagno 1"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:1", autoupdate=false}
-Switch Valve_2F_Bedroom2		"Camera 2"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:2", autoupdate=false}
-Switch Valve_2F_Living			"Soggiorno"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:3", autoupdate=false}
-Switch Valve_2F_Bedroom3		"Camera 3"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:4", autoupdate=false}
-Switch Valve_2F_Bath2			"Bagno 2"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:5", autoupdate=false}
-Switch Valve_2F_Kitchen			"Cucina"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:6", autoupdate=false}
-Switch Valve_3F_Loft			"Attico"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:7", autoupdate=false}
+Switch Valve_2F_Bedroom1		"Camera 1"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:0"}
+Switch Valve_2F_Bath1			"Bagno 1"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:1"}
+Switch Valve_2F_Bedroom2		"Camera 2"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:2"}
+Switch Valve_2F_Living			"Soggiorno"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:3"}
+Switch Valve_2F_Bedroom3		"Camera 3"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:4"}
+Switch Valve_2F_Bath2			"Bagno 2"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:5"}
+Switch Valve_2F_Kitchen			"Cucina"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:6"}
+Switch Valve_3F_Loft			"Attico"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:24:7"}
 
-Switch Fancoil_2F_GW1_Speed1	"Fancoil1 Vel1"	<heating>  (gTechnicView_Node13,gHVAC,g2F_GW1) {souliss="T11:13:1", autoupdate=false}
-Switch Fancoil_2F_GW1_Speed2	"Fancoil1 Vel2"	<heating>  (gTechnicView_Node13,gHVAC,g2F_GW1) {souliss="T11:13:2", autoupdate=false}
-Switch Fancoil_2F_GW1_Speed3	"Fancoil1 Vel3"	<heating>  (gTechnicView_Node13,gHVAC,g2F_GW1) {souliss="T11:13:3", autoupdate=false}
+Switch Fancoil_2F_GW1_Speed1	"Fancoil1 Vel1"	<heating>  (gTechnicView_Node13,gHVAC,g2F_GW1) {souliss="T11:13:1"}
+Switch Fancoil_2F_GW1_Speed2	"Fancoil1 Vel2"	<heating>  (gTechnicView_Node13,gHVAC,g2F_GW1) {souliss="T11:13:2"}
+Switch Fancoil_2F_GW1_Speed3	"Fancoil1 Vel3"	<heating>  (gTechnicView_Node13,gHVAC,g2F_GW1) {souliss="T11:13:3"}
 
-Switch Fancoil_2F_GW2_Speed1	"Fancoil2 Vel1"	<heating>  (gTechnicView_Node14,gHVAC,g2F_GW2) {souliss="T11:14:1", autoupdate=false}
-Switch Fancoil_2F_GW2_Speed2	"Fancoil2 Vel2"	<heating>  (gTechnicView_Node14,gHVAC,g2F_GW2) {souliss="T11:14:2", autoupdate=false}
-Switch Fancoil_2F_GW2_Speed3	"Fancoil2 Vel3"	<heating>  (gTechnicView_Node14,gHVAC,g2F_GW2) {souliss="T11:14:3", autoupdate=false}
+Switch Fancoil_2F_GW2_Speed1	"Fancoil2 Vel1"	<heating>  (gTechnicView_Node14,gHVAC,g2F_GW2) {souliss="T11:14:1"}
+Switch Fancoil_2F_GW2_Speed2	"Fancoil2 Vel2"	<heating>  (gTechnicView_Node14,gHVAC,g2F_GW2) {souliss="T11:14:2"}
+Switch Fancoil_2F_GW2_Speed3	"Fancoil2 Vel3"	<heating>  (gTechnicView_Node14,gHVAC,g2F_GW2) {souliss="T11:14:3"}
 
 
 
