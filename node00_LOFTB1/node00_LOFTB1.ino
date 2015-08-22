@@ -296,6 +296,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			PumpCollectorToFloorOff();
 			PumpCollectorToFancoilOff();
 			Fancoil_Off(phase_fast%2);
+			HeatingMixValveOff();
 		}
 
 		// control hot water storage if there's heating requests from any zone
