@@ -1,10 +1,16 @@
 #define IsFloorOn()					(mOutput(FLOOR_MODE) == Souliss_T1n_OnCoil)
+#define IsFloorAutoOn()			(mOutput(FLOOR_MODE) == Souliss_T1n_AutoOnCoil)
+#define IsFloorAutoOff()		(mOutput(FLOOR_MODE) == Souliss_T1n_AutoOffCoil)
 #define IsFloorOff()				(mOutput(FLOOR_MODE) == Souliss_T1n_OffCoil)
-//#define IsFloorAuto()				(mOutput(FLOOR_MODE) == Souliss_T1n_AutoState)
+#define IsFloorAuto()				(mOutput(FLOOR_MODE) == Souliss_T1n_AutoState)
+#define FloorAutoOnCmd()    SetInput(FLOOR_MODE, Souliss_T1n_AutoCmd + 2)
 
 #define IsFancoilsOn()				(mOutput(FANCOIL_MODE) == Souliss_T1n_OnCoil)
 #define IsFancoilsOff()				(mOutput(FANCOIL_MODE) == Souliss_T1n_OffCoil)
 #define IsFancoilsAuto()			(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoState)
+#define IsFancoilsAutoOn()		(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoOnCoil)
+#define IsFancoilsAutoOff()		(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoOffCoil)
+#define FancoilsAutoOnCmd()    SetInput(FANCOIL_MODE, Souliss_T1n_AutoCmd + 2)
 
 #define IsHeatMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
 #define IsCoolMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OnCoil)
@@ -13,23 +19,25 @@
 #define IsHeating()					(IsZoneOpen() && IsHeatMode())
 #define IsCooling()					(IsZoneOpen() && IsCoolMode())
 
+#define IsSanitaryWaterCold()			  (temperature_sanitary < SETPOINT_TEMP_SANITARY_WATER_MIN)
+#define IsSanitaryWaterHot()			  (temperature_sanitary > SETPOINT_TEMP_SANITARY_WATER_MAX)
 #define IsSanitaryWaterOn()	        (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_OnCoil)
 #define IsSanitaryWaterAuto()	      (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoState)
 #define IsSanitaryWaterAutoOn()	    (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOnCoil)
 #define IsSanitaryWaterAutoOff()	  (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOffCoil)
 #define SanitaryWaterAutoOnCmd()    SetInput(HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd + 2 /*cycles*/)
 
-#define IsHotWaterInProduction()		(IsHeatMode() && IsHpCirculationOn())
-#define IsCoolWaterInProduction()		(IsCoolMode() && IsHpCirculationOn())
+#define IsStorageWaterCold()        (temperature_heating < SETPOINT_TEMP_HEATING_WATER_MIN)
+#define IsStorageWaterHot()					(temperature_heating > SETPOINT_TEMP_HEATING_WATER_MAX)
+#define IsStorageWaterInProduction()  (IsHpFlowToBoiler() && IsHotWaterInProduction())
 
-#define IsSanitaryWaterCold()			(temperature_sanitary < SETPOINT_TEMP_SANITARY_WATER_MIN)
-#define IsSanitaryWaterHot()			(temperature_sanitary > SETPOINT_TEMP_SANITARY_WATER_MAX)
-#define IsHotWaterCold()				(temperature_heating < SETPOINT_TEMP_HEATING_WATER_MIN)
-#define IsHotWaterHot()					(temperature_heating > SETPOINT_TEMP_HEATING_WATER_MAX)
-
+#define IsHotWaterInProduction()		(IsHeatMode() && (IsHpCirculationOn() || IsHpCirculationAutoOn()) )
+#define IsCoolWaterInProduction()		(IsCoolMode() && (IsHpCirculationOn() || IsHpCirculationAutoOn()) )
 
 #define IsHpCirculationOn()				(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil)
-#define HpCirculationOn()				if(!IsHpCirculationOn()) SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OnCmd)
+#define IsHpCirculationAutoOn()		(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_AutoOnCoil)
+#define HpCirculationAutoOn()			SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_AutoCmd + 2 /*cycles*/)
+#define HpCirculationOn()				  if(!IsHpCirculationOn()) SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OnCmd)
 #define HpCirculationOff()				if(IsHpCirculationOn()) SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_OffCmd)
 
 #define IsHpFlowToBoiler()				(/*(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK) && */(mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_State_Open))
@@ -41,16 +49,24 @@
 
 #define IsPumpBoilerToFloorOn()			(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OnCoil)
 #define IsPumpBoilerToFloorOff()		(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OffCoil)
-#define IsPumpCollectorToFloorOn()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OnCoil)
-#define IsPumpCollectorToFloorOff()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OffCoil)
-#define IsPumpCollectorToFancoilOn()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OnCoil)
-#define IsPumpCollectorToFancoilOff()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OffCoil)
+#define IsPumpBoilerToFloorAuto()		(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_AutoState)
 #define PumpBoilerToFloorOn()			if(!IsPumpBoilerToFloorOn()) 		SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_OnCmd)
 #define PumpBoilerToFloorOff()			if(IsPumpBoilerToFloorOn()) 		SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_OffCmd)
+#define PumpBoilerToFloorAutoOn()   SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_AutoCmd + 2 /*cycles*/)
+
+#define IsPumpCollectorToFloorOn()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OnCoil)
+#define IsPumpCollectorToFloorOff()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OffCoil)
+#define IsPumpCollectorToFloorAuto()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_AutoState)
 #define PumpCollectorToFloorOn()		if(!IsPumpCollectorToFloorOn())		SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_OnCmd)
 #define PumpCollectorToFloorOff()		if(IsPumpCollectorToFloorOn())		SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_OffCmd)
+#define PumpCollectorToFloorAutoOn()  SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_AutoCmd + 2)
+
+#define IsPumpCollectorToFancoilOn()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OnCoil)
+#define IsPumpCollectorToFancoilOff()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OffCoil)
+#define IsPumpCollectorToFancoilAuto()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_AutoState)
 #define PumpCollectorToFancoilOn() 		if(!IsPumpCollectorToFancoilOn())	SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_OnCmd)
 #define PumpCollectorToFancoilOff() 	if(IsPumpCollectorToFancoilOn())	SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_OffCmd)
+#define PumpCollectorToFancoilAutoOn()  SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_AutoCmd + 2)
 
 #define IsHeatingWaterTooHot()				(temperature_floor_flow > SETPOINT_TEMP_HEATING_WATER_MAX)
 #define IsHeatingWaterTooCold()				(temperature_floor_flow < SETPOINT_TEMP_HEATING_WATER_MIN)
@@ -62,6 +78,7 @@
 #define	IsHpSetpoint2()					(mOutput(HP_SETPOINT_2) == Souliss_T1n_OnCoil)
 #define	HpSetpoint1()					if(IsHpSetpoint2()) SetInput(HP_SETPOINT_2, Souliss_T1n_OffCmd)
 #define	HpSetpoint2()					if(IsHpSetpoint1()) SetInput(HP_SETPOINT_2, Souliss_T1n_OnCmd)
+#define HpSetpoint2Auto()     SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd + 2)
 
 #define temp_BED1	pOutputAsFloat(9,4)
 #define UR_BED1		pOutputAsFloat(9,6)

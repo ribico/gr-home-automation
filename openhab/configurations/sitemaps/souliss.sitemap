@@ -227,7 +227,8 @@ sitemap default label="Full"
 
 				Frame label="Distribuzione"
 				{
-					Switch item=Floor_Mode label="Pavimento" mappings=[ON="AUTO", OFF="OFF"]
+					Switch item=Floor_Mode_auto label="Pavimento Auto/Man" mappings=[ON="Auto", OFF="Manual"]
+					Switch item=Floor_Mode label="Pavimento" mappings=[ON="ON", OFF="OFF"]
 					Switch item=Fancoil_Mode_auto label="Fancoils Auto/Man" mappings=[ON="Auto", OFF="Manual"]
 					Switch item=Fancoil_Mode label="Fancoils ON/OFF" mappings=[ON="ON", OFF="OFF"]
 				}
@@ -243,9 +244,13 @@ sitemap default label="Full"
 				{
 					Text label="Pompe"
 					{
+						Switch item=HP_Circulation_Pump_auto mappings=[ON="Auto", OFF="Manual"]
 						Switch item=HP_Circulation_Pump
+						Switch item=HVAC_Pump_Boiler_Floor_auto mappings=[ON="Auto", OFF="Manual"]
 						Switch item=HVAC_Pump_Boiler_Floor
+						Switch item=HVAC_Pump_Collector_Fancoil_auto mappings=[ON="Auto", OFF="Manual"]
 						Switch item=HVAC_Pump_Collector_Fancoil
+						Switch item=HVAC_Pump_Collector_Floor_auto mappings=[ON="Auto", OFF="Manual"]
 						Switch item=HVAC_Pump_Collector_Floor
 					}
 					Text label="Valvole"
@@ -272,15 +277,21 @@ sitemap default label="Full"
 
 						Frame label="Fancoil 1"
 						{
+							Switch item=Fancoil_2F_GW1_Speed1_auto  mappings=[ON="Auto", OFF="Manual"]
 							Switch item=Fancoil_2F_GW1_Speed1
+							Switch item=Fancoil_2F_GW1_Speed2_auto mappings=[ON="Auto", OFF="Manual"]
 							Switch item=Fancoil_2F_GW1_Speed2
+							Switch item=Fancoil_2F_GW1_Speed3_auto mappings=[ON="Auto", OFF="Manual"]
 							Switch item=Fancoil_2F_GW1_Speed3
 						}
 
 						Frame label="Fancoil 2"
 						{
+							Switch item=Fancoil_2F_GW2_Speed1_auto mappings=[ON="Auto", OFF="Manual"]
 							Switch item=Fancoil_2F_GW2_Speed1
+							Switch item=Fancoil_2F_GW2_Speed2_auto mappings=[ON="Auto", OFF="Manual"]
 							Switch item=Fancoil_2F_GW2_Speed2
+							Switch item=Fancoil_2F_GW2_Speed3_auto mappings=[ON="Auto", OFF="Manual"]
 							Switch item=Fancoil_2F_GW2_Speed3
 						}
 					}

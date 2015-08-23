@@ -52,7 +52,6 @@ MEGA with Ethernet only acting as GATEWAY
 #define COLLECTOR_FLOOR_MIX_VALVE_MIN	0
 #define COLLECTOR_FLOOR_MIX_VALVE_MAX	200
 U8 gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
-bool gbFancoilsOn = false;
 
 
 inline void ReadInputs()
@@ -155,43 +154,25 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	float temperature_fancoil_flow = NTC_RawADCToCelsius( analogRead(TEMP_FANCOIL_FLOW_PIN),TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
 	ImportAnalog(TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
 
-	// control SANITARY production hysteresys in case of Auto Mode
+	// control SANITARY production hysteresys in Auto Mode
 	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
+	{
+		SetHpFlowToBoiler(); 		// upstream to boiler
 		SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
 
-	// if SANITARY WATER is in production then stop all heating/cooling pumps
-	// and move the upstream to boiler
-	if ( IsSanitaryWaterOn() || IsSanitaryWaterAutoOn()	)
-	{
-		// no heating/cooling -> close all zone valves
-		mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
-		Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
-
-		// stop all heating/cooling activities when producing sanitary water
-		PumpCollectorToFloorOff();
-		PumpCollectorToFancoilOff();
-		PumpBoilerToFloorOff();
-		HeatingMixValveOff();
-
-		// upstream to boiler
-		SetHpFlowToBoiler();
-
-		return; // should not exectute follwing code that could modify the HVAC status
+		return; // should not exectute following code that could modify the HVAC status
 	}
 
 
-
-	if( IsFloorOff() )
+	if( IsFloorOn() ) 		// force all zones open
 	{
-		// no heating/cooling -> close all zone valves
-		mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
-
-		// turn all pumps and valves off
-		PumpBoilerToFloorOff();
-		PumpCollectorToFloorOff();
-		HeatingMixValveOff();
+		mInput(HVAC_ZONES) = HVAC_MASK_ALL_ZONES;
 	}
-	else if( IsFloorOn() )
+	else if ( IsFloorOff() ) // force all zones Close
+	{
+		mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
+	}
+	else if( IsFloorAuto() ) // check zone temperatures to open/close valves
 	{
 		// AUTO MODE -> activate only needed zones
 
@@ -275,180 +256,92 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	// process zones logics both for floor on and off
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 
-	if( IsHeating() ) // heating at least one zone
+
+	if( IsHeating() ) // heating request for at least one zone
 	{
-		if( IsPumpCollectorToFloorOff() && IsPumpCollectorToFancoilOff() && IsFancoilsOff() )
-		{
-			PumpBoilerToFloorOn();	// using hot water from boiler only, collector pumps off
+		PumpBoilerToFloorAutoOn();
 
-			// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
-			if ( IsHeatingWaterTooHot() )
-				HeatingMixValveOn_ColdDirection(); // mix valve on, direction relay off
+		// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
+		if ( IsHeatingWaterTooHot() )
+			HeatingMixValveOn_ColdDirection(); // mix valve on, direction relay off
 
-			else if ( IsHeatingWaterTooCold() )
-				HeatingMixValveOn_HotDirection(); // mix valve on, direction relay on
+		else if ( IsHeatingWaterTooCold() )
+			HeatingMixValveOn_HotDirection(); // mix valve on, direction relay on
 
-			else
-				HeatingMixValveOff(); // mix valve off (hold the position)
-		}
 		else
-		{
-			PumpCollectorToFloorOff();
-			PumpCollectorToFancoilOff();
-			Fancoil_Off(phase_fast%2);
-			HeatingMixValveOff();
-		}
+			HeatingMixValveOff(); // mix valve off (hold the position)
 
 		// control hot water storage if there's heating requests from any zone
 		// otherwise just don't care about the temperature of the storage
-		if ( !IsHotWaterInProduction() && IsHotWaterCold() )
+		if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
 		{
-			// should produce some hot water here
-			if(IsHpFlowToBoiler())
-			{
-				HpSetpoint1(); // always setpoint 1, explicit call it here.
-				HpCirculationOn();
-			}
-			else
-			{
-				HpCirculationOff();
-				SetHpFlowToBoiler(); // only needed when activating HP Circulation pump
-			}
+			SetHpFlowToBoiler();
+			HpCirculationAutoOn();
 		}
-		else if ( IsHotWaterInProduction() && IsHotWaterHot() )
-			HpCirculationOff(); // stop producing hot water
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
-		// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
-		HpSetpoint2();
+		// produce cold water
+		HpSetpoint2Auto(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
+		SetHpFlowToCollector();
+		HpCirculationAutoOn();
+		PumpCollectorToFancoilAutoOn();
 
-		// set gbFancoilsOn
-		if( IsFancoilsAuto() )
-		{
-			// check umidity max to eventually activate fancoils
-			float UR_MAX = UR_BED1;
-			UR_MAX = max(UR_MAX, UR_BED2);
-			UR_MAX = max(UR_MAX, UR_LIVING);
-			UR_MAX = max(UR_MAX, UR_BED3);
-			UR_MAX = max(UR_MAX, UR_KITCHEN);
-			UR_MAX = max(UR_MAX, UR_DINING);
+		// check the dew point to reduce floor water temperature
+		float dew_point_BED1 = temp_BED1-(100-UR_BED1)/5;
+		float dew_point_BED2 = temp_BED2-(100-UR_BED2)/5;
+		float dew_point_LIVING = temp_LIVING-(100-UR_LIVING)/5;
+		float dew_point_BED3 = temp_BED3-(100-UR_BED3)/5;
+		float dew_point_KITCHEN = temp_KITCHEN-(100-UR_KITCHEN)/5;
+		float dew_point_DINING = temp_DINING-(100-UR_DINING)/5;
 
-			if( !gbFancoilsOn && (UR_MAX > SETPOINT_UR_1) )
-				gbFancoilsOn = true;
-			else if(gbFancoilsOn && (UR_MAX < SETPOINT_UR_1 - SETPOINT_UR_DEADBAND) )
-				gbFancoilsOn = false;
-		}
-		else if( IsFancoilsOn() )
-			gbFancoilsOn = true;
+		float dew_point_MAX = dew_point_BED1;
+		dew_point_MAX = max(dew_point_MAX, dew_point_BED2);
+		dew_point_MAX = max(dew_point_MAX, dew_point_LIVING);
+		dew_point_MAX = max(dew_point_MAX, dew_point_BED3);
+		dew_point_MAX = max(dew_point_MAX, dew_point_KITCHEN);
+		dew_point_MAX = max(dew_point_MAX, dew_point_DINING);
+
+		float setpoint_cooling_water = dew_point_MAX;
+
+		// control the collector-floor mix valve to keep the setpoint
+		// simple proportional control on return floor temperature
+		float error = setpoint_cooling_water - (temperature_floor_flow + temperature_floor_return)/2;
+
+		if(gCollectorToFloorMixValvePos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
+			gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
+
+		else if(gCollectorToFloorMixValvePos - error < COLLECTOR_FLOOR_MIX_VALVE_MIN)
+			gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MIN;
 
 		else
-			gbFancoilsOn = false;
+			gCollectorToFloorMixValvePos -= (U8) error;
 
-		// manage valves and pumps according to gbFancoilsOn
-		if( gbFancoilsOn )
+
+		// check the max UR to eventually activate fancoils
+		float UR_MAX = UR_BED1;
+		UR_MAX = max(UR_MAX, UR_BED2);
+		UR_MAX = max(UR_MAX, UR_LIVING);
+		UR_MAX = max(UR_MAX, UR_BED3);
+		UR_MAX = max(UR_MAX, UR_KITCHEN);
+		UR_MAX = max(UR_MAX, UR_DINING);
+
+		if( (IsFancoilsAutoOff() && (UR_MAX > SETPOINT_UR_1)) || (IsFancoilsAutoOn() && (UR_MAX > SETPOINT_UR_1 - SETPOINT_UR_DEADBAND)) )
+				FancoilsAutoOnCmd();
+
+		if( IsFancoilsOn() || IsFancoilsAutoOn() )
 		{
-			if(IsHpFlowToCollector())
-			{
-				HpCirculationOn();
-				PumpCollectorToFancoilOn();
-			}
-			else
-			{
-				HpCirculationOff();
-				SetHpFlowToCollector();
-			}
+			PumpCollectorToFancoilAutoOn();
+			Fancoil_AutoCmd(phase_fast%2); TODO("adjust fancoils speed with UR hysteresys");
 		}
-		else
-			PumpCollectorToFancoilOff();
 
-		// control fancoils according to gbFancoilsOn value
-		if( gbFancoilsOn )
-		{
-			Fancoil_Speed1(phase_fast%2); TODO("adjust fancoils speed with UR hysteresys");
-		}
-		else
-			Fancoil_Off(phase_fast%2);
-
-/*			// choose the right fancoil fan speed
-	if( UR_AVE > SETPOINT_UR_1 && UR_AVE <= SETPOINT_UR_2 )
-		Fancoil_Speed1(phase_fast%2);
-
-	else if( UR_AVE > SETPOINT_UR_2 && UR_AVE <= SETPOINT_UR_3 )
-		Fancoil_Speed2(phase_fast%2);
-
-	else if( UR_AVE > SETPOINT_UR_3 )
-		Fancoil_Speed3(phase_fast%2);
-
-	else
-		Fancoil_Off(phase_fast%2);
-*/
-
-		// floor control
-		if( IsHpFlowToCollector() && IsPumpBoilerToFloorOff())
-		{
-			HpCirculationOn();	// Cold water needed
-			PumpCollectorToFloorOn();
-
-			float dew_point_BED1 = temp_BED1-(100-UR_BED1)/5;
-			float dew_point_BED2 = temp_BED2-(100-UR_BED2)/5;
-			float dew_point_LIVING = temp_LIVING-(100-UR_LIVING)/5;
-			float dew_point_BED3 = temp_BED3-(100-UR_BED3)/5;
-			float dew_point_KITCHEN = temp_KITCHEN-(100-UR_KITCHEN)/5;
-			float dew_point_DINING = temp_DINING-(100-UR_DINING)/5;
-
-			float dew_point_MAX = dew_point_BED1;
-			dew_point_MAX = max(dew_point_MAX, dew_point_BED2);
-			dew_point_MAX = max(dew_point_MAX, dew_point_LIVING);
-			dew_point_MAX = max(dew_point_MAX, dew_point_BED3);
-			dew_point_MAX = max(dew_point_MAX, dew_point_KITCHEN);
-			dew_point_MAX = max(dew_point_MAX, dew_point_DINING);
-
-			float setpoint_cooling_water = dew_point_MAX;
-
-			// control the collector-floor mix valve to keep the setpoint
-			// simple proportional control on return floor temperature
-			float error = setpoint_cooling_water - (temperature_floor_flow + temperature_floor_return)/2;
-
-			if(gCollectorToFloorMixValvePos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
-				gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
-
-			else if(gCollectorToFloorMixValvePos - error < COLLECTOR_FLOOR_MIX_VALVE_MIN)
-				gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MIN;
-
-			else
-				gCollectorToFloorMixValvePos -= (U8) error;
-
-			analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, gCollectorToFloorMixValvePos);
-		}
-		else
-		{
-			HpCirculationOff();
-			SetHpFlowToCollector();	// always needed in cooling
-			PumpCollectorToFloorOff(); // keep the pump off
-			PumpBoilerToFloorOff(); // do not use boiler water
-			HeatingMixValveOff();
-		}
 	}
-	else
-	{
-		// not heating and not cooling
-		HpSetpoint1(); // simply turn off setpoint 2 relay
-		HpCirculationOff();
-		PumpCollectorToFloorOff();
-		PumpCollectorToFancoilOff();
-		PumpBoilerToFloorOff();
-		HeatingMixValveOff();
-		Fancoil_Off(phase_fast%2);
-		return;
-	}
+
 }
 
 
 inline void SetOutputs()
 {
-
-
 	LowDigOut(LIGHT_LOFT_1_PIN, Souliss_T1n_Coil, LIGHT_LOFT_1);
 	LowDigOut(LIGHT_LOFT_2_PIN, Souliss_T1n_Coil, LIGHT_LOFT_2);
 	LowDigOut(LIGHT_TERRACE_1_PIN, Souliss_T1n_Coil, LIGHT_TERRACE_1);
@@ -485,6 +378,8 @@ inline void SetOutputs()
 	LowDigOut(PUMP_COLLECTOR_FLOOR_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FLOOR);
 
 	LowDigOut(HP_SETPOINT_2_PIN, Souliss_T1n_Coil, HP_SETPOINT_2);
+
+	analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, gCollectorToFloorMixValvePos);
 }
 
 inline void ProcessTimers()
