@@ -39,11 +39,15 @@ inline void ReadInputs()
 
 inline void ProcessLogics()
 {
-	Logic_T12(FAN_SPEED1);
-	Logic_T12(FAN_SPEED2);
-	Logic_T12(FAN_SPEED3);
 	Logic_SimpleLight(LIGHT_GW);
 
+	Logic_T12(FAN_SPEED2);
+	Logic_T12(FAN_SPEED3);
+
+	if( mOutput(FAN_SPEED2) == Souliss_T1n_AutoOnCoil || mOutput(FAN_SPEED3) == Souliss_T1n_AutoOnCoil)
+		SetInput(FAN_SPEED1, Souliss_T1n_AutoCmd + 2); // needed always ON because it also drive the water flux valve
+
+	Logic_T12(FAN_SPEED1);
 }
 
 inline void SetOutputs()
