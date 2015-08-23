@@ -20,8 +20,8 @@ DINO with RS485 only acting as Peer
 #include "HW_Setup_DINo_v2.h"
 
 #define FAN_SPEED1			1
-#define FAN_SPEED2			2		
-#define FAN_SPEED3			3	
+#define FAN_SPEED2			2
+#define FAN_SPEED3			3
 #define LIGHT_GW			4
 
 inline void DefineTypicals()
@@ -48,9 +48,9 @@ inline void ProcessLogics()
 
 inline void SetOutputs()
 {
-	DigOut(RELAY1, Souliss_T2n_Coil_Close,  FAN_SPEED1);
-	DigOut(RELAY2, Souliss_T2n_Coil_Close, FAN_SPEED2);
-	DigOut(RELAY3, Souliss_T2n_Coil_Close,  FAN_SPEED3);
+	nDigOut(RELAY1, Souliss_T2n_Coil_Close,  FAN_SPEED1);
+	nDigOut(RELAY2, Souliss_T2n_Coil_Close, FAN_SPEED2);
+	nDigOut(RELAY3, Souliss_T2n_Coil_Close,  FAN_SPEED3);
 	LowDigOut(RELAY4, Souliss_T2n_Coil_Close, LIGHT_GW);
 }
 
@@ -78,33 +78,33 @@ void setup()
 }
 
 void loop()
-{ 
-	EXECUTEFAST() {						
+{
+	EXECUTEFAST() {
 		UPDATEFAST();
-		
-		FAST_30ms() 
+
+		FAST_30ms()
 		{
 			ReadInputs();
-		} 
+		}
 
-		FAST_50ms() 
+		FAST_50ms()
 		{
 			ProcessLogics();
 
 			SetOutputs();
 		}
-		
+
 		FAST_2110ms()
 		{
 			ProcessTimers();
 		}
 
-		grhFastPeerComms();			
+		grhFastPeerComms();
 	}
-	
-	EXECUTESLOW() 
-	{	
+
+	EXECUTESLOW()
+	{
 		UPDATESLOW();
 		SLOW_PeerJoin();
 	}
-} 
+}
