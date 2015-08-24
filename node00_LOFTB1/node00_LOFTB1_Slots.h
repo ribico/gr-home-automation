@@ -55,8 +55,8 @@
 
 #define TEMP_AMBIENCE_SET_POINT		32
 #define TEMP_AMBIENCE_SET_POINT_H	33
-
 #define TEMP_SETPOINT_IN	34
+
 
 inline void DefineTypicals()
 {
@@ -99,8 +99,17 @@ inline void DefineTypicals()
 
 	// initialize values
 //	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
-//	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
 
-	float set_point = 19; // winter initial setup
+
+	SetInput(HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd);
+	SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_AutoCmd);
+	SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_AutoCmd);
+	SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_AutoCmd);
+	SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_AutoCmd);
+	SetInput(FANCOIL_MODE, Souliss_T1n_AutoCmd);
+	SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd);
+
+	float set_point = 26.5; // initial setup
 	ImportAnalog(TEMP_AMBIENCE_SET_POINT, &set_point);
 }

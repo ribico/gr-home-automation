@@ -35,7 +35,7 @@ MEGA with Ethernet only acting as GATEWAY
 
 
 #define SETPOINT_TEMP_SANITARY_WATER_MIN 	40 // °C
-#define SETPOINT_TEMP_SANITARY_WATER_MAX 	45 // °C
+#define SETPOINT_TEMP_SANITARY_WATER_MAX 	43 // °C
 #define SETPOINT_TEMP_HEATING_WATER_MIN		26 // °C
 #define SETPOINT_TEMP_HEATING_WATER_MAX		30 // °C
 
@@ -131,7 +131,6 @@ inline void ProcessLogics()
 		ambience_setpoint -= 0.5;
 		ImportAnalog(TEMP_AMBIENCE_SET_POINT, &ambience_setpoint);
 	}
-
 }
 
 inline void ProcessSlowLogics(U16 phase_fast)
@@ -259,7 +258,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 	if( IsHeating() ) // heating request for at least one zone
 	{
-		PumpBoilerToFloorAutoOn();
+		PumpBoilerToFloorAutoOnCmd();
 
 		// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
 		if ( IsHeatingWaterTooHot() )
@@ -276,16 +275,16 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
 		{
 			SetHpFlowToBoiler();
-			HpCirculationAutoOn();
+			HpCirculationAutoOnCmd();
 		}
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
 		// produce cold water
-		HpSetpoint2Auto(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
+		HpSetpoint2AutoCmd(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
 		SetHpFlowToCollector();
-		HpCirculationAutoOn();
-		PumpCollectorToFancoilAutoOn();
+		HpCirculationAutoOnCmd();
+		PumpCollectorToFloorAutoOnCmd();
 
 		// check the dew point to reduce floor water temperature
 		float dew_point_BED1 = temp_BED1-(100-UR_BED1)/5;
@@ -317,6 +316,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		else
 			gCollectorToFloorMixValvePos -= (U8) error;
 
+		analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, gCollectorToFloorMixValvePos);
 
 		// check the max UR to eventually activate fancoils
 		float UR_MAX = UR_BED1;
@@ -331,7 +331,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 		if( IsFancoilsOn() || IsFancoilsAutoOn() )
 		{
-			PumpCollectorToFancoilAutoOn();
+			PumpCollectorToFancoilAutoOnCmd();
 			Fancoil_AutoCmd(phase_fast%2); TODO("adjust fancoils speed with UR hysteresys");
 		}
 
@@ -342,17 +342,17 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 inline void SetOutputs()
 {
-	LowDigOut(LIGHT_LOFT_1_PIN, Souliss_T1n_Coil, LIGHT_LOFT_1);
-	LowDigOut(LIGHT_LOFT_2_PIN, Souliss_T1n_Coil, LIGHT_LOFT_2);
-	LowDigOut(LIGHT_TERRACE_1_PIN, Souliss_T1n_Coil, LIGHT_TERRACE_1);
-	LowDigOut(LIGHT_TERRACE_2_PIN, Souliss_T1n_Coil, LIGHT_TERRACE_2);
-	LowDigOut(LIGHT_TERRACE_3_PIN, Souliss_T1n_Coil, LIGHT_TERRACE_3);
-	LowDigOut(LIGHT_TOILET_PIN, Souliss_T1n_Coil, LIGHT_TOILET);
+	nLowDigOut(LIGHT_LOFT_1_PIN, Souliss_T1n_OnCoil, LIGHT_LOFT_1);
+	nLowDigOut(LIGHT_LOFT_2_PIN, Souliss_T1n_OnCoil, LIGHT_LOFT_2);
+	nLowDigOut(LIGHT_TERRACE_1_PIN, Souliss_T1n_OnCoil, LIGHT_TERRACE_1);
+	nLowDigOut(LIGHT_TERRACE_2_PIN, Souliss_T1n_OnCoil, LIGHT_TERRACE_2);
+	nLowDigOut(LIGHT_TERRACE_3_PIN, Souliss_T1n_OnCoil, LIGHT_TERRACE_3);
+	nLowDigOut(LIGHT_TOILET_PIN, Souliss_T1n_OnCoil, LIGHT_TOILET);
 
-	LowDigOut(HEATPUMP_REMOTE_SWITCH_PIN, Souliss_T1n_Coil, HEATPUMP_REMOTE_SWITCH);
-	LowDigOut(HEATPUMP_CIRCULATION_PUMP_PIN, Souliss_T1n_Coil, HEATPUMP_CIRCULATION_PUMP);
+	nLowDigOut(HEATPUMP_REMOTE_SWITCH_PIN, Souliss_T1n_OnCoil, HEATPUMP_REMOTE_SWITCH);
+	nLowDigOut(HEATPUMP_CIRCULATION_PUMP_PIN, Souliss_T1n_OnCoil, HEATPUMP_CIRCULATION_PUMP);
 	nLowDigOut(HEATPUMP_SANITARY_REQUEST_PIN, Souliss_T1n_OnCoil, HEATPUMP_SANITARY_WATER);
-	LowDigOut(HEATPUMP_COOL_PIN, Souliss_T1n_Coil, HEATPUMP_COOL);
+	nLowDigOut(HEATPUMP_COOL_PIN, Souliss_T1n_OnCoil, HEATPUMP_COOL);
 
 	// HVAC zone valves
 	digitalWrite(ZONE_SWITCH_KITCHEN_PIN, 	!(mOutput(HVAC_ZONES) & HVAC_MASK_KITCHEN)	);
@@ -373,13 +373,11 @@ inline void SetOutputs()
 	LowDigOut(MAIN_3WAY_VALVE_BOILER_PIN, Souliss_T2n_Coil_Open, MAIN_3WAY_VALVE);
 	LowDigOut(MAIN_3WAY_VALVE_COLLECTOR_PIN, Souliss_T2n_Coil_Close, MAIN_3WAY_VALVE);
 
-	LowDigOut(PUMP_BOILER_FLOOR_PIN, Souliss_T1n_Coil, PUMP_BOILER_FLOOR);
-	LowDigOut(PUMP_COLLECTOR_FANCOIL_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FANCOIL);
-	LowDigOut(PUMP_COLLECTOR_FLOOR_PIN, Souliss_T1n_Coil, PUMP_COLLECTOR_FLOOR);
+	nLowDigOut(PUMP_BOILER_FLOOR_PIN, Souliss_T1n_OnCoil, PUMP_BOILER_FLOOR);
+	nLowDigOut(PUMP_COLLECTOR_FANCOIL_PIN, Souliss_T1n_OnCoil, PUMP_COLLECTOR_FANCOIL);
+	nLowDigOut(PUMP_COLLECTOR_FLOOR_PIN, Souliss_T1n_OnCoil, PUMP_COLLECTOR_FLOOR);
 
-	LowDigOut(HP_SETPOINT_2_PIN, Souliss_T1n_Coil, HP_SETPOINT_2);
-
-	analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, gCollectorToFloorMixValvePos);
+	nLowDigOut(HP_SETPOINT_2_PIN, Souliss_T1n_OnCoil, HP_SETPOINT_2);
 }
 
 inline void ProcessTimers()
@@ -470,8 +468,8 @@ void loop()
 
 		FAST_2110ms()
 		{
-			ProcessTimers();
 			ProcessSlowLogics(phase_fast);
+			ProcessTimers();
 		}
 
 		FAST_GatewayComms();

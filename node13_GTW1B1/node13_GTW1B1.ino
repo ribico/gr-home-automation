@@ -30,6 +30,10 @@ inline void DefineTypicals()
 	Set_T12(FAN_SPEED2);
 	Set_T12(FAN_SPEED3);
 	Set_SimpleLight(LIGHT_GW);
+
+	SetInput(FAN_SPEED1, Souliss_T1n_AutoCmd);
+  SetInput(FAN_SPEED2, Souliss_T1n_AutoCmd);
+  SetInput(FAN_SPEED3, Souliss_T1n_AutoCmd);	
 }
 
 inline void ReadInputs()
@@ -52,10 +56,10 @@ inline void ProcessLogics()
 
 inline void SetOutputs()
 {
-	nDigOut(RELAY1, Souliss_T2n_Coil_Close,  FAN_SPEED1);
-	nDigOut(RELAY2, Souliss_T2n_Coil_Close, FAN_SPEED2);
-	nDigOut(RELAY3, Souliss_T2n_Coil_Close,  FAN_SPEED3);
-	LowDigOut(RELAY4, Souliss_T2n_Coil_Close, LIGHT_GW);
+	nDigOut(RELAY1, Souliss_T1n_OnCoil,  FAN_SPEED1);
+	nDigOut(RELAY2, Souliss_T1n_OnCoil, FAN_SPEED2);
+	nDigOut(RELAY3, Souliss_T1n_OnCoil,  FAN_SPEED3);
+	LowDigOut(RELAY4, Souliss_T1n_OnCoil, LIGHT_GW);
 }
 
 inline void ProcessTimers()

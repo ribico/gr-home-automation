@@ -227,22 +227,24 @@ sitemap default label="Full"
 
 				Frame label="Distribuzione"
 				{
-					Switch item=Floor_Mode_auto label="Pavimento Auto/Man" mappings=[ON="Auto", OFF="Manual"]
+					Switch item=Floor_Mode_auto label="Pavimento Auto" mappings=[ON="Auto", OFF="Manual"]
 					Switch item=Floor_Mode label="Pavimento" mappings=[ON="ON", OFF="OFF"]
-					Switch item=Fancoil_Mode_auto label="Fancoils Auto/Man" mappings=[ON="Auto", OFF="Manual"]
+					Switch item=Fancoil_Mode_auto label="Fancoils Auto" mappings=[ON="Auto", OFF="Manual"]
 					Switch item=Fancoil_Mode label="Fancoils ON/OFF" mappings=[ON="ON", OFF="OFF"]
 				}
 
 				Frame label="ACS"
 				{
 					Text item=HP_Temp_Sanitary
-					Switch item=HP_Sanitary_Request_auto label="Auto/Man" mappings=[ON="Auto", OFF="Manual"]
-					Switch item=HP_Sanitary_Request label="Manuale" mappings=[ON="ON", OFF="OFF"]
+					Switch item=HP_Sanitary_Request_auto label="Auto Mode" mappings=[ON="Auto", OFF="Manual"]
+					Switch item=HP_Sanitary_Request label="On/Off" mappings=[ON="ON", OFF="OFF"]
 				}
+
+
 
 				Text icon="boy1" label="Avanzate"
 				{
-					Text label="Pompe"
+					Text icon="boy1" label="Pompe"
 					{
 						Switch item=HP_Circulation_Pump_auto mappings=[ON="Auto", OFF="Manual"]
 						Switch item=HP_Circulation_Pump
@@ -253,7 +255,7 @@ sitemap default label="Full"
 						Switch item=HVAC_Pump_Collector_Floor_auto mappings=[ON="Auto", OFF="Manual"]
 						Switch item=HVAC_Pump_Collector_Floor
 					}
-					Text label="Valvole"
+					Text icon="boy1" label="Valvole"
 					{
 						Frame label="Valvole sul Boiler"
 						{
@@ -272,12 +274,12 @@ sitemap default label="Full"
 						}
 					}
 
-					Text label="Fancoil"
+					Text icon="boy1" label="Fancoil"
 					{
 
 						Frame label="Fancoil 1"
 						{
-							Switch item=Fancoil_2F_GW1_Speed1_auto  mappings=[ON="Auto", OFF="Manual"]
+							Switch item=Fancoil_2F_GW1_Speed1_auto mappings=[ON="Auto", OFF="Manual"]
 							Switch item=Fancoil_2F_GW1_Speed1
 							Switch item=Fancoil_2F_GW1_Speed2_auto mappings=[ON="Auto", OFF="Manual"]
 							Switch item=Fancoil_2F_GW1_Speed2
