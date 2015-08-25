@@ -99,7 +99,7 @@ inline void DefineTypicals()
 
 	// initialize values
 //	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
-	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+//	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
 
 
 	SetInput(HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd);
