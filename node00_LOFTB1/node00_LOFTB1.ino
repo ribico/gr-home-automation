@@ -34,8 +34,8 @@ MEGA with Ethernet only acting as GATEWAY
 #define TEMP_FANCOIL_FLOW_PAD_RESISTANCE      	9830 // measured
 
 
-#define SETPOINT_TEMP_SANITARY_WATER_MIN 	40 // °C
-#define SETPOINT_TEMP_SANITARY_WATER_MAX 	43 // °C
+#define SETPOINT_TEMP_SANITARY_WATER_MIN 	39 // °C
+#define SETPOINT_TEMP_SANITARY_WATER_MAX 	41 // °C
 #define SETPOINT_TEMP_HEATING_WATER_MIN		26 // °C
 #define SETPOINT_TEMP_HEATING_WATER_MAX		30 // °C
 
@@ -317,7 +317,10 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			gCollectorToFloorMixValvePos -= (U8) error;
 
 		analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, gCollectorToFloorMixValvePos);
+	}
 
+	if( IsCoolMode() )
+	{
 		// check the max UR to eventually activate fancoils
 		float UR_MAX = UR_BED1;
 		UR_MAX = max(UR_MAX, UR_BED2);
@@ -326,16 +329,21 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		UR_MAX = max(UR_MAX, UR_KITCHEN);
 		UR_MAX = max(UR_MAX, UR_DINING);
 
+		// fancoils hysteresys in auto mode
 		if( (IsFancoilsAutoOff() && (UR_MAX > SETPOINT_UR_1)) || (IsFancoilsAutoOn() && (UR_MAX > SETPOINT_UR_1 - SETPOINT_UR_DEADBAND)) )
 				FancoilsAutoOnCmd();
 
 		if( IsFancoilsOn() || IsFancoilsAutoOn() )
 		{
+			// produce cold water
+			HpSetpoint2AutoCmd(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
+			SetHpFlowToCollector();
+			HpCirculationAutoOnCmd();
 			PumpCollectorToFancoilAutoOnCmd();
 			Fancoil_AutoCmd(phase_fast%2); TODO("adjust fancoils speed with UR hysteresys");
 		}
-
 	}
+
 
 }
 
