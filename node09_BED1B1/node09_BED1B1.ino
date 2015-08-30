@@ -7,7 +7,7 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 //#define DEBUG
 
 #include "bconf/DINo_v2_EthernetBridge_RS485.h"
-#include "conf/SuperNode.h" 
+#include "conf/SuperNode.h"
 
 #include "grhSoulissCommon.h"
 
@@ -22,8 +22,8 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 
 
 
-#define LIGHT_BALCONY1		1			
-#define LIGHT_BEDROOM1		2
+#define LIGHT_BEDROOM1		1
+#define LIGHT_BALCONY1		2			
 #define WINDOW_BEDROOM1		3
 
 //--------------------------------------
@@ -48,7 +48,7 @@ inline void DefineTypicals()
 
 	Set_Temperature(TEMPERATURE);
 	Set_Humidity(HUMIDITY);
-	dht.begin();	
+	dht.begin();
 
 	Set_SimpleLight(REMOTE_LIGHT_GW1);
 }
@@ -71,7 +71,7 @@ inline void ProcessLogics()
 	Souliss_Logic_T22(memory_map, WINDOW_BEDROOM1, &data_changed, SHUTTER_LONG_TIMEOUT);
 
 	grh_Logic_Humidity(HUMIDITY);
-	grh_Logic_Temperature(TEMPERATURE);		
+	grh_Logic_Temperature(TEMPERATURE);
 }
 
 inline void SetOutputs()
@@ -92,7 +92,7 @@ inline void ProcessTimers()
 	ImportAnalog(HUMIDITY, &th);
 
 	th = dht.readTemperature();
-	ImportAnalog(TEMPERATURE, &th);		
+	ImportAnalog(TEMPERATURE, &th);
 }
 
 
@@ -112,33 +112,33 @@ void setup()
 }
 
 void loop()
-{ 
-	EXECUTEFAST() {						
-		UPDATEFAST();	
-		
-		FAST_30ms() 
+{
+	EXECUTEFAST() {
+		UPDATEFAST();
+
+		FAST_30ms()
 		{
 			ReadInputs();
-		} 
+		}
 
-		FAST_50ms() 
+		FAST_50ms()
 		{
 			ProcessLogics();
-			SetOutputs(); 
+			SetOutputs();
 		}
-		
+
 		FAST_2110ms()
 		{
 			ProcessTimers();
-				
-		}			
-		
-		grhFastPeerComms();		
+
+		}
+
+		grhFastPeerComms();
 	}
-	
-	EXECUTESLOW() 
-	{	
+
+	EXECUTESLOW()
+	{
 		UPDATESLOW();
 		SLOW_PeerJoin();
 	}
-} 
+}

@@ -37,7 +37,7 @@ Switch Light_2F_Kitchen_3	"Cucina Luce 3" 	(g2F_Kitchen,gTechnicView_Node2,gLigh
 Switch Light_2F_Dining_1	"Pranzo Luce 1" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:1"}
 Switch Light_2F_Dining_2	"Pranzo Luce 2" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:2"}
 Switch Light_2F_Dining_3	"Pranzo Luce 3" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:3"}
-Switch Light_2F_Bedroom1	"Camera1 Luce" 		(g2F_Bedroom1,gTechnicView_Node9,gLights) {souliss="T11:9:2"}
+Switch Light_2F_Bedroom1	"Camera1 Luce" 		(g2F_Bedroom1,gTechnicView_Node9,gLights) {souliss="T11:9:1"}
 Switch Light_2F_Bedroom2_1	"Camera2 Luce 1"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:1"}
 Switch Light_2F_Bedroom2_2	"Camera2 Luce 2"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:2"}
 Switch Light_2F_Bedroom2_3	"Camera2 Luce 3"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:3"}
@@ -45,7 +45,7 @@ Switch Light_2F_Bedroom2_4	"Camera2 Luce 4"	(g2F_Bedroom2,gTechnicView_Node11,gL
 Switch Light_2F_Bedroom3	"Camera3 Luce" 		(g2F_Bedroom3,gTechnicView_Node5,gLights) {souliss="T11:5:2"}
 Switch Light_2F_GW1			"Disimpegno1 Luce" 	(g2F_GW1,gTechnicView_Node13,gLights) {souliss="T11:13:4"}
 Switch Light_2F_GW2			"Disimpegno2 Luce" 	(g2F_GW2,gTechnicView_Node14,gLights) {souliss="T11:14:4"}
-Switch Light_2F_Balcony_1	"Balcone1 Luce" 	(g2F_Balcony1,gTechnicView_Node9,gLights) {souliss="T11:9:1"}
+Switch Light_2F_Balcony_1	"Balcone1 Luce" 	(g2F_Balcony1,gTechnicView_Node9,gLights) {souliss="T11:9:2"}
 Switch Light_2F_Balcony_2	"Balcone2 Luce" 	(g2F_Balcony2,gTechnicView_Node5,gLights) {souliss="T11:5:1"}
 Switch Light_2F_Bath1_1		"Bagno1 Luce 1" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:1"}
 Switch Light_2F_Bath1_2		"Bagno1 Luce 2" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:2"}
