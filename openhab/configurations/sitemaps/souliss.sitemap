@@ -213,24 +213,35 @@ sitemap default label="Full"
 		Group item=gRolleshutters
 		Text label="Clima" icon="climate"
 		{
+			Frame label="Stato corrente (Soggiorno)"
+			{
+				Text item=Temperature_2F_Dining
+				Text item=UR_2F_Dining
+			}
+
 			Text label="Impostazioni" icon="climate"
 			{
 				Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
 				Switch item=HP_Heat_Cool label="Modalità" mappings=[OFF="Caldo", ON="Freddo"]
 
-				Frame label="Temp Ambiente"
+				Frame label="Setpoint x AUTO Mode"
 				{
-					Text item=Temperature_2F_Dining
 					Text item=HVAC_Temp_SetPoint
 					Switch item=HVAC_Temp_SP label="Regola SetPoint" mappings=[DOWN="-0.5", UP="+0.5"]
 				}
 
-				Frame label="Distribuzione"
+				Frame label="Pavimento"
 				{
 					Switch item=Floor_Mode_auto label="Pavimento Auto" mappings=[ON="Auto", OFF="Manual"]
 					Switch item=Floor_Mode label="Pavimento" mappings=[ON="ON", OFF="OFF"]
+					Text item=HP_Temp_Heating_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red",HVAC_Pump_Collector_Floor==ON="blue"]
+				}
+
+				Frame label="Fancoil"
+				{
 					Switch item=Fancoil_Mode_auto label="Fancoils Auto" mappings=[ON="Auto", OFF="Manual"]
 					Switch item=Fancoil_Mode label="Fancoils ON/OFF" mappings=[ON="ON", OFF="OFF"]
+					Text item=HP_Temp_Fancoil_Flow labelcolor=[HVAC_Pump_Collector_Fancoil==ON="blue"]
 				}
 
 				Frame label="ACS"
@@ -299,7 +310,7 @@ sitemap default label="Full"
 					}
 				}
 			}
-			Text label="Zone HVAC" icon="climate"
+			Text label="Dettagli Zone" icon="climate"
 			{
 				Frame label="Salotto" icon="sofa"
 				{
@@ -456,7 +467,7 @@ sitemap default label="Full"
 
 			}
 
-			Text label="Temperature" icon="temperature"
+			Text label="Dettagli Temperature" icon="temperature"
 			{
 
 				Text icon="temperature" label="Temperature di zona"
@@ -475,7 +486,7 @@ sitemap default label="Full"
 				{
 					Frame label="Accumulo"
 					{
-						Text item=HP_Temp_Sanitary valuecolor=[<=40="blue",<43="orange",>43="red"]
+						Text item=HP_Temp_Sanitary valuecolor=[<=40="blue",<41="orange",>42="red"]
 						Text item=HP_Temp_Heating valuecolor=[<=25="blue",<=28="orange",>28="red"]
 						Text item=HP_Temp_Bottom valuecolor=[<=25="blue",<=28="orange",>28="red"]
 					}

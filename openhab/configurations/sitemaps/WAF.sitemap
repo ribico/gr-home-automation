@@ -4,37 +4,35 @@ sitemap WAF label="WAF"
 		Group item=gLights icon="light-off"
 		Group item=gRolleshutters
 
-		Text label="Climatizzatore" icon="climate"
+		Text label="Clima" icon="climate"
 		{
-			Setpoint item=HVAC_Temp_SetPoint label="SetPoint Clima [%.1f °C]" step=0.5 minValue=15 maxValue=30
-			Switch item=Floor_Mode label="Pavimento"
-			Switch item=Fancoil_Mode label="Fancoil"					
-
-
-			Frame label="Situazione Corrente"
+			Frame label="Stato corrente (Soggiorno)"
 			{
-				Text icon="temperature" label="Temperature"
+				Text item=Temperature_2F_Dining
+				Text item=UR_2F_Dining
+			}
+
+			Text label="Impostazioni" icon="climate"
+			{
+				Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
+				Switch item=HP_Heat_Cool label="Modalità" mappings=[OFF="Caldo", ON="Freddo"]
+
+				Frame label="Setpoint x AUTO Mode"
 				{
-					Text item=Temperature_2F_Living label="Soggiorno [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Kitchen label="Cucina [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Dining label="Pranzo [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Bath1 label="Bagno 1 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Bath2 label="Bagno 2 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Bedroom1 label="Camera 1 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Bedroom2 label="Camera 2 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Bedroom3 label="Camera 3 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=HVAC_Temp_SetPoint
+					Switch item=HVAC_Temp_SP label="Regola SetPoint" mappings=[DOWN="-0.5", UP="+0.5"]
 				}
-					
-				Text icon="humidity" label="Umidità"
+
+				Frame label="Pavimento"
 				{
-					Text item=UR_2F_Living label="Soggiorno [%.1f %%]"
-					Text item=UR_2F_Kitchen label="Cucina [%.1f %%]" 
-					Text item=UR_2F_Dining label="Pranzo [%.1f %%]" 
-					Text item=UR_2F_Bath1 label="Bagno 1 [%.1f %%]" 
-					Text item=UR_2F_Bath2 label="Bagno 2 [%.1f %%]" 
-					Text item=UR_2F_Bedroom1 label="Camera 1 [%.1f %%]" 
-					Text item=UR_2F_Bedroom2 label="Camera 2 [%.1f %%]" 
-					Text item=UR_2F_Bedroom3 label="Camera 3 [%.1f %%]" 
+					Switch item=Floor_Mode_auto label="Pavimento Auto" mappings=[ON="Auto", OFF="Manual"]
+					Switch item=Floor_Mode label="Pavimento" mappings=[ON="ON", OFF="OFF"]
+				}
+
+				Frame label="Fancoil"
+				{
+					Switch item=Fancoil_Mode_auto label="Fancoils Auto" mappings=[ON="Auto", OFF="Manual"]
+					Switch item=Fancoil_Mode label="Fancoils ON/OFF" mappings=[ON="ON", OFF="OFF"]
 				}
 			}
 
