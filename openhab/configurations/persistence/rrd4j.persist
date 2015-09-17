@@ -3,6 +3,7 @@ Strategies {
         everyDay        : "0 0 0 * * ?"
         everyHour       : "0 0 * * * ?"
         everyMinute     : "0 * * * * ?"
+        every5Minutes   : "0 */5 * * * ?"
 
         // If no strategy is specified for an item entry below, the default list will be used.
         default = everyChange
@@ -15,8 +16,7 @@ Strategies {
  */
 Items {
         * : strategy = everyChange, everyDay, restoreOnStartup
-        gClima* : strategy = everyChange, everyMinute
-        gHPTemp* : strategy = everyChange, everyMinute
-        gHPSettings* : strategy = everyChange, everyMinute
-        gHVAC_Valves* : strategy = everyChange, everyMinute
+
+        gTemperatures*, gUR*, gHPTemp*: strategy = every5Minutes
+        gSP*, gHPSettings*, gHVAC_Valves* : strategy = everyChange
 }
