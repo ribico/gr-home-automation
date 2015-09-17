@@ -84,43 +84,43 @@ Number UR_2F_Entrance		"Ingresso UR [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Entra
 
 Number Temperature_2F_Living	"Living Temp [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Living,gTechnicView_Node2) {souliss="T52:2:5"}
 Number Temperature_2F_Living_SP	"Living Temp Set Point [%.1f °C]" 	<temperature> (g2F_Living)
-Number Temperature_2F_Living_DP	"Living Temp di Rugiada [%.1f °C]" <temperature> (g2F_Living)
+Number Temperature_2F_Living_DP	"Living Temp di Rugiada [%.1f °C]" <temperature> (gTemperatures,g2F_Living)
 Number UR_2F_Living		"Living UR [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Living,gTechnicView_Node2) {souliss="T53:2:7"}
 
 
 Number Temperature_2F_Kitchen		"Cucina Temp [%.1f °C]" 	<temperature> (gTemperatures,g2F_Kitchen,gTechnicView_Node7) {souliss="T52:7:3"}
 Number Temperature_2F_Kitchen_SP	"Cucina Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Kitchen)
-Number Temperature_2F_Kitchen_DP	"Cucina Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Kitchen)
+Number Temperature_2F_Kitchen_DP	"Cucina Temp di Rugiada [%.1f °C]" 	<temperature> (gTemperatures,g2F_Kitchen)
 Number UR_2F_Kitchen				"Cucina UR  [%.1f %%]" 	<humidity> (gUR,g2F_Kitchen,gTechnicView_Node7) {souliss="T53:7:5"}
 
 Number Temperature_2F_Dining	"Pranzo Temp [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Dining,gTechnicView_Node3) {souliss="T52:3:5"}
-Number Temperature_2F_Dining_DP	"Pranzo Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Dining)
+Number Temperature_2F_Dining_DP	"Pranzo Temp di Rugiada [%.1f °C]" 	<temperature> (gTemperatures,g2F_Dining)
 Number UR_2F_Dining		"Pranzo UR [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Dining,gTechnicView_Node3) {souliss="T53:3:7"}
 
 Number Temperature_2F_Bath1	"Bagno1 Temp [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Bath1,gTechnicView_Node12) {souliss="T52:12:3"}
 Number Temperature_2F_Bath1_SP	"Bagno1 Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bath1)
-Number Temperature_2F_Bath1_DP	"Bagno1 Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bath1)
+Number Temperature_2F_Bath1_DP	"Bagno1 Temp di Rugiada [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bath1)
 Number UR_2F_Bath1		"Bagno1 UR [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bath1,gTechnicView_Node12) {souliss="T53:12:5"}
 
 Number Temperature_2F_Bath2	"Bagno2 Temp [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Bath2,gTechnicView_Node4) {souliss="T52:4:5"}
 Number Temperature_2F_Bath2_SP	"Bagno2 Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bath2)
-Number Temperature_2F_Bath2_DP	"Bagno2 Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bath2)
+Number Temperature_2F_Bath2_DP	"Bagno2 Temp di Rugiada [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bath2)
 Number UR_2F_Bath2		"Bagno2 UR [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bath2,gTechnicView_Node4) {souliss="T53:4:7"}
 
 Number Temperature_2F_Bedroom1	"Camera1 Temp [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Bedroom1,gTechnicView_Node9) {souliss="T52:9:4"}
 Number Temperature_2F_Bedroom1_SP	"Camera1 Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bedroom1)
-Number Temperature_2F_Bedroom1_DP	"Camera1 Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bedroom1)
+Number Temperature_2F_Bedroom1_DP	"Camera1 Temp di Rugiada [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bedroom1)
 Number UR_2F_Bedroom1		"Camera1 UR [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bedroom1,gTechnicView_Node9) {souliss="T53:9:6"}
 
 
 Number Temperature_2F_Bedroom2	"Camera2 Temp [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Bedroom2,gTechnicView_Node10) {souliss="T52:10:5"}
 Number Temperature_2F_Bedroom2_SP	"Camera2 Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bedroom2)
-Number Temperature_2F_Bedroom2_DP	"Camera2 Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bedroom2)
+Number Temperature_2F_Bedroom2_DP	"Camera2 Temp di Rugiada [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bedroom2)
 Number UR_2F_Bedroom2		"Camera2 UR [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bedroom2,gTechnicView_Node10) {souliss="T53:10:7"}
 
 Number Temperature_2F_Bedroom3	"Camera3 Temp [%.1f °C]" 	<temperature> (gTemperatures,gClima,g2F_Bedroom3,gTechnicView_Node5) {souliss="T52:5:4"}
 Number Temperature_2F_Bedroom3_SP	"Camera3 Temp Set Point [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bedroom3)
-Number Temperature_2F_Bedroom3_DP	"Camera3 Temp di Rugiada [%.1f °C]" 	<temperature> (g2F_Bedroom3)
+Number Temperature_2F_Bedroom3_DP	"Camera3 Temp di Rugiada [%.1f °C]" 	<temperature> (gTemperatures,g2F_Bedroom3)
 Number UR_2F_Bedroom3		"Camera3 UR [%.1f %%]" 	<humidity> (gUR,gClima,g2F_Bedroom3,gTechnicView_Node5) {souliss="T53:5:6"}
 
 Switch Floor_Mode			"Pavimento"		 (gTechnicView_Node13,gHPSettings) {souliss="T12:0:13:switch"}
