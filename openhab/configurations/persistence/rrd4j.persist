@@ -15,7 +15,7 @@ Strategies {
  * item (excl. the group item itself).
  */
 Items {
-        * : strategy = everyChange, everyDay, restoreOnStartup
+//        * : strategy = everyChange, everyDay, restoreOnStartup
 
         gTemperatures*, gUR*, gHPTemp*: strategy = every5Minutes
         gSP*, gHPSettings*, gHVAC_Valves* : strategy = everyChange
