@@ -165,7 +165,10 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 	if( IsFloorOn() ) 		// force all zones open
 	{
-		mInput(HVAC_ZONES) = HVAC_MASK_ALL_ZONES;
+		if( IsHeatMode() )
+			mInput(HVAC_ZONES) = HVAC_MASK_ALL_ZONES;
+		else if( IsCoolMode() )
+			mInput(HVAC_ZONES) = HVAC_MASK_ALL_COOLING_ZONES;
 	}
 	else if ( IsFloorOff() ) // force all zones Close
 	{
