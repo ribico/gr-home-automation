@@ -9,16 +9,16 @@ OpenHAB Auto mode disable low level control in (Souliss Auto)
 
 
 rule "HVAC_Living"
-when 
+when
 //	Time cron "* * * * * ?" or
 	System started or
 	Item Temperature_2F_Living_SP changed or
     Item Temperature_2F_Living changed or
-    item UR_2F_Living changed or
+    Item UR_2F_Living changed or
 then
 
 
-	try { 
+	try {
 		var set_point = Temperature_2F_Living_SP.state as DecimalType
 		var current_temp = Temperature_2F_Living.state as DecimalType
 		var current_ur = UR_2F_Living.state as DecimalType
@@ -30,25 +30,25 @@ then
 
 	}
 	catch (Exception e) // temperature set point undefined
-	{ 
-		Temperature_2F_Living_SP.sendCommand(Default_Room_Temp_SP) 
+	{
+		Temperature_2F_Living_SP.sendCommand(Default_Room_Temp_SP)
 	}
-	
+
 end
 
 
 
 rule "HVAC_Kitchen"
-when 
+when
 	System started or
 	Item Temperature_2F_Kitchen_SP changed or
     Item Temperature_2F_Kitchen changed or
-    item UR_2F_Kitchen changed or
+    Item UR_2F_Kitchen changed or
     Valves_Manual_Mode changed from ON to OFF
 then
 
 
-	try { 
+	try {
 		var Number set_point = Temperature_2F_Kitchen_SP.state as DecimalType
 		var Number current_temp = Temperature_2F_Kitchen.state as DecimalType
 		var Number current_ur = UR_2F_Kitchen.state as DecimalType
@@ -58,21 +58,21 @@ then
 
 	}
 	catch (Exception e) // temperature set point undefined
-	{ 
-		Temperature_2F_Kitchen_SP.sendCommand(Default_Room_Temp_SP) 
+	{
+		Temperature_2F_Kitchen_SP.sendCommand(Default_Room_Temp_SP)
 	}
 
 end
 
 rule "HVAC_Dining"
-when 
+when
 	System started or
     Item Temperature_2F_Dining changed or
-    item UR_2F_Dining changed
+    Item UR_2F_Dining changed
 then
 
 
-	try { 
+	try {
 		var Number current_temp = Temperature_2F_Kitchen.state as DecimalType
 		var Number current_ur = UR_2F_Kitchen.state as DecimalType
 
@@ -81,22 +81,22 @@ then
 
 	}
 	catch (Exception e)
-	{ 
+	{
 	}
 
 end
 
 rule "HVAC_Bedroom1"
-when 
+when
 	System started or
 	Item Temperature_2F_Bedroom1_SP changed or
     Item Temperature_2F_Bedroom1 changed or
-    item UR_2F_Bedroom1 changed or
+    Item UR_2F_Bedroom1 changed or
     Valves_Manual_Mode changed from ON to OFF
 then
 
 
-	try { 
+	try {
 		var Number set_point = Temperature_2F_Bedroom1_SP.state as DecimalType
 		var Number current_temp = Temperature_2F_Bedroom1.state as DecimalType
 		var Number current_ur = UR_2F_Bedroom1.state as DecimalType
@@ -106,24 +106,24 @@ then
 
 	}
 	catch (Exception e) // temperature set point undefined
-	{ 
-		Temperature_2F_Bedroom1_SP.sendCommand(Default_Room_Temp_SP) 
+	{
+		Temperature_2F_Bedroom1_SP.sendCommand(Default_Room_Temp_SP)
 	}
 
 end
 
 
 rule "HVAC_Bedroom2"
-when 
+when
 	System started or
 	Item Temperature_2F_Bedroom2_SP changed or
     Item Temperature_2F_Bedroom2 changed or
-    item UR_2F_Bedroom2 changed or
+    Item UR_2F_Bedroom2 changed or
     Valves_Manual_Mode changed from ON to OFF
 then
 
 
-	try { 
+	try {
 		var Number set_point = Temperature_2F_Bedroom2_SP.state as DecimalType
 		var Number current_temp = Temperature_2F_Bedroom2.state as DecimalType
 		var Number current_ur = UR_2F_Bedroom2.state as DecimalType
@@ -133,24 +133,24 @@ then
 
 	}
 	catch (Exception e) // temperature set point undefined
-	{ 
-		Temperature_2F_Bedroom2_SP.sendCommand(Default_Room_Temp_SP) 
+	{
+		Temperature_2F_Bedroom2_SP.sendCommand(Default_Room_Temp_SP)
 	}
 
 end
 
 
 rule "HVAC_Bedroom3"
-when 
+when
 	System started or
 	Item Temperature_2F_Bedroom3_SP changed or
     Item Temperature_2F_Bedroom3 changed or
-    item UR_2F_Bedroom3 changed or
+    Item UR_2F_Bedroom3 changed or
     Valves_Manual_Mode changed from ON to OFF
 then
 
 
-	try { 
+	try {
 		var Number set_point = Temperature_2F_Bedroom3_SP.state as DecimalType
 		var Number current_temp = Temperature_2F_Bedroom3.state as DecimalType
 		var Number current_ur = UR_2F_Bedroom3.state as DecimalType
@@ -160,21 +160,21 @@ then
 
 	}
 	catch (Exception e) // temperature set point undefined
-	{ 
-		Temperature_2F_Bedroom3_SP.sendCommand(Default_Room_Temp_SP) 
+	{
+		Temperature_2F_Bedroom3_SP.sendCommand(Default_Room_Temp_SP)
 	}
 
 end
 
 rule "HVAC_Bath1"
-when 
+when
 	System started or
 	Item Temperature_2F_Bath1_SP changed or
     Item Temperature_2F_Bath1 changed or
     item UR_2F_Bath1 changed or
     Valves_Manual_Mode changed from ON to OFF
 then
-	try { 
+	try {
 		var Number set_point = Temperature_2F_Bath1_SP.state as DecimalType
 		var Number current_temp = Temperature_2F_Bath1.state as DecimalType
 		var Number current_ur = UR_2F_Bath1.state as DecimalType
@@ -184,24 +184,24 @@ then
 
 	}
 	catch (Exception e) // temperature set point undefined
-	{ 
-		Temperature_2F_Bath1_SP.sendCommand(Default_Room_Temp_SP) 
+	{
+		Temperature_2F_Bath1_SP.sendCommand(Default_Room_Temp_SP)
 	}
 
 end
 
 
 rule "HVAC_Bath2"
-when 
+when
 	System started or
 	Item Temperature_2F_Bath2_SP changed or
     Item Temperature_2F_Bath2 changed or
-    item UR_2F_Bath2 changed or
+    Item UR_2F_Bath2 changed or
     Valves_Manual_Mode changed from ON to OFF
 then
 
 
-	try { 
+	try {
 		var Number set_point = Temperature_2F_Bath2_SP.state as DecimalType
 		var Number current_temp = Temperature_2F_Bath2.state as DecimalType
 		var Number current_ur = UR_2F_Bath2.state as DecimalType
@@ -211,8 +211,8 @@ then
 
 	}
 	catch (Exception e) // temperature set point undefined
-	{ 
-		Temperature_2F_Bath2_SP.sendCommand(Default_Room_Temp_SP) 
+	{
+		Temperature_2F_Bath2_SP.sendCommand(Default_Room_Temp_SP)
 	}
 
 end
