@@ -2,8 +2,7 @@ import org.openhab.core.library.types.*
 
 
 /*****************************************************
-OpenHAB Auto mode disable low level control in (Souliss Auto)
-
+Calculate Dew Points
 ******************************************************/
 
 rule "DP_Living"
@@ -14,8 +13,6 @@ then
 	try {
 		var current_temp = Temperature_2F_Living.state as DecimalType
 		var current_ur = UR_2F_Living.state as DecimalType
-//		logInfo("HVAC_Living", set_point.toString)
-//		logInfo("HVAC_Living", current_temp.toString)
 
 		// calculate dew point
 		Temperature_2F_Living_DP.sendCommand(current_temp-(100-current_ur)/5)
