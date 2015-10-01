@@ -1,0 +1,5 @@
+Low fuses      0xff
+High fuses     0xd8
+Extended fuses 0xcb
+Unlock bits    0x3F
+Lock bits      0x2F
