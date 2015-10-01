@@ -1,4 +1,5 @@
 Group All
+Group gMyOpenHAB
 
 Group	g2F	(All)
 
@@ -22,7 +23,7 @@ Group	g3F_Loft		"Attico"			<bedroom>	(g3F)
 Group	g3F_Terrace		"Terrazzo"			<terrace>	(g3F)
 
 
-Group	gLights			"Luci"				<light-off>	(All)
+Group	gLights			"Luci"				<light-off>	(All,gMyOpenHAB)
 Group:Switch:OR(ON, OFF) 		gLights 		"All Lights [(%d)]"		<light-off> (All)
 Switch Light_2F_Entrance_1	"Ingresso Luce 1" 	(g2F_Entrance,gTechnicView_Node4,gLights) {souliss="T11:4:1"}
 Switch Light_2F_Entrance_2	"Ingresso Luce 2" 	(g2F_Entrance,gTechnicView_Node4,gLights) {souliss="T11:4:2"}
@@ -32,14 +33,14 @@ Switch Light_2F_Living_3	"Salotto Luce 3" 	(g2F_Living,gTechnicView_Node1,gLight
 Switch Light_2F_Living_4	"Salotto Luce 4" 	(g2F_Living,gTechnicView_Node1,gLights) {souliss="T11:1:3"}
 Switch Light_2F_Stairs		"Scala Luce" 		(g2F_Living,gTechnicView_Node3,gLights) {souliss="T11:3:4"}
 Switch Light_2F_Kitchen_1	"Cucina Luce 1" 	(g2F_Kitchen,gTechnicView_Node2,gLights) {souliss="T11:2:1"}
-Switch Light_2F_Kitchen_2	"Cucina Luce 2" 	(g2F_Kitchen,gTechnicView_Node2,gLights) {souliss="T11:2:2"}
 Switch Light_2F_Kitchen_3	"Cucina Luce 3" 	(g2F_Kitchen,gTechnicView_Node2,gLights) {souliss="T11:2:3"}
+Switch Light_2F_Kitchen_2	"Cucina Luce 2" 	(g2F_Kitchen,gTechnicView_Node2,gLights) {souliss="T11:2:2"}
 Switch Light_2F_Dining_1	"Pranzo Luce 1" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:1"}
 Switch Light_2F_Dining_2	"Pranzo Luce 2" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:2"}
 Switch Light_2F_Dining_3	"Pranzo Luce 3" 	(g2F_Dining,gTechnicView_Node3,gLights) {souliss="T11:3:3"}
 Switch Light_2F_Bedroom1	"Camera1 Luce" 		(g2F_Bedroom1,gTechnicView_Node9,gLights) {souliss="T11:9:1"}
-Switch Light_2F_Bedroom2_1	"Camera2 Luce 1"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:1"}
 Switch Light_2F_Bedroom2_2	"Camera2 Luce 2"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:2"}
+Switch Light_2F_Bedroom2_1	"Camera2 Luce 1"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:1"}
 Switch Light_2F_Bedroom2_3	"Camera2 Luce 3"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:3"}
 Switch Light_2F_Bedroom2_4	"Camera2 Luce 4"	(g2F_Bedroom2,gTechnicView_Node11,gLights) {souliss="T11:11:4"}
 Switch Light_2F_Bedroom3	"Camera3 Luce" 		(g2F_Bedroom3,gTechnicView_Node5,gLights) {souliss="T11:5:2"}
@@ -48,11 +49,11 @@ Switch Light_2F_GW2			"Disimpegno2 Luce" 	(g2F_GW2,gTechnicView_Node14,gLights) 
 Switch Light_2F_Balcony_1	"Balcone1 Luce" 	(g2F_Balcony1,gTechnicView_Node9,gLights) {souliss="T11:9:2"}
 Switch Light_2F_Balcony_2	"Balcone2 Luce" 	(g2F_Balcony2,gTechnicView_Node5,gLights) {souliss="T11:5:1"}
 Switch Light_2F_Bath1_1		"Bagno1 Luce 1" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:1"}
-Switch Light_2F_Bath1_2		"Bagno1 Luce 2" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:2"}
 Switch Light_2F_Bath1_3		"Bagno1 Luce 3" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:3"}
+Switch Light_2F_Bath1_2		"Bagno1 Luce 2" 	(g2F_Bath1,gTechnicView_Node10,gLights) {souliss="T11:10:2"}
 Switch Light_2F_Bath2_1		"Bagno2 Luce 1" 	(g2F_Bath2,gTechnicView_Node4,gLights) {souliss="T11:4:3"}
-Switch Light_2F_Bath2_2		"Bagno2 Luce 2" 	(g2F_Bath2,gTechnicView_Node4,gLights) {souliss="T11:4:4"}
 Switch Light_3F_Loft_1			"Attico Luce 1" 	(g3F_Loft,gTechnicView_Node0,gLights) {souliss="T11:0:1"}
+Switch Light_2F_Bath2_2		"Bagno2 Luce 2" 	(g2F_Bath2,gTechnicView_Node4,gLights) {souliss="T11:4:4"}
 Switch Light_3F_Loft_2			"Attico Luce 2" 	(g3F_Loft,gTechnicView_Node0,gLights) {souliss="T11:0:2"}
 Switch Light_3F_Terrace_1		"Terrazzo Luce 1" 	(g3F_Terrace,gTechnicView_Node0,gLights) {souliss="T11:0:3"}
 Switch Light_3F_Terrace_2		"Terrazzo Luce 2" 	(g3F_Terrace,gTechnicView_Node0,gLights) {souliss="T11:0:4"}
@@ -60,7 +61,7 @@ Switch Light_3F_Terrace_3		"Terrazzo Luce 3" 	(g3F_Terrace,gTechnicView_Node0,gL
 Switch Light_3F_Toilet			"Bagno3 Luce 1" 	(g3F_Loft,gTechnicView_Node0,gLights) {souliss="T11:0:6"}
 
 
-Group gRolleshutters	"Tapparelle"	<rollershutter> (All)
+Group gRolleshutters	"Tapparelle"	<rollershutter> (All,gMyOpenHAB)
 Rollershutter Windows_2F_Living 	"Salotto Tapparella" 	(g2F_Living,gTechnicView_Node6,gRolleshutters) {souliss="T22:6:1"}
 Rollershutter Windows_2F_Kitchen 	"Cucina Tapparella"		(g2F_Kitchen,gTechnicView_Node6,gRolleshutters) {souliss="T22:6:2"}
 Rollershutter Windows_2F_Dining 	"Pranzo Tapparella" 	(g2F_Dining,gTechnicView_Node5,gRolleshutters) {souliss="T22:5:3"}
@@ -71,7 +72,7 @@ Rollershutter Windows_2F_Bedroom2 	"Camera2 Tapparella" 	(g2F_Bedroom2,gTechnicV
 Rollershutter Windows_2F_Bedroom3 	"Camera3 Tapparella" 	(g2F_Bedroom3,gTechnicView_Node7,gRolleshutters) {souliss="T22:7:1"}
 
 
-Group gClima			"Clima"					<climate> 		(All)
+Group gClima			"Clima"					<climate> 		(All,gMyOpenHAB)
 Group gTemperatures		"Temperature Zone"		<temperature> 	(gClima)
 Group gSP       "Temperature Set Points"    <temperature>   (gClima)
 Group gUR				"Umidità Rel. Zone"		<humidity> 		(gClima)
