@@ -7,6 +7,7 @@ Arduino UNO + ETH Shield on a IONO SOLO BOARD
 //#define DEBUG
 
 #include "bconf/IonoEthernet.h"             // Define the board type
+#include "HW_Setup_IONO.h"
 
 #include "grhSoulissCommon.h"
 
@@ -23,8 +24,6 @@ Arduino UNO + ETH Shield on a IONO SOLO BOARD
 #define WATERING_ZONE4		3
 #define LIGHT_NIGHT       4
 #define LIGHT_GARDEN			5
-#define PWMLOGIC          6
-#define PWMOUT            7
 
 inline void DefineTypicals()
 {
@@ -35,7 +34,6 @@ inline void DefineTypicals()
 	Set_T11(WATERING_ZONE4);
 	Set_T11(LIGHT_NIGHT);
 	Set_T11(LIGHT_GARDEN);
-	Set_T19(PWMLOGIC);
 }
 
 inline void ReadInputs()
@@ -52,7 +50,6 @@ inline void ProcessLogics()
 	Logic_T11(WATERING_ZONE4);                                  // Execute the logic for Relay 4
 	Logic_T11(LIGHT_NIGHT);                                  // Execute the logic for Relay 5
 	Logic_T11(LIGHT_GARDEN);                                  // Execute the logic for Relay 6
-	Logic_T19(PWMLOGIC);                                // Execute the logic for PWM Output
 }
 
 inline void SetOutputs()
@@ -63,7 +60,6 @@ inline void SetOutputs()
 	DigOut(DO4, Souliss_T1n_Coil, WATERING_ZONE4);              // Drive the Relay 4
 	DigOut(DO5, Souliss_T1n_Coil, LIGHT_NIGHT);              // Drive the Relay 5
 	DigOut(DO6, Souliss_T1n_Coil, LIGHT_GARDEN);              // Drive the Relay 6
-	analogWrite(AO1, mOutput(PWMOUT));
 }
 
 inline void ProcessTimers()
@@ -74,7 +70,6 @@ inline void ProcessTimers()
 	Timer_T11(WATERING_ZONE1);
 	Timer_T11(LIGHT_NIGHT);
 	Timer_T11(LIGHT_GARDEN);
-	Timer_T19(PWMOUT);
 }
 
 
