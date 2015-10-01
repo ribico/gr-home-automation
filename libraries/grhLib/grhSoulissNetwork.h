@@ -3,12 +3,14 @@
 	Architecture reference:
 		|->WiFi-> SoulissApp
 		|->eth-> OpenHab on RaspberryPI (192.168.1.2)
+		|->eth-> OpenHab on RaspberryPI2 (192.168.1.3)
 		|-----------------------------------------------------------------
 	 	|->eth-> LOFTB1 (gw)
 		|->eth-> ROW1B1 ->485-> ROW1B2 ->485-> ROW1B3 ->485-> ROW1B4
-		|->eth-> ROW2B1 ->485-> ROW2B2 ->485-> ROW2B3 ->485-> ROW2B4 ->485-> GTW1B1 ->485-> GTW2B1 
+		|->eth-> ROW2B1 ->485-> ROW2B2 ->485-> ROW2B3 ->485-> ROW2B4 ->485-> GTW1B1 ->485-> GTW2B1
 		|->eth-> BED1B1
 	 	|->eth-> BED2B1 ->485-> BED2B2 ->485-> BED2B3
+		|->eth-> GARDB1
 
 ***************************************************************************/
 
@@ -18,13 +20,14 @@
 #define IP_ADDRESS_1				192
 #define IP_ADDRESS_2				168
 #define IP_ADDRESS_3				1
-#define IP_ADDRESS_4_NETGW			1
+#define IP_ADDRESS_4_NETGW	1
 
 #define IP_ADDRESS_LOFTB1			100
 #define IP_ADDRESS_ROW1B1			101
 #define IP_ADDRESS_ROW2B1			102
 #define IP_ADDRESS_BED1B1			103
 #define IP_ADDRESS_BED2B1			104
+#define IP_ADDRESS_GARDB1			105
 
 #define IP_ADDRESS_TESTB1			110
 #define IP_ADDRESS_TESTB2			111
