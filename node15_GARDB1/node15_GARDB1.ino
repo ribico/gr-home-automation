@@ -7,7 +7,6 @@ Arduino UNO + ETH Shield on a IONO SOLO BOARD
 //#define DEBUG
 
 #include "bconf/IonoEthernet.h"             // Define the board type
-#include "HW_Setup_IONO.h"
 
 #include "grhSoulissCommon.h"
 
@@ -17,6 +16,7 @@ Arduino UNO + ETH Shield on a IONO SOLO BOARD
 
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
+#include "HW_Setup_IONO.h"
 
 #define WATERING_ZONE1		0
 #define WATERING_ZONE2		1
