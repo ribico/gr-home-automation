@@ -8,8 +8,8 @@
  *    Temperature in Kelvin = 1 / {A + B[ln(R)] + C[ln(R)]3}
  *    where A = 0.001129148, B = 0.000234125 and C = 8.76741E-08
  *
- * These coefficients seem to work fairly universally, which is a bit of a 
- * surprise. 
+ * These coefficients seem to work fairly universally, which is a bit of a
+ * surprise.
  *
  * Schematic:
  *   [Ground] -- [10k-pad-resistor] -- | -- [thermistor] --[Vcc (5 or 3.3v)]
@@ -29,9 +29,9 @@ public:
 	@uPin
 	Analog pin used to read
 
-	@fPadResistor 
+	@fPadResistor
 	balance/pad resistor value as measured
-	
+
 	@fTermResistor
 	thermistor nominal resistance
 	*/
@@ -48,17 +48,32 @@ public:
 
 		float fTemp = log(lRestistance); // Saving the Log(resistance) so not to calculate  it 4 times later
   		fTemp = 1 / (0.001129148 + (0.000234125 * fTemp) + (0.0000000876741 * fTemp * fTemp * fTemp));
-  		return fTemp - 273.15;  // Convert Kelvin to Celsius            
+  		return fTemp - 273.15;  // Convert Kelvin to Celsius
 	}
 
 };
 */
 
-inline float NTC_RawADCToCelsius(int iRawADC, float fPadResistor = 10000, float fTermResistor = 10000)
+inline float grhAnalogReadSmoothed(int inPin, int smoothing = 100)
 {
-	long lRestistance = fPadResistor*((1024.0 / iRawADC) - 1);
+	float buff = 0;
+
+	for (int i=0; i<smoothing; i++)
+		buff += analogRead(inPin);
+
+	return buff / smoothing;
+}
+
+inline float NTC10k_RawADCToCelsius(float rawADC, float fPadResistor = 10000, float fTermResistor = 10000)
+{
+	long lRestistance = fPadResistor*((1024.0 / rawADC) - 1);
 
 	float fTemp = log(lRestistance); // Saving the Log(resistance) so not to calculate  it 4 times later
 		fTemp = 1 / (0.001129148 + (0.000234125 * fTemp) + (0.0000000876741 * fTemp * fTemp * fTemp));
-		return fTemp - 273.15;  // Convert Kelvin to Celsius            
+		return fTemp - 273.15;  // Convert Kelvin to Celsius
+}
+
+inline float NTC10k_ToCelsius(int inPin, float fPadResistor = 10000)
+{
+	return NTC10k_RawADCToCelsius(grhAnalogReadSmoothed(inPin), fPadResistor);
 }

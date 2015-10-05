@@ -135,22 +135,22 @@ inline void ProcessLogics()
 
 inline void ProcessSlowLogics(U16 phase_fast)
 {
-	float temperature_sanitary = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_SANITARY_PIN),TEMP_BOILER_SANITARY_PAD_RESISTANCE );
+	float temperature_sanitary = NTC10k_ToCelsius( TEMP_BOILER_SANITARY_PIN, TEMP_BOILER_SANITARY_PAD_RESISTANCE );
 	ImportAnalog(TEMP_BOILER_SANITARY, &temperature_sanitary);
 
-	float temperature_heating = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_HEATING_PIN),TEMP_BOILER_HEATING_PAD_RESISTANCE );
+	float temperature_heating = NTC10k_ToCelsius( TEMP_BOILER_HEATING_PIN, TEMP_BOILER_HEATING_PAD_RESISTANCE );
 	ImportAnalog(TEMP_BOILER_HEATING, &temperature_heating);
 
-	float temperature_bottom = NTC_RawADCToCelsius( analogRead(TEMP_BOILER_BOTTOM_PIN),TEMP_BOILER_BOTTOM_PAD_RESISTANCE );
+	float temperature_bottom = NTC10k_ToCelsius( TEMP_BOILER_BOTTOM_PIN, TEMP_BOILER_BOTTOM_PAD_RESISTANCE );
 	ImportAnalog(TEMP_BOILER_BOTTOM, &temperature_bottom);
 
-	float temperature_floor_flow = NTC_RawADCToCelsius( analogRead(TEMP_FLOOR_FLOW_PIN),TEMP_FLOOR_FLOW_PAD_RESISTANCE );
+	float temperature_floor_flow = NTC10k_ToCelsius( TEMP_FLOOR_FLOW_PIN, TEMP_FLOOR_FLOW_PAD_RESISTANCE );
 	ImportAnalog(TEMP_FLOOR_FLOW, &temperature_floor_flow);
 
-	float temperature_floor_return = NTC_RawADCToCelsius( analogRead(TEMP_FLOOR_RETURN_PIN),TEMP_FLOOR_RETURN_PAD_RESISTANCE );
+	float temperature_floor_return = NTC10k_ToCelsius( TEMP_FLOOR_RETURN_PIN, TEMP_FLOOR_RETURN_PAD_RESISTANCE );
 	ImportAnalog(TEMP_FLOOR_RETURN, &temperature_floor_return);
 
-	float temperature_fancoil_flow = NTC_RawADCToCelsius( analogRead(TEMP_FANCOIL_FLOW_PIN),TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
+	float temperature_fancoil_flow = NTC10k_ToCelsius( TEMP_FANCOIL_FLOW_PIN, TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
 	ImportAnalog(TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
 
 	// control SANITARY production hysteresys in Auto Mode
