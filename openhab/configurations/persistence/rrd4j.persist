@@ -17,6 +17,6 @@ Strategies {
 Items {
 //        * : strategy = everyChange, everyDay, restoreOnStartup
 
-        gTemperatures*, gUR*, gHPTemp*: strategy = every5Minutes
-        gSP*, gHPSettings*, gHVAC_Valves* : strategy = everyChange
+        gTemperatures*, gUR*, gHPTemp*: strategy = everyMinute
+        gSP*, gHPSettings*, gHVAC_Valves* : strategy = everyMinute
 }
