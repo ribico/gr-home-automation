@@ -53,6 +53,18 @@ MEGA with Ethernet only acting as GATEWAY
 #define COLLECTOR_FLOOR_MIX_VALVE_MAX	200
 U8 gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
 
+//--------------------------------------
+// USED FOR DHT SENSOR
+#include <DHT.h>
+DHT dht(EXT_DHT22, DHT22);
+
+// DHT PIN1 Arduino 5V
+// DHT PIN2 -> Arduino EXT_DHT22 pin -> 10K Resistor -> 5V
+// DHT PIN2 Arduino Digital Pin 2
+// DHT PIN3 Not Used
+// DHT PIN4 Arduino GND
+//--------------------------------------
+
 
 inline void ReadInputs()
 {
@@ -152,6 +164,19 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 	float temperature_fancoil_flow = NTC10k_ToCelsius( TEMP_FANCOIL_FLOW_PIN, TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
 	ImportAnalog(TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
+
+
+	// read and send external temp & UR to ROW1B1 slots
+	float tmp;
+	U8 buff[2];
+
+	tmp = dht.readTemperature();
+	Souliss_HalfPrecisionFloating(buff, &tmp);
+	SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, buff, 2);
+
+	tmp = dht.readHumidity();
+	Souliss_HalfPrecisionFloating(buff, &tmp);
+	SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_UR, buff, 2);
 
 	// control SANITARY production hysteresys in Auto Mode
 	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )

@@ -7,7 +7,7 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 //#define DEBUG
 
 #include "bconf/DINo_v2_EthernetBridge_RS485.h"
-#include "conf/SuperNode.h" 
+#include "conf/SuperNode.h"
 
 #include "grhSoulissCommon.h"
 
@@ -23,29 +23,42 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 
 #define LIGHT_LIVING_1			0
 #define LIGHT_LIVING_2			1
-#define LIGHT_LIVING_3			2		
+#define LIGHT_LIVING_3			2
 #define LIGHT_LIVING_4			3
 #define LIGHT_LIVING_5			4
 #define LIGHT_LIVING_6			5
 
+// not connected directly to this board
+#define EXT_TEMP						6
+#define EXT_TEMP_H					7
+#define EXT_UR							8
+#define EXT_UR_H						9
+
+#define ROW1B3_LIGHT_STAIRS			4
+#define ROW1B4_LIGHT_ENTRANCE_1	1
+
 inline void DefineTypicals()
 {
 	Set_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_6);
+	Set_Temperature(EXT_TEMP);
+	Set_Humidity(EXT_UR);
 }
 
 inline void ReadInputs()
 {
 	if( LightsGroupIn(IN1, LIGHT_LIVING_1, LIGHT_LIVING_6) == MaCaco_DATACHANGED)
 	{
-		RemoteInput(RS485_ADDRESS_ROW1B3, 4, mInput(LIGHT_LIVING_5)); // -> LIGHT_STAIRS
+		Send(RS485_ADDRESS_ROW1B3, ROW1B3_LIGHT_STAIRS, mInput(LIGHT_LIVING_5)); // -> LIGHT_STAIRS
 		delay(50);
-		RemoteInput(RS485_ADDRESS_ROW1B4, 1, mInput(LIGHT_LIVING_6)); // -> LIGHT_ENTRANCE_1
+		Send(RS485_ADDRESS_ROW1B4, ROW1B4_LIGHT_ENTRANCE_1, mInput(LIGHT_LIVING_6)); // -> LIGHT_ENTRANCE_1
 	}
 }
 
 inline void ProcessLogics()
 {
 	Logic_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_6);
+	grh_Logic_Temperature(EXT_TEMP);
+	grh_Logic_Humidity(EXT_UR);
 }
 
 inline void SetOutputs()
@@ -53,7 +66,7 @@ inline void SetOutputs()
 	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_LIVING_1);
 	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_LIVING_2);
 	DigOut(RELAY3, Souliss_T1n_Coil, LIGHT_LIVING_3);
-	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_LIVING_4); 
+	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_LIVING_4);
 	// LIGHT_LIVING_5 is remote on RS485_ADDRESS_ROW1B3 -> LIGHT_STAIRS
 	// LIGHT_LIVING_6 is remote on RS485_ADDRESS_ROW1B4 -> LIGHT_ENTRANCE_1
 }
@@ -78,33 +91,33 @@ void setup()
 }
 
 void loop()
-{ 
-	EXECUTEFAST() {						
-		UPDATEFAST();	
-		
-		FAST_30ms() 
+{
+	EXECUTEFAST() {
+		UPDATEFAST();
+
+		FAST_30ms()
 		{
 			ReadInputs();
-		} 
+		}
 
-		FAST_50ms() 
+		FAST_50ms()
 		{
 			ProcessLogics();
-			SetOutputs(); 
+			SetOutputs();
 		}
-		
+
 		FAST_2110ms()
 		{
 			ProcessTimers();
-				
-		}			
-		
-		grhFastPeerComms();		
+
+		}
+
+		grhFastPeerComms();
 	}
-	
-	EXECUTESLOW() 
-	{	
+
+	EXECUTESLOW()
+	{
 		UPDATESLOW();
 		SLOW_PeerJoin();
 	}
-} 
+}

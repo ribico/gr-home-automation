@@ -15,10 +15,12 @@
 #define TEMP_FLOOR_RETURN_PIN 		A4       // analog pin used
 #define TEMP_FANCOIL_FLOW_PIN 		A5       // analog pin used
 
-#define MAIN_3WAY_VALVE_BOILER_LIMIT_PIN		9
+#define MAIN_3WAY_VALVE_BOILER_LIMIT_PIN			9
 #define MAIN_3WAY_VALVE_COLLECTOR_LIMIT_PIN		8
 
-#define COLLECTOR_FLOOR_MIX_VALVE_PIN			13
+#define EXT_DHT22															7
+
+#define COLLECTOR_FLOOR_MIX_VALVE_PIN					13
 
 // DEFINE OUTPUT PINs
 // ** DO NOT FORGET TO SET pinMode to OUTPUT **
@@ -93,7 +95,7 @@ inline void DefinePinMode()
 	digitalWrite(ZONE_SWITCH_KITCHEN_PIN, HIGH);
 	digitalWrite(ZONE_SWITCH_LIVING_PIN, HIGH);
 	digitalWrite(ZONE_SWITCH_LOFT_PIN, HIGH);
-	
+
 	pinMode(HP_SETPOINT_2_PIN, OUTPUT);
 
 	pinMode(PUMP_BOILER_FLOOR_PIN, OUTPUT);

@@ -58,6 +58,8 @@
 #define TEMP_AMBIENCE_SET_POINT_H	33
 #define TEMP_SETPOINT_IN	34
 
+#define ROW1B1_EXT_TEMP						6
+#define ROW1B1_EXT_UR							8
 
 inline void DefineTypicals()
 {
@@ -111,6 +113,6 @@ inline void DefineTypicals()
 	SetInput(FANCOIL_MODE, Souliss_T1n_AutoCmd);
 	SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd);
 
-	float set_point = 26.5; // initial setup
+	float set_point = 19.0; // initial setup
 	ImportAnalog(TEMP_AMBIENCE_SET_POINT, &set_point);
 }
