@@ -86,3 +86,8 @@
 #define UR_KITCHEN	pOutputAsFloat(7,5)
 #define temp_DINING	pOutputAsFloat(3,5)
 #define UR_DINING	pOutputAsFloat(3,7)
+
+#define temp_EXT pOutputAsFloat(1,ROW1B1_EXT_TEMP)
+#define UR_EXT pOutputAsFloat(1,ROW1B1_EXT_UR)
+#define temp_LOFT pOutputAsFloat(1,ROW1B1_LOFT_TEMP)
+#define UR_LOFT pOutputAsFloat(1,ROW1B1_LOFT_UR)

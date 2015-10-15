@@ -34,6 +34,11 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 #define EXT_UR							8
 #define EXT_UR_H						9
 
+#define LOFT_TEMP						10
+#define LOFT_TEMP_H					11
+#define LOFT_UR							12
+#define LOFT_UR_H						13
+
 #define ROW1B3_LIGHT_STAIRS			4
 #define ROW1B4_LIGHT_ENTRANCE_1	1
 
@@ -42,6 +47,8 @@ inline void DefineTypicals()
 	Set_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_6);
 	Set_Temperature(EXT_TEMP);
 	Set_Humidity(EXT_UR);
+	Set_Temperature(LOFT_TEMP);
+	Set_Humidity(LOFT_UR);
 }
 
 inline void ReadInputs()
@@ -59,6 +66,8 @@ inline void ProcessLogics()
 	Logic_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_6);
 	grh_Logic_Temperature(EXT_TEMP);
 	grh_Logic_Humidity(EXT_UR);
+	grh_Logic_Temperature(LOFT_TEMP);
+	grh_Logic_Humidity(LOFT_UR);
 }
 
 inline void SetOutputs()

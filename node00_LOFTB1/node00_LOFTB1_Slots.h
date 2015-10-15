@@ -60,6 +60,8 @@
 
 #define ROW1B1_EXT_TEMP						6
 #define ROW1B1_EXT_UR							8
+#define ROW1B1_LOFT_TEMP					10
+#define ROW1B1_LOFT_UR						12
 
 inline void DefineTypicals()
 {

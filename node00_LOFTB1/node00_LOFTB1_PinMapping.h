@@ -18,7 +18,8 @@
 #define MAIN_3WAY_VALVE_BOILER_LIMIT_PIN			9
 #define MAIN_3WAY_VALVE_COLLECTOR_LIMIT_PIN		8
 
-#define EXT_DHT22															7
+#define EXT_DHT22_PIN													7
+#define LOFT_DHT22_PIN												6
 
 #define COLLECTOR_FLOOR_MIX_VALVE_PIN					13
 
@@ -42,7 +43,7 @@
 #define LIGHT_TOILET_PIN                        35
 
 #define HEATPUMP_REMOTE_SWITCH_PIN              36
-#define HEATPUMP_CIRCULATION_PUMP_PIN   		37
+#define HEATPUMP_CIRCULATION_PUMP_PIN   				37
 #define HEATPUMP_SANITARY_REQUEST_PIN           38
 #define HEATPUMP_COOL_PIN                       39
 #define ZONE_SWITCH_BED_1_PIN                   40
@@ -127,4 +128,7 @@ inline void DefinePinMode()
 	pinMode(ZONE_SWITCH_KITCHEN_PIN, OUTPUT);
 	pinMode(ZONE_SWITCH_LIVING_PIN, OUTPUT);
 	pinMode(ZONE_SWITCH_LOFT_PIN, OUTPUT);
+
+	pinMode(EXT_DHT22_PIN, INPUT);
+	pinMode(LOFT_DHT22_PIN, INPUT);
 }
