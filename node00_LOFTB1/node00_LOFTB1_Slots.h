@@ -111,6 +111,6 @@ inline void DefineTypicals()
 	SetInput(FANCOIL_MODE, Souliss_T1n_AutoCmd);
 	SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd);
 
-	float set_point = 26.5; // initial setup
+	float set_point = 19.0; // initial setup
 	ImportAnalog(TEMP_AMBIENCE_SET_POINT, &set_point);
 }
