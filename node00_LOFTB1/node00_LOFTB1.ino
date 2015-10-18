@@ -263,11 +263,15 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	{
 		PumpBoilerToFloorAutoOnCmd();
 
+		// the upstream floor temperature shall be adjusted 3 degrees above the ambiance setpoint
+		// + a correction factor proportional to the temp error
+		float fFloorTemp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) + 3 + (mOutputAsFloat(TEMP_AMBIENCE_SET_POINT)-temp_DINING);
+
 		// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
-		if ( IsHeatingWaterTooHot() )
+		if ( IsHeatingWaterTooHot(fFloorTemp) )
 			HeatingMixValveOn_ColdDirection(); // mix valve on, direction relay off
 
-		else if ( IsHeatingWaterTooCold() )
+		else if ( IsHeatingWaterTooCold(fFloorTemp) )
 			HeatingMixValveOn_HotDirection(); // mix valve on, direction relay on
 
 		else
