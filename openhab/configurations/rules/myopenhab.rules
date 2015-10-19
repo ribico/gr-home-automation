@@ -1,0 +1,48 @@
+import org.openhab.core.library.types.*
+
+
+/*****************************************************
+Notifications through my.openhab
+******************************************************/
+
+rule "HeatingWater_ProdutionStart"
+when
+  Item HP_Circulation_Pump changed from OFF to ON
+then
+  sendNotification("gabriele@ribichini.net", "Inizio produzione accumulo")
+end
+
+rule "HeatingWater_ProdutionEnd"
+when
+  Item HP_Circulation_Pump changed from ON to OFF
+then
+  sendNotification("gabriele@ribichini.net", "Fine produzione accumulo")
+end
+
+rule "SanitaryWater_ProdutionStart"
+when
+  Item HP_Sanitary_Request changed from OFF to ON
+then
+  sendNotification("gabriele@ribichini.net", "Inizio produzione ACS")
+end
+
+rule "SanitaryWater_ProdutionEnd"
+when
+  Item HP_Sanitary_Request changed from ON to OFF
+then
+  sendNotification("gabriele@ribichini.net", "Fine produzione ACS")
+end
+
+rule "Heating_Start"
+when
+  Item HVAC_Pump_Boiler_Floor changed from OFF to ON
+then
+  sendNotification("gabriele@ribichini.net", "Riscaldamento acceso")
+end
+
+rule "Heating_End"
+when
+  Item HVAC_Pump_Boiler_Floor changed from ON to OFF
+then
+  sendNotification("gabriele@ribichini.net", "Riscaldamento spento")
+end
