@@ -19,6 +19,14 @@ then
   sendNotification("gabriele@ribichini.net", "Fine produzione accumulo")
 end
 
+rule "SanitaryWater_TooCold"
+when
+  Item HP_Temp_Sanitary changed
+then
+  if( HP_Temp_Sanitary.state < 30 )
+    sendNotification("gabriele@ribichini.net", "Allarme ACS FREDDA !")
+end
+
 rule "SanitaryWater_ProdutionStart"
 when
   Item HP_Sanitary_Request changed from OFF to ON
