@@ -26,6 +26,8 @@ MEGA with Ethernet only acting as GATEWAY
 #include "node00_LOFTB1_Slots.h"
 #include "node00_LOFTB1_SpeakEasy.h"
 
+#include <math.h>
+
 #define TEMP_BOILER_SANITARY_PAD_RESISTANCE 	9800 // measured
 #define TEMP_BOILER_HEATING_PAD_RESISTANCE      9800 // measured
 #define TEMP_BOILER_BOTTOM_PAD_RESISTANCE       9800 // measured
@@ -131,6 +133,42 @@ inline void ProcessLogics()
 		ambience_setpoint -= 0.5;
 		ImportAnalog(TEMP_AMBIENCE_SET_POINT, &ambience_setpoint);
 	}
+}
+
+U8 gHeatingMixValve_TimerOn = 0;
+U8 gHeatingMixValve_TimerCycle = 0;
+
+#define HEATINGMIXVALVE_COLD_DIRECTION	0
+#define HEATINGMIXVALVE_WARM_DIRECTION	1
+
+// Move the heating mix valve of one step asynchronously from the rest of code
+// @direction specify the direction of movement (HEATINGMIXVALVE_COLD_DIRECTION / HEATINGMIXVALVE_WARM_DIRECTION)
+// @duration_on specify time of actuation
+// @duration_cycle specify time of the complete cycle (actuation + delay)
+//
+inline void HeatingMixValve_StepMove(U8 direction, U8 duration_on, U8 duration_cycle)
+{
+	if( gHeatingMixValve_TimerCycle == 0 )
+	{
+		// new cycle, set timers and activate the valve
+		gHeatingMixValve_TimerOn = duration_on;
+		gHeatingMixValve_TimerCycle = duration_cycle;
+
+		if( direction == HEATINGMIXVALVE_COLD_DIRECTION )
+			HeatingMixValveOn_ColdDirection();
+
+		else if( direction == HEATINGMIXVALVE_WARM_DIRECTION )
+			HeatingMixValveOn_WarmDirection();
+	}
+
+	if( gHeatingMixValve_TimerOn == 0 )
+		HeatingMixValveOff();
+
+	if( gHeatingMixValve_TimerOn > 0)
+		gHeatingMixValve_TimerOn--;
+
+	if( gHeatingMixValve_TimerCycle > 0)
+		gHeatingMixValve_TimerCycle--;
 }
 
 inline void ProcessSlowLogics(U16 phase_fast)
@@ -263,19 +301,20 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	{
 		PumpBoilerToFloorAutoOnCmd();
 
-		// the upstream floor temperature shall be adjusted 3 degrees above the ambiance setpoint
-		// + a correction factor proportional to the temp error
-		float fFloorTemp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) + 3 + (mOutputAsFloat(TEMP_AMBIENCE_SET_POINT)-temp_DINING);
+		// variable flow temp setpoint according to the current ambience temp setpoint
+		// and its difference with current measured temp in DINING zone (the warmest)
+		float setpoint_heating_water = 2 * mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_DINING;
 
-		// adjust heating mix valve position in order to keep the SETPOINT_HEATING flow temperature
-		if ( IsHeatingWaterTooHot(fFloorTemp) )
-			HeatingMixValveOn_ColdDirection(); // mix valve on, direction relay off
+		// control the boiler-floor mix valve to keep the setpoint
+		// error is used as a timer value for motorized valve
+		float error = setpoint_heating_water - (temperature_floor_flow + temperature_floor_return)/2;
 
-		else if ( IsHeatingWaterTooCold(fFloorTemp) )
-			HeatingMixValveOn_HotDirection(); // mix valve on, direction relay on
+		if( error < -1.0 ) // too hot
+			HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, abs(round(error)), 100); // cycle of 211s ~ 3,5 min
 
-		else
-			HeatingMixValveOff(); // mix valve off (hold the position)
+		else if( error > 1.0 ) // too cold
+			HeatingMixValve_StepMove(HEATINGMIXVALVE_WARM_DIRECTION, abs(round(error)), 100); // cycle of 211s ~ 3,5 min
+
 
 		// control hot water storage if there's heating requests from any zone
 		// otherwise just don't care about the temperature of the storage
@@ -308,6 +347,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		dew_point_MAX = max(dew_point_MAX, dew_point_KITCHEN);
 		dew_point_MAX = max(dew_point_MAX, dew_point_DINING);
 
+		// variable setpoint according to UR and dew point
 		float setpoint_cooling_water = dew_point_MAX;
 
 		// control the collector-floor mix valve to keep the setpoint
@@ -394,6 +434,7 @@ inline void SetOutputs()
 
 	nLowDigOut(HP_SETPOINT_2_PIN, Souliss_T1n_OnCoil, HP_SETPOINT_2);
 }
+
 
 inline void ProcessTimers()
 {

@@ -60,10 +60,10 @@
 #define IsPumpCollectorToFancoilAuto()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_AutoState)
 #define PumpCollectorToFancoilAutoOnCmd()  SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_AutoCmd + 4)
 
-#define IsHeatingWaterTooHot(setpoint)    (temperature_floor_flow > setpoint + 1)
-#define IsHeatingWaterTooCold(setpoint)	  (temperature_floor_flow < setpoint - 1)
+// mix valve on, direction relay off
 #define HeatingMixValveOn_ColdDirection()	SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK)
-#define HeatingMixValveOn_HotDirection()	SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) )
+// mix valve on, direction relay on
+#define HeatingMixValveOn_WarmDirection()	SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) )
 #define HeatingMixValveOff()				SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK & ~HEATING_MIX_VALVE_DIRECTION_MASK)
 
 #define	IsHpSetpoint1()					(mOutput(HP_SETPOINT_2) == Souliss_T1n_OffCoil)
