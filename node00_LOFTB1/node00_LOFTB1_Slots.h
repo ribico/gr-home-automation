@@ -103,7 +103,7 @@ inline void DefineTypicals()
 	Souliss_SetT22(memory_map, TEMP_SETPOINT_IN);
 
 	// initialize values
-//	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
+	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
 //	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
 
 
