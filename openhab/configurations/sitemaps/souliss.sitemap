@@ -235,6 +235,7 @@ sitemap default label="Full"
 					Switch item=Floor_Mode_auto label="Pavimento Auto" mappings=[ON="Auto", OFF="Manual"]
 					Switch item=Floor_Mode label="Pavimento" mappings=[ON="ON", OFF="OFF"]
 					Text item=HP_Temp_Heating_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red",HVAC_Pump_Collector_Floor==ON="blue"]
+					Text item=HVAC_Temp_SetPoint_Floor
 				}
 
 				Frame label="Fancoil"
