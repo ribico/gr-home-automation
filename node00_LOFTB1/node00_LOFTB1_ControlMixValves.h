@@ -46,7 +46,8 @@ inline float FloorFlow_HEATING_Setpoint()
 	if(temp_KITCHEN != 0) temp_min = min(temp_min, temp_KITCHEN);
 	if(temp_DINING != 0) temp_min = min(temp_min, temp_DINING);
 
-	float setpoint_floor_water = 2 * mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_min + 2.0;
+	float setpoint_floor_water = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) + 3.0 // fixed delta above ambience setpoint
+															+ (mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_min); // variable delta at startup
 	ImportAnalog(TEMP_FLOOR_FLOW_SETPOINT, &setpoint_floor_water);
 
 	return setpoint_floor_water;
@@ -72,4 +73,39 @@ inline float FloorFlow_COOLING_Setpoint()
 	// variable setpoint according to UR and dew point
 	ImportAnalog(TEMP_FLOOR_FLOW_SETPOINT, &dew_point_MAX);
 	return dew_point_MAX;
+}
+
+inline void AdjustFloorFlowTemperature_HEATING()
+{
+	// control the boiler-floor mix valve to keep the setpoint
+	// error is used as a timer value for motorized valve
+	float error = FloorFlow_HEATING_Setpoint() - (mOutputAsFloat(TEMP_FLOOR_FLOW)+mOutputAsFloat(TEMP_FLOOR_RETURN))/2;
+
+	if( error < -1.0 ) // too hot
+		HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, abs(round(error)), 100); // cycle of 211s ~ 3,5 min
+
+	else if( error > 1.0 ) // too cold
+		HeatingMixValve_StepMove(HEATINGMIXVALVE_WARM_DIRECTION, abs(round(error)), 100); // cycle of 211s ~ 3,5 min
+}
+
+#define COLLECTOR_FLOOR_MIX_VALVE_MIN	0
+#define COLLECTOR_FLOOR_MIX_VALVE_MAX	200
+U8 gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
+
+inline void AdjustFloorFlowTemperature_COOLING()
+{
+	// control the collector-floor mix valve to keep the setpoint
+	// simple proportional control on return floor temperature
+	float error = FloorFlow_COOLING_Setpoint() - (mOutputAsFloat(TEMP_FLOOR_FLOW)+mOutputAsFloat(TEMP_FLOOR_RETURN))/2;
+
+	if(gCollectorToFloorMixValvePos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
+		gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
+
+	else if(gCollectorToFloorMixValvePos - error < COLLECTOR_FLOOR_MIX_VALVE_MIN)
+		gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MIN;
+
+	else
+		gCollectorToFloorMixValvePos -= (U8) error;
+
+	analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, gCollectorToFloorMixValvePos);
 }
