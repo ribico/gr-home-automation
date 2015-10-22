@@ -301,13 +301,9 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	{
 		PumpBoilerToFloorAutoOnCmd();
 
-		// variable flow temp setpoint according to the current ambience temp setpoint
-		// and its difference with current measured temp in DINING zone (the warmest)
-		float setpoint_floor_water = 2 * mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_DINING;
-
 		// control the boiler-floor mix valve to keep the setpoint
 		// error is used as a timer value for motorized valve
-		float error = setpoint_floor_water - (temperature_floor_flow + temperature_floor_return)/2;
+		float error = FloorFlow_HEATING_Setpoint() - (temperature_floor_flow + temperature_floor_return)/2;
 
 		if( error < -1.0 ) // too hot
 			HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, abs(round(error)), 100); // cycle of 211s ~ 3,5 min
@@ -332,27 +328,9 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		HpCirculationAutoOnCmd();
 		PumpCollectorToFloorAutoOnCmd();
 
-		// check the dew point to reduce floor water temperature
-		float dew_point_BED1 = temp_BED1-(100-UR_BED1)/5;
-		float dew_point_BED2 = temp_BED2-(100-UR_BED2)/5;
-		float dew_point_LIVING = temp_LIVING-(100-UR_LIVING)/5;
-		float dew_point_BED3 = temp_BED3-(100-UR_BED3)/5;
-		float dew_point_KITCHEN = temp_KITCHEN-(100-UR_KITCHEN)/5;
-		float dew_point_DINING = temp_DINING-(100-UR_DINING)/5;
-
-		float dew_point_MAX = dew_point_BED1;
-		dew_point_MAX = max(dew_point_MAX, dew_point_BED2);
-		dew_point_MAX = max(dew_point_MAX, dew_point_LIVING);
-		dew_point_MAX = max(dew_point_MAX, dew_point_BED3);
-		dew_point_MAX = max(dew_point_MAX, dew_point_KITCHEN);
-		dew_point_MAX = max(dew_point_MAX, dew_point_DINING);
-
-		// variable setpoint according to UR and dew point
-		float setpoint_floor_water = dew_point_MAX;
-
 		// control the collector-floor mix valve to keep the setpoint
 		// simple proportional control on return floor temperature
-		float error = setpoint_floor_water - (temperature_floor_flow + temperature_floor_return)/2;
+		float error = FloorFlow_COOLING_Setpoint() - (temperature_floor_flow + temperature_floor_return)/2;
 
 		if(gCollectorToFloorMixValvePos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
 			gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
