@@ -25,6 +25,7 @@ MEGA with Ethernet only acting as GATEWAY
 #include "node00_LOFTB1_PinMapping.h"
 #include "node00_LOFTB1_Slots.h"
 #include "node00_LOFTB1_SpeakEasy.h"
+#include "node00_LOFTB1_Helper.h"
 
 #include <math.h>
 
@@ -121,6 +122,7 @@ inline void ProcessLogics()
 	grh_Logic_Temperature(TEMP_FLOOR_RETURN);
 	grh_Logic_Temperature(TEMP_FANCOIL_FLOW);
 	grh_Logic_Temperature(TEMP_AMBIENCE_SET_POINT);
+	grh_Logic_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
 
 	Souliss_Logic_T22(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
 
@@ -146,42 +148,6 @@ inline void ProcessLogics()
 		ambience_setpoint -= 0.5;
 		ImportAnalog(TEMP_AMBIENCE_SET_POINT, &ambience_setpoint);
 	}
-}
-
-U8 gHeatingMixValve_TimerOn = 0;
-U8 gHeatingMixValve_TimerCycle = 0;
-
-#define HEATINGMIXVALVE_COLD_DIRECTION	0
-#define HEATINGMIXVALVE_WARM_DIRECTION	1
-
-// Move the heating mix valve of one step asynchronously from the rest of code
-// @direction specify the direction of movement (HEATINGMIXVALVE_COLD_DIRECTION / HEATINGMIXVALVE_WARM_DIRECTION)
-// @duration_on specify time of actuation
-// @duration_cycle specify time of the complete cycle (actuation + delay)
-//
-inline void HeatingMixValve_StepMove(U8 direction, U8 duration_on, U8 duration_cycle)
-{
-	if( gHeatingMixValve_TimerCycle == 0 )
-	{
-		// new cycle, set timers and activate the valve
-		gHeatingMixValve_TimerOn = duration_on;
-		gHeatingMixValve_TimerCycle = duration_cycle;
-
-		if( direction == HEATINGMIXVALVE_COLD_DIRECTION )
-			HeatingMixValveOn_ColdDirection();
-
-		else if( direction == HEATINGMIXVALVE_WARM_DIRECTION )
-			HeatingMixValveOn_WarmDirection();
-	}
-
-	if( gHeatingMixValve_TimerOn == 0 )
-		HeatingMixValveOff();
-
-	if( gHeatingMixValve_TimerOn > 0)
-		gHeatingMixValve_TimerOn--;
-
-	if( gHeatingMixValve_TimerCycle > 0)
-		gHeatingMixValve_TimerCycle--;
 }
 
 inline void ProcessSlowLogics(U16 phase_fast)
@@ -231,7 +197,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		SetHpFlowToBoiler(); 		// upstream to boiler
 		SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
 
-		return; // should not exectute following code that could modify the HVAC status
+		return; // should not execute following code that could modify the HVAC status
 	}
 
 
@@ -337,11 +303,11 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 		// variable flow temp setpoint according to the current ambience temp setpoint
 		// and its difference with current measured temp in DINING zone (the warmest)
-		float setpoint_heating_water = 2 * mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_DINING;
+		float setpoint_floor_water = 2 * mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_DINING;
 
 		// control the boiler-floor mix valve to keep the setpoint
 		// error is used as a timer value for motorized valve
-		float error = setpoint_heating_water - (temperature_floor_flow + temperature_floor_return)/2;
+		float error = setpoint_floor_water - (temperature_floor_flow + temperature_floor_return)/2;
 
 		if( error < -1.0 ) // too hot
 			HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, abs(round(error)), 100); // cycle of 211s ~ 3,5 min
@@ -382,11 +348,11 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		dew_point_MAX = max(dew_point_MAX, dew_point_DINING);
 
 		// variable setpoint according to UR and dew point
-		float setpoint_cooling_water = dew_point_MAX;
+		float setpoint_floor_water = dew_point_MAX;
 
 		// control the collector-floor mix valve to keep the setpoint
 		// simple proportional control on return floor temperature
-		float error = setpoint_cooling_water - (temperature_floor_flow + temperature_floor_return)/2;
+		float error = setpoint_floor_water - (temperature_floor_flow + temperature_floor_return)/2;
 
 		if(gCollectorToFloorMixValvePos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
 			gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
