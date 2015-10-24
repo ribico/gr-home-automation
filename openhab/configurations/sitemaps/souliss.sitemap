@@ -487,7 +487,7 @@ sitemap default label="Full"
 				{
 					Frame label="Accumulo"
 					{
-						Text item=HP_Temp_Sanitary valuecolor=[<=40="blue",<41="orange",>42="red"]
+						Text item=HP_Temp_Sanitary valuecolor=[<=38="blue",<40="orange",>42="red"]
 						Text item=HP_Temp_Heating valuecolor=[<=25="blue",<=28="orange",>28="red"]
 						Text item=HP_Temp_Bottom valuecolor=[<=25="blue",<=28="orange",>28="red"]
 					}
