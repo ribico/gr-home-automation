@@ -25,7 +25,7 @@ MEGA with Ethernet only acting as GATEWAY
 #include "node00_LOFTB1_PinMapping.h"
 #include "node00_LOFTB1_Slots.h"
 #include "node00_LOFTB1_SpeakEasy.h"
-#include "node00_LOFTB1_Helper.h"
+#include "node00_LOFTB1_ControlMixValves.h"
 
 #include <math.h>
 
@@ -59,11 +59,10 @@ MEGA with Ethernet only acting as GATEWAY
 DHT dht_ext(EXT_DHT22_PIN, DHT22);
 DHT dht_loft(LOFT_DHT22_PIN, DHT22);
 
-// DHT PIN1 Arduino 5V
-// DHT PIN2 -> Arduino EXT_DHT22 pin -> 10K Resistor -> 5V
-// DHT PIN2 Arduino Digital Pin 2
+// DHT PIN1 -> 5V
+// DHT PIN2 -> Arduino EXT_DHT22 pin (INPUT_PULLUP)
 // DHT PIN3 Not Used
-// DHT PIN4 Arduino GND
+// DHT PIN4 -> GND
 //--------------------------------------
 
 
@@ -170,23 +169,23 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 	// read and send external temp & UR to ROW1B1 slots
 	float tmp;
-	U8 buff[2];
+	U8 buff[4]; // two bytes for temp and two bytes for UR
 
 	tmp = dht_ext.readTemperature();
 	Souliss_HalfPrecisionFloating(buff, &tmp);
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, buff, 2);
 
 	tmp = dht_ext.readHumidity();
-	Souliss_HalfPrecisionFloating(buff, &tmp);
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_UR, buff, 2);
+	Souliss_HalfPrecisionFloating(buff+2, &tmp); // 2 bytes offset for UR
+
+	SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
 
 	tmp = dht_loft.readTemperature();
 	Souliss_HalfPrecisionFloating(buff, &tmp);
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 2);
 
 	tmp = dht_loft.readHumidity();
-	Souliss_HalfPrecisionFloating(buff, &tmp);
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_UR, buff, 2);
+	Souliss_HalfPrecisionFloating(buff+2, &tmp); // 2 bytes offset for UR
+
+	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
 
 	// control SANITARY production hysteresys in Auto Mode
 	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
