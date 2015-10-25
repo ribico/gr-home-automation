@@ -46,8 +46,10 @@ inline float FloorFlow_HEATING_Setpoint()
 	if(temp_KITCHEN != 0) temp_min = min(temp_min, temp_KITCHEN);
 	if(temp_DINING != 0) temp_min = min(temp_min, temp_DINING);
 
-	float setpoint_floor_water = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) + 3.0 // fixed delta above ambience setpoint
-															+ (mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_min); // variable delta at startup
+	float setpoint_floor_water = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT)
+															+ 2.0 // fixed delta above ambience setpoint
+															+ (mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_EXT) / 10.0 // variable with external delta
+															+ (mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_min); // variable with internal delta
 	ImportAnalog(TEMP_FLOOR_FLOW_SETPOINT, &setpoint_floor_water);
 
 	return setpoint_floor_water;
