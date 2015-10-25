@@ -291,7 +291,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	if( IsHeating() ) // heating request for at least one zone
 	{
 		FloorAutoOnCmd(); // only for user interface feedback
-		PumpBoilerToFancoilsAutoOnCmd();
+		PumpBoilerToFloorAutoOnCmd();
 		AdjustFloorFlowTemperature_HEATING();
 
 		// control hot water storage if there's heating requests from any zone
