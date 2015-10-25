@@ -203,7 +203,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	{
 		mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
 	}
-	else if( IsFloorAuto() ) // check zone temperatures to open/close valves
+	else if( IsFloorAuto() || IsFloorAutoOn() ) // check zone temperatures to open/close valves
 	{
 		// AUTO MODE -> activate only needed zones
 
