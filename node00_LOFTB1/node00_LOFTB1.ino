@@ -291,15 +291,17 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	if( IsHeating() ) // heating request for at least one zone
 	{
 		FloorAutoOnCmd(); // only for user interface feedback
-		PumpBoilerToFloorAutoOnCmd();
-		AdjustFloorFlowTemperature_HEATING();
 
 		// control hot water storage if there's heating requests from any zone
-		// otherwise just don't care about the temperature of the storage
 		if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
 		{
 			SetHpFlowToBoiler();
 			HpCirculationAutoOnCmd();
+		}
+		else
+		{
+			PumpBoilerToFloorAutoOnCmd();
+			AdjustFloorFlowTemperature_HEATING();
 		}
 	}
 	else if( IsCooling() ) // cooling at least one zone
