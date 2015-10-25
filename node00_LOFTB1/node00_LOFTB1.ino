@@ -39,8 +39,6 @@ MEGA with Ethernet only acting as GATEWAY
 
 #define SETPOINT_TEMP_SANITARY_WATER_MIN 	36 // °C
 #define SETPOINT_TEMP_SANITARY_WATER_MAX 	43 // °C
-#define SETPOINT_TEMP_HEATING_WATER_MIN		26 // °C
-#define SETPOINT_TEMP_HEATING_WATER_MAX		30 // °C
 
 #define SETPOINT_TEMP_DEADBAND_SMALL	0.2	// °C
 
@@ -48,9 +46,6 @@ MEGA with Ethernet only acting as GATEWAY
 #define SETPOINT_UR_2				70
 #define SETPOINT_UR_3				75
 #define SETPOINT_UR_DEADBAND	3
-
-//#define SETPOINT_COOL_TEMP			25
-//#define SETPOINT_HEAT_TEMP			19
 
 
 //--------------------------------------

@@ -27,8 +27,8 @@
 #define IsSanitaryWaterAutoOff()	  (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOffCoil)
 #define SanitaryWaterAutoOnCmd()    SetInput(HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd + 4 /*cycles*/)
 
-#define IsStorageWaterCold()        (temperature_heating < SETPOINT_TEMP_HEATING_WATER_MIN)
-#define IsStorageWaterHot()					(temperature_heating > SETPOINT_TEMP_HEATING_WATER_MAX)
+#define IsStorageWaterCold()        (temperature_heating < mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT))
+#define IsStorageWaterHot()					(temperature_bottom > mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT))
 #define IsStorageWaterInProduction()  (IsHpFlowToBoiler() && IsHotWaterInProduction())
 
 #define IsHotWaterInProduction()		(IsHeatMode() && (IsHpCirculationOn() || IsHpCirculationAutoOn()) )
