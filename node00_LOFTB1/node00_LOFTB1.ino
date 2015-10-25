@@ -236,9 +236,9 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			else if( temp_BED2 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
 
-			if( temp_LIVING < min_temp)
+			if( (temp_LIVING+temp_DINING)/2.0 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-			else if( temp_LIVING > max_temp)
+			else if( (temp_LIVING+temp_DINING)/2.0 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
 
 			if( temp_BED3 < min_temp)
@@ -272,9 +272,9 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			else if( temp_BED2 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
 
-			if( temp_LIVING > max_temp)
+			if( (temp_LIVING+temp_DINING)/2.0 > max_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-			else if( temp_LIVING < min_temp)
+			else if( (temp_LIVING+temp_DINING)/2.0 < min_temp)
 				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
 
 			if( temp_BED3 > max_temp)
