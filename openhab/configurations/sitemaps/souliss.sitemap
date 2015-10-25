@@ -213,10 +213,12 @@ sitemap default label="Full"
 		Group item=gRolleshutters
 		Text label="Clima" icon="climate"
 		{
-			Frame label="Stato corrente (Soggiorno)"
+			Frame label="Stato corrente"
 			{
 				Text item=Temperature_2F_Dining
 				Text item=UR_2F_Dining
+				Text item=Temperature_3F_Ext
+				Text item=UR_3F_Ext
 			}
 
 			Text label="Impostazioni" icon="climate"
@@ -481,6 +483,7 @@ sitemap default label="Full"
 					Text item=Temperature_2F_Bedroom1 label="Camera 1 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
 					Text item=Temperature_2F_Bedroom2 label="Camera 2 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
 					Text item=Temperature_2F_Bedroom3 label="Camera 3 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=Temperature_3F_Ext label="Esterno [%.1f °C]"
 				}
 
 				Text icon="temperature" label="HVAC"
