@@ -132,8 +132,8 @@ Number Temperature_3F_Loft	"Loft Temp [%.1f °C]" 	<temperature> (gTemperatures,
 Number UR_3F_Loft		"Loft UR [%.1f %%]" 	<humidity> (gUR,g3F_Loft,gTechnicView_Node1) {souliss="T53:1:12"}
 
 
-Switch Floor_Mode			"Pavimento"		 (gTechnicView_Node13,gHPSettings) {souliss="T12:0:13:switch"}
-Switch Floor_Mode_auto		"Pavimento Auto"		<lock> (gTechnicView_Node13,gHPSettings) {souliss="T12:0:13:automode"}
+Switch Floor_Mode			"Pavimento"		 (gTechnicView_Node0,gHPSettings) {souliss="T12:0:13:switch"}
+Switch Floor_Mode_auto		"Pavimento Auto"		<lock> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:13:automode"}
 Switch HP_Remote_Switch		"Remote Switch" 		<inverter> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:14:switch"}
 Switch HP_Circulation_Pump	"Pompa Interna" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:15:switch"}
 Switch HP_Circulation_Pump_auto	"Pompa Interna Auto" 	<lock>	(gTechnicView_Node0,gHPSettings) {souliss="T12:0:15:automode"}

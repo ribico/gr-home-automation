@@ -37,8 +37,8 @@ MEGA with Ethernet only acting as GATEWAY
 #define TEMP_FANCOIL_FLOW_PAD_RESISTANCE      	9830 // measured
 
 
-#define SETPOINT_TEMP_SANITARY_WATER_MIN 	36 // °C
-#define SETPOINT_TEMP_SANITARY_WATER_MAX 	43 // °C
+#define SETPOINT_TEMP_SANITARY_WATER_MIN 	36
+#define SETPOINT_TEMP_SANITARY_WATER_MAX 	43
 
 #define SETPOINT_TEMP_DEADBAND_SMALL	0.2	// °C
 
@@ -290,7 +290,8 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 	if( IsHeating() ) // heating request for at least one zone
 	{
-		PumpBoilerToFloorAutoOnCmd();
+		FloorAutoOnCmd(); // only for user interface feedback
+		PumpBoilerToFancoilsAutoOnCmd();
 		AdjustFloorFlowTemperature_HEATING();
 
 		// control hot water storage if there's heating requests from any zone
@@ -303,6 +304,7 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
+		FloorAutoOnCmd(); // only for user interface feedback
 		// produce cold water
 		HpSetpoint2AutoCmd(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
 		SetHpFlowToCollector();
