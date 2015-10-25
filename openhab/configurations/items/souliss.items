@@ -62,14 +62,15 @@ Switch Light_3F_Toilet			"Bagno3 Luce 1" 	(g3F_Loft,gTechnicView_Node0,gLights,g
 
 
 Group gRolleshutters	"Tapparelle"	<rollershutter> (All)
-Rollershutter Windows_2F_Living 	"Salotto Tapparella" 	(g2F_Living,gTechnicView_Node6,gRolleshutters,gMyOpenHAB) {souliss="T22:6:1"}
-Rollershutter Windows_2F_Kitchen 	"Cucina Tapparella"		(g2F_Kitchen,gTechnicView_Node6,gRolleshutters,gMyOpenHAB) {souliss="T22:6:2"}
-Rollershutter Windows_2F_Dining 	"Pranzo Tapparella" 	(g2F_Dining,gTechnicView_Node5,gRolleshutters,gMyOpenHAB) {souliss="T22:5:3"}
+Group gRS_Night	"Tapparelle notte"	<rollershutter> (All)
+Rollershutter Windows_2F_Living 	"Salotto Tapparella" 	(g2F_Living,gTechnicView_Node6,gRolleshutters,gRS_Night,gMyOpenHAB) {souliss="T22:6:1"}
+Rollershutter Windows_2F_Kitchen 	"Cucina Tapparella"		(g2F_Kitchen,gTechnicView_Node6,gRolleshutters,gRS_Night,gMyOpenHAB) {souliss="T22:6:2"}
+Rollershutter Windows_2F_Dining 	"Pranzo Tapparella" 	(g2F_Dining,gTechnicView_Node5,gRolleshutters,gRS_Night,gMyOpenHAB) {souliss="T22:5:3"}
 Rollershutter Windows_2F_Bath1 	"Bagno1 Tapparella" 	(g2F_Bath1,gTechnicView_Node12,gRolleshutters,gMyOpenHAB) {souliss="T22:12:1"}
 Rollershutter Windows_2F_Bath2 	"Bagno2 Tapparella"		(g2F_Bath2,gTechnicView_Node7,gRolleshutters,gMyOpenHAB) {souliss="T22:7:2"}
-Rollershutter Windows_2F_Bedroom1 	"Camera1 Tapparella" 	(g2F_Bedroom1,gTechnicView_Node9,gRolleshutters,gMyOpenHAB) {souliss="T22:9:3"}
-Rollershutter Windows_2F_Bedroom2 	"Camera2 Tapparella" 	(g2F_Bedroom2,gTechnicView_Node12,gRolleshutters,gMyOpenHAB) {souliss="T22:12:2"}
-Rollershutter Windows_2F_Bedroom3 	"Camera3 Tapparella" 	(g2F_Bedroom3,gTechnicView_Node7,gRolleshutters,gMyOpenHAB) {souliss="T22:7:1"}
+Rollershutter Windows_2F_Bedroom1 	"Camera1 Tapparella" 	(g2F_Bedroom1,gTechnicView_Node9,gRolleshutters,gRS_Night,gMyOpenHAB) {souliss="T22:9:3"}
+Rollershutter Windows_2F_Bedroom2 	"Camera2 Tapparella" 	(g2F_Bedroom2,gTechnicView_Node12,gRolleshutters,gRS_Night,gMyOpenHAB) {souliss="T22:12:2"}
+Rollershutter Windows_2F_Bedroom3 	"Camera3 Tapparella" 	(g2F_Bedroom3,gTechnicView_Node7,gRolleshutters,gRS_Night,gMyOpenHAB) {souliss="T22:7:1"}
 
 
 Group gClima			"Clima"					<climate> 		(All,gMyOpenHAB)
