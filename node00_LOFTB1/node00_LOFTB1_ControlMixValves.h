@@ -82,10 +82,10 @@ inline void AdjustFloorFlowTemperature_HEATING()
 	float error = FloorFlow_HEATING_Setpoint() - (mOutputAsFloat(TEMP_FLOOR_FLOW)+mOutputAsFloat(TEMP_FLOOR_RETURN))/2;
 
 	if( error < -1.0 ) // too hot
-		HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, abs(round(error)), 100); // cycle of 211s ~ 3,5 min
+		HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, abs(round(error)), 50); // cycle of 105 seconds
 
 	else if( error > 1.0 ) // too cold
-		HeatingMixValve_StepMove(HEATINGMIXVALVE_WARM_DIRECTION, abs(round(error)), 100); // cycle of 211s ~ 3,5 min
+		HeatingMixValve_StepMove(HEATINGMIXVALVE_WARM_DIRECTION, abs(round(error)), 50); // cycle of 105 seconds
 }
 
 #define COLLECTOR_FLOOR_MIX_VALVE_MIN	0
