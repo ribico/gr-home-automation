@@ -9,6 +9,7 @@ U8 gHeatingMixValve_TimerCycle = 0;
 // @duration_on specify time of actuation
 // @duration_cycle specify time of the complete cycle (actuation + delay)
 //
+
 inline void HeatingMixValve_StepMove(U8 direction, U8 duration_on, U8 duration_cycle)
 {
 	if( gHeatingMixValve_TimerCycle == 0 )
@@ -34,9 +35,15 @@ inline void HeatingMixValve_StepMove(U8 direction, U8 duration_on, U8 duration_c
 		gHeatingMixValve_TimerCycle--;
 }
 
+#define TEMP_FLOOR_FLOW_SET_POINT_MIN 20.0
+#define TEMP_FLOOR_FLOW_SET_POINT_MAX 30.0
 
 inline float FloorFlow_HEATING_Setpoint()
 {
+	float temp_amb_sp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
+	float setpoint_floor_water = temp_amb_sp + 2.0; // fixed delta above ambience setpoint
+	setpoint_floor_water += (temp_amb_sp - temp_EXT) / 10.0; // variable with external delta
+	
 	float temp_min = temp_BED1;
 	if(temp_BED2 != 0) temp_min = min(temp_min, temp_BED2);
 	if(temp_BED3 != 0) temp_min = min(temp_min, temp_BED3);
@@ -45,11 +52,16 @@ inline float FloorFlow_HEATING_Setpoint()
 	if(temp_LIVING != 0) temp_min = min(temp_min, temp_LIVING);
 	if(temp_KITCHEN != 0) temp_min = min(temp_min, temp_KITCHEN);
 	if(temp_DINING != 0) temp_min = min(temp_min, temp_DINING);
-
-	float setpoint_floor_water = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT)
-															+ 2.0 // fixed delta above ambience setpoint
-															+ (mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_EXT) / 10.0 // variable with external delta
-															+ (mOutputAsFloat(TEMP_AMBIENCE_SET_POINT) - temp_min); // variable with internal delta
+	
+	if( temp_min!= 0 )
+		setpoint_floor_water += (temp_amb_sp - temp_min); // variable with internal delta
+	
+	if( setpoint_floor_water < TEMP_FLOOR_FLOW_SET_POINT_MIN )
+		setpoint_floor_water = TEMP_FLOOR_FLOW_SET_POINT_MIN;
+		
+	else if( setpoint_floor_water > TEMP_FLOOR_FLOW_SET_POINT_MAX )
+		setpoint_floor_water = TEMP_FLOOR_FLOW_SET_POINT_MAX;
+		
 	ImportAnalog(TEMP_FLOOR_FLOW_SETPOINT, &setpoint_floor_water);
 
 	return setpoint_floor_water;
