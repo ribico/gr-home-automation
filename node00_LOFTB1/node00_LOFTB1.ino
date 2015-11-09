@@ -141,24 +141,27 @@ inline void ProcessLogics()
 	}
 }
 
-inline void ProcessSlowLogics(U16 phase_fast)
+float temperature_sanitary, temperature_heating, temperature_bottom;
+float temperature_floor_flow, temperature_floor_return, temperature_fancoil_flow;
+
+inline void ProcessSlowLogics1(U16 phase_fast)
 {
-	float temperature_sanitary = NTC10k_ToCelsius( TEMP_BOILER_SANITARY_PIN, TEMP_BOILER_SANITARY_PAD_RESISTANCE );
+	temperature_sanitary = NTC10k_ToCelsius( TEMP_BOILER_SANITARY_PIN, TEMP_BOILER_SANITARY_PAD_RESISTANCE );
 	ImportAnalog(TEMP_BOILER_SANITARY, &temperature_sanitary);
 
-	float temperature_heating = NTC10k_ToCelsius( TEMP_BOILER_HEATING_PIN, TEMP_BOILER_HEATING_PAD_RESISTANCE );
+	temperature_heating = NTC10k_ToCelsius( TEMP_BOILER_HEATING_PIN, TEMP_BOILER_HEATING_PAD_RESISTANCE );
 	ImportAnalog(TEMP_BOILER_HEATING, &temperature_heating);
 
-	float temperature_bottom = NTC10k_ToCelsius( TEMP_BOILER_BOTTOM_PIN, TEMP_BOILER_BOTTOM_PAD_RESISTANCE );
+	temperature_bottom = NTC10k_ToCelsius( TEMP_BOILER_BOTTOM_PIN, TEMP_BOILER_BOTTOM_PAD_RESISTANCE );
 	ImportAnalog(TEMP_BOILER_BOTTOM, &temperature_bottom);
 
-	float temperature_floor_flow = NTC10k_ToCelsius( TEMP_FLOOR_FLOW_PIN, TEMP_FLOOR_FLOW_PAD_RESISTANCE );
+	temperature_floor_flow = NTC10k_ToCelsius( TEMP_FLOOR_FLOW_PIN, TEMP_FLOOR_FLOW_PAD_RESISTANCE );
 	ImportAnalog(TEMP_FLOOR_FLOW, &temperature_floor_flow);
 
-	float temperature_floor_return = NTC10k_ToCelsius( TEMP_FLOOR_RETURN_PIN, TEMP_FLOOR_RETURN_PAD_RESISTANCE );
+	temperature_floor_return = NTC10k_ToCelsius( TEMP_FLOOR_RETURN_PIN, TEMP_FLOOR_RETURN_PAD_RESISTANCE );
 	ImportAnalog(TEMP_FLOOR_RETURN, &temperature_floor_return);
 
-	float temperature_fancoil_flow = NTC10k_ToCelsius( TEMP_FANCOIL_FLOW_PIN, TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
+	temperature_fancoil_flow = NTC10k_ToCelsius( TEMP_FANCOIL_FLOW_PIN, TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
 	ImportAnalog(TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
 
 
@@ -181,7 +184,10 @@ inline void ProcessSlowLogics(U16 phase_fast)
 	Souliss_HalfPrecisionFloating(buff+2, &tmp); // 2 bytes offset for UR
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
+}
 
+inline void ProcessSlowLogics2(U16 phase_fast)
+{
 	// control SANITARY production hysteresys in Auto Mode
 	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
 	{
@@ -286,8 +292,10 @@ inline void ProcessSlowLogics(U16 phase_fast)
 
 	// process zones logics both for floor on and off
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
+}
 
-
+inline void ProcessSlowLogics3(U16 phase_fast)
+{
 	if( IsHeating() ) // heating request for at least one zone
 	{
 		FloorAutoOnCmd(); // only for user interface feedback
@@ -314,7 +322,10 @@ inline void ProcessSlowLogics(U16 phase_fast)
 		PumpCollectorToFloorAutoOnCmd();
 		AdjustFloorFlowTemperature_COOLING();
 	}
+}
 
+inline void ProcessSlowLogics4(U16 phase_fast)
+{
 	if( IsCoolMode() )
 	{
 		// check the max UR to eventually activate fancoils
@@ -339,8 +350,6 @@ inline void ProcessSlowLogics(U16 phase_fast)
 			Fancoil_AutoCmd(phase_fast%2); TODO("adjust fancoils speed with UR hysteresys");
 		}
 	}
-
-
 }
 
 
@@ -449,7 +458,6 @@ void setup()
 	RoutingTable(IP_ADDRESS_BED1B1, RS485_ADDRESS_BED1SN, 2);
 	RoutingTable(IP_ADDRESS_BED2B1, RS485_ADDRESS_BED2SN, 3);
 
-
 	DefineTypicals();
 }
 
@@ -461,21 +469,29 @@ void loop()
 		UPDATEFAST();
 
 		FAST_30ms()
-		{
 			ReadInputs();
-		}
 
-		FAST_50ms()
-		{
+		SHIFT_50ms(1)
 			ProcessLogics();
-			SetOutputs();
-		}
 
-		FAST_2110ms()
-		{
-			ProcessSlowLogics(phase_fast);
+		SHIFT_50ms(2)
+			SetOutputs();
+
+
+		SHIFT_2110ms(1)
+			ProcessSlowLogics1(phase_fast);
+
+		SHIFT_2110ms(2)
+			ProcessSlowLogics2(phase_fast);
+
+		SHIFT_2110ms(3)
+			ProcessSlowLogics3(phase_fast);
+
+		SHIFT_2110ms(4)
+			ProcessSlowLogics4(phase_fast);
+
+		SHIFT_2110ms(5)
 			ProcessTimers();
-		}
 
 		FAST_GatewayComms();
 	}
