@@ -248,12 +248,15 @@ void loop()
 			ProcessZoneActivation(phase_fast);
 
 		SHIFT_2110ms(4)
-			ProcessFloorRequest(phase_fast);
+			CalculateFloorTempSetpoint(phase_fast);
 
 		SHIFT_2110ms(5)
-			ProcessFancoilsRequest(phase_fast);
+			ProcessFloorRequest(phase_fast);
 
 		SHIFT_2110ms(6)
+			ProcessFancoilsRequest(phase_fast);
+
+		SHIFT_2110ms(7)
 			ProcessTimers();
 
 		FAST_GatewayComms();
