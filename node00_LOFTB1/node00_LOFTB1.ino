@@ -14,6 +14,8 @@ MEGA with Ethernet only acting as GATEWAY
 
 #include <SPI.h>
 #include <EEPROM.h>
+#include <math.h>
+
 #include "Souliss.h"
 
 #include "grhSoulissNetwork.h"
@@ -26,8 +28,6 @@ MEGA with Ethernet only acting as GATEWAY
 #include "node00_LOFTB1_Slots.h"
 #include "node00_LOFTB1_SpeakEasy.h"
 #include "node00_LOFTB1_ControlMixValves.h"
-
-#include <math.h>
 
 #define TEMP_BOILER_SANITARY_PAD_RESISTANCE 	9800 // measured
 #define TEMP_BOILER_HEATING_PAD_RESISTANCE      9800 // measured
@@ -60,6 +60,7 @@ DHT dht_loft(LOFT_DHT22_PIN, DHT22);
 // DHT PIN4 -> GND
 //--------------------------------------
 
+#include "node00_LOFTB1_HVAC_Logics.h"
 
 inline void ReadInputs()
 {
@@ -138,226 +139,6 @@ inline void ProcessLogics()
 		mInput(TEMP_SETPOINT_IN) = Souliss_T2n_RstCmd;
 		ambience_setpoint -= 0.5;
 		ImportAnalog(TEMP_AMBIENCE_SET_POINT, &ambience_setpoint);
-	}
-}
-
-float temperature_sanitary, temperature_heating, temperature_bottom;
-float temperature_floor_flow, temperature_floor_return, temperature_fancoil_flow;
-
-inline void GetAmbienceCurrentStatus(U16 phase_fast)
-{
-	temperature_sanitary = NTC10k_ToCelsius( TEMP_BOILER_SANITARY_PIN, TEMP_BOILER_SANITARY_PAD_RESISTANCE );
-	ImportAnalog(TEMP_BOILER_SANITARY, &temperature_sanitary);
-
-	temperature_heating = NTC10k_ToCelsius( TEMP_BOILER_HEATING_PIN, TEMP_BOILER_HEATING_PAD_RESISTANCE );
-	ImportAnalog(TEMP_BOILER_HEATING, &temperature_heating);
-
-	temperature_bottom = NTC10k_ToCelsius( TEMP_BOILER_BOTTOM_PIN, TEMP_BOILER_BOTTOM_PAD_RESISTANCE );
-	ImportAnalog(TEMP_BOILER_BOTTOM, &temperature_bottom);
-
-	temperature_floor_flow = NTC10k_ToCelsius( TEMP_FLOOR_FLOW_PIN, TEMP_FLOOR_FLOW_PAD_RESISTANCE );
-	ImportAnalog(TEMP_FLOOR_FLOW, &temperature_floor_flow);
-
-	temperature_floor_return = NTC10k_ToCelsius( TEMP_FLOOR_RETURN_PIN, TEMP_FLOOR_RETURN_PAD_RESISTANCE );
-	ImportAnalog(TEMP_FLOOR_RETURN, &temperature_floor_return);
-
-	temperature_fancoil_flow = NTC10k_ToCelsius( TEMP_FANCOIL_FLOW_PIN, TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
-	ImportAnalog(TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
-
-
-	// read and send external temp & UR to ROW1B1 slots
-	float tmp;
-	U8 buff[4]; // two bytes for temp and two bytes for UR
-
-	tmp = dht_ext.readTemperature();
-	Souliss_HalfPrecisionFloating(buff, &tmp);
-
-	tmp = dht_ext.readHumidity();
-	Souliss_HalfPrecisionFloating(buff+2, &tmp); // 2 bytes offset for UR
-
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
-
-	tmp = dht_loft.readTemperature();
-	Souliss_HalfPrecisionFloating(buff, &tmp);
-
-	tmp = dht_loft.readHumidity();
-	Souliss_HalfPrecisionFloating(buff+2, &tmp); // 2 bytes offset for UR
-
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
-}
-
-inline void ProcessSanitaryWaterRequest(U16 phase_fast)
-{
-	// control SANITARY production hysteresys in Auto Mode
-	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
-	{
-		SetHpFlowToBoiler(); 		// upstream to boiler
-		SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
-	}
-}
-
-inline void ProcessZoneActivation(U16 phase_fast)
-{
-	if (IsSanitaryWaterAutoOn())
-		return;
-
-	if( IsFloorOn() ) 		// force all zones open
-	{
-		if( IsHeatMode() )
-			mInput(HVAC_ZONES) = HVAC_MASK_ALL_ZONES;
-		else if( IsCoolMode() )
-			mInput(HVAC_ZONES) = HVAC_MASK_ALL_COOLING_ZONES;
-	}
-	else if ( IsFloorOff() ) // force all zones Close
-	{
-		mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
-	}
-	else if( IsFloorAuto() || IsFloorAutoOn() ) // check zone temperatures to open/close valves
-	{
-		// AUTO MODE -> activate only needed zones
-
-		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
-		float max_temp = setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL;
-		float min_temp = setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL;
-
-		// activate zones according to measured temperature according to setpoint
-		mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
-
-		if( IsHeatMode() )
-		{
-			if( temp_BED1 < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
-			else if( temp_BED1 > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED1);
-
-			if( temp_BATH1 < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BATH1);
-			else if( temp_BATH1 > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
-
-			if( temp_BED2 < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED2);
-			else if( temp_BED2 > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
-
-			if( (temp_LIVING+temp_DINING)/2.0 < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-			else if( (temp_LIVING+temp_DINING)/2.0 > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
-
-			if( temp_BED3 < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED3);
-			else if( temp_BED3 > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED3);
-
-			if( temp_BATH2 < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BATH2);
-			else if( temp_BATH2 > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH2);
-
-			if( temp_KITCHEN < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
-			else if( temp_KITCHEN > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
-		}
-		else if( IsCoolMode() )
-		{
-			// do not cool baths floor
-			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
-			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH2);
-
-			if( temp_BED1 > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
-			else if( temp_BED1 < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED1);
-
-			if( temp_BED2 > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED2);
-			else if( temp_BED2 < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
-
-			if( (temp_LIVING+temp_DINING)/2.0 > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-			else if( (temp_LIVING+temp_DINING)/2.0 < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
-
-			if( temp_BED3 > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED3);
-			else if( temp_BED3 < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED3);
-
-			if( temp_KITCHEN > max_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
-			else if( temp_KITCHEN < min_temp)
-				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
-		}
-	}
-
-	// process zones logics both for floor on and off
-	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
-}
-
-inline void ProcessFloorRequest(U16 phase_fast)
-{
-	if (IsSanitaryWaterAutoOn())
-		return;
-
-	if( IsHeating() ) // heating request for at least one zone
-	{
-		FloorAutoOnCmd(); // only for user interface feedback
-
-		// control hot water storage if there's heating requests from any zone
-		if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
-		{
-			SetHpFlowToBoiler();
-			HpCirculationAutoOnCmd();
-		}
-		else
-		{
-			PumpBoilerToFloorAutoOnCmd();
-			AdjustFloorFlowTemperature_HEATING();
-		}
-	}
-	else if( IsCooling() ) // cooling at least one zone
-	{
-		FloorAutoOnCmd(); // only for user interface feedback
-		// produce cold water
-		HpSetpoint2AutoCmd(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
-		SetHpFlowToCollector();
-		HpCirculationAutoOnCmd();
-		PumpCollectorToFloorAutoOnCmd();
-		AdjustFloorFlowTemperature_COOLING();
-	}
-}
-
-inline void ProcessFancoilsRequest(U16 phase_fast)
-{
-	if (IsSanitaryWaterAutoOn())
-		return;
-
-	if( IsCoolMode() )
-	{
-		// check the max UR to eventually activate fancoils
-		float UR_MAX = UR_BED1;
-		UR_MAX = max(UR_MAX, UR_BED2);
-		UR_MAX = max(UR_MAX, UR_LIVING);
-		UR_MAX = max(UR_MAX, UR_BED3);
-		UR_MAX = max(UR_MAX, UR_KITCHEN);
-		UR_MAX = max(UR_MAX, UR_DINING);
-
-		// fancoils hysteresys in auto mode
-		if( (IsFancoilsAutoOff() && (UR_MAX > SETPOINT_UR_1)) || (IsFancoilsAutoOn() && (UR_MAX > SETPOINT_UR_1 - SETPOINT_UR_DEADBAND)) )
-				FancoilsAutoOnCmd();
-
-		if( IsFancoilsOn() || IsFancoilsAutoOn() )
-		{
-			// produce cold water
-			HpSetpoint2AutoCmd(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
-			SetHpFlowToCollector();
-			HpCirculationAutoOnCmd();
-			PumpCollectorToFancoilAutoOnCmd();
-			Fancoil_AutoCmd(phase_fast%2); TODO("adjust fancoils speed with UR hysteresys");
-		}
 	}
 }
 
@@ -488,7 +269,7 @@ void loop()
 
 
 		SHIFT_2110ms(1)
-			GetAmbienceCurrentStatus(phase_fast);
+			GetCurrentStatus(phase_fast);
 
 		SHIFT_2110ms(2)
 			ProcessSanitaryWaterRequest(phase_fast);
