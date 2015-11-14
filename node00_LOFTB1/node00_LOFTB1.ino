@@ -144,7 +144,7 @@ inline void ProcessLogics()
 float temperature_sanitary, temperature_heating, temperature_bottom;
 float temperature_floor_flow, temperature_floor_return, temperature_fancoil_flow;
 
-inline void ProcessSlowLogics1(U16 phase_fast)
+inline void GetAmbienceCurrentStatus(U16 phase_fast)
 {
 	temperature_sanitary = NTC10k_ToCelsius( TEMP_BOILER_SANITARY_PIN, TEMP_BOILER_SANITARY_PAD_RESISTANCE );
 	ImportAnalog(TEMP_BOILER_SANITARY, &temperature_sanitary);
@@ -186,17 +186,20 @@ inline void ProcessSlowLogics1(U16 phase_fast)
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
 }
 
-inline void ProcessSlowLogics2(U16 phase_fast)
+inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 {
 	// control SANITARY production hysteresys in Auto Mode
 	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
 	{
 		SetHpFlowToBoiler(); 		// upstream to boiler
 		SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
-
-		return; // should not execute following code that could modify the HVAC status
 	}
+}
 
+inline void ProcessZoneActivation(U16 phase_fast)
+{
+	if (IsSanitaryWaterAutoOn())
+		return;
 
 	if( IsFloorOn() ) 		// force all zones open
 	{
@@ -294,8 +297,11 @@ inline void ProcessSlowLogics2(U16 phase_fast)
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 }
 
-inline void ProcessSlowLogics3(U16 phase_fast)
+inline void ProcessFloorRequest(U16 phase_fast)
 {
+	if (IsSanitaryWaterAutoOn())
+		return;
+
 	if( IsHeating() ) // heating request for at least one zone
 	{
 		FloorAutoOnCmd(); // only for user interface feedback
@@ -324,8 +330,11 @@ inline void ProcessSlowLogics3(U16 phase_fast)
 	}
 }
 
-inline void ProcessSlowLogics4(U16 phase_fast)
+inline void ProcessFancoilsRequest(U16 phase_fast)
 {
+	if (IsSanitaryWaterAutoOn())
+		return;
+
 	if( IsCoolMode() )
 	{
 		// check the max UR to eventually activate fancoils
@@ -479,18 +488,21 @@ void loop()
 
 
 		SHIFT_2110ms(1)
-			ProcessSlowLogics1(phase_fast);
+			GetAmbienceCurrentStatus(phase_fast);
 
 		SHIFT_2110ms(2)
-			ProcessSlowLogics2(phase_fast);
+			ProcessSanitaryWaterRequest(phase_fast);
 
 		SHIFT_2110ms(3)
-			ProcessSlowLogics3(phase_fast);
+			ProcessZoneActivation(phase_fast);
 
 		SHIFT_2110ms(4)
-			ProcessSlowLogics4(phase_fast);
+			ProcessFloorRequest(phase_fast);
 
 		SHIFT_2110ms(5)
+			ProcessFancoilsRequest(phase_fast);
+
+		SHIFT_2110ms(6)
 			ProcessTimers();
 
 		FAST_GatewayComms();
