@@ -1,3 +1,14 @@
+//--------------------------------------
+// USED FOR DHT SENSOR
+DHT dht_ext(EXT_DHT22_PIN, DHT22);
+DHT dht_loft(LOFT_DHT22_PIN, DHT22);
+
+// DHT PIN1 -> 5V
+// DHT PIN2 -> Arduino EXT_DHT22 pin (INPUT_PULLUP)
+// DHT PIN3 Not Used
+// DHT PIN4 -> GND
+//--------------------------------------
+
 float temperature_sanitary, temperature_heating, temperature_bottom;
 float temperature_floor_flow, temperature_floor_return, temperature_fancoil_flow;
 

@@ -15,6 +15,7 @@ MEGA with Ethernet only acting as GATEWAY
 #include <SPI.h>
 #include <EEPROM.h>
 #include <math.h>
+#include <DHT.h>
 
 #include "Souliss.h"
 
@@ -25,41 +26,10 @@ MEGA with Ethernet only acting as GATEWAY
 #include "NTC.h"
 
 #include "node00_LOFTB1_PinMapping.h"
+#include "node00_LOFTB1_Parameters.h"
 #include "node00_LOFTB1_Slots.h"
 #include "node00_LOFTB1_SpeakEasy.h"
 #include "node00_LOFTB1_ControlMixValves.h"
-
-#define TEMP_BOILER_SANITARY_PAD_RESISTANCE 	9800 // measured
-#define TEMP_BOILER_HEATING_PAD_RESISTANCE      9800 // measured
-#define TEMP_BOILER_BOTTOM_PAD_RESISTANCE       9800 // measured
-#define TEMP_FLOOR_FLOW_PAD_RESISTANCE        	9830 // measured
-#define TEMP_FLOOR_RETURN_PAD_RESISTANCE      	9820 // measured
-#define TEMP_FANCOIL_FLOW_PAD_RESISTANCE      	9830 // measured
-
-
-#define SETPOINT_TEMP_SANITARY_WATER_MIN 	36
-#define SETPOINT_TEMP_SANITARY_WATER_MAX 	43
-
-#define SETPOINT_TEMP_DEADBAND_SMALL	0.2	// °C
-
-#define SETPOINT_UR_1				60
-#define SETPOINT_UR_2				70
-#define SETPOINT_UR_3				75
-#define SETPOINT_UR_DEADBAND	3
-
-
-//--------------------------------------
-// USED FOR DHT SENSOR
-#include <DHT.h>
-DHT dht_ext(EXT_DHT22_PIN, DHT22);
-DHT dht_loft(LOFT_DHT22_PIN, DHT22);
-
-// DHT PIN1 -> 5V
-// DHT PIN2 -> Arduino EXT_DHT22 pin (INPUT_PULLUP)
-// DHT PIN3 Not Used
-// DHT PIN4 -> GND
-//--------------------------------------
-
 #include "node00_LOFTB1_HVAC_Logics.h"
 
 inline void ReadInputs()
