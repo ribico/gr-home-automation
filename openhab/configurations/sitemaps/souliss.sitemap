@@ -10,6 +10,13 @@ sitemap default label="Full"
 				Switch item=Light_3F_Loft_2 label="Luce 2"
 				Switch item=Light_3F_Toilet label="Luce Bagno"
 
+				Text label="Clima" icon="climate"
+				{
+					Text item=Temperature_3F_Loft
+					Text item=UR_3F_Loft
+					Text item=Valve_3F_Loft label="Valvola Zona"
+				}
+
 			}
 
 			Text label="Terrazzo" icon="terrace"
@@ -18,6 +25,11 @@ sitemap default label="Full"
 				Switch item=Light_3F_Terrace_2 label="Luce 2"
 				Switch item=Light_3F_Terrace_3 label="Luce 3"
 
+				Text label="Clima" icon="climate"
+				{
+					Text item=Temperature_3F_Ext
+					Text item=UR_3F_Ext
+				}
 			}
 
 		}
@@ -467,7 +479,16 @@ sitemap default label="Full"
 						}
 					}
 				}
-
+				Frame label="Loft" icon="attic"
+				{
+					Text item=Temperature_3F_Loft
+					Text item=UR_3F_Loft
+				}
+				Frame label="Ext" icon="terrace"
+				{
+					Text item=Temperature_3F_Ext
+					Text item=UR_3F_Ext
+				}
 			}
 
 			Text label="Dettagli Temperature" icon="temperature"
@@ -483,6 +504,7 @@ sitemap default label="Full"
 					Text item=Temperature_2F_Bedroom1 label="Camera 1 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
 					Text item=Temperature_2F_Bedroom2 label="Camera 2 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
 					Text item=Temperature_2F_Bedroom3 label="Camera 3 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=Temperature_3F_Loft label="Loft [%.1f °C]"
 					Text item=Temperature_3F_Ext label="Esterno [%.1f °C]"
 				}
 
