@@ -117,6 +117,7 @@ inline void DefineTypicals()
 	SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_AutoCmd);
 	SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_AutoCmd);
 	SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_AutoCmd);
+//	SetInput(FLOOR_MODE, Souliss_T1n_AutoCmd);
 	SetInput(FANCOIL_MODE, Souliss_T1n_AutoCmd);
 	SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd);
 

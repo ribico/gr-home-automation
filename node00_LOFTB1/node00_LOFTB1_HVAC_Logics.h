@@ -165,6 +165,57 @@ inline void ProcessZoneActivation(U16 phase_fast)
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 }
 
+
+inline void CalculateFloorTempSetpoint(U16 phase_fast)
+{
+  if( IsHeating() ) // heating request for at least one zone
+	{
+    float temp_amb_sp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
+  	float setpoint_floor_water = temp_amb_sp + 2.0; // fixed delta above ambience setpoint
+  	setpoint_floor_water += (temp_amb_sp - temp_EXT) / 5.0; // variable with external delta
+
+  	float temp_min = temp_BED1;
+  	if(temp_BED2 != 0) temp_min = min(temp_min, temp_BED2);
+  	if(temp_BED3 != 0) temp_min = min(temp_min, temp_BED3);
+  	if(temp_BATH1 != 0) temp_min = min(temp_min, temp_BATH1);
+  	if(temp_BATH2 != 0) temp_min = min(temp_min, temp_BATH2);
+  	if(temp_LIVING != 0) temp_min = min(temp_min, temp_LIVING);
+  	if(temp_KITCHEN != 0) temp_min = min(temp_min, temp_KITCHEN);
+  	if(temp_DINING != 0) temp_min = min(temp_min, temp_DINING);
+
+  	if( temp_min!= 0 )
+  		setpoint_floor_water += (temp_amb_sp - temp_min); // variable with internal delta
+
+  	if( setpoint_floor_water > SETPOINT_TEMP_FLOOR_FLOW_MAX )
+  		setpoint_floor_water = SETPOINT_TEMP_FLOOR_FLOW_MAX;
+
+  	ImportAnalog(TEMP_FLOOR_FLOW_SETPOINT, &setpoint_floor_water);
+  }
+  else if( IsCooling() ) // cooling at least one zone
+	{
+    // check the dew point to reduce floor water temperature
+  	float dew_point_BED1 = temp_BED1-(100-UR_BED1)/5;
+  	float dew_point_BED2 = temp_BED2-(100-UR_BED2)/5;
+  	float dew_point_LIVING = temp_LIVING-(100-UR_LIVING)/5;
+  	float dew_point_BED3 = temp_BED3-(100-UR_BED3)/5;
+  	float dew_point_KITCHEN = temp_KITCHEN-(100-UR_KITCHEN)/5;
+  	float dew_point_DINING = temp_DINING-(100-UR_DINING)/5;
+
+  	float dew_point_MAX = dew_point_BED1;
+  	dew_point_MAX = max(dew_point_MAX, dew_point_BED2);
+  	dew_point_MAX = max(dew_point_MAX, dew_point_LIVING);
+  	dew_point_MAX = max(dew_point_MAX, dew_point_BED3);
+  	dew_point_MAX = max(dew_point_MAX, dew_point_KITCHEN);
+  	dew_point_MAX = max(dew_point_MAX, dew_point_DINING);
+
+    if( dew_point_MAX < SETPOINT_TEMP_FLOOR_FLOW_MIN )
+  		dew_point_MAX = SETPOINT_TEMP_FLOOR_FLOW_MIN;
+
+  	// variable setpoint according to UR and dew point
+  	ImportAnalog(TEMP_FLOOR_FLOW_SETPOINT, &dew_point_MAX);
+  }
+}
+
 inline void ProcessFloorRequest(U16 phase_fast)
 {
 	if (IsSanitaryWaterAutoOn())
@@ -184,18 +235,19 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		else
 		{
 			PumpBoilerToFloorAutoOnCmd();
-			AdjustFloorFlowTemperature_HEATING();
+			AdjustBoilerToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
 		}
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
 		FloorAutoOnCmd(); // only for user interface feedback
+
 		// produce cold water
 		HpSetpoint2AutoCmd(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
 		SetHpFlowToCollector();
 		HpCirculationAutoOnCmd();
 		PumpCollectorToFloorAutoOnCmd();
-		AdjustFloorFlowTemperature_COOLING();
+		AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
 	}
 }
 
