@@ -177,8 +177,9 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		// control hot water storage if there's heating requests from any zone
 		if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
 		{
-			SetHpFlowToBoiler();
-			HpCirculationAutoOnCmd();
+      HpSetpoint2AutoCmd(); 	// fixed HP setpoint 2, do not care about standard HP climatic curves
+      SetHpFlowToBoiler();
+      HpCirculationAutoOnCmd();
 		}
 		else
 		{
