@@ -1,11 +1,8 @@
 U8 gHeatingMixValve_TimerOn = 0;
 U8 gHeatingMixValve_TimerCycle = 0;
 
-#define HEATINGMIXVALVE_COLD_DIRECTION	0
-#define HEATINGMIXVALVE_WARM_DIRECTION	1
-
 // Move the heating mix valve of one step asynchronously from the rest of code
-// @direction specify the direction of movement (HEATINGMIXVALVE_COLD_DIRECTION / HEATINGMIXVALVE_WARM_DIRECTION)
+// @direction specify the direction of movement (Souliss_T2n_Coil_Open - HOT / Souliss_T2n_Coil_Close - COLD)
 // @duration_on specify time of actuation
 // @duration_cycle specify time of the complete cycle (actuation + delay)
 //
@@ -14,27 +11,16 @@ inline void HeatingMixValve_StepMove(U8 direction, U8 duration_on, U8 duration_c
 {
 	if( gHeatingMixValve_TimerCycle == 0 )
 	{
-		// new cycle, set timers and activate the valve
 		gHeatingMixValve_TimerOn = duration_on;
 		gHeatingMixValve_TimerCycle = duration_cycle;
-
-		if( direction == HEATINGMIXVALVE_COLD_DIRECTION )
-			HeatingMixValveOn_ColdDirection();
-
-		else if( direction == HEATINGMIXVALVE_WARM_DIRECTION )
-			HeatingMixValveOn_WarmDirection();
+		SetInput(HEATING_MIX_VALVE, direction);
 	}
+}
 
-	if( gHeatingMixValve_TimerOn == 0 )
-		HeatingMixValveOff();
-
-	if( gHeatingMixValve_TimerOn > 0)
-		gHeatingMixValve_TimerOn--;
-
-	if( gHeatingMixValve_TimerCycle > 0)
+inline void Timer_HeatingMixValveCycle()
+{
+	if( gHeatingMixValve_TimerCycle > 0 )
 		gHeatingMixValve_TimerCycle--;
-
-	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
 }
 
 
@@ -45,10 +31,10 @@ inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 	float error = setpoint - (mOutputAsFloat(TEMP_FLOOR_FLOW)+mOutputAsFloat(TEMP_FLOOR_RETURN))/2;
 
 	if( error < -1.0 ) // too hot
-		HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, abs(round(error)), 30); // cycle of 63 seconds (30x 2110ms)
+		HeatingMixValve_StepMove(Souliss_T2n_CloseCmd_SW, abs(round(error)), HEATINGMIXVALVE_PWM_CYCLE);
 
 	else if( error > 1.0 ) // too cold
-		HeatingMixValve_StepMove(HEATINGMIXVALVE_WARM_DIRECTION, abs(round(error)), 30); // cycle of 63 seconds (30x 2110ms)
+		HeatingMixValve_StepMove(Souliss_T2n_OpenCmd_SW, abs(round(error)), HEATINGMIXVALVE_PWM_CYCLE);
 }
 
 #define COLLECTOR_FLOOR_MIX_VALVE_MIN	0

@@ -42,8 +42,8 @@
 #define HVAC_VALVES 							25
 #	define MAIN_3WAY_VALVE_BOILER_MASK			0x01
 #	define MAIN_3WAY_VALVE_COLLECTOR_MASK		0x02
-#	define HEATING_MIX_VALVE_SWITCH_MASK		0x04
-#	define HEATING_MIX_VALVE_DIRECTION_MASK		0x08
+//#	define HEATING_MIX_VALVE_HOT_MASK		0x04
+//#	define HEATING_MIX_VALVE_COLD_MASK		0x08
 
 #define MAIN_3WAY_VALVE				26
 
@@ -60,6 +60,8 @@
 
 #define TEMP_FLOOR_FLOW_SETPOINT	35
 #define TEMP_FLOOR_FLOW_SETPOINT_H	36
+
+#define HEATING_MIX_VALVE		37
 
 
 #define ROW1B1_EXT_TEMP						6
@@ -110,6 +112,8 @@ inline void DefineTypicals()
 	// initialize values
 	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
 //	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+
+	Souliss_SetT22(memory_map, HEATING_MIX_VALVE);
 
 
 	SetInput(HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd);

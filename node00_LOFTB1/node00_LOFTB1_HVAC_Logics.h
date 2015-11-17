@@ -59,6 +59,12 @@ inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 	// control SANITARY production hysteresys in Auto Mode
 	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
 	{
+    if( IsHeating() && IsSanitaryWaterAutoOff() && IsSanitaryWaterCold() ) // only once, when starting production
+    {
+      // move heating mix valve a bit torwards cold direction since after production the storage water will be hotter
+      HeatingMixValve_StepMove(Souliss_T2n_CloseCmd_SW, HEATINGMIXVALVE_PWM_CYCLE/2, HEATINGMIXVALVE_PWM_CYCLE);
+    }
+
 		SetHpFlowToBoiler(); 		// upstream to boiler
 		SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
 	}
@@ -264,6 +270,12 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		// control hot water storage if there's heating requests from any zone
 		if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
 		{
+      if( !IsStorageWaterInProduction() && IsStorageWaterCold() ) // only once, when starting production
+      {
+        // move heating mix valve a bit torwards cold direction since after production the storage water will be hotter
+        HeatingMixValve_StepMove(Souliss_T2n_CloseCmd_SW, HEATINGMIXVALVE_PWM_CYCLE/5, HEATINGMIXVALVE_PWM_CYCLE);
+      }
+
       HpSetpoint2AutoCmd(); 	// fixed HP setpoint 2, do not care about standard HP climatic curves
       SetHpFlowToBoiler();
       HpCirculationAutoOnCmd();
