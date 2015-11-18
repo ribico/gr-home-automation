@@ -59,6 +59,13 @@ inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 	// control SANITARY production hysteresys in Auto Mode
 	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
 	{
+    if( IsHeating() )
+    {
+      // in case of heating
+      // move mix valve to coolest position since the water will be hotter after sanitary water production
+      HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, HEATING_MIX_VALVE_CYCLE, HEATING_MIX_VALVE_LONG_CYCLE);
+    }
+
 		SetHpFlowToBoiler(); 		// upstream to boiler
 		SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
 	}
@@ -201,7 +208,6 @@ inline void ProcessZoneActivation(U16 phase_fast)
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 }
 
-
 inline void CalculateFloorTempSetpoint(U16 phase_fast)
 {
   if( IsHeating() ) // heating request for at least one zone
@@ -267,6 +273,8 @@ inline void ProcessFloorRequest(U16 phase_fast)
       HpSetpoint2AutoCmd(); 	// fixed HP setpoint 2, do not care about standard HP climatic curves
       SetHpFlowToBoiler();
       HpCirculationAutoOnCmd();
+      // move mix valve to a bit cooler position since the water will be hotter after storage water production
+      HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, HEATING_MIX_VALVE_CYCLE/4, HEATING_MIX_VALVE_LONG_CYCLE);
 		}
 		else
 		{

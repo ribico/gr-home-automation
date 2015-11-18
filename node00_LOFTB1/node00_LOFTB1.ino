@@ -177,6 +177,8 @@ inline void ProcessTimers()
 
 	Souliss_T12_Timer(memory_map, FANCOIL_MODE);
 	Souliss_T12_Timer(memory_map, HP_SETPOINT_2);
+
+	Timer_HeatingMixValve();
 }
 
 
