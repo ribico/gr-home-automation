@@ -87,7 +87,6 @@ inline void ProcessLogics()
 	grh_Logic_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
 
 	Souliss_Logic_T22(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
-	Souliss_Logic_T22(memory_map, HEATING_MIX_VALVE, &data_changed, Souliss_T2n_Timer_Off+gHeatingMixValve_TimerOn);
 
 	Souliss_Logic_T12(memory_map, PUMP_BOILER_FLOOR, &data_changed);
 	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FANCOIL, &data_changed);
@@ -138,8 +137,11 @@ inline void SetOutputs()
 	digitalWrite(ZONE_SWITCH_BED_1_PIN, 	!(mOutput(HVAC_ZONES) & HVAC_MASK_BED1)		);
 	digitalWrite(ZONE_SWITCH_LOFT_PIN, 		!(mOutput(HVAC_ZONES) & HVAC_MASK_LOFT)		);
 
-	LowDigOut(HEATING_MIX_VALVE_HOT_PIN, Souliss_T2n_Coil_Open, HEATING_MIX_VALVE);
-	LowDigOut(HEATING_MIX_VALVE_COLD_PIN, Souliss_T2n_Coil_Close, HEATING_MIX_VALVE);
+	// heating mix valve on/off and direction
+	digitalWrite(HEATING_MIX_VALVE_SWITCH_PIN,
+		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK) );
+	digitalWrite(HEATING_MIX_VALVE_DIRECTION_PIN,
+		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_DIRECTION_MASK) );
 
 	LowDigOut(MAIN_3WAY_VALVE_BOILER_PIN, Souliss_T2n_Coil_Open, MAIN_3WAY_VALVE);
 	LowDigOut(MAIN_3WAY_VALVE_COLLECTOR_PIN, Souliss_T2n_Coil_Close, MAIN_3WAY_VALVE);
@@ -176,8 +178,7 @@ inline void ProcessTimers()
 	Souliss_T12_Timer(memory_map, FANCOIL_MODE);
 	Souliss_T12_Timer(memory_map, HP_SETPOINT_2);
 
-	Souliss_T22_Timer(memory_map, HEATING_MIX_VALVE);
-	Timer_HeatingMixValveCycle();
+	Timer_HeatingMixValve();
 }
 
 

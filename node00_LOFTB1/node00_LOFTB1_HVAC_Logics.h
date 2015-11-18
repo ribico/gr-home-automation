@@ -59,10 +59,11 @@ inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 	// control SANITARY production hysteresys in Auto Mode
 	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
 	{
-    if( IsHeating() && IsSanitaryWaterAutoOff() && IsSanitaryWaterCold() ) // only once, when starting production
+    if( IsHeating() )
     {
-      // move heating mix valve a bit torwards cold direction since after production the storage water will be hotter
-      HeatingMixValve_StepMove(Souliss_T2n_CloseCmd_SW, HEATINGMIXVALVE_PWM_CYCLE/2, HEATINGMIXVALVE_PWM_CYCLE);
+      // in case of heating
+      // move mix valve to coolest position since the water will be hotter after sanitary water production
+      HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, HEATING_MIX_VALVE_CYCLE, HEATING_MIX_VALVE_LONG_CYCLE);
     }
 
 		SetHpFlowToBoiler(); 		// upstream to boiler
@@ -207,7 +208,6 @@ inline void ProcessZoneActivation(U16 phase_fast)
 	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
 }
 
-
 inline void CalculateFloorTempSetpoint(U16 phase_fast)
 {
   if( IsHeating() ) // heating request for at least one zone
@@ -270,15 +270,11 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		// control hot water storage if there's heating requests from any zone
 		if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
 		{
-      if( !IsStorageWaterInProduction() && IsStorageWaterCold() ) // only once, when starting production
-      {
-        // move heating mix valve a bit torwards cold direction since after production the storage water will be hotter
-        HeatingMixValve_StepMove(Souliss_T2n_CloseCmd_SW, HEATINGMIXVALVE_PWM_CYCLE/5, HEATINGMIXVALVE_PWM_CYCLE);
-      }
-
       HpSetpoint2AutoCmd(); 	// fixed HP setpoint 2, do not care about standard HP climatic curves
       SetHpFlowToBoiler();
       HpCirculationAutoOnCmd();
+      // move mix valve to a bit cooler position since the water will be hotter after storage water production
+      HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, HEATING_MIX_VALVE_CYCLE/4, HEATING_MIX_VALVE_LONG_CYCLE);
 		}
 		else
 		{
