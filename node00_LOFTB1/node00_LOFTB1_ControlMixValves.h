@@ -56,6 +56,8 @@ inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 	// control the boiler-floor mix valve to keep the setpoint
 	// error is used as a timer value for motorized valve
 	float error = setpoint - (mOutputAsFloat(TEMP_FLOOR_FLOW)+mOutputAsFloat(TEMP_FLOOR_RETURN))/2;
+	Serial.print("HEATING FLOW ERROR: ");
+	Serial.println(error);
 
 	if( error < -1.0 ) // too hot
 		HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, abs(round(error)), HEATING_MIX_VALVE_CYCLE); // cycle of 105 seconds (50x 2110ms)
