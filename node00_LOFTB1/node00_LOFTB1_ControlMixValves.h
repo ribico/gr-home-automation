@@ -2,8 +2,8 @@ U8 gHeatingMixValve_TimerOn = 0;
 U16 gHeatingMixValve_TimerCycle = 0;
 U16 gHeatingMixValve_TimerCycle_LastVal;
 
-#define HEATINGMIXVALVE_COLD_DIRECTION	0
-#define HEATINGMIXVALVE_WARM_DIRECTION	1
+#define HEATINGMIXVALVE_COLD_DIRECTION	1
+#define HEATINGMIXVALVE_WARM_DIRECTION	2
 
 /*
 by calling this function at every cycle it enable the heating mix valve
@@ -53,17 +53,39 @@ inline void Timer_HeatingMixValve()
 
 inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 {
+//	float temp_storage = mOutputAsFloat(TEMP_BOILER_HEATING);
+	float temp_floor_flow = mOutputAsFloat(TEMP_FLOOR_FLOW);
+	float temp_floor_return = mOutputAsFloat(TEMP_FLOOR_RETURN);
+
 	// control the boiler-floor mix valve to keep the setpoint
 	// error is used as a timer value for motorized valve
-	float error = setpoint - (mOutputAsFloat(TEMP_FLOOR_FLOW)+mOutputAsFloat(TEMP_FLOOR_RETURN))/2;
+	float error = setpoint - (temp_floor_flow + temp_floor_return)/2;
+/*
 	Serial.print("HEATING FLOW ERROR: ");
 	Serial.println(error);
+*/
+	float mix_delta = temp_storage-temp_floor_return;
+
+	U8 direction = 0;
+	U8 duration_on = 0;
 
 	if( error < -1.0 ) // too hot
-		HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, abs(round(error)), HEATING_MIX_VALVE_CYCLE); // cycle of 105 seconds (50x 2110ms)
-
+	{
+		direction = HEATINGMIXVALVE_COLD_DIRECTION;
+		duration_on = abs(round(error));
+	}
 	else if( error > 1.0 ) // too cold
-		HeatingMixValve_StepMove(HEATINGMIXVALVE_WARM_DIRECTION, abs(round(error)), HEATING_MIX_VALVE_CYCLE); // cycle of 105 seconds (50x 2110ms)
+	{
+		direction = HEATINGMIXVALVE_WARM_DIRECTION;
+		duration_on = abs(round(error));
+	}
+/*
+	Serial.print("STEP MOVE - direction : ");
+	Serial.print(direction);
+	Serial.print(" - duration_on : ");
+	Serial.println(duration_on);
+*/
+	HeatingMixValve_StepMove(direction, duration_on, HEATING_MIX_VALVE_CYCLE); // cycle of 105 seconds (50x 2110ms)
 }
 
 #define COLLECTOR_FLOOR_MIX_VALVE_MIN	0

@@ -4,7 +4,7 @@ MEGA with Ethernet only acting as GATEWAY
 
 ***********************/
 
-#define DEBUG
+//#define DEBUG
 
 #include "bconf/StandardArduino.h"
 #include "conf/ethW5100.h"
