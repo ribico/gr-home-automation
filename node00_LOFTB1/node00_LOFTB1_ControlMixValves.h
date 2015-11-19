@@ -64,7 +64,6 @@ inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 	Serial.print("HEATING FLOW ERROR: ");
 	Serial.println(error);
 */
-	float mix_delta = temp_storage-temp_floor_return;
 
 	U8 direction = 0;
 	U8 duration_on = 0;
