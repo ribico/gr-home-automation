@@ -214,7 +214,7 @@ inline void CalculateFloorTempSetpoint(U16 phase_fast)
 	{
     float temp_amb_sp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
   	float setpoint_floor_water = temp_amb_sp + 2.0; // fixed delta above ambience setpoint
-  	setpoint_floor_water += (temp_amb_sp - temp_EXT) / 5.0; // variable with external delta
+  	setpoint_floor_water += (temp_amb_sp - temp_EXT) / 5.0; // variable with indoor/outdoor delta
 
   	float temp_min = temp_BED1;
   	if(temp_BED2 != 0) temp_min = min(temp_min, temp_BED2);
@@ -226,7 +226,7 @@ inline void CalculateFloorTempSetpoint(U16 phase_fast)
   	if(temp_DINING != 0) temp_min = min(temp_min, temp_DINING);
 
   	if( temp_min!= 0 )
-  		setpoint_floor_water += (temp_amb_sp - temp_min); // variable with internal delta
+  		setpoint_floor_water += 2.0*(temp_amb_sp - temp_min); // variable with indoor delta
 
   	if( setpoint_floor_water > SETPOINT_TEMP_FLOOR_FLOW_MAX )
   		setpoint_floor_water = SETPOINT_TEMP_FLOOR_FLOW_MAX;
