@@ -97,6 +97,8 @@ inline void ProcessZoneActivation(U16 phase_fast)
 
 		// activate zones according to measured temperature according to setpoint
 		mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
+    if( setpoint_temp == 0 )
+      return;
 
 		if( IsHeatMode() )
 		{
