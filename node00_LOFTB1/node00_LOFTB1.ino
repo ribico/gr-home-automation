@@ -5,6 +5,7 @@ MEGA with Ethernet only acting as GATEWAY
 ***********************/
 
 //#define DEBUG
+//#define DEBUG_SOULISS
 
 #include "bconf/StandardArduino.h"
 #include "conf/ethW5100.h"
@@ -87,14 +88,13 @@ inline void ProcessLogics()
 	grh_Logic_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
 
 	Souliss_Logic_T22(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
+	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
 
 	Souliss_Logic_T12(memory_map, PUMP_BOILER_FLOOR, &data_changed);
 	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FANCOIL, &data_changed);
 	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FLOOR, &data_changed);
 	Souliss_Logic_T12(memory_map, FANCOIL_MODE, &data_changed);
 	Souliss_Logic_T12(memory_map, HP_SETPOINT_2, &data_changed);
-
-	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
 
 	// use a T21 for increasing/decreasing ambience temp setpoint
 	float ambience_setpoint = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
@@ -137,6 +137,17 @@ inline void SetOutputs()
 	digitalWrite(ZONE_SWITCH_BED_1_PIN, 	!(mOutput(HVAC_ZONES) & HVAC_MASK_BED1)		);
 	digitalWrite(ZONE_SWITCH_LOFT_PIN, 		!(mOutput(HVAC_ZONES) & HVAC_MASK_LOFT)		);
 
+	#ifdef DEBUG
+		if(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK)
+		{
+			Serial.print("SetOutputs - mOutput(HVAC_VALVES): ");
+			Serial.println(mOutput(HVAC_VALVES), BIN);
+			Serial.print("Move valve: ");
+			Serial.print(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK);
+			Serial.print(" Direction ");
+			Serial.println(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_DIRECTION_MASK);
+		}
+	#endif
 	// heating mix valve on/off and direction
 	digitalWrite(HEATING_MIX_VALVE_SWITCH_PIN,
 		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK) );

@@ -20,6 +20,21 @@ duration_cycle value
 */
 inline void HeatingMixValve_StepMove(U8 direction, U8 duration_on, U16 duration_cycle)
 {
+#ifdef DEBUG
+	Serial.print("STEP MOVE - direction : ");
+	Serial.print(direction);
+	Serial.print(" - duration_on : ");
+	Serial.print(duration_on);
+	Serial.print(" - duration_cycle : ");
+	Serial.println(duration_cycle);
+#endif
+
+	if( direction == 0 || duration_on == 0 || duration_cycle == 0)
+	{
+		Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
+		return;
+	}
+
 	if( gHeatingMixValve_TimerCycle == 0 ||	gHeatingMixValve_TimerCycle_LastVal != duration_cycle )
 	{
 		// new cycle, set timers and activate the valve
@@ -38,11 +53,24 @@ inline void HeatingMixValve_StepMove(U8 direction, U8 duration_on, U16 duration_
 
 		else if( direction == HEATINGMIXVALVE_WARM_DIRECTION )
 			HeatingMixValveOn_WarmDirection();
+
+		Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
+		#ifdef DEBUG
+			Serial.print("mInput(HVAC_VALVES): ");
+			Serial.println(mInput(HVAC_VALVES), BIN);
+		#endif
 	}
 }
 
 inline void Timer_HeatingMixValve()
 {
+	#ifdef DEBUG
+		Serial.print("gHeatingMixValve_TimerOn : ");
+		Serial.print(gHeatingMixValve_TimerOn);
+		Serial.print(" - gHeatingMixValve_TimerCycle : ");
+		Serial.println(gHeatingMixValve_TimerCycle);
+	#endif
+
 	if( gHeatingMixValve_TimerOn > 0)
 		gHeatingMixValve_TimerOn--;
 
@@ -60,10 +88,11 @@ inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 	// control the boiler-floor mix valve to keep the setpoint
 	// error is used as a timer value for motorized valve
 	float error = setpoint - (temp_floor_flow + temp_floor_return)/2;
-/*
+
+#ifdef DEBUG
 	Serial.print("HEATING FLOW ERROR: ");
 	Serial.println(error);
-*/
+#endif
 
 	U8 direction = 0;
 	U8 duration_on = 0;
@@ -78,12 +107,7 @@ inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 		direction = HEATINGMIXVALVE_WARM_DIRECTION;
 		duration_on = abs(round(error));
 	}
-/*
-	Serial.print("STEP MOVE - direction : ");
-	Serial.print(direction);
-	Serial.print(" - duration_on : ");
-	Serial.println(duration_on);
-*/
+
 	HeatingMixValve_StepMove(direction, duration_on, HEATING_MIX_VALVE_CYCLE); // cycle of 105 seconds (50x 2110ms)
 }
 
