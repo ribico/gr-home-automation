@@ -18,6 +18,14 @@
 // USAGE: TODO(Remember to fix this)
 
 #ifdef DEBUG
+	#define grhOpenSerialOnDebug()	Serial.begin(9600);\
+									while (!Serial) { ; }\
+									Serial.println("Serial started to DEBUG");
+#else
+	#define grhOpenSerialOnDebug()
+#endif
+
+#ifdef DEBUG_SOULISS
 	#define MaCaco_DEBUG_INSKETCH
 	#define MaCaco_DEBUG 	1
 	#define VNET_DEBUG_INSKETCH
@@ -25,8 +33,6 @@
 	#define grhOpenSerialOnDebug()	Serial.begin(9600);\
 									while (!Serial) { ; }\
 									Serial.println("Serial started to DEBUG");
-#else
-	#define grhOpenSerialOnDebug()
 #endif
 
 
