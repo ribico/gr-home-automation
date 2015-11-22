@@ -31,6 +31,7 @@ inline void HeatingMixValve_StepMove(U8 direction, U8 duration_on, U16 duration_
 
 	if( direction == 0 || duration_on == 0 || duration_cycle == 0)
 	{
+		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES);
 		Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
 		return;
 	}
@@ -87,7 +88,7 @@ inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 
 	// control the boiler-floor mix valve to keep the setpoint
 	// error is used as a timer value for motorized valve
-	float error = setpoint - (temp_floor_flow + temp_floor_return)/2;
+	float error = setpoint - (2*temp_floor_flow + temp_floor_return)/3;
 
 #ifdef DEBUG
 	Serial.print("HEATING FLOW ERROR: ");
