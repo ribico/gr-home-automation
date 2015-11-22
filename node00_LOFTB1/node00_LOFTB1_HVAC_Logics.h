@@ -218,17 +218,17 @@ inline void CalculateFloorTempSetpoint(U16 phase_fast)
   	float setpoint_floor_water = temp_amb_sp + 2.0; // fixed delta above ambience setpoint
   	setpoint_floor_water += (temp_amb_sp - temp_EXT) / 5.0; // variable with indoor/outdoor delta
 
-  	float temp_min = temp_BED1;
-  	if(temp_BED2 != 0) temp_min = min(temp_min, temp_BED2);
-  	if(temp_BED3 != 0) temp_min = min(temp_min, temp_BED3);
-  	if(temp_BATH1 != 0) temp_min = min(temp_min, temp_BATH1);
-  	if(temp_BATH2 != 0) temp_min = min(temp_min, temp_BATH2);
-  	if(temp_LIVING != 0) temp_min = min(temp_min, temp_LIVING);
-  	if(temp_KITCHEN != 0) temp_min = min(temp_min, temp_KITCHEN);
-  	if(temp_DINING != 0) temp_min = min(temp_min, temp_DINING);
+  	float temp_ave = temp_BED1;
+  	if(temp_BED2 != 0) temp_ave = (temp_ave + temp_BED2)/2;
+  	if(temp_BED3 != 0) temp_ave = (temp_ave + temp_BED3)/2;
+  	if(temp_BATH1 != 0) temp_ave = (temp_ave + temp_BATH1)/2;
+  	if(temp_BATH2 != 0) temp_ave = (temp_ave + temp_BATH2)/2;
+  	if(temp_LIVING != 0) temp_ave = (temp_ave + temp_LIVING)/2;
+  	if(temp_KITCHEN != 0) temp_ave = (temp_ave + temp_KITCHEN)/2;
+    if(temp_DINING != 0) temp_ave = (temp_ave + temp_DINING)/2;
 
-  	if( temp_min!= 0 )
-  		setpoint_floor_water += 2.0*(temp_amb_sp - temp_min); // variable with indoor delta
+  	if( temp_ave!= 0 )
+  		setpoint_floor_water += 2.0*(temp_amb_sp - temp_ave); // variable with indoor delta
 
   	if( setpoint_floor_water > SETPOINT_TEMP_FLOOR_FLOW_MAX )
   		setpoint_floor_water = SETPOINT_TEMP_FLOOR_FLOW_MAX;
