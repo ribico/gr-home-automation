@@ -87,7 +87,24 @@
 #define temp_DINING	pOutputAsFloat(3,5)
 #define UR_DINING	pOutputAsFloat(3,7)
 
-#define temp_EXT pOutputAsFloat(1,ROW1B1_EXT_TEMP)
-#define UR_EXT pOutputAsFloat(1,ROW1B1_EXT_UR)
-#define temp_LOFT pOutputAsFloat(1,ROW1B1_LOFT_TEMP)
-#define UR_LOFT pOutputAsFloat(1,ROW1B1_LOFT_UR)
+#define temp_EXT  pOutputAsFloat(ROW1B1,ROW1B1_EXT_TEMP)
+#define UR_EXT    pOutputAsFloat(ROW1B1,ROW1B1_EXT_UR)
+#define temp_LOFT pOutputAsFloat(ROW1B1,ROW1B1_LOFT_TEMP)
+#define UR_LOFT   pOutputAsFloat(ROW1B1,ROW1B1_LOFT_UR)
+
+#define temp_HVAC_Boiler_Saniary            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_SANITARY_TEMP)
+#define temp_HVAC_Boiler_Heating            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_HEATING_TEMP)
+#define temp_HVAC_Boiler_Bottom             pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_BOTTOM_TEMP)
+
+#define temp_HVAC_Collector_Flow            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FLOW_TEMP)
+#define temp_HVAC_Collector_Return          pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_RETURN_TEMP)
+#define temp_HVAC_Collector_Floor_Flow      pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FLOOR_FLOW_TEMP)
+#define temp_HVAC_Collector_Floor_Return    pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FLOOR_RETURN_TEMP)
+#define temp_HVAC_Collector_Fancoil_Flow    pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FANCOILS_FLOW_TEMP)
+#define temp_HVAC_Collector_Fancoil_Return  pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FANCOILS_RETURN_TEMP)
+
+#define temp_HVAC_Boiler_Floor_Flow         pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_FLOOR_FLOW_TEMP)
+#define temp_HVAC_Bouler_Floor_Return       pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_FLOOR_RETURN_TEMP)
+
+#define temp_HVAC_HP_Flow                   pOutputAsFloat(ROW1B1,ROW1B1_HVAC_HP_FLOW_TEMP)
+#define temp_HVAC_HP_Return                 pOutputAsFloat(ROW1B1,ROW1B1_HVAC_HP_RETURN_TEMP)

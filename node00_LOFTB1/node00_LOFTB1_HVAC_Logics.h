@@ -52,6 +52,13 @@ inline void GetCurrentStatus(U16 phase_fast)
 	Souliss_HalfPrecisionFloating(buff+2, &tmp); // 2 bytes offset for UR
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
+
+	tmp = gTempSensors.getTempCByIndex(0);
+	Souliss_HalfPrecisionFloating(buff, &tmp);
+
+	gTempSensors.requestTemperatures(); // asynchronous request
+
+	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP, buff, 2);
 }
 
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)

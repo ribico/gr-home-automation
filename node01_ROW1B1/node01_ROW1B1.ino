@@ -30,14 +30,29 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 
 // not connected directly to this board
 #define EXT_TEMP						6
-#define EXT_TEMP_H					7
 #define EXT_UR							8
-#define EXT_UR_H						9
 
 #define LOFT_TEMP						10
-#define LOFT_TEMP_H					11
 #define LOFT_UR							12
-#define LOFT_UR_H						13
+
+#define HVAC_BOILER_SANITARY_TEMP 							14
+#define HVAC_BOILER_HEATING_TEMP 								16
+#define HVAC_BOILER_BOTTOM_TEMP 								18
+
+#define HVAC_COLLECTOR_FLOW_TEMP								20
+#define HVAC_COLLECTOR_RETURN_TEMP							22
+#define HVAC_COLLECTOR_FLOOR_FLOW_TEMP		 			24
+#define HVAC_COLLECTOR_FLOOR_RETURN_TEMP  			26
+#define HVAC_COLLECTOR_FANCOILS_FLOW_TEMP  			28
+#define HVAC_COLLECTOR_FANCOILS_RETURN_TEMP 		30
+
+#define HVAC_BOILER_FLOOR_FLOW_TEMP							32
+#define HVAC_BOILER_FLOOR_RETURN_TEMP						34
+
+#define HVAC_HP_FLOW_TEMP												36
+#define HVAC_HP_RETURN_TEMP											38
+
+
 
 #define ROW1B3_LIGHT_STAIRS			4
 #define ROW1B4_LIGHT_ENTRANCE_1	1
@@ -45,10 +60,29 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 inline void DefineTypicals()
 {
 	Set_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_6);
+
 	Set_Temperature(EXT_TEMP);
 	Set_Humidity(EXT_UR);
+
 	Set_Temperature(LOFT_TEMP);
 	Set_Humidity(LOFT_UR);
+
+	Set_Temperature(HVAC_BOILER_SANITARY_TEMP);
+	Set_Temperature(HVAC_BOILER_HEATING_TEMP);
+	Set_Temperature(HVAC_BOILER_BOTTOM_TEMP);
+
+	Set_Temperature(HVAC_COLLECTOR_FLOW_TEMP);
+	Set_Temperature(HVAC_COLLECTOR_RETURN_TEMP);
+	Set_Temperature(HVAC_COLLECTOR_FLOOR_FLOW_TEMP);
+	Set_Temperature(HVAC_COLLECTOR_FLOOR_RETURN_TEMP);
+	Set_Temperature(HVAC_COLLECTOR_FANCOILS_FLOW_TEMP);
+	Set_Temperature(HVAC_COLLECTOR_FANCOILS_RETURN_TEMP);
+
+	Set_Temperature(HVAC_BOILER_FLOOR_FLOW_TEMP);
+	Set_Temperature(HVAC_BOILER_FLOOR_RETURN_TEMP);
+
+	Set_Temperature(HVAC_HP_FLOW_TEMP);
+	Set_Temperature(HVAC_HP_RETURN_TEMP);
 }
 
 inline void ReadInputs()
@@ -64,10 +98,29 @@ inline void ReadInputs()
 inline void ProcessLogics()
 {
 	Logic_LightsGroup(LIGHT_LIVING_1, LIGHT_LIVING_6);
+
 	grh_Logic_Temperature(EXT_TEMP);
 	grh_Logic_Humidity(EXT_UR);
+
 	grh_Logic_Temperature(LOFT_TEMP);
 	grh_Logic_Humidity(LOFT_UR);
+
+	grh_Logic_Temperature(HVAC_BOILER_SANITARY_TEMP);
+	grh_Logic_Temperature(HVAC_BOILER_HEATING_TEMP);
+	grh_Logic_Temperature(HVAC_BOILER_BOTTOM_TEMP);
+
+	grh_Logic_Temperature(HVAC_COLLECTOR_FLOW_TEMP);
+	grh_Logic_Temperature(HVAC_COLLECTOR_RETURN_TEMP);
+	grh_Logic_Temperature(HVAC_COLLECTOR_FLOOR_FLOW_TEMP);
+	grh_Logic_Temperature(HVAC_COLLECTOR_FLOOR_RETURN_TEMP);
+	grh_Logic_Temperature(HVAC_COLLECTOR_FANCOILS_FLOW_TEMP);
+	grh_Logic_Temperature(HVAC_COLLECTOR_FANCOILS_RETURN_TEMP);
+
+	grh_Logic_Temperature(HVAC_BOILER_FLOOR_FLOW_TEMP);
+	grh_Logic_Temperature(HVAC_BOILER_FLOOR_RETURN_TEMP);
+
+	grh_Logic_Temperature(HVAC_HP_FLOW_TEMP);
+	grh_Logic_Temperature(HVAC_HP_RETURN_TEMP);	
 }
 
 inline void SetOutputs()

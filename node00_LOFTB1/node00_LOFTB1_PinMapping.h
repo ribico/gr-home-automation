@@ -21,6 +21,8 @@
 #define EXT_DHT22_PIN													7
 #define LOFT_DHT22_PIN												6
 
+#define DALLAS_WIRE_BUS												5
+
 #define COLLECTOR_FLOOR_MIX_VALVE_PIN					13
 
 // DEFINE OUTPUT PINs
@@ -131,4 +133,9 @@ inline void DefinePinMode()
 
 	pinMode(EXT_DHT22_PIN, INPUT_PULLUP);
 	pinMode(LOFT_DHT22_PIN, INPUT_PULLUP);
+	pinMode(DALLAS_WIRE_BUS, INPUT_PULLUP);
 }
+
+
+OneWire gOneWire(DALLAS_WIRE_BUS);
+DallasTemperature gTempSensors(&gOneWire);

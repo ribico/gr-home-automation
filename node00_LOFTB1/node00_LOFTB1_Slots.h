@@ -63,11 +63,25 @@
 
 #define HEATING_MIX_VALVE		37
 
-
-#define ROW1B1_EXT_TEMP						6
-#define ROW1B1_EXT_UR							8
-#define ROW1B1_LOFT_TEMP					10
-#define ROW1B1_LOFT_UR						12
+/////////////////////////////////////////////////////////////
+#define ROW1B1																					1
+# define ROW1B1_EXT_TEMP																6
+# define ROW1B1_EXT_UR																	8
+# define ROW1B1_LOFT_TEMP																10
+# define ROW1B1_LOFT_UR																	12
+# define ROW1B1_HVAC_BOILER_SANITARY_TEMP 							14
+# define ROW1B1_HVAC_BOILER_HEATING_TEMP 								16
+#	define ROW1B1_HVAC_BOILER_BOTTOM_TEMP 								18
+#	define ROW1B1_HVAC_COLLECTOR_FLOW_TEMP								20
+#	define ROW1B1_HVAC_COLLECTOR_RETURN_TEMP							22
+#	define ROW1B1_HVAC_COLLECTOR_FLOOR_FLOW_TEMP		 			24
+#	define ROW1B1_HVAC_COLLECTOR_FLOOR_RETURN_TEMP  			26
+#	define ROW1B1_HVAC_COLLECTOR_FANCOILS_FLOW_TEMP  			28
+#	define ROW1B1_HVAC_COLLECTOR_FANCOILS_RETURN_TEMP 		30
+#	define ROW1B1_HVAC_BOILER_FLOOR_FLOW_TEMP							32
+#	define ROW1B1_HVAC_BOILER_FLOOR_RETURN_TEMP						34
+#	define ROW1B1_HVAC_HP_FLOW_TEMP												36
+#	define ROW1B1_HVAC_HP_RETURN_TEMP											38
 
 inline void DefineTypicals()
 {
