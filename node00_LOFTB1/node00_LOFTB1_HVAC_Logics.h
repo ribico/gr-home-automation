@@ -280,11 +280,9 @@ inline void ProcessFloorRequest(U16 phase_fast)
       // move mix valve to a bit cooler position since the water will be hotter after storage water production
       HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, HEATING_MIX_VALVE_CYCLE/4, HEATING_MIX_VALVE_LONG_CYCLE);
 		}
-		else
-		{
-			PumpBoilerToFloorAutoOnCmd();
-			AdjustBoilerToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
-		}
+
+		PumpBoilerToFloorAutoOnCmd();
+		AdjustBoilerToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
