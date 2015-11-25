@@ -214,6 +214,8 @@ inline void CalculateFloorTempSetpoint(U16 phase_fast)
 {
   if( IsHeating() ) // heating request for at least one zone
 	{
+		float setpoint_floor_water = 40.4 - 0.92*temp_EXT; // copied from ROHSS heatpump winter climatic curves
+/*
     float temp_amb_sp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
   	float setpoint_floor_water = temp_amb_sp + 2.0; // fixed delta above ambience setpoint
   	setpoint_floor_water += (temp_amb_sp - temp_EXT) / 5.0; // variable with indoor/outdoor delta
@@ -229,7 +231,7 @@ inline void CalculateFloorTempSetpoint(U16 phase_fast)
 
   	if( temp_ave!= 0 )
   		setpoint_floor_water += 2.0*(temp_amb_sp - temp_ave); // variable with indoor delta
-
+*/
   	if( setpoint_floor_water > SETPOINT_TEMP_FLOOR_FLOW_MAX )
   		setpoint_floor_water = SETPOINT_TEMP_FLOOR_FLOW_MAX;
 
