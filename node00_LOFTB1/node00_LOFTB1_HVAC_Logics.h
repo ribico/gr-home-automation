@@ -277,8 +277,6 @@ inline void ProcessFloorRequest(U16 phase_fast)
       HpSetpoint2AutoCmd(); 	// fixed HP setpoint 2, do not care about standard HP climatic curves
       SetHpFlowToBoiler();
       HpCirculationAutoOnCmd();
-      // move mix valve to a bit cooler position since the water will be hotter after storage water production
-      HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, HEATING_MIX_VALVE_CYCLE/4, HEATING_MIX_VALVE_LONG_CYCLE);
 		}
 
 		PumpBoilerToFloorAutoOnCmd();
