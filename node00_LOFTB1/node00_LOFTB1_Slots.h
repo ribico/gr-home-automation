@@ -1,30 +1,16 @@
-#define LIGHT_STAIRS					0
-#define LIGHT_LOFT_1            		1
-#define LIGHT_LOFT_2            		2
+#define LIGHT_STAIRS										0
+#define LIGHT_LOFT_1            				1
+#define LIGHT_LOFT_2            				2
 #define LIGHT_TERRACE_1                 3
 #define LIGHT_TERRACE_2                 4
 #define LIGHT_TERRACE_3                 5
 #define LIGHT_TOILET                    6
 
-#define TEMP_BOILER_SANITARY            7
-#define TEMP_BOILER_SANITARY_H          8
-#define TEMP_BOILER_HEATING             9
-#define TEMP_BOILER_HEATING_H   		10
-#define TEMP_BOILER_BOTTOM              11
-#define TEMP_BOILER_BOTTOM_H    		12
-
-#define FLOOR_MODE 			  			13
+#define FLOOR_MODE 			  							13
 #define HEATPUMP_REMOTE_SWITCH          14
 #define HEATPUMP_CIRCULATION_PUMP       15
-#define HEATPUMP_SANITARY_WATER       16
-#define HEATPUMP_COOL                	17
-
-#define TEMP_FLOOR_FLOW 			18      // floor heating system water temp
-#define TEMP_FLOOR_FLOW_H 			19
-#define TEMP_FLOOR_RETURN  			20      // floor heating system water return temp
-#define TEMP_FLOOR_RETURN_H 		21
-#define TEMP_FANCOIL_FLOW  			22      // floor heating system water return temp
-#define TEMP_FANCOIL_FLOW_H 		23
+#define HEATPUMP_SANITARY_WATER       	16
+#define HEATPUMP_COOL                		17
 
 #define HVAC_ZONES					24
 #	define HVAC_MASK_NO_ZONES		0x00
@@ -100,13 +86,6 @@ inline void DefineTypicals()
 	Souliss_SetT12(memory_map, HEATPUMP_CIRCULATION_PUMP);
 	Souliss_SetT12(memory_map, HEATPUMP_SANITARY_WATER);
 	Souliss_SetT12(memory_map, HEATPUMP_COOL);
-
-	Set_Temperature(TEMP_BOILER_SANITARY);
-	Set_Temperature(TEMP_BOILER_HEATING);
-	Set_Temperature(TEMP_BOILER_BOTTOM);
-	Set_Temperature(TEMP_FLOOR_FLOW);
-	Set_Temperature(TEMP_FLOOR_RETURN);
-	Set_Temperature(TEMP_FANCOIL_FLOW);
 
 	Souliss_SetT1A(memory_map, HVAC_ZONES);
 	Souliss_SetT1A(memory_map, HVAC_VALVES);

@@ -83,12 +83,6 @@ inline void ProcessLogics()
 	Souliss_Logic_T12(memory_map, HEATPUMP_SANITARY_WATER, &data_changed);
 	Souliss_Logic_T12(memory_map, HEATPUMP_COOL, &data_changed);
 
-	grh_Logic_Temperature(TEMP_BOILER_SANITARY);
-	grh_Logic_Temperature(TEMP_BOILER_HEATING);
-	grh_Logic_Temperature(TEMP_BOILER_BOTTOM);
-	grh_Logic_Temperature(TEMP_FLOOR_FLOW);
-	grh_Logic_Temperature(TEMP_FLOOR_RETURN);
-	grh_Logic_Temperature(TEMP_FANCOIL_FLOW);
 	grh_Logic_Temperature(TEMP_AMBIENCE_SET_POINT);
 	grh_Logic_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
 

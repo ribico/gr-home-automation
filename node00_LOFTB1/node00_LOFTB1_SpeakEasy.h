@@ -104,7 +104,10 @@
 #define temp_HVAC_Collector_Fancoil_Return  pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FANCOILS_RETURN_TEMP)
 
 #define temp_HVAC_Boiler_Floor_Flow         pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_FLOOR_FLOW_TEMP)
-#define temp_HVAC_Bouler_Floor_Return       pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_FLOOR_RETURN_TEMP)
+#define temp_HVAC_Boiler_Floor_Return       pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_FLOOR_RETURN_TEMP)
 
 #define temp_HVAC_HP_Flow                   pOutputAsFloat(ROW1B1,ROW1B1_HVAC_HP_FLOW_TEMP)
 #define temp_HVAC_HP_Return                 pOutputAsFloat(ROW1B1,ROW1B1_HVAC_HP_RETURN_TEMP)
+
+#define temp_HVAC_Floor_Flow                pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_FLOW_TEMP)
+#define temp_HVAC_Floor_Return              pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_RETURN_TEMP)
