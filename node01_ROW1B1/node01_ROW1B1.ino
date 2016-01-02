@@ -52,6 +52,8 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 #define HVAC_HP_FLOW_TEMP												36
 #define HVAC_HP_RETURN_TEMP											38
 
+#define HVAC_FLOOR_FLOW_TEMP										40
+#define HVAC_FLOOR_RETURN_TEMP									42
 
 
 #define ROW1B3_LIGHT_STAIRS			4
@@ -83,6 +85,9 @@ inline void DefineTypicals()
 
 	Set_Temperature(HVAC_HP_FLOW_TEMP);
 	Set_Temperature(HVAC_HP_RETURN_TEMP);
+
+	Set_Temperature(HVAC_FLOOR_FLOW_TEMP);
+	Set_Temperature(HVAC_FLOOR_RETURN_TEMP);
 }
 
 inline void ReadInputs()
@@ -120,7 +125,10 @@ inline void ProcessLogics()
 	grh_Logic_Temperature(HVAC_BOILER_FLOOR_RETURN_TEMP);
 
 	grh_Logic_Temperature(HVAC_HP_FLOW_TEMP);
-	grh_Logic_Temperature(HVAC_HP_RETURN_TEMP);	
+	grh_Logic_Temperature(HVAC_HP_RETURN_TEMP);
+
+	grh_Logic_Temperature(HVAC_FLOOR_FLOW_TEMP);
+	grh_Logic_Temperature(HVAC_FLOOR_RETURN_TEMP);
 }
 
 inline void SetOutputs()

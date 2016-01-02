@@ -82,6 +82,8 @@
 #	define ROW1B1_HVAC_BOILER_FLOOR_RETURN_TEMP						34
 #	define ROW1B1_HVAC_HP_FLOW_TEMP												36
 #	define ROW1B1_HVAC_HP_RETURN_TEMP											38
+# define ROW1B1_HVAC_FLOOR_FLOW_TEMP										40
+# define ROW1B1_HVAC_FLOOR_RETURN_TEMP									42
 
 inline void DefineTypicals()
 {

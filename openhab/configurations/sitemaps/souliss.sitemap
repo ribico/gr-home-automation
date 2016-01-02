@@ -496,14 +496,14 @@ sitemap default label="Full"
 
 				Text icon="temperature" label="Temperature di zona"
 				{
-					Text item=Temperature_2F_Kitchen label="Cucina [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Living label="Soggiorno [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Dining label="Pranzo [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Bath1 label="Bagno 1 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Bath2 label="Bagno 2 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Bedroom1 label="Camera 1 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Bedroom2 label="Camera 2 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
-					Text item=Temperature_2F_Bedroom3 label="Camera 3 [%.1f °C]" valuecolor=[<=17="blue",<=19="aqua",<=21="yellow",<=23="orange",>23="red"]
+					Text item=Temperature_2F_Kitchen label="Cucina [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"]
+					Text item=Temperature_2F_Living label="Soggiorno [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"]
+					Text item=Temperature_2F_Dining label="Pranzo [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"]
+					Text item=Temperature_2F_Bath1 label="Bagno 1 [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"]
+					Text item=Temperature_2F_Bath2 label="Bagno 2 [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"]
+					Text item=Temperature_2F_Bedroom1 label="Camera 1 [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"]
+					Text item=Temperature_2F_Bedroom2 label="Camera 2 [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"]
+					Text item=Temperature_2F_Bedroom3 label="Camera 3 [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"]
 					Text item=Temperature_3F_Loft label="Loft [%.1f °C]"
 					Text item=Temperature_3F_Ext label="Esterno [%.1f °C]"
 				}
@@ -512,15 +512,24 @@ sitemap default label="Full"
 				{
 					Frame label="Accumulo"
 					{
-						Text item=HP_Temp_Sanitary valuecolor=[<=38="blue",<40="orange",>42="red"]
-						Text item=HP_Temp_Heating valuecolor=[<=25="blue",<=28="orange",>28="red"]
-						Text item=HP_Temp_Bottom valuecolor=[<=25="blue",<=28="orange",>28="red"]
+						Text item=HVAC_Temp_Sanitary valuecolor=[<=38="blue",<40="orange",>42="red"]
+						Text item=HVAC_Temp_Heating valuecolor=[<=25="blue",<=28="orange",>28="red"]
+						Text item=HVAC_Temp_Bottom valuecolor=[<=25="blue",<=28="orange",>28="red"]
 					}
 					Frame label="Distribuzione"
 					{
-						Text item=HP_Temp_Heating_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red",HVAC_Pump_Collector_Floor==ON="blue"]
-						Text item=HP_Temp_Heating_Ret
-						Text item=HP_Temp_Fancoil_Flow labelcolor=[HVAC_Pump_Collector_Fancoil==ON="blue"]
+						Text item=HVAC_Temp_HP_Flow
+						Text item=HVAC_Temp_HP_Ret
+						Text item=HVAC_Temp_Collector_Flow
+						Text item=HVAC_Temp_Collector_Ret
+						Text item=HVAC_Temp_Coll_Floor_Flow
+						Text item=HVAC_Temp_Coll_Floor_Ret
+						Text item=HVAC_Temp_Coll_Fancoils_Flow labelcolor=[HVAC_Pump_Collector_Fancoil==ON="blue"]
+						Text item=HVAC_Temp_Coll_Fancoils_Ret
+						Text item=HVAC_Temp_Boiler_Floor_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red"]
+						Text item=HVAC_Temp_Boiler_Floor_Ret
+						Text item=HVAC_Floor_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red",HVAC_Pump_Collector_Floor==ON="blue"]
+						Text item=HVAC_Floor_Ret
 					}
 				}
 			}
