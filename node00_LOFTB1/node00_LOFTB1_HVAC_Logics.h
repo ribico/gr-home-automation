@@ -66,13 +66,6 @@ inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 	// control SANITARY production hysteresys in Auto Mode
 	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
 	{
-    if( IsHeating() )
-    {
-      // in case of heating
-      // move mix valve to coolest position since the water will be hotter after sanitary water production
-      HeatingMixValve_StepMove(HEATINGMIXVALVE_COLD_DIRECTION, HEATING_MIX_VALVE_CYCLE, HEATING_MIX_VALVE_LONG_CYCLE);
-    }
-
 		SetHpFlowToBoiler(); 		// upstream to boiler
 		SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
 	}
@@ -221,7 +214,10 @@ inline void CalculateFloorTempSetpoint(U16 phase_fast)
 {
   if( IsHeating() ) // heating request for at least one zone
 	{
-		float setpoint_floor_water = 40.4 - 0.92*temp_EXT; // copied from ROHSS heatpump winter climatic curves
+		float setpoint_floor_water = 30;
+
+		if (temp_EXT != 0)
+			40.4 - 0.92*temp_EXT; // copied from ROHSS heatpump winter climatic curves
 /*
     float temp_amb_sp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
   	float setpoint_floor_water = temp_amb_sp + 2.0; // fixed delta above ambience setpoint
