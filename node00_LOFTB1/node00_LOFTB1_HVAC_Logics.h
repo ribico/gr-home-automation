@@ -35,7 +35,7 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	// read and send external temp & UR to ROW1B1 slots
 	float tmp;
-	U8 buff[4]; // two bytes for temp and two bytes for UR
+	U8 buff[8];
 
 	tmp = dht_ext.readTemperature();
 	Souliss_HalfPrecisionFloating(buff, &tmp);
@@ -53,12 +53,67 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
 
-	tmp = gTempSensors.getTempCByIndex(0);
+
+	tmp = gTempSensors.getTemp(HVAC_BOILER_SANITARY_TEMP_ADDR);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_BOILER_HEATING_TEMP);
+	Souliss_HalfPrecisionFloating(buff+2, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_BOILER_BOTTOM_TEMP);
+	Souliss_HalfPrecisionFloating(buff+4, &tmp);
+
+	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP, buff, 6);
+
+
+	tmp = gTempSensors.getTemp(HVAC_COLLECTOR_FLOW_TEMP);
+	Souliss_HalfPrecisionFloating(buff, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_COLLECTOR_RETURN_TEMP);
+	Souliss_HalfPrecisionFloating(buff+2, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_COLLECTOR_FLOOR_FLOW_TEMP);
+	Souliss_HalfPrecisionFloating(buff+4, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_COLLECTOR_FLOOR_RETURN_TEMP);
+	Souliss_HalfPrecisionFloating(buff+6, &tmp);
+
+	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_COLLECTOR_FLOW_TEMP, buff, 8);
+
+
+	tmp = gTempSensors.getTemp(HVAC_COLLECTOR_FANCOILS_FLOW_TEMP);
+	Souliss_HalfPrecisionFloating(buff, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_COLLECTOR_FANCOILS_RETURN_TEMP);
+	Souliss_HalfPrecisionFloating(buff+2, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_BOILER_FLOOR_FLOW_TEMP);
+	Souliss_HalfPrecisionFloating(buff+4, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_BOILER_FLOOR_RETURN_TEMP);
+	Souliss_HalfPrecisionFloating(buff+6, &tmp);
+
+	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_COLLECTOR_FANCOILS_FLOW_TEMP, buff, 8);
+
+
+	tmp = gTempSensors.getTemp(HVAC_HP_FLOW_TEMP);
+	Souliss_HalfPrecisionFloating(buff, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_HP_RETURN_TEMP);
+	Souliss_HalfPrecisionFloating(buff+2, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_FLOOR_FLOW_TEMP);
+	Souliss_HalfPrecisionFloating(buff+4, &tmp);
+
+	tmp = gTempSensors.getTemp(HVAC_FLOOR_RETURN_TEMP);
+	Souliss_HalfPrecisionFloating(buff+6, &tmp);
+
+	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_HP_FLOW_TEMP, buff, 8);
+
+
 
 	gTempSensors.requestTemperatures(); // asynchronous request
 
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP, buff, 2);
 }
 
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)
