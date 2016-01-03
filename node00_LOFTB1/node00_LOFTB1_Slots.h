@@ -6,6 +6,9 @@
 #define LIGHT_TERRACE_3                 5
 #define LIGHT_TOILET                    6
 
+#define LIGHT_SENSOR										7
+#define LIGHT_SENSOR_H									8
+
 #define FLOOR_MODE 			  							13
 #define HEATPUMP_REMOTE_SWITCH          14
 #define HEATPUMP_CIRCULATION_PUMP       15
@@ -80,6 +83,8 @@ inline void DefineTypicals()
 	Set_SimpleLight(LIGHT_TERRACE_2);
 	Set_SimpleLight(LIGHT_TERRACE_3);
 	Set_SimpleLight(LIGHT_TOILET);
+
+	Set_Light(LIGHT_SENSOR);
 
 	Souliss_SetT12(memory_map, FLOOR_MODE);
 	Souliss_SetT12(memory_map, HEATPUMP_REMOTE_SWITCH);
