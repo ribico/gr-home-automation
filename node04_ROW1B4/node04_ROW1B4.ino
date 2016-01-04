@@ -17,19 +17,9 @@ DINO with RS485 only acting as Peer
 
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
+#include "grhSoulissSlots.h"
 #include "HW_Setup_DINo_v2.h"
 
-#define LIGHT_ENTRANCE_1	1			
-#define LIGHT_ENTRANCE_2	2
-#define LIGHT_BATH_1		3			
-#define LIGHT_BATH_2		4
-
-//--------------------------------------
-// USED FOR DHT SENSOR
-#define TEMPERATURE			5
-#define TEMPERATURE_1		6
-#define HUMIDITY			7
-#define HUMIDITY_1			8
 
 #include <DHT.h>
 DHT dht(ONE_WIRE_PIN, DHT22);
@@ -39,47 +29,47 @@ float th=0;
 
 inline void DefineTypicals()
 {
-	Set_LightsGroup(LIGHT_ENTRANCE_1, LIGHT_ENTRANCE_2);
-  	Set_LightsGroup(LIGHT_BATH_1, LIGHT_BATH_2);
-	
-	Set_Temperature(TEMPERATURE);
-	Set_Humidity(HUMIDITY);
+	Set_LightsGroup(ROW1B4_LIGHT_ENTRANCE_1, ROW1B4_LIGHT_ENTRANCE_2);
+  	Set_LightsGroup(ROW1B4_LIGHT_BATH_1, ROW1B4_LIGHT_BATH_2);
+
+	Set_Temperature(ROW1B4_TEMPERATURE);
+	Set_Humidity(ROW1B4_HUMIDITY);
 	dht.begin();
 }
 
 inline void ReadInputs()
 {
-	LightsGroupIn(IN1, LIGHT_ENTRANCE_1, LIGHT_ENTRANCE_2);
-	LightsGroupIn(IN2, LIGHT_BATH_1, LIGHT_BATH_2);	
+	LightsGroupIn(IN1, ROW1B4_LIGHT_ENTRANCE_1, ROW1B4_LIGHT_ENTRANCE_2);
+	LightsGroupIn(IN2, ROW1B4_LIGHT_BATH_1, ROW1B4_LIGHT_BATH_2);
 }
 
 inline void ProcessLogics()
 {
-	Logic_LightsGroup(LIGHT_ENTRANCE_1, LIGHT_ENTRANCE_2);\
-	Logic_LightsGroup(LIGHT_BATH_1, LIGHT_BATH_2);
+	Logic_LightsGroup(ROW1B4_LIGHT_ENTRANCE_1, ROW1B4_LIGHT_ENTRANCE_2);\
+	Logic_LightsGroup(ROW1B4_LIGHT_BATH_1, ROW1B4_LIGHT_BATH_2);
 
-	grh_Logic_Humidity(HUMIDITY);
-	grh_Logic_Temperature(TEMPERATURE);
+	grh_Logic_Humidity(ROW1B4_HUMIDITY);
+	grh_Logic_Temperature(ROW1B4_TEMPERATURE);
 }
 
 inline void SetOutputs()
 {
-	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_ENTRANCE_1);
-	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_ENTRANCE_2);
-	DigOut(RELAY3, Souliss_T1n_Coil, LIGHT_BATH_2);
-	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_BATH_1);
+	DigOut(RELAY1, Souliss_T1n_Coil, ROW1B4_LIGHT_ENTRANCE_1);
+	DigOut(RELAY2, Souliss_T1n_Coil, ROW1B4_LIGHT_ENTRANCE_2);
+	DigOut(RELAY3, Souliss_T1n_Coil, ROW1B4_LIGHT_BATH_2);
+	DigOut(RELAY4, Souliss_T1n_Coil, ROW1B4_LIGHT_BATH_1);
 }
 
 inline void ProcessTimers()
 {
-	Timer_LightsGroup(LIGHT_ENTRANCE_1, LIGHT_ENTRANCE_2);
-	Timer_LightsGroup(LIGHT_BATH_1, LIGHT_BATH_2);
-	
+	Timer_LightsGroup(ROW1B4_LIGHT_ENTRANCE_1, ROW1B4_LIGHT_ENTRANCE_2);
+	Timer_LightsGroup(ROW1B4_LIGHT_BATH_1, ROW1B4_LIGHT_BATH_2);
+
 	th = dht.readHumidity();
-	ImportAnalog(HUMIDITY, &th);
+	ImportAnalog(ROW1B4_HUMIDITY, &th);
 
 	th = dht.readTemperature();
-	ImportAnalog(TEMPERATURE, &th);	
+	ImportAnalog(ROW1B4_TEMPERATURE, &th);
 }
 
 
@@ -98,33 +88,33 @@ void setup()
 }
 
 void loop()
-{ 
-	EXECUTEFAST() {						
+{
+	EXECUTEFAST() {
 		UPDATEFAST();
-		
-		FAST_30ms() 
+
+		FAST_30ms()
 		{
 			ReadInputs();
-		} 
+		}
 
-		FAST_50ms() 
+		FAST_50ms()
 		{
 			ProcessLogics();
 
 			SetOutputs();
 		}
-		
+
 		FAST_2110ms()
 		{
 			ProcessTimers();
 		}
 
-		grhFastPeerComms();			
+		grhFastPeerComms();
 	}
-	
-	EXECUTESLOW() 
-	{	
+
+	EXECUTESLOW()
+	{
 		UPDATESLOW();
 		SLOW_PeerJoin();
 	}
-} 
+}

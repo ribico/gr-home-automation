@@ -17,19 +17,9 @@ DINO with RS485 only acting as Peer
 
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
+#include "grhSoulissSlots.h"
 #include "HW_Setup_DINo_v2.h"
 
-#define LIGHT_BEDROOM2_1			1
-#define LIGHT_BEDROOM2_2			2
-#define LIGHT_BEDROOM2_3			3		
-#define LIGHT_BEDROOM2_4			4
-
-//--------------------------------------
-// USED FOR DHT SENSOR
-#define TEMPERATURE			5
-#define TEMPERATURE_1		6
-#define HUMIDITY			7
-#define HUMIDITY_1			8
 
 #include <DHT.h>
 DHT dht(ONE_WIRE_PIN, DHT22);
@@ -39,45 +29,45 @@ float th=0;
 
 inline void DefineTypicals()
 {
-	Set_LightsGroup(LIGHT_BEDROOM2_1, LIGHT_BEDROOM2_4);
+	Set_LightsGroup(BED2B2_LIGHT_BEDROOM2_1, BED2B2_LIGHT_BEDROOM2_4);
 
-	Set_Temperature(TEMPERATURE);
-	Set_Humidity(HUMIDITY);
+	Set_Temperature(BED2B2_TEMPERATURE);
+	Set_Humidity(BED2B2_HUMIDITY);
 	dht.begin();
 }
 
 inline void ReadInputs()
 {
-	LightsGroupIn(IN1, LIGHT_BEDROOM2_1, LIGHT_BEDROOM2_4);
-	Souliss_DigIn(IN3, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BEDROOM2_2, true);
-	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BEDROOM2_3, true);
+	LightsGroupIn(IN1, BED2B2_LIGHT_BEDROOM2_1, BED2B2_LIGHT_BEDROOM2_4);
+	Souliss_DigIn(IN3, Souliss_T1n_ToggleCmd, memory_map, BED2B2_LIGHT_BEDROOM2_2, true);
+	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, BED2B2_LIGHT_BEDROOM2_3, true);
 }
 
 inline void ProcessLogics()
 {
-	Logic_LightsGroup(LIGHT_BEDROOM2_1, LIGHT_BEDROOM2_4);
+	Logic_LightsGroup(BED2B2_LIGHT_BEDROOM2_1, BED2B2_LIGHT_BEDROOM2_4);
 
-	grh_Logic_Humidity(HUMIDITY);
-	grh_Logic_Temperature(TEMPERATURE);
+	grh_Logic_Humidity(BED2B2_HUMIDITY);
+	grh_Logic_Temperature(BED2B2_TEMPERATURE);
 }
 
 inline void SetOutputs()
 {
-	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_BEDROOM2_1);
-	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_BEDROOM2_2);
-	DigOut(RELAY3, Souliss_T1n_Coil, LIGHT_BEDROOM2_3);
-	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_BEDROOM2_4);
+	DigOut(RELAY1, Souliss_T1n_Coil, BED2B2_LIGHT_BEDROOM2_1);
+	DigOut(RELAY2, Souliss_T1n_Coil, BED2B2_LIGHT_BEDROOM2_2);
+	DigOut(RELAY3, Souliss_T1n_Coil, BED2B2_LIGHT_BEDROOM2_3);
+	DigOut(RELAY4, Souliss_T1n_Coil, BED2B2_LIGHT_BEDROOM2_4);
 }
 
 inline void ProcessTimers()
 {
-	Timer_LightsGroup(LIGHT_BEDROOM2_1, LIGHT_BEDROOM2_4);
-	
+	Timer_LightsGroup(BED2B2_LIGHT_BEDROOM2_1, BED2B2_LIGHT_BEDROOM2_4);
+
 	th = dht.readHumidity();
-	ImportAnalog(HUMIDITY, &th);
+	ImportAnalog(BED2B2_HUMIDITY, &th);
 
 	th = dht.readTemperature();
-	ImportAnalog(TEMPERATURE, &th);	
+	ImportAnalog(BED2B2_TEMPERATURE, &th);
 }
 
 
@@ -95,33 +85,33 @@ void setup()
 }
 
 void loop()
-{ 
-	EXECUTEFAST() {						
+{
+	EXECUTEFAST() {
 		UPDATEFAST();
-		
-		FAST_30ms() 
+
+		FAST_30ms()
 		{
 			ReadInputs();
-		} 
+		}
 
-		FAST_50ms() 
+		FAST_50ms()
 		{
 			ProcessLogics();
 
 			SetOutputs();
 		}
-		
+
 		FAST_2110ms()
 		{
 			ProcessTimers();
 		}
 
-		grhFastPeerComms();			
+		grhFastPeerComms();
 	}
-	
-	EXECUTESLOW() 
-	{	
+
+	EXECUTESLOW()
+	{
 		UPDATESLOW();
 		SLOW_PeerJoin();
 	}
-} 
+}

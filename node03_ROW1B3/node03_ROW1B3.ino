@@ -17,19 +17,9 @@ DINO with RS485 only acting as Peer
 
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
+#include "grhSoulissSlots.h"
 #include "HW_Setup_DINo_v2.h"
 
-#define LIGHT_DINING_1		1			
-#define LIGHT_DINING_2		2
-#define LIGHT_DINING_3		3			
-#define LIGHT_STAIRS		4
-
-//--------------------------------------
-// USED FOR DHT SENSOR
-#define TEMPERATURE			5
-#define TEMPERATURE_1		6
-#define HUMIDITY			7
-#define HUMIDITY_1			8
 
 #include <DHT.h>
 DHT dht(ONE_WIRE_PIN, DHT22);
@@ -39,46 +29,46 @@ float th=0;
 
 inline void DefineTypicals()
 {
-	Set_LightsGroup(LIGHT_DINING_1, LIGHT_DINING_3);
-	Set_SimpleLight(LIGHT_STAIRS);
+	Set_LightsGroup(ROW1B3_LIGHT_DINING_1, ROW1B3_LIGHT_DINING_3);
+	Set_SimpleLight(ROW1B3_LIGHT_STAIRS);
 
-	Set_Temperature(TEMPERATURE);
-	Set_Humidity(HUMIDITY);
+	Set_Temperature(ROW1B3_TEMPERATURE);
+	Set_Humidity(ROW1B3_HUMIDITY);
 	dht.begin();
 }
 
 inline void ReadInputs()
 {
-	LightsGroupIn(IN1, LIGHT_DINING_1, LIGHT_DINING_3);
-	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_STAIRS, true);
+	LightsGroupIn(IN1, ROW1B3_LIGHT_DINING_1, ROW1B3_LIGHT_DINING_3);
+	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, ROW1B3_LIGHT_STAIRS, true);
 }
 
 inline void ProcessLogics()
 {
-	Logic_LightsGroup(LIGHT_DINING_1, LIGHT_DINING_3);
-	Logic_SimpleLight(LIGHT_STAIRS);
-	grh_Logic_Humidity(HUMIDITY);
-	grh_Logic_Temperature(TEMPERATURE);
+	Logic_LightsGroup(ROW1B3_LIGHT_DINING_1, ROW1B3_LIGHT_DINING_3);
+	Logic_SimpleLight(ROW1B3_LIGHT_STAIRS);
+	grh_Logic_Humidity(ROW1B3_HUMIDITY);
+	grh_Logic_Temperature(ROW1B3_TEMPERATURE);
 }
 
 inline void SetOutputs()
 {
-	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_DINING_1);
-	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_DINING_3);
-	DigOut(RELAY3, Souliss_T1n_Coil, LIGHT_DINING_2);
-	DigOut(RELAY4, Souliss_T1n_Coil, LIGHT_STAIRS);
+	DigOut(RELAY1, Souliss_T1n_Coil, ROW1B3_LIGHT_DINING_1);
+	DigOut(RELAY2, Souliss_T1n_Coil, ROW1B3_LIGHT_DINING_3);
+	DigOut(RELAY3, Souliss_T1n_Coil, ROW1B3_LIGHT_DINING_2);
+	DigOut(RELAY4, Souliss_T1n_Coil, ROW1B3_LIGHT_STAIRS);
 }
 
 inline void ProcessTimers()
 {
-	Timer_LightsGroup(LIGHT_DINING_1, LIGHT_DINING_3);
-	Timer_SimpleLight(LIGHT_STAIRS);
-	
+	Timer_LightsGroup(ROW1B3_LIGHT_DINING_1, ROW1B3_LIGHT_DINING_3);
+	Timer_SimpleLight(ROW1B3_LIGHT_STAIRS);
+
 	th = dht.readHumidity();
-	ImportAnalog(HUMIDITY, &th);
+	ImportAnalog(ROW1B3_HUMIDITY, &th);
 
 	th = dht.readTemperature();
-	ImportAnalog(TEMPERATURE, &th);	
+	ImportAnalog(ROW1B3_TEMPERATURE, &th);
 }
 
 
@@ -97,33 +87,33 @@ void setup()
 }
 
 void loop()
-{ 
-	EXECUTEFAST() {						
+{
+	EXECUTEFAST() {
 		UPDATEFAST();
-		
-		FAST_30ms() 
+
+		FAST_30ms()
 		{
 			ReadInputs();
-		} 
+		}
 
-		FAST_50ms() 
+		FAST_50ms()
 		{
 			ProcessLogics();
 
 			SetOutputs();
 		}
-		
+
 		FAST_2110ms()
 		{
 			ProcessTimers();
 		}
 
-		grhFastPeerComms();			
+		grhFastPeerComms();
 	}
-	
-	EXECUTESLOW() 
-	{	
+
+	EXECUTESLOW()
+	{
 		UPDATESLOW();
 		SLOW_PeerJoin();
 	}
-} 
+}
