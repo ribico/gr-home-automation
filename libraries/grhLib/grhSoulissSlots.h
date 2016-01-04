@@ -5,6 +5,7 @@
 # define ROW1B1_LIGHT_LIVING_4			                    3
 # define ROW1B1_LIGHT_LIVING_5			                    4
 # define ROW1B1_LIGHT_LIVING_6			                    5
+// from node LOFTB1
 # define ROW1B1_EXT_TEMP																6
 # define ROW1B1_EXT_UR																	8
 # define ROW1B1_LOFT_TEMP																10
@@ -54,6 +55,53 @@
 # define ROW2B1_WINDOW_DINING			                      3
 # define ROW2B1_TEMPERATURE			                        4
 # define ROW2B1_HUMIDITY				                        6
+// from node LOFTB1
+# define ROW2B1_LIGHT_LOFT_1            				        8
+# define ROW2B1_LIGHT_LOFT_2            				        9
+# define ROW2B1_LIGHT_TERRACE_1                         10
+# define ROW2B1_LIGHT_TERRACE_2                         11
+# define ROW2B1_LIGHT_TERRACE_3                         12
+# define ROW2B1_LIGHT_TOILET                            13
+# define ROW2B1_LIGHT_SENSOR										        14
+# define ROW2B1_LIGHT_SENSOR_H									        15
+# define ROW2B1_HEATPUMP_REMOTE_SWITCH                  16
+# define ROW2B1_HEATPUMP_CIRCULATION_PUMP               17
+# define ROW2B1_HEATPUMP_SANITARY_WATER       	        18
+# define ROW2B1_HEATPUMP_COOL                		        19
+# define ROW2B1_HEATPUMP_SETPOINT_2				              21
+# define ROW2B1_HVAC_FLOOR_MODE 			  							  22
+# define ROW2B1_HVAC_ZONES					                    23
+#	  define HVAC_MASK_NO_ZONES		              0x00
+#	  define HVAC_MASK_ALL_ZONES	              0xFF
+#	  define HVAC_MASK_ALL_COOLING_ZONES (HVAC_MASK_BED1|HVAC_MASK_BED2|HVAC_MASK_LIVING|HVAC_MASK_BED3|HVAC_MASK_KITCHEN|HVAC_MASK_LOFT)
+#	  define HVAC_MASK_BED1			                0x01
+#	  define HVAC_MASK_BATH1			              0x02
+#	  define HVAC_MASK_BED2			                0x04
+#	  define HVAC_MASK_LIVING			              0x08
+#	  define HVAC_MASK_BED3			                0x10
+#	  define HVAC_MASK_BATH2			              0x20
+#	  define HVAC_MASK_KITCHEN		              0x40
+#	  define HVAC_MASK_LOFT			                0x80
+# define ROW2B1_HVAC_VALVES 							              24
+#	  define MAIN_3WAY_VALVE_BOILER_MASK			  0x01
+#	  define MAIN_3WAY_VALVE_COLLECTOR_MASK		  0x02
+#	  define HEATING_MIX_VALVE_SWITCH_MASK		  0x04
+#	  define HEATING_MIX_VALVE_DIRECTION_MASK		0x08
+# define ROW2B1_HVAC_MAIN_3WAY_VALVE				            25
+# define ROW2B1_HVAC_PUMP_BOILER_FLOOR 			            26
+# define ROW2B1_HVAC_PUMP_COLLECTOR_FANCOIL 		        27
+# define ROW2B1_HVAC_PUMP_COLLECTOR_FLOOR 		          28
+# define ROW2B1_HVAC_FANCOIL_MODE				                29
+# define ROW2B1_HVAC_HEATING_MIX_VALVE	                30
+# define ROW2B1_TEMP_AMBIENCE_SET_POINT		              31
+# define ROW2B1_TEMP_AMBIENCE_SET_POINT_H	              32
+# define ROW2B1_TEMP_FLOOR_FLOW_SETPOINT	              33
+# define ROW2B1_TEMP_FLOOR_FLOW_SETPOINT_H	            34
+# define ROW2B1_TEMP_SETPOINT_IN                        35
+
+
+
+
 
 #define ROW2B2 6
 # define ROW2B2_WINDOW_LIVING		                        1

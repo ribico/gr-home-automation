@@ -34,6 +34,58 @@ inline void DefineTypicals()
 	Set_Temperature(ROW2B1_TEMPERATURE);
 	Set_Humidity(ROW2B1_HUMIDITY);
 	dht.begin();
+
+
+	Set_SimpleLight(ROW2B1_LIGHT_LOFT_1);
+	Set_SimpleLight(ROW2B1_LIGHT_LOFT_2);
+	Set_SimpleLight(ROW2B1_LIGHT_TERRACE_1);
+	Set_SimpleLight(ROW2B1_LIGHT_TERRACE_2);
+	Set_SimpleLight(ROW2B1_LIGHT_TERRACE_3);
+	Set_SimpleLight(ROW2B1_LIGHT_TOILET);
+
+	Set_Light(ROW2B1_LIGHT_SENSOR);
+
+	Souliss_SetT12(memory_map, ROW2B1_HVAC_FLOOR_MODE);
+	Souliss_SetT12(memory_map, ROW2B1_HEATPUMP_REMOTE_SWITCH);
+	Souliss_SetT12(memory_map, ROW2B1_HEATPUMP_CIRCULATION_PUMP);
+	Souliss_SetT12(memory_map, ROW2B1_HEATPUMP_SANITARY_WATER);
+	Souliss_SetT12(memory_map, ROW2B1_HEATPUMP_COOL);
+
+	Souliss_SetT1A(memory_map, ROW2B1_HVAC_ZONES);
+	Souliss_SetT1A(memory_map, ROW2B1_HVAC_VALVES);
+
+	Souliss_SetT22(memory_map, ROW2B1_HVAC_MAIN_3WAY_VALVE);
+
+	Souliss_SetT12(memory_map, ROW2B1_HVAC_PUMP_BOILER_FLOOR);
+	Souliss_SetT12(memory_map, ROW2B1_HVAC_PUMP_COLLECTOR_FANCOIL);
+	Souliss_SetT12(memory_map, ROW2B1_HVAC_PUMP_COLLECTOR_FLOOR);
+
+	Set_Temperature(ROW2B1_TEMP_AMBIENCE_SET_POINT);
+	Set_Temperature(ROW2B1_TEMP_FLOOR_FLOW_SETPOINT);
+
+	Souliss_SetT12(memory_map, ROW2B1_HVAC_FANCOIL_MODE);
+	Souliss_SetT12(memory_map, ROW2B1_HEATPUMP_SETPOINT_2);
+
+	Souliss_SetT22(memory_map, ROW2B1_TEMP_SETPOINT_IN);
+
+	// initialize values
+	SetInput(ROW2B1_HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
+//	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
+
+	Souliss_SetT22(memory_map, ROW2B1_HVAC_HEATING_MIX_VALVE);
+
+
+	SetInput(ROW2B1_HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd);
+	SetInput(ROW2B1_HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_AutoCmd);
+	SetInput(ROW2B1_HVAC_PUMP_BOILER_FLOOR, Souliss_T1n_AutoCmd);
+	SetInput(ROW2B1_HVAC_PUMP_COLLECTOR_FANCOIL, Souliss_T1n_AutoCmd);
+	SetInput(ROW2B1_HVAC_PUMP_COLLECTOR_FLOOR, Souliss_T1n_AutoCmd);
+//	SetInput(FLOOR_MODE, Souliss_T1n_AutoCmd);
+	SetInput(ROW2B1_FANCOIL_MODE, Souliss_T1n_AutoCmd);
+	SetInput(ROW2B1_HEATPUMP_SETPOINT_2, Souliss_T1n_AutoCmd);
+
+	float set_point = AMBIENCE_SETPOINT_DEFAULT; // initial setup
+	ImportAnalog(ROW2B1_TEMP_AMBIENCE_SET_POINT, &set_point);
 }
 
 inline void ReadInputs()
@@ -51,6 +103,25 @@ inline void ProcessLogics()
 
 	grh_Logic_Humidity(ROW2B1_HUMIDITY);
 	grh_Logic_Temperature(ROW2B1_TEMPERATURE);
+
+
+	Souliss_Logic_T12(memory_map, ROW2B1_HVAC_FLOOR_MODE, &data_changed);
+	Souliss_Logic_T12(memory_map, ROW2B1_HEATPUMP_REMOTE_SWITCH, &data_changed);
+	Souliss_Logic_T12(memory_map, ROW2B1_HEATPUMP_CIRCULATION_PUMP, &data_changed);
+	Souliss_Logic_T12(memory_map, ROW2B1_HEATPUMP_SANITARY_WATER, &data_changed);
+	Souliss_Logic_T12(memory_map, ROW2B1_HEATPUMP_COOL, &data_changed);
+
+	grh_Logic_Temperature(ROW2B1_TEMP_AMBIENCE_SET_POINT);
+	grh_Logic_Temperature(ROW2B1_TEMP_FLOOR_FLOW_SETPOINT);
+
+	Souliss_Logic_T22(memory_map, ROW2B1_HVAC_MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
+	Souliss_Logic_T1A(memory_map, ROW2B1_HVAC_VALVES, &data_changed);
+
+	Souliss_Logic_T12(memory_map, ROW2B1_HVAC_PUMP_BOILER_FLOOR, &data_changed);
+	Souliss_Logic_T12(memory_map, ROW2B1_HVAC_PUMP_COLLECTOR_FANCOIL, &data_changed);
+	Souliss_Logic_T12(memory_map, ROW2B1_HVAC_PUMP_COLLECTOR_FLOOR, &data_changed);
+	Souliss_Logic_T12(memory_map, ROW2B1_HVAC_FANCOIL_MODE, &data_changed);
+	Souliss_Logic_T12(memory_map, ROW2B1_HEATPUMP_SETPOINT_2, &data_changed);
 }
 
 inline void SetOutputs()
@@ -72,6 +143,31 @@ inline void ProcessTimers()
 
 	th = dht.readTemperature();
 	ImportAnalog(ROW2B1_TEMPERATURE, &th);
+
+	Timer_SimpleLight(ROW2B1_LIGHT_LOFT_1);
+	Timer_SimpleLight(ROW2B1_LIGHT_LOFT_2);
+	Timer_SimpleLight(ROW2B1_LIGHT_TERRACE_1);
+	Timer_SimpleLight(ROW2B1_LIGHT_TERRACE_2);
+	Timer_SimpleLight(ROW2B1_LIGHT_TERRACE_3);
+	Timer_SimpleLight(ROW2B1_LIGHT_TOILET);
+
+	Souliss_T12_Timer(memory_map, ROW2B1_HVAC_FLOOR_MODE);
+	Souliss_T12_Timer(memory_map, ROW2B1_HEATPUMP_REMOTE_SWITCH);
+	Souliss_T12_Timer(memory_map, ROW2B1_HEATPUMP_CIRCULATION_PUMP);
+	Souliss_T12_Timer(memory_map, ROW2B1_HEATPUMP_SANITARY_WATER);
+	Souliss_T12_Timer(memory_map, ROW2B1_HEATPUMP_COOL);
+
+	Souliss_T22_Timer(memory_map, ROW2B1_HVAC_MAIN_3WAY_VALVE);
+
+	Souliss_T12_Timer(memory_map, ROW2B1_HVAC_PUMP_BOILER_FLOOR);
+	Souliss_T12_Timer(memory_map, ROW2B1_HVAC_PUMP_COLLECTOR_FANCOIL);
+	Souliss_T12_Timer(memory_map, ROW2B1_HVAC_PUMP_COLLECTOR_FLOOR);
+
+	Souliss_T12_Timer(memory_map, ROW2B1_HVAC_FANCOIL_MODE);
+	Souliss_T12_Timer(memory_map, ROW2B1_HEATPUMP_SETPOINT_2);
+
+	Timer_HeatingMixValve();
+
 }
 
 

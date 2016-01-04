@@ -23,6 +23,7 @@ MEGA with Ethernet only acting as GATEWAY
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
 #include "grhFancoils.h"
+#include "grhSoulissSlots.h"
 #include "HW_Setup_Mega_2560.h"
 #include "NTC.h"
 
@@ -40,21 +41,16 @@ MEGA with Ethernet only acting as GATEWAY
 
 inline void ReadInputs()
 {
-	U8 ret = Souliss_LowDigIn(LIGHT_STAIRS_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_STAIRS, true);
-	if( ret != MaCaco_NODATACHANGED)
-		RemoteInput(RS485_ADDRESS_ROW1B3, 4, mInput(LIGHT_STAIRS));
+	RemoteLowDigIn(LIGHT_STAIRS_PIN_IN, Souliss_T1n_ToggleCmd, RS485_ADDRESS_ROW1B3, ROW1B3_LIGHT_STAIRS);
 
-	Souliss_LowDigIn(LIGHT_LOFT_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_LOFT_1, true);
-	Souliss_LowDigIn(LIGHT_TERRACE_1_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_1, true);
-	Souliss_LowDigIn(LIGHT_TERRACE_2_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_2, true);
-	Souliss_LowDigIn(LIGHT_TERRACE_3_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_3, true);
-	Souliss_LowDigIn(LIGHT_TOILET_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TOILET, true);
-
-	int analog_val = analogRead(LIGHT_TRANSDUCER_PIN_IN);
-	float light_intensity = 40000.0/5.0 * (1024-analog_val);
-	ImportAnalog(LIGHT_SENSOR, &light_intensity);
+	RemoteLowDigIn(LIGHT_LOFT_PIN_IN, Souliss_T1n_ToggleCmd, IP_ADDRESS_ROW2B1, ROW2B1_LIGHT_LOFT_1);
+	RemoteLowDigIn(LIGHT_TERRACE_1_PIN_IN, Souliss_T1n_ToggleCmd, IP_ADDRESS_ROW2B1, ROW2B1_LIGHT_TERRACE_1);
+	RemoteLowDigIn(LIGHT_TERRACE_2_PIN_IN, Souliss_T1n_ToggleCmd, IP_ADDRESS_ROW2B1, ROW2B1_LIGHT_TERRACE_2);
+	RemoteLowDigIn(LIGHT_TERRACE_3_PIN_IN, Souliss_T1n_ToggleCmd, IP_ADDRESS_ROW2B1, ROW2B1_LIGHT_TERRACE_3);
+	RemoteLowDigIn(LIGHT_TOILET_PIN_IN, Souliss_T1n_ToggleCmd, IP_ADDRESS_ROW2B1, ROW2B1_LIGHT_TOILET);
 
 
+/*
 	mInput(HVAC_VALVES) = mOutput(HVAC_VALVES);
 
 
@@ -67,42 +63,25 @@ inline void ReadInputs()
 		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) | MAIN_3WAY_VALVE_COLLECTOR_MASK); // set distribution bit
 	else
 		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) & ~MAIN_3WAY_VALVE_COLLECTOR_MASK);	// unset distribution bit
+*/
 }
+
+inline void ReadSlowInputs()
+{
+/*
+	int analog_val = analogRead(LIGHT_TRANSDUCER_PIN_IN);
+	float light_intensity = 40000.0/5.0 * (1024-analog_val);
+	ImportAnalog(LIGHT_SENSOR, &light_intensity);
+*/
+}
+
 
 
 inline void ProcessLogics()
 {
-	// standar slots logics
-	Logic_SimpleLight(LIGHT_STAIRS);
-	Logic_SimpleLight(LIGHT_LOFT_1);
-	Logic_SimpleLight(LIGHT_LOFT_2);
-	Logic_SimpleLight(LIGHT_TERRACE_1);
-	Logic_SimpleLight(LIGHT_TERRACE_2);
-	Logic_SimpleLight(LIGHT_TERRACE_3);
-	Logic_SimpleLight(LIGHT_TOILET);
-
-	Logic_Light(LIGHT_SENSOR);
-
-	Souliss_Logic_T12(memory_map, FLOOR_MODE, &data_changed);
-	Souliss_Logic_T12(memory_map, HEATPUMP_REMOTE_SWITCH, &data_changed);
-	Souliss_Logic_T12(memory_map, HEATPUMP_CIRCULATION_PUMP, &data_changed);
-	Souliss_Logic_T12(memory_map, HEATPUMP_SANITARY_WATER, &data_changed);
-	Souliss_Logic_T12(memory_map, HEATPUMP_COOL, &data_changed);
-
-	grh_Logic_Temperature(TEMP_AMBIENCE_SET_POINT);
-	grh_Logic_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
-
-	Souliss_Logic_T22(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
-	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
-
-	Souliss_Logic_T12(memory_map, PUMP_BOILER_FLOOR, &data_changed);
-	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FANCOIL, &data_changed);
-	Souliss_Logic_T12(memory_map, PUMP_COLLECTOR_FLOOR, &data_changed);
-	Souliss_Logic_T12(memory_map, FANCOIL_MODE, &data_changed);
-	Souliss_Logic_T12(memory_map, HP_SETPOINT_2, &data_changed);
-
+/*
 	// use a T21 for increasing/decreasing ambience temp setpoint
-	float ambience_setpoint = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
+	float ambience_setpoint = pOutputAsFloat(ROW2B1, ROW2B1_TEMP_AMBIENCE_SET_POINT);
 	if(mInput(TEMP_SETPOINT_IN) == Souliss_T2n_OpenCmd_SW)
 	{
 		mInput(TEMP_SETPOINT_IN) = Souliss_T2n_RstCmd;
@@ -115,86 +94,65 @@ inline void ProcessLogics()
 		ambience_setpoint -= 0.5;
 		ImportAnalog(TEMP_AMBIENCE_SET_POINT, &ambience_setpoint);
 	}
+*/
 }
+
 
 
 inline void SetOutputs()
 {
-	nLowDigOut(LIGHT_LOFT_1_PIN, Souliss_T1n_OnCoil, LIGHT_LOFT_1);
-	nLowDigOut(LIGHT_LOFT_2_PIN, Souliss_T1n_OnCoil, LIGHT_LOFT_2);
-	nLowDigOut(LIGHT_TERRACE_1_PIN, Souliss_T1n_OnCoil, LIGHT_TERRACE_1);
-	nLowDigOut(LIGHT_TERRACE_2_PIN, Souliss_T1n_OnCoil, LIGHT_TERRACE_2);
-	nLowDigOut(LIGHT_TERRACE_3_PIN, Souliss_T1n_OnCoil, LIGHT_TERRACE_3);
-	nLowDigOut(LIGHT_TOILET_PIN, Souliss_T1n_OnCoil, LIGHT_TOILET);
+	pnLowDigOut(LIGHT_LOFT_1_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_LIGHT_LOFT_1);
+	pnLowDigOut(LIGHT_LOFT_2_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_LIGHT_LOFT_2);
+	pnLowDigOut(LIGHT_TERRACE_1_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_LIGHT_TERRACE_1);
+	pnLowDigOut(LIGHT_TERRACE_2_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_LIGHT_TERRACE_2);
+	pnLowDigOut(LIGHT_TERRACE_3_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_LIGHT_TERRACE_3);
+	pnLowDigOut(LIGHT_TOILET_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_LIGHT_TOILET);
 
-	nLowDigOut(HEATPUMP_REMOTE_SWITCH_PIN, Souliss_T1n_OnCoil, HEATPUMP_REMOTE_SWITCH);
-	nLowDigOut(HEATPUMP_CIRCULATION_PUMP_PIN, Souliss_T1n_OnCoil, HEATPUMP_CIRCULATION_PUMP);
-	nLowDigOut(HEATPUMP_SANITARY_REQUEST_PIN, Souliss_T1n_OnCoil, HEATPUMP_SANITARY_WATER);
-	nLowDigOut(HEATPUMP_COOL_PIN, Souliss_T1n_OnCoil, HEATPUMP_COOL);
+	pnLowDigOut(HEATPUMP_REMOTE_SWITCH_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_HEATPUMP_REMOTE_SWITCH);
+	pnLowDigOut(HEATPUMP_CIRCULATION_PUMP_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_HEATPUMP_CIRCULATION_PUMP);
+	pnLowDigOut(HEATPUMP_SANITARY_REQUEST_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_HEATPUMP_SANITARY_WATER);
+	pnLowDigOut(HEATPUMP_COOL_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_HEATPUMP_COOL);
 
 	// HVAC zone valves
-	digitalWrite(ZONE_SWITCH_KITCHEN_PIN, 	!(mOutput(HVAC_ZONES) & HVAC_MASK_KITCHEN)	);
-	digitalWrite(ZONE_SWITCH_BATH_2_PIN, 	!(mOutput(HVAC_ZONES) & HVAC_MASK_BATH2) 	);
-	digitalWrite(ZONE_SWITCH_BED_3_PIN, 	!(mOutput(HVAC_ZONES) & HVAC_MASK_BED3) 	);
-	digitalWrite(ZONE_SWITCH_LIVING_PIN, 	!(mOutput(HVAC_ZONES) & HVAC_MASK_LIVING) 	);
-	digitalWrite(ZONE_SWITCH_BED_2_PIN, 	!(mOutput(HVAC_ZONES) & HVAC_MASK_BED2) 	);
-	digitalWrite(ZONE_SWITCH_BATH_1_PIN, 	!(mOutput(HVAC_ZONES) & HVAC_MASK_BATH1) 	);
-	digitalWrite(ZONE_SWITCH_BED_1_PIN, 	!(mOutput(HVAC_ZONES) & HVAC_MASK_BED1)		);
-	digitalWrite(ZONE_SWITCH_LOFT_PIN, 		!(mOutput(HVAC_ZONES) & HVAC_MASK_LOFT)		);
+	digitalWrite(ZONE_SWITCH_KITCHEN_PIN, 	!(pOutput(ROW2B1, ROW2B1_HVAC_ZONES) & HVAC_MASK_KITCHEN)	);
+	digitalWrite(ZONE_SWITCH_BATH_2_PIN, 	!(pOutput(ROW2B1, ROW2B1_HVAC_ZONES) & HVAC_MASK_BATH2) 	);
+	digitalWrite(ZONE_SWITCH_BED_3_PIN, 	!(pOutput(ROW2B1, ROW2B1_HVAC_ZONES) & HVAC_MASK_BED3) 	);
+	digitalWrite(ZONE_SWITCH_LIVING_PIN, 	!(pOutput(ROW2B1, ROW2B1_HVAC_ZONES) & HVAC_MASK_LIVING) 	);
+	digitalWrite(ZONE_SWITCH_BED_2_PIN, 	!(pOutput(ROW2B1, ROW2B1_HVAC_ZONES) & HVAC_MASK_BED2) 	);
+	digitalWrite(ZONE_SWITCH_BATH_1_PIN, 	!(pOutput(ROW2B1, ROW2B1_HVAC_ZONES) & HVAC_MASK_BATH1) 	);
+	digitalWrite(ZONE_SWITCH_BED_1_PIN, 	!(pOutput(ROW2B1, ROW2B1_HVAC_ZONES) & HVAC_MASK_BED1)		);
+	digitalWrite(ZONE_SWITCH_LOFT_PIN, 		!(pOutput(ROW2B1, ROW2B1_HVAC_ZONES) & HVAC_MASK_LOFT)		);
 
 	#ifdef DEBUG
-		if(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK)
+		if(pOutput(ROW2B1, ROW2B1_HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK)
 		{
-			Serial.print("SetOutputs - mOutput(HVAC_VALVES): ");
-			Serial.println(mOutput(HVAC_VALVES), BIN);
+			Serial.print("SetOutputs - pOutput(ROW2B1, ROW2B1_HVAC_VALVES): ");
+			Serial.println(pOutput(ROW2B1, ROW2B1_HVAC_VALVES), BIN);
 			Serial.print("Move valve: ");
-			Serial.print(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK);
+			Serial.print(pOutput(ROW2B1, ROW2B1_HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK);
 			Serial.print(" Direction ");
-			Serial.println(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_DIRECTION_MASK);
+			Serial.println(pOutput(ROW2B1, ROW2B1_HVAC_VALVES) & HEATING_MIX_VALVE_DIRECTION_MASK);
 		}
 	#endif
 	// heating mix valve on/off and direction
 	digitalWrite(HEATING_MIX_VALVE_SWITCH_PIN,
-		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK) );
+		!(pOutput(ROW2B1, ROW2B1_HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK) );
 	digitalWrite(HEATING_MIX_VALVE_DIRECTION_PIN,
-		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_DIRECTION_MASK) );
+		!(pOutput(ROW2B1, ROW2B1_HVAC_VALVES) & HEATING_MIX_VALVE_DIRECTION_MASK) );
 
-	LowDigOut(MAIN_3WAY_VALVE_BOILER_PIN, Souliss_T2n_Coil_Open, MAIN_3WAY_VALVE);
-	LowDigOut(MAIN_3WAY_VALVE_COLLECTOR_PIN, Souliss_T2n_Coil_Close, MAIN_3WAY_VALVE);
+	pLowDigOut(MAIN_3WAY_VALVE_BOILER_PIN, Souliss_T2n_Coil_Open, ROW2B1, ROW2B1_HVAC_MAIN_3WAY_VALVE);
+	pLowDigOut(MAIN_3WAY_VALVE_COLLECTOR_PIN, Souliss_T2n_Coil_Close, ROW2B1, ROW2B1_HVAC_MAIN_3WAY_VALVE);
 
-	nLowDigOut(PUMP_BOILER_FLOOR_PIN, Souliss_T1n_OnCoil, PUMP_BOILER_FLOOR);
-	nLowDigOut(PUMP_COLLECTOR_FANCOIL_PIN, Souliss_T1n_OnCoil, PUMP_COLLECTOR_FANCOIL);
-	nLowDigOut(PUMP_COLLECTOR_FLOOR_PIN, Souliss_T1n_OnCoil, PUMP_COLLECTOR_FLOOR);
+	pnLowDigOut(PUMP_BOILER_FLOOR_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_HVAC_PUMP_BOILER_FLOOR);
+	pnLowDigOut(PUMP_COLLECTOR_FANCOIL_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_HVAC_PUMP_COLLECTOR_FANCOIL);
+	pnLowDigOut(PUMP_COLLECTOR_FLOOR_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_HVAC_PUMP_COLLECTOR_FLOOR);
 
-	nLowDigOut(HP_SETPOINT_2_PIN, Souliss_T1n_OnCoil, HP_SETPOINT_2);
+	pnLowDigOut(HP_SETPOINT_2_PIN, Souliss_T1n_OnCoil, ROW2B1, ROW2B1_HEATPUMP_SETPOINT_2);
 }
 
 
 inline void ProcessTimers()
 {
-	Timer_SimpleLight(LIGHT_LOFT_1);
-	Timer_SimpleLight(LIGHT_LOFT_2);
-	Timer_SimpleLight(LIGHT_TERRACE_1);
-	Timer_SimpleLight(LIGHT_TERRACE_2);
-	Timer_SimpleLight(LIGHT_TERRACE_3);
-	Timer_SimpleLight(LIGHT_TOILET);
-
-	Souliss_T12_Timer(memory_map, FLOOR_MODE);
-	Souliss_T12_Timer(memory_map, HEATPUMP_REMOTE_SWITCH);
-	Souliss_T12_Timer(memory_map, HEATPUMP_CIRCULATION_PUMP);
-	Souliss_T12_Timer(memory_map, HEATPUMP_SANITARY_WATER);
-	Souliss_T12_Timer(memory_map, HEATPUMP_COOL);
-
-	Souliss_T22_Timer(memory_map, MAIN_3WAY_VALVE);
-
-	Souliss_T12_Timer(memory_map, PUMP_BOILER_FLOOR);
-	Souliss_T12_Timer(memory_map, PUMP_COLLECTOR_FANCOIL);
-	Souliss_T12_Timer(memory_map, PUMP_COLLECTOR_FLOOR);
-
-	Souliss_T12_Timer(memory_map, FANCOIL_MODE);
-	Souliss_T12_Timer(memory_map, HP_SETPOINT_2);
-
-	Timer_HeatingMixValve();
 }
 
 
@@ -285,6 +243,9 @@ void loop()
 			ProcessFancoilsRequest(phase_fast);
 
 		SHIFT_2110ms(7)
+			ReadSlowInputs();
+
+		SHIFT_2110ms(8)
 			ProcessTimers();
 
 		FAST_GatewayComms();
