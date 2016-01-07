@@ -82,12 +82,9 @@ inline void Timer_HeatingMixValve()
 
 inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 {
-	float temp_floor_flow = temp_HVAC_Floor_Flow;
-	float temp_floor_return = temp_HVAC_Floor_Return;
-
 	// control the boiler-floor mix valve to keep the setpoint
 	// error is used as a timer value for motorized valve
-	float error = setpoint - (2*temp_floor_flow + temp_floor_return)/3;
+	float error = setpoint - (2*temp_HVAC_Floor_Flow + temp_HVAC_Floor_Return)/3;
 
 #ifdef DEBUG
 	Serial.print("HEATING FLOW ERROR: ");
