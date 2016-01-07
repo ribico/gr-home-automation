@@ -96,18 +96,10 @@
 #define temp_HVAC_Boiler_Heating            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_HEATING_TEMP)
 #define temp_HVAC_Boiler_Bottom             pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_BOTTOM_TEMP)
 
-#define temp_HVAC_Collector_Flow            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FLOW_TEMP)
-#define temp_HVAC_Collector_Return          pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_RETURN_TEMP)
-#define temp_HVAC_Collector_Floor_Flow      pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FLOOR_FLOW_TEMP)
-#define temp_HVAC_Collector_Floor_Return    pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FLOOR_RETURN_TEMP)
-#define temp_HVAC_Collector_Fancoil_Flow    pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FANCOILS_FLOW_TEMP)
-#define temp_HVAC_Collector_Fancoil_Return  pOutputAsFloat(ROW1B1,ROW1B1_HVAC_COLLECTOR_FANCOILS_RETURN_TEMP)
+#define temp_HVAC_HEATPUMP_Flow             pOutputAsFloat(ROW1B1,ROW1B1_HVAC_HEATPUMP_FLOW_TEMP)
+#define temp_HVAC_HEATPUMP_Return           pOutputAsFloat(ROW1B1,ROW1B1_HVAC_HEATPUMP_RETURN_TEMP)
 
-#define temp_HVAC_Boiler_Floor_Flow         pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_FLOOR_FLOW_TEMP)
-#define temp_HVAC_Boiler_Floor_Return       pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_FLOOR_RETURN_TEMP)
-
-#define temp_HVAC_HP_Flow                   pOutputAsFloat(ROW1B1,ROW1B1_HVAC_HP_FLOW_TEMP)
-#define temp_HVAC_HP_Return                 pOutputAsFloat(ROW1B1,ROW1B1_HVAC_HP_RETURN_TEMP)
-
+#define temp_HVAC_Fancoil_Flow              pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FANCOILS_FLOW_TEMP)
+#define temp_HVAC_Fancoil_Return            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FANCOILS_RETURN_TEMP)
 #define temp_HVAC_Floor_Flow                pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_FLOW_TEMP)
 #define temp_HVAC_Floor_Return              pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_RETURN_TEMP)
