@@ -39,21 +39,13 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 #define HVAC_BOILER_HEATING_TEMP 								16
 #define HVAC_BOILER_BOTTOM_TEMP 								18
 
-#define HVAC_COLLECTOR_FLOW_TEMP								20
-#define HVAC_COLLECTOR_RETURN_TEMP							22
-#define HVAC_COLLECTOR_FLOOR_FLOW_TEMP		 			24
-#define HVAC_COLLECTOR_FLOOR_RETURN_TEMP  			26
-#define HVAC_COLLECTOR_FANCOILS_FLOW_TEMP  			28
-#define HVAC_COLLECTOR_FANCOILS_RETURN_TEMP 		30
+#define HVAC_HEATPUMP_FLOW_TEMP									20
+#define HVAC_HEATPUMP_RETURN_TEMP								22
 
-#define HVAC_BOILER_FLOOR_FLOW_TEMP							32
-#define HVAC_BOILER_FLOOR_RETURN_TEMP						34
-
-#define HVAC_HP_FLOW_TEMP												36
-#define HVAC_HP_RETURN_TEMP											38
-
-//#define HVAC_FLOOR_FLOW_TEMP										40
-//#define HVAC_FLOOR_RETURN_TEMP									42
+#define HVAC_FANCOILS_FLOW_TEMP  								24
+#define HVAC_FANCOILS_RETURN_TEMP 							26
+#define HVAC_FLOOR_FLOW_TEMP										28
+#define HVAC_FLOOR_RETURN_TEMP									30
 
 
 #define ROW1B3_LIGHT_STAIRS			4
@@ -73,23 +65,14 @@ inline void DefineTypicals()
 	Set_Temperature(HVAC_BOILER_HEATING_TEMP);
 	Set_Temperature(HVAC_BOILER_BOTTOM_TEMP);
 
-	Set_Temperature(HVAC_COLLECTOR_FLOW_TEMP);
-	Set_Temperature(HVAC_COLLECTOR_RETURN_TEMP);
-	Set_Temperature(HVAC_COLLECTOR_FLOOR_FLOW_TEMP);
-	Set_Temperature(HVAC_COLLECTOR_FLOOR_RETURN_TEMP);
-	Set_Temperature(HVAC_COLLECTOR_FANCOILS_FLOW_TEMP);
-	Set_Temperature(HVAC_COLLECTOR_FANCOILS_RETURN_TEMP);
+	Set_Temperature(HVAC_HEATPUMP_FLOW_TEMP);
+	Set_Temperature(HVAC_HEATPUMP_RETURN_TEMP);
 
-	Set_Temperature(HVAC_BOILER_FLOOR_FLOW_TEMP);
-	Set_Temperature(HVAC_BOILER_FLOOR_RETURN_TEMP);
-
-	Set_Temperature(HVAC_HP_FLOW_TEMP);
-	Set_Temperature(HVAC_HP_RETURN_TEMP);
-
-/*
+	Set_Temperature(HVAC_FANCOILS_FLOW_TEMP);
+	Set_Temperature(HVAC_FANCOILS_RETURN_TEMP);
 	Set_Temperature(HVAC_FLOOR_FLOW_TEMP);
 	Set_Temperature(HVAC_FLOOR_RETURN_TEMP);
-*/
+
 }
 
 inline void ReadInputs()
@@ -116,23 +99,13 @@ inline void ProcessLogics()
 	grh_Logic_Temperature(HVAC_BOILER_HEATING_TEMP);
 	grh_Logic_Temperature(HVAC_BOILER_BOTTOM_TEMP);
 
-	grh_Logic_Temperature(HVAC_COLLECTOR_FLOW_TEMP);
-	grh_Logic_Temperature(HVAC_COLLECTOR_RETURN_TEMP);
-	grh_Logic_Temperature(HVAC_COLLECTOR_FLOOR_FLOW_TEMP);
-	grh_Logic_Temperature(HVAC_COLLECTOR_FLOOR_RETURN_TEMP);
-	grh_Logic_Temperature(HVAC_COLLECTOR_FANCOILS_FLOW_TEMP);
-	grh_Logic_Temperature(HVAC_COLLECTOR_FANCOILS_RETURN_TEMP);
+	grh_Logic_Temperature(HVAC_HEATPUMP_FLOW_TEMP);
+	grh_Logic_Temperature(HVAC_HEATPUMP_RETURN_TEMP);
 
-	grh_Logic_Temperature(HVAC_BOILER_FLOOR_FLOW_TEMP);
-	grh_Logic_Temperature(HVAC_BOILER_FLOOR_RETURN_TEMP);
-
-	grh_Logic_Temperature(HVAC_HP_FLOW_TEMP);
-	grh_Logic_Temperature(HVAC_HP_RETURN_TEMP);
-
-/*
+	grh_Logic_Temperature(HVAC_FANCOILS_FLOW_TEMP);
+	grh_Logic_Temperature(HVAC_FANCOILS_RETURN_TEMP);
 	grh_Logic_Temperature(HVAC_FLOOR_FLOW_TEMP);
 	grh_Logic_Temperature(HVAC_FLOOR_RETURN_TEMP);
-*/
 }
 
 inline void SetOutputs()

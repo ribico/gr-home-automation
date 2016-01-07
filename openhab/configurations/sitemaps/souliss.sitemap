@@ -520,16 +520,10 @@ sitemap default label="Full"
 					{
 						Text item=HVAC_Temp_HP_Flow
 						Text item=HVAC_Temp_HP_Ret
-						Text item=HVAC_Temp_Collector_Flow
-						Text item=HVAC_Temp_Collector_Ret
-						Text item=HVAC_Temp_Coll_Floor_Flow
-						Text item=HVAC_Temp_Coll_Floor_Ret
-						Text item=HVAC_Temp_Coll_Fancoils_Flow labelcolor=[HVAC_Pump_Collector_Fancoil==ON="blue"]
-						Text item=HVAC_Temp_Coll_Fancoils_Ret
-						Text item=HVAC_Temp_Boiler_Floor_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red"]
-						Text item=HVAC_Temp_Boiler_Floor_Ret
-						Text item=HVAC_Floor_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red",HVAC_Pump_Collector_Floor==ON="blue"]
-						Text item=HVAC_Floor_Ret
+						Text item=HVAC_Temp_Fancoils_Flow labelcolor=[HVAC_Pump_Collector_Fancoil==ON="blue"]
+						Text item=HVAC_Temp_Fancoils_Ret
+						Text item=HVAC_Temp_Floor_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red",HVAC_Pump_Collector_Floor==ON="blue"]
+						Text item=HVAC_Temp_Floor_Ret
 					}
 				}
 			}
