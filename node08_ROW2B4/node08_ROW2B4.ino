@@ -17,15 +17,10 @@ DINO with RS485 only acting as Peer
 
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
+#include "grhSoulissSlots.h"
 #include "HW_Setup_DINo_v2.h"
 
 
-//--------------------------------------
-// USED FOR DHT SENSOR
-#define TEMPERATURE			1
-#define TEMPERATURE_1		2
-#define HUMIDITY			3
-#define HUMIDITY_1			4
 
 #include <DHT.h>
 DHT dht(ONE_WIRE_PIN, DHT22);
@@ -35,9 +30,9 @@ float th=0;
 
 inline void DefineTypicals()
 {
-	
-	Set_Temperature(TEMPERATURE);
-	Set_Humidity(HUMIDITY);
+
+	Set_Temperature(ROW1B4_TEMPERATURE);
+	Set_Humidity(ROW1B4_HUMIDITY);
 	dht.begin();
 }
 
@@ -49,8 +44,8 @@ inline void ReadInputs()
 inline void ProcessLogics()
 {
 
-	grh_Logic_Humidity(HUMIDITY);
-	grh_Logic_Temperature(TEMPERATURE);
+	grh_Logic_Humidity(ROW1B4_HUMIDITY);
+	grh_Logic_Temperature(ROW1B4_TEMPERATURE);
 }
 
 inline void SetOutputs()
@@ -60,12 +55,12 @@ inline void SetOutputs()
 
 inline void ProcessTimers()
 {
-	
+
 	th = dht.readHumidity();
-	ImportAnalog(HUMIDITY, &th);
+	ImportAnalog(ROW1B4_HUMIDITY, &th);
 
 	th = dht.readTemperature();
-	ImportAnalog(TEMPERATURE, &th);	
+	ImportAnalog(ROW1B4_TEMPERATURE, &th);
 }
 
 
@@ -84,33 +79,33 @@ void setup()
 }
 
 void loop()
-{ 
-	EXECUTEFAST() {						
+{
+	EXECUTEFAST() {
 		UPDATEFAST();
-		
-		FAST_30ms() 
+
+		FAST_30ms()
 		{
 			ReadInputs();
-		} 
+		}
 
-		FAST_50ms() 
+		FAST_50ms()
 		{
 			ProcessLogics();
 
 			SetOutputs();
 		}
-		
+
 		FAST_2110ms()
 		{
 			ProcessTimers();
 		}
 
-		grhFastPeerComms();			
+		grhFastPeerComms();
 	}
-	
-	EXECUTESLOW() 
-	{	
+
+	EXECUTESLOW()
+	{
 		UPDATESLOW();
 		SLOW_PeerJoin();
 	}
-} 
+}

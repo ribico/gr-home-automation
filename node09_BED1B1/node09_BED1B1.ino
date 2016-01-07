@@ -17,23 +17,9 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
+#include "grhSoulissSlots.h"
 #include "HW_Setup_DINo_v2.h"
 
-
-
-
-#define LIGHT_BEDROOM1		1
-#define LIGHT_BALCONY1		2			
-#define WINDOW_BEDROOM1		3
-
-//--------------------------------------
-// USED FOR DHT SENSOR
-#define TEMPERATURE			4
-#define TEMPERATURE_1		5
-#define HUMIDITY			6
-#define HUMIDITY_1			7
-
-#define REMOTE_LIGHT_GW1	8
 
 #include <DHT.h>
 DHT dht(ONE_WIRE_PIN, DHT22);
@@ -42,57 +28,57 @@ float th=0;
 
 inline void DefineTypicals()
 {
-	Set_SimpleLight(LIGHT_BALCONY1);
-	Set_SimpleLight(LIGHT_BEDROOM1);
-	Souliss_SetT22(memory_map, WINDOW_BEDROOM1);
+	Set_SimpleLight(BED1B1_LIGHT_BALCONY1);
+	Set_SimpleLight(BED1B1_LIGHT_BEDROOM1);
+	Souliss_SetT22(memory_map, BED1B1_WINDOW_BEDROOM1);
 
-	Set_Temperature(TEMPERATURE);
-	Set_Humidity(HUMIDITY);
+	Set_Temperature(BED1B1_TEMPERATURE);
+	Set_Humidity(BED1B1_HUMIDITY);
 	dht.begin();
 
-	Set_SimpleLight(REMOTE_LIGHT_GW1);
+	Set_SimpleLight(BED1B1_REMOTE_LIGHT_GW1);
 }
 
 inline void ReadInputs()
 {
-	Souliss_DigIn(IN1, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BALCONY1, true);
-	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BEDROOM1, true);
-	DigInWindowToggle(IN3, WINDOW_BEDROOM1);
+	Souliss_DigIn(IN1, Souliss_T1n_ToggleCmd, memory_map, BED1B1_LIGHT_BALCONY1, true);
+	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, BED1B1_LIGHT_BEDROOM1, true);
+	DigInWindowToggle(IN3, BED1B1_WINDOW_BEDROOM1);
 
-	U8 ret = Souliss_DigIn(IN4, Souliss_T1n_ToggleCmd, memory_map, REMOTE_LIGHT_GW1, true);
+	U8 ret = Souliss_DigIn(IN4, Souliss_T1n_ToggleCmd, memory_map, BED1B1_REMOTE_LIGHT_GW1, true);
 	if( ret != MaCaco_NODATACHANGED )
 		RemoteInput(RS485_ADDRESS_GTW1B1, 4, ret);
 }
 
 inline void ProcessLogics()
 {
-	Logic_SimpleLight(LIGHT_BALCONY1);
-	Logic_SimpleLight(LIGHT_BEDROOM1);
-	Souliss_Logic_T22(memory_map, WINDOW_BEDROOM1, &data_changed, SHUTTER_LONG_TIMEOUT);
+	Logic_SimpleLight(BED1B1_LIGHT_BALCONY1);
+	Logic_SimpleLight(BED1B1_LIGHT_BEDROOM1);
+	Souliss_Logic_T22(memory_map, BED1B1_WINDOW_BEDROOM1, &data_changed, SHUTTER_LONG_TIMEOUT);
 
-	grh_Logic_Humidity(HUMIDITY);
-	grh_Logic_Temperature(TEMPERATURE);
+	grh_Logic_Humidity(BED1B1_HUMIDITY);
+	grh_Logic_Temperature(BED1B1_TEMPERATURE);
 }
 
 inline void SetOutputs()
 {
-	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_BALCONY1);
-	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_BEDROOM1);
-	DigOut(RELAY3, Souliss_T2n_Coil_Open,  WINDOW_BEDROOM1);
-	DigOut(RELAY4, Souliss_T2n_Coil_Close, WINDOW_BEDROOM1);
+	DigOut(RELAY1, Souliss_T1n_Coil, BED1B1_LIGHT_BALCONY1);
+	DigOut(RELAY2, Souliss_T1n_Coil, BED1B1_LIGHT_BEDROOM1);
+	DigOut(RELAY3, Souliss_T2n_Coil_Open,  BED1B1_WINDOW_BEDROOM1);
+	DigOut(RELAY4, Souliss_T2n_Coil_Close, BED1B1_WINDOW_BEDROOM1);
 }
 
 inline void ProcessTimers()
 {
-	Timer_SimpleLight(LIGHT_BALCONY1);
-	Timer_SimpleLight(LIGHT_BEDROOM1);
-	Timer_Windows(WINDOW_BEDROOM1);
+	Timer_SimpleLight(BED1B1_LIGHT_BALCONY1);
+	Timer_SimpleLight(BED1B1_LIGHT_BEDROOM1);
+	Timer_Windows(BED1B1_WINDOW_BEDROOM1);
 
 	th = dht.readHumidity();
-	ImportAnalog(HUMIDITY, &th);
+	ImportAnalog(BED1B1_HUMIDITY, &th);
 
 	th = dht.readTemperature();
-	ImportAnalog(TEMPERATURE, &th);
+	ImportAnalog(BED1B1_TEMPERATURE, &th);
 }
 
 

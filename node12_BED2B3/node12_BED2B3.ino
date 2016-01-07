@@ -17,17 +17,9 @@ DINO with RS485 only acting as Peer
 
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
+#include "grhSoulissSlots.h"
 #include "HW_Setup_DINo_v2.h"
 
-#define WINDOW_BATH1		1			
-#define WINDOW_BEDROOM2		2	
-
-//--------------------------------------
-// USED FOR DHT SENSOR
-#define TEMPERATURE			3
-#define TEMPERATURE_1		4
-#define HUMIDITY			5
-#define HUMIDITY_1			6
 
 #include <DHT.h>
 DHT dht(ONE_WIRE_PIN, DHT22);
@@ -37,47 +29,47 @@ float th=0;
 
 inline void DefineTypicals()
 {
-	Souliss_SetT22(memory_map, WINDOW_BATH1);
-	Souliss_SetT22(memory_map, WINDOW_BEDROOM2);
+	Souliss_SetT22(memory_map, BED2B3_WINDOW_BATH1);
+	Souliss_SetT22(memory_map, BED2B3_WINDOW_BEDROOM2);
 
-	Set_Temperature(TEMPERATURE);
-	Set_Humidity(HUMIDITY);
+	Set_Temperature(BED2B3_TEMPERATURE);
+	Set_Humidity(BED2B3_HUMIDITY);
 	dht.begin();
 }
 
 inline void ReadInputs()
 {
-	DigInWindowToggle(IN1, WINDOW_BATH1);
-	DigInWindowToggle(IN2, WINDOW_BEDROOM2);
+	DigInWindowToggle(IN1, BED2B3_WINDOW_BATH1);
+	DigInWindowToggle(IN2, BED2B3_WINDOW_BEDROOM2);
 }
 
 inline void ProcessLogics()
 {
-	Souliss_Logic_T22(memory_map, WINDOW_BATH1, &data_changed, SHUTTER_SHORT_TIMEOUT);
-	Souliss_Logic_T22(memory_map, WINDOW_BEDROOM2, &data_changed, SHUTTER_SHORT_TIMEOUT);
+	Souliss_Logic_T22(memory_map, BED2B3_WINDOW_BATH1, &data_changed, SHUTTER_SHORT_TIMEOUT);
+	Souliss_Logic_T22(memory_map, BED2B3_WINDOW_BEDROOM2, &data_changed, SHUTTER_SHORT_TIMEOUT);
 
-	grh_Logic_Humidity(HUMIDITY);
-	grh_Logic_Temperature(TEMPERATURE);
+	grh_Logic_Humidity(BED2B3_HUMIDITY);
+	grh_Logic_Temperature(BED2B3_TEMPERATURE);
 }
 
 inline void SetOutputs()
 {
-	DigOut(RELAY1, Souliss_T2n_Coil_Open,  WINDOW_BATH1);
-	DigOut(RELAY2, Souliss_T2n_Coil_Close, WINDOW_BATH1);
-	DigOut(RELAY3, Souliss_T2n_Coil_Open,  WINDOW_BEDROOM2);
-	DigOut(RELAY4, Souliss_T2n_Coil_Close, WINDOW_BEDROOM2);
+	DigOut(RELAY1, Souliss_T2n_Coil_Open,  BED2B3_WINDOW_BATH1);
+	DigOut(RELAY2, Souliss_T2n_Coil_Close, BED2B3_WINDOW_BATH1);
+	DigOut(RELAY3, Souliss_T2n_Coil_Open,  BED2B3_WINDOW_BEDROOM2);
+	DigOut(RELAY4, Souliss_T2n_Coil_Close, BED2B3_WINDOW_BEDROOM2);
 }
 
 inline void ProcessTimers()
 {
-	Timer_Windows(WINDOW_BATH1);
-	Timer_Windows(WINDOW_BEDROOM2);
+	Timer_Windows(BED2B3_WINDOW_BATH1);
+	Timer_Windows(BED2B3_WINDOW_BEDROOM2);
 
 	th = dht.readHumidity();
-	ImportAnalog(HUMIDITY, &th);
+	ImportAnalog(BED2B3_HUMIDITY, &th);
 
 	th = dht.readTemperature();
-	ImportAnalog(TEMPERATURE, &th);	
+	ImportAnalog(BED2B3_TEMPERATURE, &th);
 }
 
 
@@ -96,33 +88,33 @@ void setup()
 }
 
 void loop()
-{ 
-	EXECUTEFAST() {						
+{
+	EXECUTEFAST() {
 		UPDATEFAST();
-		
-		FAST_30ms() 
+
+		FAST_30ms()
 		{
 			ReadInputs();
-		} 
+		}
 
-		FAST_50ms() 
+		FAST_50ms()
 		{
 			ProcessLogics();
 
 			SetOutputs();
 		}
-		
+
 		FAST_2110ms()
 		{
 			ProcessTimers();
 		}
 
-		grhFastPeerComms();			
+		grhFastPeerComms();
 	}
-	
-	EXECUTESLOW() 
-	{	
+
+	EXECUTESLOW()
+	{
 		UPDATESLOW();
 		SLOW_PeerJoin();
 	}
-} 
+}

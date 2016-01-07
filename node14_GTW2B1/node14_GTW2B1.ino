@@ -17,57 +17,54 @@ DINO with RS485 only acting as Peer
 
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
+#include "grhSoulissSlots.h"
 #include "HW_Setup_DINo_v2.h"
 
-#define FAN_SPEED1			1
-#define FAN_SPEED2			2
-#define FAN_SPEED3			3
-#define LIGHT_GW			4
 
 inline void DefineTypicals()
 {
-	Set_T12(FAN_SPEED1);
-	Set_T12(FAN_SPEED2);
-	Set_T12(FAN_SPEED3);
-	Set_SimpleLight(LIGHT_GW);
+	Set_T12(GTW2B1_FAN_SPEED1);
+	Set_T12(GTW2B1_FAN_SPEED2);
+	Set_T12(GTW2B1_FAN_SPEED3);
+	Set_SimpleLight(GTW2B1_LIGHT_GW);
 
-  SetInput(FAN_SPEED1, Souliss_T1n_AutoCmd);
-  SetInput(FAN_SPEED2, Souliss_T1n_AutoCmd);
-  SetInput(FAN_SPEED3, Souliss_T1n_AutoCmd);
+  SetInput(GTW2B1_FAN_SPEED1, Souliss_T1n_AutoCmd);
+  SetInput(GTW2B1_FAN_SPEED2, Souliss_T1n_AutoCmd);
+  SetInput(GTW2B1_FAN_SPEED3, Souliss_T1n_AutoCmd);
 }
 
 inline void ReadInputs()
 {
-	Souliss_DigIn(IN1, Souliss_T1n_ToggleCmd, memory_map, LIGHT_GW, true);
+	Souliss_DigIn(IN1, Souliss_T1n_ToggleCmd, memory_map, GTW2B1_LIGHT_GW, true);
 }
 
 inline void ProcessLogics()
 {
-	Logic_SimpleLight(LIGHT_GW);
+	Logic_SimpleLight(GTW2B1_LIGHT_GW);
 
-	Logic_T12(FAN_SPEED2);
-	Logic_T12(FAN_SPEED3);
+	Logic_T12(GTW2B1_FAN_SPEED2);
+	Logic_T12(GTW2B1_FAN_SPEED3);
 
-	if( mOutput(FAN_SPEED2) == Souliss_T1n_AutoOnCoil || mOutput(FAN_SPEED3) == Souliss_T1n_AutoOnCoil)
-		SetInput(FAN_SPEED1, Souliss_T1n_AutoCmd + 2); // needed always ON because it also drive the water flux valve
+	if( mOutput(GTW2B1_FAN_SPEED2) == Souliss_T1n_AutoOnCoil || mOutput(GTW2B1_FAN_SPEED3) == Souliss_T1n_AutoOnCoil)
+		SetInput(GTW2B1_FAN_SPEED1, Souliss_T1n_AutoCmd + 2); // needed always ON because it also drive the water flux valve
 
-	Logic_T12(FAN_SPEED1);
+	Logic_T12(GTW2B1_FAN_SPEED1);
 }
 
 inline void SetOutputs()
 {
-	nDigOut(RELAY1, Souliss_T1n_OnCoil,  FAN_SPEED1);
-	nDigOut(RELAY2, Souliss_T1n_OnCoil, FAN_SPEED2);
-	nDigOut(RELAY3, Souliss_T1n_OnCoil,  FAN_SPEED3);
-	LowDigOut(RELAY4, Souliss_T1n_OnCoil, LIGHT_GW);
+	nDigOut(RELAY1, Souliss_T1n_OnCoil,  GTW2B1_FAN_SPEED1);
+	nDigOut(RELAY2, Souliss_T1n_OnCoil, GTW2B1_FAN_SPEED2);
+	nDigOut(RELAY3, Souliss_T1n_OnCoil,  GTW2B1_FAN_SPEED3);
+	LowDigOut(RELAY4, Souliss_T1n_OnCoil, GTW2B1_LIGHT_GW);
 }
 
 inline void ProcessTimers()
 {
-	Timer_T12(FAN_SPEED1);
-	Timer_T12(FAN_SPEED2);
-	Timer_T12(FAN_SPEED3);
-	Timer_SimpleLight(LIGHT_GW);
+	Timer_T12(GTW2B1_FAN_SPEED1);
+	Timer_T12(GTW2B1_FAN_SPEED2);
+	Timer_T12(GTW2B1_FAN_SPEED3);
+	Timer_SimpleLight(GTW2B1_LIGHT_GW);
 }
 
 

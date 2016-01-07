@@ -7,7 +7,7 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 //#define DEBUG
 
 #include "bconf/DINo_v2_EthernetBridge_RS485.h"
-#include "conf/SuperNode.h" 
+#include "conf/SuperNode.h"
 
 #include "grhSoulissCommon.h"
 
@@ -17,21 +17,8 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 
 #include "grhSoulissNetwork.h"
 #include "grhSoulissCustom.h"
+#include "grhSoulissSlots.h"
 #include "HW_Setup_DINo_v2.h"
-
-
-
-
-#define LIGHT_BALCONY2		1			
-#define LIGHT_BEDROOM3		2
-#define WINDOW_DINING		3
-
-//--------------------------------------
-// USED FOR DHT SENSOR
-#define TEMPERATURE			4
-#define TEMPERATURE_1		5
-#define HUMIDITY			6
-#define HUMIDITY_1			7
 
 #include <DHT.h>
 DHT dht(ONE_WIRE_PIN, DHT22);
@@ -40,51 +27,51 @@ float th=0;
 
 inline void DefineTypicals()
 {
-	Set_SimpleLight(LIGHT_BALCONY2);
-	Set_SimpleLight(LIGHT_BEDROOM3);
-	Souliss_SetT22(memory_map, WINDOW_DINING);
+	Set_SimpleLight(ROW2B1_LIGHT_BALCONY2);
+	Set_SimpleLight(ROW2B1_LIGHT_BEDROOM3);
+	Souliss_SetT22(memory_map, ROW2B1_WINDOW_DINING);
 
-	Set_Temperature(TEMPERATURE);
-	Set_Humidity(HUMIDITY);
-	dht.begin();	
+	Set_Temperature(ROW2B1_TEMPERATURE);
+	Set_Humidity(ROW2B1_HUMIDITY);
+	dht.begin();
 }
 
 inline void ReadInputs()
 {
-	Souliss_DigIn(IN1, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BALCONY2, true);
-	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, LIGHT_BEDROOM3, true);
-	DigInWindowToggle(IN3, WINDOW_DINING);	
+	Souliss_DigIn(IN1, Souliss_T1n_ToggleCmd, memory_map, ROW2B1_LIGHT_BALCONY2, true);
+	Souliss_DigIn(IN2, Souliss_T1n_ToggleCmd, memory_map, ROW2B1_LIGHT_BEDROOM3, true);
+	DigInWindowToggle(IN3, ROW2B1_WINDOW_DINING);
 }
 
 inline void ProcessLogics()
 {
-	Logic_SimpleLight(LIGHT_BALCONY2);
-	Logic_SimpleLight(LIGHT_BEDROOM3);
-	Souliss_Logic_T22(memory_map, WINDOW_DINING, &data_changed, SHUTTER_SHORT_TIMEOUT);
+	Logic_SimpleLight(ROW2B1_LIGHT_BALCONY2);
+	Logic_SimpleLight(ROW2B1_LIGHT_BEDROOM3);
+	Souliss_Logic_T22(memory_map, ROW2B1_WINDOW_DINING, &data_changed, SHUTTER_SHORT_TIMEOUT);
 
-	grh_Logic_Humidity(HUMIDITY);
-	grh_Logic_Temperature(TEMPERATURE);	
+	grh_Logic_Humidity(ROW2B1_HUMIDITY);
+	grh_Logic_Temperature(ROW2B1_TEMPERATURE);
 }
 
 inline void SetOutputs()
 {
-	DigOut(RELAY1, Souliss_T1n_Coil, LIGHT_BALCONY2);
-	DigOut(RELAY2, Souliss_T1n_Coil, LIGHT_BEDROOM3);
-	DigOut(RELAY3, Souliss_T2n_Coil_Open,  WINDOW_DINING);
-	DigOut(RELAY4, Souliss_T2n_Coil_Close, WINDOW_DINING);
+	DigOut(RELAY1, Souliss_T1n_Coil, ROW2B1_LIGHT_BALCONY2);
+	DigOut(RELAY2, Souliss_T1n_Coil, ROW2B1_LIGHT_BEDROOM3);
+	DigOut(RELAY3, Souliss_T2n_Coil_Open,  ROW2B1_WINDOW_DINING);
+	DigOut(RELAY4, Souliss_T2n_Coil_Close, ROW2B1_WINDOW_DINING);
 }
 
 inline void ProcessTimers()
 {
-	Timer_SimpleLight(LIGHT_BALCONY2);
-	Timer_SimpleLight(LIGHT_BEDROOM3);
-	Timer_Windows(WINDOW_DINING);
+	Timer_SimpleLight(ROW2B1_LIGHT_BALCONY2);
+	Timer_SimpleLight(ROW2B1_LIGHT_BEDROOM3);
+	Timer_Windows(ROW2B1_WINDOW_DINING);
 
 	th = dht.readHumidity();
-	ImportAnalog(HUMIDITY, &th);
+	ImportAnalog(ROW2B1_HUMIDITY, &th);
 
 	th = dht.readTemperature();
-	ImportAnalog(TEMPERATURE, &th);		
+	ImportAnalog(ROW2B1_TEMPERATURE, &th);
 }
 
 
@@ -104,33 +91,33 @@ void setup()
 }
 
 void loop()
-{ 
-	EXECUTEFAST() {						
-		UPDATEFAST();	
-		
-		FAST_30ms() 
+{
+	EXECUTEFAST() {
+		UPDATEFAST();
+
+		FAST_30ms()
 		{
 			ReadInputs();
-		} 
+		}
 
-		FAST_50ms() 
+		FAST_50ms()
 		{
 			ProcessLogics();
-			SetOutputs(); 
+			SetOutputs();
 		}
-		
+
 		FAST_2110ms()
 		{
 			ProcessTimers();
-				
-		}			
-		
-		grhFastPeerComms();		
+
+		}
+
+		grhFastPeerComms();
 	}
-	
-	EXECUTESLOW() 
-	{	
+
+	EXECUTESLOW()
+	{
 		UPDATESLOW();
 		SLOW_PeerJoin();
 	}
-} 
+}

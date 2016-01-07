@@ -49,21 +49,11 @@
 
 #define HEATING_MIX_VALVE							25
 
+#define LIGHT_SENSOR									26
+#define LIGHT_SENSOR_H								27
+
 /////////////////////////////////////////////////////////////
-#define ROW1B1																					1
-# define ROW1B1_EXT_TEMP																6
-# define ROW1B1_EXT_UR																	8
-# define ROW1B1_LOFT_TEMP																10
-# define ROW1B1_LOFT_UR																	12
-# define ROW1B1_HVAC_BOILER_SANITARY_TEMP 							14
-# define ROW1B1_HVAC_BOILER_HEATING_TEMP 								16
-#	define ROW1B1_HVAC_BOILER_BOTTOM_TEMP 								18
-# define ROW1B1_HVAC_HEATPUMP_FLOW_TEMP									20
-# define ROW1B1_HVAC_HEATPUMP_RETURN_TEMP								22
-# define ROW1B1_HVAC_FANCOILS_FLOW_TEMP  								24
-# define ROW1B1_HVAC_FANCOILS_RETURN_TEMP 							26
-# define ROW1B1_HVAC_FLOOR_FLOW_TEMP										28
-# define ROW1B1_HVAC_FLOOR_RETURN_TEMP									30
+#include "grhSoulissSlots.h"
 
 inline void DefineTypicals()
 {
@@ -74,6 +64,8 @@ inline void DefineTypicals()
 	Set_SimpleLight(LIGHT_TERRACE_2);
 	Set_SimpleLight(LIGHT_TERRACE_3);
 	Set_SimpleLight(LIGHT_TOILET);
+
+	Set_Light(LIGHT_SENSOR);
 
 	Souliss_SetT12(memory_map, FLOOR_MODE);
 	Souliss_SetT12(memory_map, HEATPUMP_REMOTE_SWITCH);
