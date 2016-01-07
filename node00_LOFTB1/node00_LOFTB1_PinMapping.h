@@ -133,7 +133,6 @@ inline void DefinePinMode()
 
 	pinMode(EXT_DHT22_PIN, INPUT_PULLUP);
 	pinMode(LOFT_DHT22_PIN, INPUT_PULLUP);
-	pinMode(DALLAS_WIRE_BUS, INPUT_PULLUP);
 }
 
 
