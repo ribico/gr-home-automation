@@ -6,48 +6,48 @@
 #define LIGHT_TERRACE_3                 5
 #define LIGHT_TOILET                    6
 
-#define FLOOR_MODE 			  							13
-#define HEATPUMP_REMOTE_SWITCH          14
-#define HEATPUMP_CIRCULATION_PUMP       15
-#define HEATPUMP_SANITARY_WATER       	16
-#define HEATPUMP_COOL                		17
+#define FLOOR_MODE 			  							7
+#define HEATPUMP_REMOTE_SWITCH          8
+#define HEATPUMP_CIRCULATION_PUMP       9
+#define HEATPUMP_SANITARY_WATER       	10
+#define HEATPUMP_COOL                		11
 
-#define HVAC_ZONES					24
-#	define HVAC_MASK_NO_ZONES		0x00
-#	define HVAC_MASK_ALL_ZONES	0xFF
+#define HVAC_ZONES											12
+#	define HVAC_MASK_NO_ZONES							0x00
+#	define HVAC_MASK_ALL_ZONES						0xFF
 #	define HVAC_MASK_ALL_COOLING_ZONES (HVAC_MASK_BED1|HVAC_MASK_BED2|HVAC_MASK_LIVING|HVAC_MASK_BED3|HVAC_MASK_KITCHEN|HVAC_MASK_LOFT)
-#	define HVAC_MASK_BED1			0x01
-#	define HVAC_MASK_BATH1			0x02
-#	define HVAC_MASK_BED2			0x04
-#	define HVAC_MASK_LIVING			0x08
-#	define HVAC_MASK_BED3			0x10
-#	define HVAC_MASK_BATH2			0x20
-#	define HVAC_MASK_KITCHEN		0x40
-#	define HVAC_MASK_LOFT			0x80
+#	define HVAC_MASK_BED1									0x01
+#	define HVAC_MASK_BATH1								0x02
+#	define HVAC_MASK_BED2									0x04
+#	define HVAC_MASK_LIVING								0x08
+#	define HVAC_MASK_BED3									0x10
+#	define HVAC_MASK_BATH2								0x20
+#	define HVAC_MASK_KITCHEN							0x40
+#	define HVAC_MASK_LOFT									0x80
 
-#define HVAC_VALVES 							25
-#	define MAIN_3WAY_VALVE_BOILER_MASK			0x01
-#	define MAIN_3WAY_VALVE_COLLECTOR_MASK		0x02
-#	define HEATING_MIX_VALVE_SWITCH_MASK		0x04
+#define HVAC_VALVES 												13
+#	define MAIN_3WAY_VALVE_BOILER_MASK				0x01
+#	define MAIN_3WAY_VALVE_COLLECTOR_MASK			0x02
+#	define HEATING_MIX_VALVE_SWITCH_MASK			0x04
 #	define HEATING_MIX_VALVE_DIRECTION_MASK		0x08
 
-#define MAIN_3WAY_VALVE				26
+#define MAIN_3WAY_VALVE								14
 
-#define PUMP_BOILER_FLOOR 			27
-#define PUMP_COLLECTOR_FANCOIL 		28
-#define PUMP_COLLECTOR_FLOOR 		29
+#define PUMP_BOILER_FLOOR 						15
+#define PUMP_COLLECTOR_FANCOIL 				16
+#define PUMP_COLLECTOR_FLOOR 					17
 
-#define FANCOIL_MODE				30
-#define HP_SETPOINT_2				31
+#define FANCOIL_MODE									18
+#define HP_SETPOINT_2									19
 
-#define TEMP_AMBIENCE_SET_POINT		32
-#define TEMP_AMBIENCE_SET_POINT_H	33
-#define TEMP_SETPOINT_IN	34
+#define TEMP_AMBIENCE_SET_POINT				20
+#define TEMP_AMBIENCE_SET_POINT_H			21
+#define TEMP_SETPOINT_IN							22
 
-#define TEMP_FLOOR_FLOW_SETPOINT	35
-#define TEMP_FLOOR_FLOW_SETPOINT_H	36
+#define TEMP_FLOOR_FLOW_SETPOINT			23
+#define TEMP_FLOOR_FLOW_SETPOINT_H		24
 
-#define HEATING_MIX_VALVE		37
+#define HEATING_MIX_VALVE							25
 
 /////////////////////////////////////////////////////////////
 #define ROW1B1																					1

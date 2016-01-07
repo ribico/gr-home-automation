@@ -19,16 +19,16 @@
 #define IsHeating()					(IsZoneOpen() && IsHeatMode())
 #define IsCooling()					(IsZoneOpen() && IsCoolMode())
 
-#define IsSanitaryWaterCold()			  (temperature_sanitary < SETPOINT_TEMP_SANITARY_WATER_MIN)
-#define IsSanitaryWaterHot()			  (temperature_sanitary > SETPOINT_TEMP_SANITARY_WATER_MAX)
+#define IsSanitaryWaterCold()			  (temp_HVAC_Boiler_Saniary < SETPOINT_TEMP_SANITARY_WATER_MIN)
+#define IsSanitaryWaterHot()			  (temp_HVAC_Boiler_Saniary > SETPOINT_TEMP_SANITARY_WATER_MAX)
 #define IsSanitaryWaterOn()	        (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_OnCoil)
 #define IsSanitaryWaterAuto()	      (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoState)
 #define IsSanitaryWaterAutoOn()	    (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOnCoil)
 #define IsSanitaryWaterAutoOff()	  (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOffCoil)
 #define SanitaryWaterAutoOnCmd()    SetInput(HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd + 4 /*cycles*/)
 
-#define IsStorageWaterCold()        (temperature_heating < mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT))
-#define IsStorageWaterHot()					(temperature_bottom > mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT))
+#define IsStorageWaterCold()        (temp_HVAC_Boiler_Heating < mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT))
+#define IsStorageWaterHot()					(temp_HVAC_Boiler_Bottom > mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT))
 #define IsStorageWaterInProduction()  (IsHpFlowToBoiler() && IsHotWaterInProduction())
 
 #define IsHotWaterInProduction()		(IsHeatMode() && (IsHpCirculationOn() || IsHpCirculationAutoOn()) )

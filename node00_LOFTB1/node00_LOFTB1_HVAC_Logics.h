@@ -9,9 +9,6 @@ DHT dht_loft(LOFT_DHT22_PIN, DHT22);
 // DHT PIN4 -> GND
 //--------------------------------------
 
-float temperature_sanitary, temperature_heating, temperature_bottom;
-float temperature_floor_flow, temperature_floor_return, temperature_fancoil_flow;
-
 inline void GetCurrentStatus(U16 phase_fast)
 {
 	// read and send external temp & UR to ROW1B1 slots
