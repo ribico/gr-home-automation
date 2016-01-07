@@ -14,25 +14,6 @@ float temperature_floor_flow, temperature_floor_return, temperature_fancoil_flow
 
 inline void GetCurrentStatus(U16 phase_fast)
 {
-	temperature_sanitary = NTC10k_ToCelsius( TEMP_BOILER_SANITARY_PIN, TEMP_BOILER_SANITARY_PAD_RESISTANCE );
-	ImportAnalog(TEMP_BOILER_SANITARY, &temperature_sanitary);
-
-	temperature_heating = NTC10k_ToCelsius( TEMP_BOILER_HEATING_PIN, TEMP_BOILER_HEATING_PAD_RESISTANCE );
-	ImportAnalog(TEMP_BOILER_HEATING, &temperature_heating);
-
-	temperature_bottom = NTC10k_ToCelsius( TEMP_BOILER_BOTTOM_PIN, TEMP_BOILER_BOTTOM_PAD_RESISTANCE );
-	ImportAnalog(TEMP_BOILER_BOTTOM, &temperature_bottom);
-
-	temperature_floor_flow = NTC10k_ToCelsius( TEMP_FLOOR_FLOW_PIN, TEMP_FLOOR_FLOW_PAD_RESISTANCE );
-	ImportAnalog(TEMP_FLOOR_FLOW, &temperature_floor_flow);
-
-	temperature_floor_return = NTC10k_ToCelsius( TEMP_FLOOR_RETURN_PIN, TEMP_FLOOR_RETURN_PAD_RESISTANCE );
-	ImportAnalog(TEMP_FLOOR_RETURN, &temperature_floor_return);
-
-	temperature_fancoil_flow = NTC10k_ToCelsius( TEMP_FANCOIL_FLOW_PIN, TEMP_FANCOIL_FLOW_PAD_RESISTANCE );
-	ImportAnalog(TEMP_FANCOIL_FLOW, &temperature_fancoil_flow);
-
-
 	// read and send external temp & UR to ROW1B1 slots
 	float tmp;
 	U8 buff[8];

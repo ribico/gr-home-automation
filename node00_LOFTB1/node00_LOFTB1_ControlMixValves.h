@@ -82,9 +82,8 @@ inline void Timer_HeatingMixValve()
 
 inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 {
-//	float temp_storage = mOutputAsFloat(TEMP_BOILER_HEATING);
-	float temp_floor_flow = mOutputAsFloat(TEMP_FLOOR_FLOW);
-	float temp_floor_return = mOutputAsFloat(TEMP_FLOOR_RETURN);
+	float temp_floor_flow = temp_HVAC_Floor_Flow;
+	float temp_floor_return = temp_HVAC_Floor_Return;
 
 	// control the boiler-floor mix valve to keep the setpoint
 	// error is used as a timer value for motorized valve
@@ -120,7 +119,7 @@ inline void AdjustCollectorToFloorFlowTemperature(float setpoint)
 {
 	// control the collector-floor mix valve to keep the setpoint
 	// simple proportional control on return floor temperature
-	float error = setpoint - (mOutputAsFloat(TEMP_FLOOR_FLOW)+mOutputAsFloat(TEMP_FLOOR_RETURN))/2;
+	float error = setpoint - (temp_HVAC_Floor_Flow + temp_HVAC_Floor_Return/2);
 
 	if(gCollectorToFloorMixValvePos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
 		gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
