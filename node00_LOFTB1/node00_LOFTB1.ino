@@ -212,11 +212,7 @@ void setup()
 
 	// Initialize dallas temperature sensors
 	gTempSensors.begin();
-
-  DeviceAddress tempDeviceAddress;
-	gTempSensors.getAddress(tempDeviceAddress, 0);
-  gTempSensors.setResolution(tempDeviceAddress, DALLAS_TEMP_RESOLUTION);
-
+  gTempSensors.setResolution(DALLAS_TEMP_RESOLUTION);
   gTempSensors.setWaitForConversion(false); // asynchronous temp conversions
   gTempSensors.requestTemperatures();
 
