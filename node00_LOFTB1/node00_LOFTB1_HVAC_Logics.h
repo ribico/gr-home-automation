@@ -75,10 +75,13 @@ inline void GetCurrentStatus(U16 phase_fast)
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 {
 	// control SANITARY production hysteresys in Auto Mode
-	if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
+	if(temp_HVAC_Boiler_Saniary != DEVICE_DISCONNECTED_C)
 	{
-		SetHpFlowToBoiler(); 		// upstream to boiler
-		SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
+		if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
+		{
+			SetHpFlowToBoiler(); 		// upstream to boiler
+			SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
+		}
 	}
 }
 
@@ -286,15 +289,20 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		FloorAutoOnCmd(); // only for user interface feedback
 
 		// control hot water storage if there's heating requests from any zone
-		if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
+		if( temp_HVAC_Boiler_Heating != DEVICE_DISCONNECTED_C && temp_HVAC_Boiler_Bottom != DEVICE_DISCONNECTED_C)
 		{
-      HpSetpoint2AutoCmd(); 	// fixed HP setpoint 2, do not care about standard HP climatic curves
-      SetHpFlowToBoiler();
-      HpCirculationAutoOnCmd();
+			if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
+			{
+	      HpSetpoint2AutoCmd(); 	// fixed HP setpoint 2, do not care about standard HP climatic curves
+	      SetHpFlowToBoiler();
+	      HpCirculationAutoOnCmd();
+			}
 		}
 
 		PumpBoilerToFloorAutoOnCmd();
-		AdjustBoilerToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
+
+		if (temp_HVAC_Floor_Flow != DEVICE_DISCONNECTED_C || temp_HVAC_Floor_Return != DEVICE_DISCONNECTED_C)
+			AdjustBoilerToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
@@ -305,7 +313,9 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		SetHpFlowToCollector();
 		HpCirculationAutoOnCmd();
 		PumpCollectorToFloorAutoOnCmd();
-		AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
+
+		if (temp_HVAC_Floor_Flow != DEVICE_DISCONNECTED_C || temp_HVAC_Floor_Return != DEVICE_DISCONNECTED_C)
+			AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
 	}
 }
 
