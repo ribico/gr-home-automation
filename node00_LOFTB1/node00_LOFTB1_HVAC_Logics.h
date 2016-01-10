@@ -75,7 +75,7 @@ inline void GetCurrentStatus(U16 phase_fast)
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 {
 	// control SANITARY production hysteresys in Auto Mode
-	if(temp_HVAC_Boiler_Saniary != DEVICE_DISCONNECTED_C)
+	if( IsTempValid(temp_HVAC_Boiler_Saniary) )
 	{
 		if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
 		{
@@ -289,7 +289,7 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		FloorAutoOnCmd(); // only for user interface feedback
 
 		// control hot water storage if there's heating requests from any zone
-		if( temp_HVAC_Boiler_Heating != DEVICE_DISCONNECTED_C && temp_HVAC_Boiler_Bottom != DEVICE_DISCONNECTED_C)
+		if( IsTempValid(temp_HVAC_Boiler_Heating) && IsTempValid(temp_HVAC_Boiler_Bottom) )
 		{
 			if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
 			{
@@ -301,7 +301,7 @@ inline void ProcessFloorRequest(U16 phase_fast)
 
 		PumpBoilerToFloorAutoOnCmd();
 
-		if (temp_HVAC_Floor_Flow != DEVICE_DISCONNECTED_C || temp_HVAC_Floor_Return != DEVICE_DISCONNECTED_C)
+		if( IsTempValid(temp_HVAC_Floor_Flow) && IsTempValid(temp_HVAC_Floor_Return) )
 			AdjustBoilerToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
 	}
 	else if( IsCooling() ) // cooling at least one zone
@@ -314,7 +314,7 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		HpCirculationAutoOnCmd();
 		PumpCollectorToFloorAutoOnCmd();
 
-		if (temp_HVAC_Floor_Flow != DEVICE_DISCONNECTED_C || temp_HVAC_Floor_Return != DEVICE_DISCONNECTED_C)
+		if( IsTempValid(temp_HVAC_Floor_Flow) && IsTempValid(temp_HVAC_Floor_Return) )
 			AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
 	}
 }

@@ -103,3 +103,5 @@
 #define temp_HVAC_Fancoil_Return            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FANCOILS_RETURN_TEMP)
 #define temp_HVAC_Floor_Flow                pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_FLOW_TEMP)
 #define temp_HVAC_Floor_Return              pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_RETURN_TEMP)
+
+#define IsTempValid(temp)                   ( (temp != DEVICE_DISCONNECTED_C) && (temp != 0.0) )
