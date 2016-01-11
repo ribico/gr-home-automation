@@ -211,10 +211,25 @@ void setup()
 	grhInitMEGA();
 
 	// Initialize dallas temperature sensors
-	gTempSensors.begin();
-  gTempSensors.setResolution(DALLAS_TEMP_RESOLUTION);
-  gTempSensors.setWaitForConversion(false); // asynchronous temp conversions
-  gTempSensors.requestTemperatures();
+	gTempSensors1.begin();
+  gTempSensors1.setResolution(DALLAS_TEMP_RESOLUTION);
+  gTempSensors1.setWaitForConversion(false); // asynchronous temp conversions
+  gTempSensors1.requestTemperatures();
+
+	gTempSensors2.begin();
+  gTempSensors2.setResolution(DALLAS_TEMP_RESOLUTION);
+  gTempSensors2.setWaitForConversion(false); // asynchronous temp conversions
+  gTempSensors2.requestTemperatures();
+
+	gTempSensors3.begin();
+  gTempSensors3.setResolution(DALLAS_TEMP_RESOLUTION);
+  gTempSensors3.setWaitForConversion(false); // asynchronous temp conversions
+  gTempSensors3.requestTemperatures();
+
+	gTempSensors4.begin();
+  gTempSensors4.setResolution(DALLAS_TEMP_RESOLUTION);
+  gTempSensors4.setWaitForConversion(false); // asynchronous temp conversions
+  gTempSensors4.requestTemperatures();
 
 	// LIST OF NODES
 	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);

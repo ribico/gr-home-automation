@@ -17,6 +17,9 @@
 #define LOFT_DHT22_PIN												6
 
 #define DALLAS_WIRE_BUS1_PIN									5
+#define DALLAS_WIRE_BUS2_PIN									4
+#define DALLAS_WIRE_BUS3_PIN									3
+#define DALLAS_WIRE_BUS4_PIN									2
 
 
 #define COLLECTOR_FLOOR_MIX_VALVE_PIN					13
@@ -132,5 +135,12 @@ inline void DefinePinMode()
 }
 
 
-OneWire gOneWire(DALLAS_WIRE_BUS1_PIN);
-DallasTemperature gTempSensors(&gOneWire);
+OneWire gOneWire1(DALLAS_WIRE_BUS1_PIN);
+OneWire gOneWire2(DALLAS_WIRE_BUS2_PIN);
+OneWire gOneWire3(DALLAS_WIRE_BUS3_PIN);
+OneWire gOneWire4(DALLAS_WIRE_BUS4_PIN);
+
+DallasTemperature gTempSensors1(&gOneWire1);
+DallasTemperature gTempSensors2(&gOneWire2);
+DallasTemperature gTempSensors3(&gOneWire3);
+DallasTemperature gTempSensors4(&gOneWire4);
