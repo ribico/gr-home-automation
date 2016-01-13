@@ -284,7 +284,7 @@ void loop()
 			ProcessSanitaryWaterRequest(phase_fast);
 
 		SHIFT_2110ms(3)
-			ProcessZoneActivation(phase_fast);
+			ProcessZonesActivation(phase_fast);
 
 		SHIFT_2110ms(4)
 			CalculateFloorTempSetpoint(phase_fast);

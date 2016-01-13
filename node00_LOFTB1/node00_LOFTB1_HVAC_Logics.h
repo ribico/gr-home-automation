@@ -88,21 +88,47 @@ inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 	}
 }
 
-inline void ProcessZoneActivation(U16 phase_fast)
+inline void FloorZone_HeatingLogics(U8 zone_mask, float current_temp, float min_temp, float max_temp)
+{
+	if( IsTempValid(current_temp) )
+	{
+	  if( current_temp < min_temp )
+	    FloorZoneOpen(zone_mask);
+	  else if( current_temp > max_temp)
+	    FloorZoneClose(zone_mask);
+	}
+}
+
+inline void FloorZone_CoolingLogics(U8 zone_mask, float current_temp, float min_temp, float max_temp)
+{
+	if( IsTempValid(current_temp) )
+	{
+	  if( current_temp < min_temp )
+	    FloorZoneClose(zone_mask);
+	  else if( current_temp > max_temp)
+	    FloorZoneOpen(zone_mask);
+	}
+}
+
+
+inline void ProcessZonesActivation(U16 phase_fast)
 {
 	if (IsSanitaryWaterAutoOn())
+	{
+		FloorZones_None();
 		return;
+	}
 
 	if( IsFloorOn() ) 		// force all zones open
 	{
 		if( IsHeatMode() )
-			mInput(HVAC_ZONES) = HVAC_MASK_ALL_ZONES;
+			FloorZones_All();
 		else if( IsCoolMode() )
-			mInput(HVAC_ZONES) = HVAC_MASK_ALL_COOLING_ZONES;
+			FloorZones_AllCooling();
 	}
 	else if ( IsFloorOff() ) // force all zones Close
 	{
-		mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
+		FloorZones_None();
 	}
 	else if( IsFloorAuto() || IsFloorAutoOn() ) // check zone temperatures to open/close valves
 	{
@@ -119,107 +145,25 @@ inline void ProcessZoneActivation(U16 phase_fast)
 
 		if( IsHeatMode() )
 		{
-      if( temp_BED1 != 0 )
-      {
-  			if( temp_BED1 < min_temp )
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
-  			else if( temp_BED1 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED1);
-      }
-
-      if( temp_BATH1 != 0 )
-      {
-  			if( temp_BATH1 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BATH1);
-  			else if( temp_BATH1 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
-      }
-
-      if( temp_BED2 != 0 )
-      {
-  			if( temp_BED2 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED2);
-  			else if( temp_BED2 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
-      }
-
-      if( temp_LIVING != 0 && temp_DINING != 0 )
-      {
-  			if( (temp_LIVING+temp_DINING)/2.0 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-  			else if( (temp_LIVING+temp_DINING)/2.0 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
-      }
-
-      if( temp_BED3 != 0 )
-      {
-  			if( temp_BED3 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED3);
-  			else if( temp_BED3 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED3);
-      }
-
-      if( temp_BATH2 != 0 )
-      {
-  			if( temp_BATH2 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BATH2);
-  			else if( temp_BATH2 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH2);
-      }
-
-      if( temp_KITCHEN != 0 )
-      {
-    		if( temp_KITCHEN < min_temp)
-    			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
-    		else if( temp_KITCHEN > max_temp)
-    			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
-      }
+			FloorZone_HeatingLogics(HVAC_MASK_BED1, temp_BED1, min_temp, max_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BATH1, temp_BATH1, min_temp, max_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BED2, temp_BED2, min_temp, max_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, min_temp, max_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BED3, temp_BED3, min_temp, max_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BATH2, temp_BATH2, min_temp, max_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, min_temp, max_temp);
 		}
 		else if( IsCoolMode() )
 		{
 			// do not cool baths floor
-			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
-			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH2);
+			FloorZoneClose(HVAC_MASK_BATH1);
+			FloorZoneClose(HVAC_MASK_BATH2);
 
-      if( temp_BED1 != 0 )
-      {
-  			if( temp_BED1 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
-  			else if( temp_BED1 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED1);
-      }
-
-      if( temp_BED2 != 0 )
-      {
-  			if( temp_BED2 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED2);
-  			else if( temp_BED2 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
-      }
-
-      if( temp_LIVING != 0 && temp_DINING != 0 )
-      {
-  			if( (temp_LIVING+temp_DINING)/2.0 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-  			else if( (temp_LIVING+temp_DINING)/2.0 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
-      }
-
-      if( temp_BED3 != 0 )
-      {
-  			if( temp_BED3 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED3);
-  			else if( temp_BED3 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED3);
-      }
-
-      if( temp_KITCHEN != 0 )
-      {
-  			if( temp_KITCHEN > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
-  			else if( temp_KITCHEN < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
-      }
+			FloorZone_CoolingLogics(HVAC_MASK_BED1, temp_BED1, min_temp, max_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_BED2, temp_BED2, min_temp, max_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, min_temp, max_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_BED3, temp_BED3, min_temp, max_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, min_temp, max_temp);
 		}
 	}
 

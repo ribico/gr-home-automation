@@ -68,7 +68,13 @@
 
 #define	IsHpSetpoint1()					(mOutput(HP_SETPOINT_2) == Souliss_T1n_OffCoil)
 #define	IsHpSetpoint2()					(mOutput(HP_SETPOINT_2) == Souliss_T1n_OnCoil)
-#define HpSetpoint2AutoCmd()     SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd + 4)
+#define HpSetpoint2AutoCmd()    SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd + 4)
+
+#define FloorZones_None()        mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES
+#define FloorZones_All()         mInput(HVAC_ZONES) = HVAC_MASK_ALL_ZONES
+#define FloorZones_AllCooling()  mInput(HVAC_ZONES) = HVAC_MASK_ALL_COOLING_ZONES
+#define FloorZoneOpen(mask)      SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | mask)
+#define FloorZoneClose(mask)     SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~mask)
 
 #define temp_BED1	    pOutputAsFloat(BED1B1,BED1B1_TEMPERATURE)
 #define UR_BED1		    pOutputAsFloat(BED1B1,BED1B1_HUMIDITY)
