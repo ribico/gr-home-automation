@@ -239,6 +239,7 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		SetHpFlowToCollector();
 		HpCirculationAutoOnCmd();
 		PumpCollectorToFloorAutoOnCmd();
+		SetCollectorToFloorMixValve_FullOpen();
 
 /*
 		// floor heating from the storage

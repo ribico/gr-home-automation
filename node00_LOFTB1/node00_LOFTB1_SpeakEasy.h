@@ -66,6 +66,10 @@
 #define HeatingMixValveOn_WarmDirection()	SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | (HEATING_MIX_VALVE_SWITCH_MASK | HEATING_MIX_VALVE_DIRECTION_MASK) )
 #define HeatingMixValveOff()				SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) & ~HEATING_MIX_VALVE_SWITCH_MASK & ~HEATING_MIX_VALVE_DIRECTION_MASK)
 
+#define SetCollectorToFloorMixValve(pos)         analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, pos)
+#define SetCollectorToFloorMixValve_FullOpen()   analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, COLLECTOR_FLOOR_MIX_VALVE_MAX)
+#define SetCollectorToFloorMixValve_FullClose()  analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, COLLECTOR_FLOOR_MIX_VALVE_MIN)
+
 #define	IsHpSetpoint1()					(mOutput(HP_SETPOINT_2) == Souliss_T1n_OffCoil)
 #define	IsHpSetpoint2()					(mOutput(HP_SETPOINT_2) == Souliss_T1n_OnCoil)
 #define HpSetpoint2AutoCmd()    SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd + 4)

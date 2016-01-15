@@ -108,6 +108,7 @@ inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 	HeatingMixValve_StepMove(direction, duration_on, HEATING_MIX_VALVE_CYCLE); // cycle of 105 seconds (50x 2110ms)
 }
 
+
 #define COLLECTOR_FLOOR_MIX_VALVE_MIN	0
 #define COLLECTOR_FLOOR_MIX_VALVE_MAX	200
 U8 gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
@@ -127,5 +128,5 @@ inline void AdjustCollectorToFloorFlowTemperature(float setpoint)
 	else
 		gCollectorToFloorMixValvePos -= (U8) error;
 
-	analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, gCollectorToFloorMixValvePos);
+	SetCollectorToFloorMixValve(gCollectorToFloorMixValvePos);
 }
