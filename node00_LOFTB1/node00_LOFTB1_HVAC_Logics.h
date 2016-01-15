@@ -235,6 +235,13 @@ inline void ProcessFloorRequest(U16 phase_fast)
 	{
 		FloorAutoOnCmd(); // only for user interface feedback
 
+		// direct floor heating from the heatpump
+		SetHpFlowToCollector();
+		HpCirculationAutoOnCmd();
+		PumpCollectorToFloorAutoOnCmd();
+
+/*
+		// floor heating from the storage
 		// control hot water storage if there's heating requests from any zone
 		if( IsTempValid(temp_HVAC_Boiler_Heating) && IsTempValid(temp_HVAC_Boiler_Bottom) )
 		{
@@ -250,6 +257,7 @@ inline void ProcessFloorRequest(U16 phase_fast)
 
 		if( IsTempValid(temp_HVAC_Floor_Flow) && IsTempValid(temp_HVAC_Floor_Return) )
 			AdjustBoilerToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
+*/
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
