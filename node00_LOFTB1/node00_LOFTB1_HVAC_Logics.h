@@ -41,6 +41,8 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
 
+	gTempSensors1.requestTemperatures();
+
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_SANITARY_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
@@ -53,6 +55,8 @@ inline void GetCurrentStatus(U16 phase_fast)
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP, buff, 6);
 
 
+	gTempSensors2.requestTemperatures();
+
 	ReadDallasTemp(gTempSensors2, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
@@ -61,12 +65,15 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_HEATPUMP_FLOW_TEMP, buff, 4);
 
+	gTempSensors3.requestTemperatures();
 
 	ReadDallasTemp(gTempSensors3, HVAC_FANCOILS_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
 	ReadDallasTemp(gTempSensors3, HVAC_FANCOILS_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+2, &tmp);
+
+	gTempSensors4.requestTemperatures();
 
 	ReadDallasTemp(gTempSensors4, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+4, &tmp);
@@ -75,14 +82,6 @@ inline void GetCurrentStatus(U16 phase_fast)
 	Souliss_HalfPrecisionFloating(buff+6, &tmp);
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_FANCOILS_FLOW_TEMP, buff, 8);
-
-
-
-	gTempSensors1.requestTemperatures(); // asynchronous request
-	gTempSensors2.requestTemperatures(); // asynchronous request
-	gTempSensors3.requestTemperatures(); // asynchronous request
-	gTempSensors4.requestTemperatures(); // asynchronous request
-
 }
 
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)
