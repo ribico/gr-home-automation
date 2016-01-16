@@ -9,6 +9,16 @@ DHT dht_loft(LOFT_DHT22_PIN, DHT22);
 // DHT PIN4 -> GND
 //--------------------------------------
 
+inline void ReadDallasTemp(DallasTemperature& sensor_group, const DeviceAddress address, float& ret_val, U8 retry = 3)
+{
+	for(int i=0; i<retry; i++)
+	{
+		ret_val = sensor_group.getTempC(address);
+		if(IsTempValid(ret_val))
+			return;
+	}
+}
+
 inline void GetCurrentStatus(U16 phase_fast)
 {
 	// read and send external temp & UR to ROW1B1 slots
@@ -31,37 +41,37 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
 
-	tmp = gTempSensors1.getTempC(HVAC_BOILER_SANITARY_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors1, HVAC_BOILER_SANITARY_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
-	tmp = gTempSensors1.getTempC(HVAC_BOILER_HEATING_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors1, HVAC_BOILER_HEATING_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+2, &tmp);
 
-	tmp = gTempSensors1.getTempC(HVAC_BOILER_BOTTOM_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors1, HVAC_BOILER_BOTTOM_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+4, &tmp);
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP, buff, 6);
 
 
-	tmp = gTempSensors2.getTempC(HVAC_FLOOR_FLOW_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors2, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
-	tmp = gTempSensors2.getTempC(HVAC_FLOOR_RETURN_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors2, HVAC_FLOOR_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+2, &tmp);
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_HEATPUMP_FLOW_TEMP, buff, 4);
 
 
-	tmp = gTempSensors3.getTempC(HVAC_FANCOILS_FLOW_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors3, HVAC_FANCOILS_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
-	tmp = gTempSensors3.getTempC(HVAC_FANCOILS_RETURN_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors3, HVAC_FANCOILS_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+2, &tmp);
 
-	tmp = gTempSensors4.getTempC(HVAC_HEATPUMP_FLOW_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors4, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+4, &tmp);
 
-	tmp = gTempSensors4.getTempC(HVAC_HEATPUMP_RETURN_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors4, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+6, &tmp);
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_FANCOILS_FLOW_TEMP, buff, 8);
