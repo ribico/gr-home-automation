@@ -213,15 +213,23 @@ void setup()
 	// Initialize dallas temperature sensors
 	gTempSensors1.begin();
   gTempSensors1.setResolution(DALLAS_TEMP_RESOLUTION);
+  gTempSensors1.setWaitForConversion(false); // asynchronous temp conversions
+  gTempSensors1.requestTemperatures();
 
 	gTempSensors2.begin();
   gTempSensors2.setResolution(DALLAS_TEMP_RESOLUTION);
+  gTempSensors2.setWaitForConversion(false); // asynchronous temp conversions
+  gTempSensors2.requestTemperatures();
 
 	gTempSensors3.begin();
   gTempSensors3.setResolution(DALLAS_TEMP_RESOLUTION);
+  gTempSensors3.setWaitForConversion(false); // asynchronous temp conversions
+  gTempSensors3.requestTemperatures();
 
 	gTempSensors4.begin();
   gTempSensors4.setResolution(DALLAS_TEMP_RESOLUTION);
+  gTempSensors4.setWaitForConversion(false); // asynchronous temp conversions
+  gTempSensors4.requestTemperatures();
 
 	// LIST OF NODES
 	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);
@@ -276,7 +284,7 @@ void loop()
 			ProcessSanitaryWaterRequest(phase_fast);
 
 		SHIFT_2110ms(3)
-			ProcessZonesActivation(phase_fast);
+			ProcessZoneActivation(phase_fast);
 
 		SHIFT_2110ms(4)
 			CalculateFloorTempSetpoint(phase_fast);
