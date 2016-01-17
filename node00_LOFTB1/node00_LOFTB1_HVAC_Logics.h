@@ -9,6 +9,13 @@ DHT dht_loft(LOFT_DHT22_PIN, DHT22);
 // DHT PIN4 -> GND
 //--------------------------------------
 
+
+//--------------------------------------
+// USED FOR DALLAS TEMP SENSOR
+OneWire gOneWire1(DALLAS_WIRE_BUS1_PIN);
+DallasTemperature gTempSensors1(&gOneWire1);
+
+
 inline void ReadDallasTemp(DallasTemperature& sensor_group, const DeviceAddress address, float& ret_val, U8 retry = 3)
 {
 	for(int i=0; i<retry; i++)
@@ -41,7 +48,7 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
 
-	gTempSensors1.requestTemperatures();
+
 
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_SANITARY_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
@@ -55,33 +62,37 @@ inline void GetCurrentStatus(U16 phase_fast)
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP, buff, 6);
 
 
-	gTempSensors2.requestTemperatures();
 
-	ReadDallasTemp(gTempSensors2, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
+	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
-	ReadDallasTemp(gTempSensors2, HVAC_FLOOR_RETURN_TEMP_ADDR, tmp);
+	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+2, &tmp);
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_HEATPUMP_FLOW_TEMP, buff, 4);
 
-	gTempSensors3.requestTemperatures();
 
-	ReadDallasTemp(gTempSensors3, HVAC_FANCOILS_FLOW_TEMP_ADDR, tmp);
+
+	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
-	ReadDallasTemp(gTempSensors3, HVAC_FANCOILS_RETURN_TEMP_ADDR, tmp);
+	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+2, &tmp);
 
-	gTempSensors4.requestTemperatures();
 
-	ReadDallasTemp(gTempSensors4, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
+
+	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+4, &tmp);
 
-	ReadDallasTemp(gTempSensors4, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
+	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+6, &tmp);
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_FANCOILS_FLOW_TEMP, buff, 8);
+
+
+
+	// request temperature for next cycle
+	gTempSensors1.requestTemperatures();
 }
 
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)
