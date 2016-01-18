@@ -169,9 +169,6 @@ inline void ProcessZonesActivation(U16 phase_fast)
 		else if( IsCoolMode() )
 		{
 			// do not cool baths floor
-			FloorZoneClose(HVAC_MASK_BATH1);
-			FloorZoneClose(HVAC_MASK_BATH2);
-
 			FloorZone_CoolingLogics(HVAC_MASK_BED1, temp_BED1, setpoint_temp);
 			FloorZone_CoolingLogics(HVAC_MASK_BED2, temp_BED2, setpoint_temp);
 			FloorZone_CoolingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, setpoint_temp);
