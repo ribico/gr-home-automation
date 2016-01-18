@@ -151,10 +151,10 @@ inline void ProcessZonesActivation(U16 phase_fast)
 		// AUTO MODE -> activate only needed zones
 
 		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
+		if ( !IsTempValid(setpoint_temp) )
+			return;
 
 		// activate zones according to measured temperature according to setpoint
-    if( setpoint_temp == 0 )
-      return;
 
 		if( IsHeatMode() )
 		{
