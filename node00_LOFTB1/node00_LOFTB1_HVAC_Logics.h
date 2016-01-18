@@ -108,24 +108,24 @@ inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 	}
 }
 
-inline void FloorZone_HeatingLogics(U8 zone_mask, float current_temp, float min_temp, float max_temp)
+inline void FloorZone_HeatingLogics(U8 zone_mask, float current_temp, float setpoint_temp)
 {
 	if( IsTempValid(current_temp) )
 	{
-	  if( current_temp < min_temp )
+	  if( current_temp < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL )
 	    FloorZoneOpen(zone_mask);
-	  else if( current_temp > max_temp)
+	  else if( current_temp > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL )
 	    FloorZoneClose(zone_mask);
 	}
 }
 
-inline void FloorZone_CoolingLogics(U8 zone_mask, float current_temp, float min_temp, float max_temp)
+inline void FloorZone_CoolingLogics(U8 zone_mask, float current_temp, float setpoint_temp)
 {
 	if( IsTempValid(current_temp) )
 	{
-	  if( current_temp < min_temp )
+	  if( current_temp < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL )
 	    FloorZoneClose(zone_mask);
-	  else if( current_temp > max_temp)
+	  else if( current_temp > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL )
 	    FloorZoneOpen(zone_mask);
 	}
 }
@@ -155,8 +155,6 @@ inline void ProcessZonesActivation(U16 phase_fast)
 		// AUTO MODE -> activate only needed zones
 
 		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
-		float max_temp = setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL;
-		float min_temp = setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL;
 
 		// activate zones according to measured temperature according to setpoint
 		mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
@@ -165,13 +163,13 @@ inline void ProcessZonesActivation(U16 phase_fast)
 
 		if( IsHeatMode() )
 		{
-			FloorZone_HeatingLogics(HVAC_MASK_BED1, temp_BED1, min_temp, max_temp);
-			FloorZone_HeatingLogics(HVAC_MASK_BATH1, temp_BATH1, min_temp, max_temp);
-			FloorZone_HeatingLogics(HVAC_MASK_BED2, temp_BED2, min_temp, max_temp);
-			FloorZone_HeatingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, min_temp, max_temp);
-			FloorZone_HeatingLogics(HVAC_MASK_BED3, temp_BED3, min_temp, max_temp);
-			FloorZone_HeatingLogics(HVAC_MASK_BATH2, temp_BATH2, min_temp, max_temp);
-			FloorZone_HeatingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, min_temp, max_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BED1, temp_BED1, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BATH1, temp_BATH1, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BED2, temp_BED2, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BED3, temp_BED3, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BATH2, temp_BATH2, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, setpoint_temp);
 		}
 		else if( IsCoolMode() )
 		{
@@ -179,11 +177,11 @@ inline void ProcessZonesActivation(U16 phase_fast)
 			FloorZoneClose(HVAC_MASK_BATH1);
 			FloorZoneClose(HVAC_MASK_BATH2);
 
-			FloorZone_CoolingLogics(HVAC_MASK_BED1, temp_BED1, min_temp, max_temp);
-			FloorZone_CoolingLogics(HVAC_MASK_BED2, temp_BED2, min_temp, max_temp);
-			FloorZone_CoolingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, min_temp, max_temp);
-			FloorZone_CoolingLogics(HVAC_MASK_BED3, temp_BED3, min_temp, max_temp);
-			FloorZone_CoolingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, min_temp, max_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_BED1, temp_BED1, setpoint_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_BED2, temp_BED2, setpoint_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, setpoint_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_BED3, temp_BED3, setpoint_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, setpoint_temp);
 		}
 	}
 
