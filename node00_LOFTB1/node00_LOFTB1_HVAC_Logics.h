@@ -114,8 +114,6 @@ inline void FloorZone_HeatingLogics(U8 zone_mask, float current_temp, float setp
 	{
 	  if( current_temp < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL )
 	    FloorZoneOpen(zone_mask);
-	  else if( current_temp > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL )
-	    FloorZoneClose(zone_mask);
 	}
 }
 
@@ -123,9 +121,7 @@ inline void FloorZone_CoolingLogics(U8 zone_mask, float current_temp, float setp
 {
 	if( IsTempValid(current_temp) )
 	{
-	  if( current_temp < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL )
-	    FloorZoneClose(zone_mask);
-	  else if( current_temp > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL )
+	  if( current_temp > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL )
 	    FloorZoneOpen(zone_mask);
 	}
 }
@@ -157,7 +153,6 @@ inline void ProcessZonesActivation(U16 phase_fast)
 		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
 
 		// activate zones according to measured temperature according to setpoint
-		mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
     if( setpoint_temp == 0 )
       return;
 
