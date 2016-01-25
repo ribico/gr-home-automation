@@ -9,6 +9,23 @@ DHT dht_loft(LOFT_DHT22_PIN, DHT22);
 // DHT PIN4 -> GND
 //--------------------------------------
 
+
+//--------------------------------------
+// USED FOR DALLAS TEMP SENSOR
+OneWire gOneWire1(DALLAS_WIRE_BUS1_PIN);
+DallasTemperature gTempSensors1(&gOneWire1);
+
+
+inline void ReadDallasTemp(DallasTemperature& sensor_group, const DeviceAddress address, float& ret_val, U8 retry = 3)
+{
+	for(int i=0; i<retry; i++)
+	{
+		ret_val = sensor_group.getTempC(address);
+		if(IsTempValid(ret_val))
+			return;
+	}
+}
+
 inline void GetCurrentStatus(U16 phase_fast)
 {
 	// read and send external temp & UR to ROW1B1 slots
@@ -31,48 +48,51 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
 
-	tmp = gTempSensors1.getTempC(HVAC_BOILER_SANITARY_TEMP_ADDR);
+
+
+	ReadDallasTemp(gTempSensors1, HVAC_BOILER_SANITARY_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
-	tmp = gTempSensors1.getTempC(HVAC_BOILER_HEATING_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors1, HVAC_BOILER_HEATING_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+2, &tmp);
 
-	tmp = gTempSensors1.getTempC(HVAC_BOILER_BOTTOM_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors1, HVAC_BOILER_BOTTOM_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+4, &tmp);
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP, buff, 6);
 
 
-	tmp = gTempSensors2.getTempC(HVAC_FLOOR_FLOW_TEMP_ADDR);
+
+	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
-	tmp = gTempSensors2.getTempC(HVAC_FLOOR_RETURN_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+2, &tmp);
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_HEATPUMP_FLOW_TEMP, buff, 4);
 
 
-	tmp = gTempSensors3.getTempC(HVAC_FANCOILS_FLOW_TEMP_ADDR);
+
+	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff, &tmp);
 
-	tmp = gTempSensors3.getTempC(HVAC_FANCOILS_RETURN_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+2, &tmp);
 
-	tmp = gTempSensors4.getTempC(HVAC_HEATPUMP_FLOW_TEMP_ADDR);
+
+
+	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+4, &tmp);
 
-	tmp = gTempSensors4.getTempC(HVAC_HEATPUMP_RETURN_TEMP_ADDR);
+	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+6, &tmp);
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_FANCOILS_FLOW_TEMP, buff, 8);
 
 
 
-	gTempSensors1.requestTemperatures(); // asynchronous request
-	gTempSensors2.requestTemperatures(); // asynchronous request
-	gTempSensors3.requestTemperatures(); // asynchronous request
-	gTempSensors4.requestTemperatures(); // asynchronous request
-
+	// request temperature for next cycle
+	gTempSensors1.requestTemperatures();
 }
 
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)
@@ -88,138 +108,72 @@ inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 	}
 }
 
-inline void ProcessZoneActivation(U16 phase_fast)
+inline void FloorZone_HeatingLogics(U8 zone_mask, float current_temp, float setpoint_temp)
+{
+	if( IsTempValid(current_temp) )
+	{
+	  if( current_temp < setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL )
+	    FloorZoneOpen(zone_mask);
+	}
+}
+
+inline void FloorZone_CoolingLogics(U8 zone_mask, float current_temp, float setpoint_temp)
+{
+	if( IsTempValid(current_temp) )
+	{
+	  if( current_temp > setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL )
+	    FloorZoneOpen(zone_mask);
+	}
+}
+
+
+inline void ProcessZonesActivation(U16 phase_fast)
 {
 	if (IsSanitaryWaterAutoOn())
+	{
+		FloorZones_None();
 		return;
+	}
 
 	if( IsFloorOn() ) 		// force all zones open
 	{
 		if( IsHeatMode() )
-			mInput(HVAC_ZONES) = HVAC_MASK_ALL_ZONES;
+			FloorZones_All();
 		else if( IsCoolMode() )
-			mInput(HVAC_ZONES) = HVAC_MASK_ALL_COOLING_ZONES;
+			FloorZones_AllCooling();
 	}
 	else if ( IsFloorOff() ) // force all zones Close
 	{
-		mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES;
+		FloorZones_None();
 	}
 	else if( IsFloorAuto() || IsFloorAutoOn() ) // check zone temperatures to open/close valves
 	{
 		// AUTO MODE -> activate only needed zones
 
 		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
-		float max_temp = setpoint_temp + SETPOINT_TEMP_DEADBAND_SMALL;
-		float min_temp = setpoint_temp - SETPOINT_TEMP_DEADBAND_SMALL;
+		if ( !IsTempValid(setpoint_temp) )
+			return;
 
 		// activate zones according to measured temperature according to setpoint
-		mInput(HVAC_ZONES) = mOutput(HVAC_ZONES);
-    if( setpoint_temp == 0 )
-      return;
 
 		if( IsHeatMode() )
 		{
-      if( temp_BED1 != 0 )
-      {
-  			if( temp_BED1 < min_temp )
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
-  			else if( temp_BED1 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED1);
-      }
-
-      if( temp_BATH1 != 0 )
-      {
-  			if( temp_BATH1 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BATH1);
-  			else if( temp_BATH1 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
-      }
-
-      if( temp_BED2 != 0 )
-      {
-  			if( temp_BED2 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED2);
-  			else if( temp_BED2 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
-      }
-
-      if( temp_LIVING != 0 && temp_DINING != 0 )
-      {
-  			if( (temp_LIVING+temp_DINING)/2.0 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-  			else if( (temp_LIVING+temp_DINING)/2.0 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
-      }
-
-      if( temp_BED3 != 0 )
-      {
-  			if( temp_BED3 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED3);
-  			else if( temp_BED3 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED3);
-      }
-
-      if( temp_BATH2 != 0 )
-      {
-  			if( temp_BATH2 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BATH2);
-  			else if( temp_BATH2 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH2);
-      }
-
-      if( temp_KITCHEN != 0 )
-      {
-    		if( temp_KITCHEN < min_temp)
-    			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
-    		else if( temp_KITCHEN > max_temp)
-    			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
-      }
+			FloorZone_HeatingLogics(HVAC_MASK_BED1, temp_BED1, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BATH1, temp_BATH1, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BED2, temp_BED2, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BED3, temp_BED3, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BATH2, temp_BATH2, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, setpoint_temp);
 		}
 		else if( IsCoolMode() )
 		{
 			// do not cool baths floor
-			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH1);
-			SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BATH2);
-
-      if( temp_BED1 != 0 )
-      {
-  			if( temp_BED1 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED1);
-  			else if( temp_BED1 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED1);
-      }
-
-      if( temp_BED2 != 0 )
-      {
-  			if( temp_BED2 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED2);
-  			else if( temp_BED2 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED2);
-      }
-
-      if( temp_LIVING != 0 && temp_DINING != 0 )
-      {
-  			if( (temp_LIVING+temp_DINING)/2.0 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_LIVING);
-  			else if( (temp_LIVING+temp_DINING)/2.0 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_LIVING);
-      }
-
-      if( temp_BED3 != 0 )
-      {
-  			if( temp_BED3 > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_BED3);
-  			else if( temp_BED3 < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_BED3);
-      }
-
-      if( temp_KITCHEN != 0 )
-      {
-  			if( temp_KITCHEN > max_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) | HVAC_MASK_KITCHEN);
-  			else if( temp_KITCHEN < min_temp)
-  				SetInput(HVAC_ZONES, mInput(HVAC_ZONES) & ~HVAC_MASK_KITCHEN);
-      }
+			FloorZone_CoolingLogics(HVAC_MASK_BED1, temp_BED1, setpoint_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_BED2, temp_BED2, setpoint_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, setpoint_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_BED3, temp_BED3, setpoint_temp);
+			FloorZone_CoolingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, setpoint_temp);
 		}
 	}
 
@@ -291,6 +245,14 @@ inline void ProcessFloorRequest(U16 phase_fast)
 	{
 		FloorAutoOnCmd(); // only for user interface feedback
 
+		// direct floor heating from the heatpump
+		SetHpFlowToCollector();
+		HpCirculationAutoOnCmd();
+		PumpCollectorToFloorAutoOnCmd();
+		SetCollectorToFloorMixValve_FullOpen();
+
+/*
+		// floor heating from the storage
 		// control hot water storage if there's heating requests from any zone
 		if( IsTempValid(temp_HVAC_Boiler_Heating) && IsTempValid(temp_HVAC_Boiler_Bottom) )
 		{
@@ -306,6 +268,7 @@ inline void ProcessFloorRequest(U16 phase_fast)
 
 		if( IsTempValid(temp_HVAC_Floor_Flow) && IsTempValid(temp_HVAC_Floor_Return) )
 			AdjustBoilerToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
+*/
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{
