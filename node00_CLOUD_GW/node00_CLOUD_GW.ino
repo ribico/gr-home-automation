@@ -101,12 +101,17 @@ void setup()
 
 void loop()
 {
-    // Here we start to play
     EXECUTEFAST() {
         UPDATEFAST();
+        FAST_GatewayComms();
 
-        FAST_90ms() {
-            MQTT_connect();
+        MQTT_connect();
+      }
+
+    EXECUTESLOW() {
+        UPDATESLOW();
+        
+        SLOW_x10s(1) {
 
             if(LastIn_IsData(1)) {
               double temp = LastIn_GetAnalog(ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP);
@@ -117,8 +122,6 @@ void loop()
             }
         }
 
-        // Here we handle here the communication with Android
-        FAST_GatewayComms();
     }
 }
 
