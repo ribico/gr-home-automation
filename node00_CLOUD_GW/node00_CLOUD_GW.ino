@@ -87,10 +87,11 @@ void MQTT_connect();
 
 void setup()
 {
-//  Serial.begin(115200);
-//  delay(10);
 
-//  Serial.println(F("Adafruit MQTT demo"));
+  Serial.begin(115200);
+  delay(10);
+
+  Serial.println(F("Adafruit MQTT demo"));
 
     pinMode(BUILTIN_LED, OUTPUT);
 
@@ -143,6 +144,27 @@ void loop()
         {
           if(LastIn_IsData(ROW1B1))
           {
+            Serial.println("********* ROW1B1 UPDATED");
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_LIGHT_LIVING_1));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_LIGHT_LIVING_2));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_LIGHT_LIVING_3));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_LIGHT_LIVING_4));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_LIGHT_LIVING_5));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_LIGHT_LIVING_6));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_EXT_TEMP));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_EXT_UR));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_LOFT_TEMP));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_LOFT_UR));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_HVAC_BOILER_HEATING_TEMP));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_HVAC_BOILER_BOTTOM_TEMP));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_HVAC_HEATPUMP_FLOW_TEMP));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_HVAC_HEATPUMP_RETURN_TEMP));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_HVAC_FANCOILS_FLOW_TEMP));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_HVAC_FANCOILS_RETURN_TEMP));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_HVAC_FLOOR_FLOW_TEMP));
+            Serial.println(LastIn_GetData(ROW1B1, ROW1B1_HVAC_FLOOR_RETURN_TEMP));
+
             double temp = LastIn_GetAnalog(ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP);
             if(HVAC_Boiler_Sanitary_Temp_last != temp)
             {
@@ -165,6 +187,8 @@ void loop()
 
           if(LastIn_IsData(ROW2B3))
           {
+            Serial.println("********* ROW2B3 UPDATED");
+
             double temp = LastIn_GetAnalog(ROW2B3, ROW2B3_TEMPERATURE);
             if(Kitchen_Temp_last != temp)
             {
