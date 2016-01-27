@@ -27,7 +27,7 @@ Olimex_ESP8266EVB acting as GATEWAY for cloud streaming
 #define AIO_USERNAME    "ribico"
 #define AIO_KEY         "e5d8a6ddc6e1898d8c7ad425e7e858697928a1c3"
 
-#define PUBSUB_H
+//#define PUBSUB_H
 /*** All configuration includes should be above this line ***/
 #include "grhSoulissCommon.h"
 #include "Souliss.h"
@@ -50,6 +50,36 @@ Adafruit_MQTT_Client mqtt(&client, MQTT_SERVER, AIO_SERVERPORT, MQTT_USERNAME, M
 
 const char HVAC_Boiler_Sanitary_Temp_FEED[] PROGMEM = AIO_USERNAME "/feeds/HVAC_Boiler_Sanitary_Temp";
 Adafruit_MQTT_Publish HVAC_Boiler_Sanitary_Temp = Adafruit_MQTT_Publish(&mqtt, HVAC_Boiler_Sanitary_Temp_FEED);
+float HVAC_Boiler_Sanitary_Temp_last = 0.0;
+
+const char HVAC_Floor_Flow_Temp_FEED[] PROGMEM = AIO_USERNAME "/feeds/HVAC_Floor_Flow_Temp";
+Adafruit_MQTT_Publish HVAC_Floor_Flow_Temp = Adafruit_MQTT_Publish(&mqtt, HVAC_Floor_Flow_Temp_FEED);
+float HVAC_Floor_Flow_Temp_last = 0.0;
+
+const char Bed1_Temp_FEED[] PROGMEM = AIO_USERNAME "/feeds/Bed1_Temp";
+Adafruit_MQTT_Publish Bed1_Temp = Adafruit_MQTT_Publish(&mqtt, Bed1_Temp_FEED);
+
+const char Bath1_Temp_FEED[] PROGMEM = AIO_USERNAME "/feeds/Bath1_Temp";
+Adafruit_MQTT_Publish Bath1_Temp = Adafruit_MQTT_Publish(&mqtt, Bath1_Temp_FEED);
+
+const char Bed2_Temp_FEED[] PROGMEM = AIO_USERNAME "/feeds/Bed2_Temp";
+Adafruit_MQTT_Publish Bed2_Temp = Adafruit_MQTT_Publish(&mqtt, Bed2_Temp_FEED);
+
+const char Living_Temp_FEED[] PROGMEM = AIO_USERNAME "/feeds/Living_Temp";
+Adafruit_MQTT_Publish Living_Temp = Adafruit_MQTT_Publish(&mqtt, Living_Temp_FEED);
+
+const char Bed3_Temp_FEED[] PROGMEM = AIO_USERNAME "/feeds/Bed3_Temp";
+Adafruit_MQTT_Publish Bed3_Temp = Adafruit_MQTT_Publish(&mqtt, Bed3_Temp_FEED);
+
+const char Bath2_Temp_FEED[] PROGMEM = AIO_USERNAME "/feeds/Bath_Temp";
+Adafruit_MQTT_Publish Bath2_Temp = Adafruit_MQTT_Publish(&mqtt, Bath2_Temp_FEED);
+
+const char Kitchen_Temp_FEED[] PROGMEM = AIO_USERNAME "/feeds/Kitchen_Temp";
+Adafruit_MQTT_Publish Kitchen_Temp = Adafruit_MQTT_Publish(&mqtt, Kitchen_Temp_FEED);
+float Kitchen_Temp_last = 0.0;
+
+const char Ext_Temp_FEED[] PROGMEM = AIO_USERNAME "/feeds/Ext_Temp";
+Adafruit_MQTT_Publish Ext_Temp = Adafruit_MQTT_Publish(&mqtt, Ext_Temp_FEED);
 
 // Bug workaround for Arduino 1.6.6, it seems to need a function declaration
 // for some reason (only affects ESP8266, likely an arduino-builder bug).
@@ -61,6 +91,8 @@ void setup()
 //  delay(10);
 
 //  Serial.println(F("Adafruit MQTT demo"));
+
+    pinMode(BUILTIN_LED, OUTPUT);
 
     Initialize();
 
@@ -106,22 +138,45 @@ void loop()
         FAST_GatewayComms();
 
         MQTT_connect();
-      }
 
-    EXECUTESLOW() {
-        UPDATESLOW();
-        
-        SLOW_x10s(1) {
-
-            if(LastIn_IsData(1)) {
-              double temp = LastIn_GetAnalog(ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP);
-//              Serial.print("Temp: ");
-//              Serial.println(temp);
+        FAST_50ms()
+        {
+          if(LastIn_IsData(ROW1B1))
+          {
+            double temp = LastIn_GetAnalog(ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP);
+            if(HVAC_Boiler_Sanitary_Temp_last != temp)
+            {
+              digitalWrite(BUILTIN_LED, LOW);
+              HVAC_Boiler_Sanitary_Temp_last = temp;
               HVAC_Boiler_Sanitary_Temp.publish(temp);
-              LastIn_ClearData(1);
+              digitalWrite(BUILTIN_LED, HIGH);
             }
-        }
 
+            temp = LastIn_GetAnalog(ROW1B1, ROW1B1_HVAC_FLOOR_FLOW_TEMP);
+            if(HVAC_Floor_Flow_Temp_last != temp)
+            {
+              digitalWrite(BUILTIN_LED, LOW);
+              HVAC_Floor_Flow_Temp_last = temp;
+              HVAC_Floor_Flow_Temp.publish(temp);
+              digitalWrite(BUILTIN_LED, HIGH);
+            }
+            LastIn_ClearData(ROW1B1);
+          }
+
+          if(LastIn_IsData(ROW2B3))
+          {
+            double temp = LastIn_GetAnalog(ROW2B3, ROW2B3_TEMPERATURE);
+            if(Kitchen_Temp_last != temp)
+            {
+              digitalWrite(BUILTIN_LED, LOW);
+              Kitchen_Temp_last = temp;
+              Kitchen_Temp.publish(temp);
+              digitalWrite(BUILTIN_LED, HIGH);
+            }
+            LastIn_ClearData(ROW2B3);
+          }
+
+        }
     }
 }
 
