@@ -142,8 +142,11 @@ void loop()
 
         FAST_50ms()
         {
+          Serial.print(".");
           if(LastIn_IsData(ROW1B1))
           {
+            digitalWrite(BUILTIN_LED, LOW);
+
             Serial.println("********* ROW1B1 UPDATED");
             Serial.println(LastIn_GetData(ROW1B1, ROW1B1_LIGHT_LIVING_1));
             Serial.println(LastIn_GetData(ROW1B1, ROW1B1_LIGHT_LIVING_2));
@@ -166,42 +169,29 @@ void loop()
             Serial.println(LastIn_GetData(ROW1B1, ROW1B1_HVAC_FLOOR_RETURN_TEMP));
 
             double temp = LastIn_GetAnalog(ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP);
-            if(HVAC_Boiler_Sanitary_Temp_last != temp)
-            {
-              digitalWrite(BUILTIN_LED, LOW);
-              HVAC_Boiler_Sanitary_Temp_last = temp;
-              HVAC_Boiler_Sanitary_Temp.publish(temp);
-              digitalWrite(BUILTIN_LED, HIGH);
-            }
+            HVAC_Boiler_Sanitary_Temp.publish(temp);
 
             temp = LastIn_GetAnalog(ROW1B1, ROW1B1_HVAC_FLOOR_FLOW_TEMP);
-            if(HVAC_Floor_Flow_Temp_last != temp)
-            {
-              digitalWrite(BUILTIN_LED, LOW);
-              HVAC_Floor_Flow_Temp_last = temp;
-              HVAC_Floor_Flow_Temp.publish(temp);
-              digitalWrite(BUILTIN_LED, HIGH);
+            HVAC_Floor_Flow_Temp.publish(temp);
             }
             LastIn_ClearData(ROW1B1);
+            digitalWrite(BUILTIN_LED, HIGH);
           }
 
           if(LastIn_IsData(ROW2B3))
           {
+            digitalWrite(BUILTIN_LED, LOW);
+
             Serial.println("********* ROW2B3 UPDATED");
 
             double temp = LastIn_GetAnalog(ROW2B3, ROW2B3_TEMPERATURE);
-            if(Kitchen_Temp_last != temp)
-            {
-              digitalWrite(BUILTIN_LED, LOW);
-              Kitchen_Temp_last = temp;
-              Kitchen_Temp.publish(temp);
-              digitalWrite(BUILTIN_LED, HIGH);
-            }
+            Kitchen_Temp.publish(temp);
+
             LastIn_ClearData(ROW2B3);
+            digitalWrite(BUILTIN_LED, HIGH);
           }
 
-        }
-    }
+      }
 }
 
 // Function to connect and reconnect as necessary to the MQTT server.
