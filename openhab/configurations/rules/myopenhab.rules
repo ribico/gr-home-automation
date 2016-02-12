@@ -9,14 +9,14 @@ rule "HeatingWater_ProdutionStart"
 when
   Item HP_Circulation_Pump changed from OFF to ON
 then
-  sendNotification("gabriele@ribichini.net", "Inizio produzione accumulo")
+  sendNotification("gabriele@ribichini.net", "Pompa circolazione HP accesa")
 end
 
 rule "HeatingWater_ProdutionEnd"
 when
   Item HP_Circulation_Pump changed from ON to OFF
 then
-  sendNotification("gabriele@ribichini.net", "Fine produzione accumulo")
+  sendNotification("gabriele@ribichini.net", "Pompa circolazione HP spenta")
 end
 
 rule "SanitaryWater_TooCold"
@@ -43,14 +43,14 @@ end
 
 rule "Heating_Start"
 when
-  Item HVAC_Pump_Boiler_Floor changed from OFF to ON
+  Item HVAC_Pump_Collector_Floor changed from OFF to ON
 then
-  sendNotification("gabriele@ribichini.net", "Riscaldamento acceso")
+  sendNotification("gabriele@ribichini.net", "Pavimento acceso")
 end
 
 rule "Heating_End"
 when
-  Item HVAC_Pump_Boiler_Floor changed from ON to OFF
+  Item HVAC_Pump_Collector_Floor changed from ON to OFF
 then
-  sendNotification("gabriele@ribichini.net", "Riscaldamento spento")
+  sendNotification("gabriele@ribichini.net", "Pavimento spento")
 end
