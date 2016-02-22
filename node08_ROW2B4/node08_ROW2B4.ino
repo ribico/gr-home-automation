@@ -30,6 +30,7 @@ float th=0;
 
 inline void DefineTypicals()
 {
+	Set_T12(ROW2B4_TEST_T12);
 
 	Set_Temperature(ROW1B4_TEMPERATURE);
 	Set_Humidity(ROW1B4_HUMIDITY);
@@ -38,23 +39,24 @@ inline void DefineTypicals()
 
 inline void ReadInputs()
 {
-
+	Souliss_DigIn(IN1, Souliss_T1n_AutoCmd+2, memory_map, ROW2B4_TEST_T12, true);
 }
 
 inline void ProcessLogics()
 {
-
+	Logic_T12(ROW2B4_TEST_T12);
 	grh_Logic_Humidity(ROW1B4_HUMIDITY);
 	grh_Logic_Temperature(ROW1B4_TEMPERATURE);
 }
 
 inline void SetOutputs()
 {
-
+	nDigOut(RELAY1, Souliss_T1n_Coil, ROW2B4_TEST_T12);
 }
 
 inline void ProcessTimers()
 {
+	Timer_T12(ROW2B4_TEST_T12);
 
 	th = dht.readHumidity();
 	ImportAnalog(ROW1B4_HUMIDITY, &th);
@@ -76,6 +78,11 @@ void setup()
 
 
 	DefineTypicals();
+
+	SetInput(ROW2B4_TEST_T12, Souliss_T1n_AutoCmd);
+	Logic_T12(ROW2B4_TEST_T12);
+	mAuxiliary(ROW2B4_TEST_T12) = 3;
+	mInput(ROW2B4_TEST_T12) = Souliss_T1n_AutoCmd+5;
 }
 
 void loop()

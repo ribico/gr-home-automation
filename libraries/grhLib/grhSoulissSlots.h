@@ -63,6 +63,7 @@
 # define ROW2B3_HUMIDITY			                          5
 
 #define ROW2B4 8
+# define ROW2B4_TEST_T12                                0
 # define ROW1B4_TEMPERATURE			                        1
 # define ROW1B4_HUMIDITY			                          3
 
