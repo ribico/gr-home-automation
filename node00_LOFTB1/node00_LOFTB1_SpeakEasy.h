@@ -24,7 +24,7 @@
 #define IsSanitaryWaterHot()			  (temp_HVAC_Boiler_Saniary > SETPOINT_TEMP_SANITARY_WATER_MAX)
 #define IsSanitaryWaterOn()	        (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_OnCoil)
 #define IsSanitaryWaterAuto()	      (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoState)
-#define IsSanitaryWaterAutoOn()	    ( (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOnCoil) && (mInput(HEATPUMP_SANITARY_WATER) > Souliss_T1n_AutoCmd + SANITARY_PAUSE_CYCLES) )
+#define IsSanitaryWaterAutoOn()	    (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOnCoil)
 #define IsSanitaryWaterAutoOff()	  (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOffCoil)
 #define SanitaryWaterAutoOnCmd()    SetInput(HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd + SANITARY_PAUSE_CYCLES + 4 /*cycles*/)
 
