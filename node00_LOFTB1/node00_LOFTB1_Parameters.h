@@ -19,6 +19,8 @@
 
 #define MAIN_3WAY_VALVE_TIMEOUT		(Souliss_T2n_Timer_Off + 5)
 
+#define HP_CMD_DELAY  30 // cycles delay after sanitary water production
+
 #define DALLAS_TEMP_RESOLUTION  11
 
 #define DALLAS_1_ADDRESS  { 0x28, 0x12, 0x0F, 0x29, 0x07, 0x00, 0x00, 0xDD }

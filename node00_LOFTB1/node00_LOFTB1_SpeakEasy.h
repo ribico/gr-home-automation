@@ -36,7 +36,8 @@
 
 #define IsHpCirculationOn()				(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil)
 #define IsHpCirculationAutoOn()		(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_AutoOnCoil)
-#define HpCirculationAutoOnCmd()			SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_AutoCmd + 4 /*cycles*/)
+#define HpCirculationAutoOnCmd()	SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_AutoCmd + 4 /*cycles*/)
+#define HpCirculationAutoDelay()  mAuxiliary(HEATPUMP_CIRCULATION_PUMP) = HP_CMD_DELAY;
 
 #define IsHpFlowToBoiler()				(/*(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK) && */(mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_State_Open))
 #define IsHpFlowToCollector()			(/*(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK) &&*/ (mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_State_Close))
@@ -54,11 +55,13 @@
 #define IsPumpCollectorToFloorOff()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OffCoil)
 #define IsPumpCollectorToFloorAuto()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_AutoState)
 #define PumpCollectorToFloorAutoOnCmd()  SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_AutoCmd + 4)
+#define PumpCollectorToFloorAutoDelay()  mAuxiliary(PUMP_COLLECTOR_FLOOR) = HP_CMD_DELAY;
 
 #define IsPumpCollectorToFancoilOn()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OnCoil)
 #define IsPumpCollectorToFancoilOff()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OffCoil)
 #define IsPumpCollectorToFancoilAuto()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_AutoState)
 #define PumpCollectorToFancoilAutoOnCmd()  SetInput(PUMP_COLLECTOR_FANCOIL, Souliss_T1n_AutoCmd + 4)
+#define PumpCollectorToFancoilAutoDelay()  mAuxiliary(PUMP_COLLECTOR_FANCOIL) = HP_CMD_DELAY;
 
 // mix valve on, direction relay off
 #define HeatingMixValveOn_ColdDirection()	SetInput(HVAC_VALVES, mOutput(HVAC_VALVES) | HEATING_MIX_VALVE_SWITCH_MASK)

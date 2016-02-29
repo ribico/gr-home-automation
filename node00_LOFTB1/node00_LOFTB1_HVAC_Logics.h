@@ -104,6 +104,8 @@ inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 		{
 			SetHpFlowToBoiler(); 		// upstream to boiler
 			SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
+
+			HpCirculationAutoDelay();	// set HP circulation pump to OFF and set a delay timer for restart
 		}
 	}
 }
@@ -129,13 +131,12 @@ inline void FloorZone_CoolingLogics(U8 zone_mask, float current_temp, float setp
 
 inline void ProcessZonesActivation(U16 phase_fast)
 {
-	if (IsSanitaryWaterAutoOn())
+	if( IsSanitaryWaterOn() || IsSanitaryWaterAutoOn() )
 	{
-		FloorZones_None();
-		return;
+		if( IsFloorAuto() )
+			FloorZones_None();	// close all zones
 	}
-
-	if( IsFloorOn() ) 		// force all zones open
+	else if( IsFloorOn() ) 		// force all zones open
 	{
 		if( IsHeatMode() )
 			FloorZones_All();
@@ -238,10 +239,11 @@ inline void CalculateFloorTempSetpoint(U16 phase_fast)
 
 inline void ProcessFloorRequest(U16 phase_fast)
 {
-	if (IsSanitaryWaterAutoOn())
-		return;
-
-	if( IsHeating() ) // heating request for at least one zone
+	if( IsSanitaryWaterAutoOn() )
+	{
+			PumpCollectorToFloorAutoDelay();
+	}
+	else if( IsHeating() ) // heating request for at least one zone
 	{
 		FloorAutoOnCmd(); // only for user interface feedback
 
@@ -288,9 +290,10 @@ inline void ProcessFloorRequest(U16 phase_fast)
 inline void ProcessFancoilsRequest(U16 phase_fast)
 {
 	if (IsSanitaryWaterAutoOn())
-		return;
-
-	if( IsCoolMode() )
+	{
+		PumpCollectorToFancoilAutoDelay();
+	}
+	else if( IsCoolMode() )
 	{
 		// check the max UR to eventually activate fancoils
 		float UR_MAX = UR_BED1;
