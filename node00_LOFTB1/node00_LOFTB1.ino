@@ -159,8 +159,21 @@ inline void SetOutputs()
 	digitalWrite(HEATING_MIX_VALVE_DIRECTION_PIN,
 		!(mOutput(HVAC_VALVES) & HEATING_MIX_VALVE_DIRECTION_MASK) );
 
-	LowDigOut(MAIN_3WAY_VALVE_BOILER_PIN, Souliss_T2n_Coil_Open, MAIN_3WAY_VALVE);
-	LowDigOut(MAIN_3WAY_VALVE_COLLECTOR_PIN, Souliss_T2n_Coil_Close, MAIN_3WAY_VALVE);
+		if(mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_Coil_Open)
+		{
+			dWrite(MAIN_3WAY_VALVE_BOILER_PIN, LOW);
+			dWrite(MAIN_3WAY_VALVE_COLLECTOR_PIN, HIGH);
+		}
+		else if(mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_Coil_Close)
+		{
+			dWrite(MAIN_3WAY_VALVE_BOILER_PIN, LOW);
+			dWrite(MAIN_3WAY_VALVE_COLLECTOR_PIN, LOW);
+		}
+		else
+		{
+			dWrite(MAIN_3WAY_VALVE_BOILER_PIN, HIGH);
+			dWrite(MAIN_3WAY_VALVE_COLLECTOR_PIN, HIGH);
+		}
 
 	nLowDigOut(PUMP_BOILER_FLOOR_PIN, Souliss_T1n_OnCoil, PUMP_BOILER_FLOOR);
 	nLowDigOut(PUMP_COLLECTOR_FANCOIL_PIN, Souliss_T1n_OnCoil, PUMP_COLLECTOR_FANCOIL);
