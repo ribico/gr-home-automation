@@ -52,6 +52,10 @@
 #define LIGHT_SENSOR									26
 #define LIGHT_SENSOR_H								27
 
+#define HVAC_BOILER_SANITARY_TEMP			28
+#define HVAC_BOILER_SANITARY_TEMP_H		29
+
+
 /////////////////////////////////////////////////////////////
 #include "grhSoulissSlots.h"
 
@@ -84,6 +88,7 @@ inline void DefineTypicals()
 
 	Set_Temperature(TEMP_AMBIENCE_SET_POINT);
 	Set_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
+	Set_Temperature(HVAC_BOILER_SANITARY_TEMP);
 
 	Souliss_SetT12(memory_map, FANCOIL_MODE);
 	Souliss_SetT12(memory_map, HP_SETPOINT_2);

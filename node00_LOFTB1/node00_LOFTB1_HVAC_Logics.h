@@ -15,6 +15,9 @@ DHT dht_loft(LOFT_DHT22_PIN, DHT22);
 OneWire gOneWire1(DALLAS_WIRE_BUS1_PIN);
 DallasTemperature gTempSensors1(&gOneWire1);
 
+OneWire gOneWire2(DALLAS_WIRE_BUS2_PIN); // spare sensor for sanitary water
+DallasTemperature gTempSensors2(&gOneWire2);
+
 
 inline void ReadDallasTemp(DallasTemperature& sensor_group, const DeviceAddress address, float& ret_val, U8 retry = 3)
 {
@@ -47,6 +50,11 @@ inline void GetCurrentStatus(U16 phase_fast)
 	Souliss_HalfPrecisionFloating(buff+2, &tmp); // 2 bytes offset for UR
 
 	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
+
+
+// get the sanitary temp value from spare sensor
+	ReadDallasTemp(gTempSensors2, HVAC_BOILER_SANITARY_TEMP_ADDR_2, tmp);
+	ImportAnalog(HVAC_BOILER_SANITARY_TEMP, &tmp);
 
 
 
@@ -93,6 +101,7 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	// request temperature for next cycle
 	gTempSensors1.requestTemperatures();
+	gTempSensors2.requestTemperatures();	
 }
 
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)

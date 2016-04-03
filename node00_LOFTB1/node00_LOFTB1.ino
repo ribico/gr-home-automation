@@ -91,6 +91,7 @@ inline void ProcessLogics()
 
 	grh_Logic_Temperature(TEMP_AMBIENCE_SET_POINT);
 	grh_Logic_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
+	grh_Logic_Temperature(HVAC_BOILER_SANITARY_TEMP);
 
 	Souliss_Logic_T22(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
 	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
@@ -228,6 +229,11 @@ void setup()
   gTempSensors1.setResolution(DALLAS_TEMP_RESOLUTION);
   gTempSensors1.setWaitForConversion(true); // asynchronous temp conversions
   gTempSensors1.requestTemperatures();
+
+	gTempSensors2.begin();
+  gTempSensors2.setResolution(DALLAS_TEMP_RESOLUTION);
+  gTempSensors2.setWaitForConversion(true); // asynchronous temp conversions
+  gTempSensors2.requestTemperatures();
 
 	// LIST OF NODES
 	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);
