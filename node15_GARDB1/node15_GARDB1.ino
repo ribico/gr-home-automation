@@ -23,12 +23,12 @@ Arduino UNO + ETH Shield on a IONO SOLO BOARD
 inline void DefineTypicals()
 {
 	// Define logics for the node
-	Set_T11(GARDB1_WATERING_ZONE1);
-	Set_T11(GARDB1_WATERING_ZONE2);
-	Set_T11(GARDB1_WATERING_ZONE3);
-	Set_T11(GARDB1_WATERING_ZONE4);
-	Set_T11(GARDB1_LIGHT_NIGHT);
-	Set_T11(GARDB1_LIGHT_GARDEN);
+	Set_T12(GARDB1_WATERING_ZONE1);
+	Set_T12(GARDB1_WATERING_ZONE2);
+	Set_T12(GARDB1_WATERING_ZONE3);
+	Set_T12(GARDB1_WATERING_ZONE4);
+	Set_T12(GARDB1_LIGHT_NIGHT);
+	Set_T12(GARDB1_LIGHT_GARDEN);
 }
 
 inline void ReadInputs()
@@ -39,12 +39,12 @@ inline void ReadInputs()
 
 inline void ProcessLogics()
 {
-	Logic_T11(GARDB1_WATERING_ZONE1);                                  // Execute the logic for Relay 1
-	Logic_T11(GARDB1_WATERING_ZONE2);                                  // Execute the logic for Relay 2
-	Logic_T11(GARDB1_WATERING_ZONE3);                                  // Execute the logic for Relay 3
-	Logic_T11(GARDB1_WATERING_ZONE4);                                  // Execute the logic for Relay 4
-	Logic_T11(GARDB1_LIGHT_NIGHT);                                  // Execute the logic for Relay 5
-	Logic_T11(GARDB1_LIGHT_GARDEN);                                  // Execute the logic for Relay 6
+	Logic_T12(GARDB1_WATERING_ZONE1);                                  // Execute the logic for Relay 1
+	Logic_T12(GARDB1_WATERING_ZONE2);                                  // Execute the logic for Relay 2
+	Logic_T12(GARDB1_WATERING_ZONE3);                                  // Execute the logic for Relay 3
+	Logic_T12(GARDB1_WATERING_ZONE4);                                  // Execute the logic for Relay 4
+	Logic_T12(GARDB1_LIGHT_NIGHT);                                  // Execute the logic for Relay 5
+	Logic_T12(GARDB1_LIGHT_GARDEN);                                  // Execute the logic for Relay 6
 }
 
 inline void SetOutputs()
@@ -59,12 +59,12 @@ inline void SetOutputs()
 
 inline void ProcessTimers()
 {
-	Timer_T11(GARDB1_WATERING_ZONE1);
-	Timer_T11(GARDB1_WATERING_ZONE1);
-	Timer_T11(GARDB1_WATERING_ZONE1);
-	Timer_T11(GARDB1_WATERING_ZONE1);
-	Timer_T11(GARDB1_LIGHT_NIGHT);
-	Timer_T11(GARDB1_LIGHT_GARDEN);
+	Timer_T12(GARDB1_WATERING_ZONE1);
+	Timer_T12(GARDB1_WATERING_ZONE1);
+	Timer_T12(GARDB1_WATERING_ZONE1);
+	Timer_T12(GARDB1_WATERING_ZONE1);
+	Timer_T12(GARDB1_LIGHT_NIGHT);
+	Timer_T12(GARDB1_LIGHT_GARDEN);
 }
 
 
