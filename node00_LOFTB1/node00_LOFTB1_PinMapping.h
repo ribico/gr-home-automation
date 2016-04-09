@@ -17,7 +17,7 @@
 #define LOFT_DHT22_PIN												6
 
 #define DALLAS_WIRE_BUS1_PIN									5
-#define DALLAS_WIRE_BUS2_PIN									4
+#define DALLAS_WIRE_BUS2_PIN									12
 
 #define COLLECTOR_FLOOR_MIX_VALVE_PIN					13
 
