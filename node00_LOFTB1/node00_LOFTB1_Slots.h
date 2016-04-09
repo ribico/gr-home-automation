@@ -55,6 +55,9 @@
 #define HVAC_BOILER_SANITARY_TEMP			28
 #define HVAC_BOILER_SANITARY_TEMP_H		29
 
+#define HVAC_BOILER_SANITARY_SETPOINT			30
+#define HVAC_BOILER_SANITARY_SETPOINT_H		31
+
 
 /////////////////////////////////////////////////////////////
 #include "grhSoulissSlots.h"
