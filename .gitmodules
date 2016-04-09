@@ -4,15 +4,6 @@
 [submodule "libraries/souliss"]
 	path = libraries/souliss
 	url = ../souliss.git
-[submodule "libraries/DHT-sensor-library"]
-	path = libraries/DHT-sensor-library
-	url = ../DHT-sensor-library.git
-[submodule "libraries/AdaFruit_NeoPixel"]
-	path = libraries/AdaFruit_NeoPixel
-	url = ../Adafruit_NeoPixel.git
-[submodule "libraries/Arduino-Temperature-Control-Library"]
-	path = libraries/Arduino-Temperature-Control-Library
-	url = ../Arduino-Temperature-Control-Library.git
 [submodule "libraries/OneWire"]
 	path = libraries/OneWire
 	url = ../OneWire.git
