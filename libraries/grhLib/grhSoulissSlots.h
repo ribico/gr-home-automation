@@ -117,3 +117,7 @@
 # define GARDB1_WATERING_ZONE4		                      3
 # define GARDB1_LIGHT_NIGHT                             4
 # define GARDB1_LIGHT_GARDEN			                      5
+# define GARDB1_WATERING_TIME_ZONE1                     6
+# define GARDB1_WATERING_TIME_ZONE2                     7
+# define GARDB1_WATERING_TIME_ZONE3                     8
+# define GARDB1_WATERING_TIME_ZONE4                     9
