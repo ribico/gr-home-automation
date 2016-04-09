@@ -255,12 +255,15 @@ void setup()
 	SetAsPeerNode(RS485_ADDRESS_GTW2B1,14);
 
 	SetAsPeerNode(IP_ADDRESS_GARDB1,15);
+	SetAsPeerNode(RS485_ADDRESS_GARDB2,16);
+
 
 	// define static routing table (NOT STRICTLY NEEDED if using PEER_Join in peers)
 	RoutingTable(IP_ADDRESS_ROW1B1, RS485_ADDRESS_ROW1SN, 0);
 	RoutingTable(IP_ADDRESS_ROW2B1, RS485_ADDRESS_ROW2SN, 1);
 	RoutingTable(IP_ADDRESS_BED1B1, RS485_ADDRESS_BED1SN, 2);
 	RoutingTable(IP_ADDRESS_BED2B1, RS485_ADDRESS_BED2SN, 3);
+	RoutingTable(IP_ADDRESS_GARDB1, RS485_ADDRESS_GARDSN, 4);
 
 	DefineTypicals();
 }

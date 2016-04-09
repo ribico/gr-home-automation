@@ -7,6 +7,7 @@ Arduino UNO + ETH Shield on a IONO SOLO BOARD
 //#define DEBUG
 
 #include "bconf/IonoEthernet.h"             // Define the board type
+#include "conf/SuperNode.h"
 
 #include "grhSoulissCommon.h"
 
@@ -83,6 +84,7 @@ void setup()
 	InitIono();
 
 	grhSetIpAddress(IP_ADDRESS_GARDB1);
+	grhSetUSARTAddress(RS485_ADDRESS_GARDB1, 0x0000);
 
 	DefineTypicals();
 }
