@@ -28,13 +28,17 @@ inline void DefineTypicals()
 	Set_T12(GARDB1_WATERING_ZONE3);
 	Set_T12(GARDB1_WATERING_ZONE4);
 	Set_T12(GARDB1_LIGHT_NIGHT);
-	Set_T12(GARDB1_LIGHT_GARDEN);
+
+	SetInput(GARDB1_WATERING_ZONE1, Souliss_T1n_AutoCmd);
+	SetInput(GARDB1_WATERING_ZONE2, Souliss_T1n_AutoCmd);
+	SetInput(GARDB1_WATERING_ZONE3, Souliss_T1n_AutoCmd);
+	SetInput(GARDB1_WATERING_ZONE4, Souliss_T1n_AutoCmd);
+	SetInput(GARDB1_LIGHT_NIGHT, Souliss_T1n_AutoCmd);
 }
 
 inline void ReadInputs()
 {
 	DigIn(DI5, Souliss_T1n_ToggleCmd, GARDB1_LIGHT_NIGHT);          // Read inputs from DI5
-	DigIn(DI6, Souliss_T1n_ToggleCmd, GARDB1_LIGHT_GARDEN);          // Read inputs from DI6
 }
 
 inline void ProcessLogics()
@@ -43,18 +47,17 @@ inline void ProcessLogics()
 	Logic_T12(GARDB1_WATERING_ZONE2);                                  // Execute the logic for Relay 2
 	Logic_T12(GARDB1_WATERING_ZONE3);                                  // Execute the logic for Relay 3
 	Logic_T12(GARDB1_WATERING_ZONE4);                                  // Execute the logic for Relay 4
-	Logic_T12(GARDB1_LIGHT_NIGHT);                                  // Execute the logic for Relay 5
-	Logic_T12(GARDB1_LIGHT_GARDEN);                                  // Execute the logic for Relay 6
+	Logic_T12(GARDB1_LIGHT_NIGHT);                                  // Execute the logic for Relay 6
 }
 
 inline void SetOutputs()
 {
-	DigOut(DO1, Souliss_T1n_Coil, GARDB1_WATERING_ZONE1);              // Drive the Relay 1
-	DigOut(DO2, Souliss_T1n_Coil, GARDB1_WATERING_ZONE2);              // Drive the Relay 2
-	DigOut(DO3, Souliss_T1n_Coil, GARDB1_WATERING_ZONE3);              // Drive the Relay 3
-	DigOut(DO4, Souliss_T1n_Coil, GARDB1_WATERING_ZONE4);              // Drive the Relay 4
-	DigOut(DO5, Souliss_T1n_Coil, GARDB1_LIGHT_NIGHT);              // Drive the Relay 5
-	DigOut(DO6, Souliss_T1n_Coil, GARDB1_LIGHT_GARDEN);              // Drive the Relay 6
+	nDigOut(DO1, Souliss_T1n_Coil, GARDB1_WATERING_ZONE1);              // Drive the Relay 1
+	nDigOut(DO2, Souliss_T1n_Coil, GARDB1_WATERING_ZONE2);              // Drive the Relay 2
+	nDigOut(DO3, Souliss_T1n_Coil, GARDB1_WATERING_ZONE3);              // Drive the Relay 3
+	nDigOut(DO4, Souliss_T1n_Coil, GARDB1_WATERING_ZONE4);              // Drive the Relay 4
+	// D05 not working !!
+	nDigOut(DO6, Souliss_T1n_Coil, GARDB1_LIGHT_NIGHT);              // Drive the Relay 5
 }
 
 inline void ProcessTimers()
@@ -64,7 +67,6 @@ inline void ProcessTimers()
 	Timer_T12(GARDB1_WATERING_ZONE1);
 	Timer_T12(GARDB1_WATERING_ZONE1);
 	Timer_T12(GARDB1_LIGHT_NIGHT);
-	Timer_T12(GARDB1_LIGHT_GARDEN);
 }
 
 

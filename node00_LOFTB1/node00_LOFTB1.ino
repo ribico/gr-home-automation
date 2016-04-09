@@ -42,7 +42,7 @@ inline void ReadInputs()
 {
 	U8 ret = Souliss_LowDigIn(LIGHT_STAIRS_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_STAIRS, true);
 	if( ret != MaCaco_NODATACHANGED)
-		RemoteInput(RS485_ADDRESS_ROW1B3, 4, mInput(LIGHT_STAIRS));
+		RemoteInput(RS485_ADDRESS_ROW1B3, ROW1B3_LIGHT_STAIRS, mInput(LIGHT_STAIRS));
 
 	Souliss_LowDigIn(LIGHT_LOFT_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_LOFT_1, true);
 	Souliss_LowDigIn(LIGHT_TERRACE_1_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_1, true);
@@ -302,6 +302,14 @@ void loop()
 
 		SHIFT_2110ms(7)
 			ProcessTimers();
+
+		SHIFT_2110ms(8)
+		{
+			// logics to turn on night lights when lux is low
+			float lux = mOutputAsFloat(LIGHT_SENSOR);
+			if(lux < NIGHT_LIGHT_LUX_LIMIT)
+				RemoteInput(IP_ADDRESS_GARDB1, GARDB1_LIGHT_NIGHT, Souliss_T1n_AutoCmd + 10);
+		}
 
 		FAST_GatewayComms();
 	}
