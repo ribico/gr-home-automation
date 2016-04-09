@@ -62,6 +62,8 @@ inline void ReadInputs()
 		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) | MAIN_3WAY_VALVE_COLLECTOR_MASK); // set distribution bit
 	else
 		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) & ~MAIN_3WAY_VALVE_COLLECTOR_MASK);	// unset distribution bit
+
+	Souliss_SetT62(memory_map, HVAC_BOILER_SANITARY_SETPOINT);
 }
 
 
@@ -111,6 +113,8 @@ inline void ProcessLogics()
 		ambience_setpoint -= 0.5;
 		ImportAnalog(TEMP_AMBIENCE_SET_POINT, &ambience_setpoint);
 	}
+
+	Souliss_Logic_T62(memory_map, HVAC_BOILER_SANITARY_SETPOINT, 0.1, &data_changed);
 }
 
 
@@ -249,6 +253,8 @@ void setup()
 
 	SetAsPeerNode(RS485_ADDRESS_GTW1B1,13);
 	SetAsPeerNode(RS485_ADDRESS_GTW2B1,14);
+
+	SetAsPeerNode(IP_ADDRESS_GARDB1,15);
 
 	// define static routing table (NOT STRICTLY NEEDED if using PEER_Join in peers)
 	RoutingTable(IP_ADDRESS_ROW1B1, RS485_ADDRESS_ROW1SN, 0);
