@@ -1,7 +1,7 @@
 
 
 // DEFINE INPUT PINs
-#define LIGHT_TRANSDUCER_PIN_IN									A7
+#define LIGHT_TRANSDUCER_PIN_IN									A15
 
 #define LIGHT_STAIRS_PIN_IN                     48
 #define LIGHT_LOFT_PIN_IN                     	49

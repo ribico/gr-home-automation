@@ -50,11 +50,6 @@ inline void ReadInputs()
 	Souliss_LowDigIn(LIGHT_TERRACE_3_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TERRACE_3, true);
 	Souliss_LowDigIn(LIGHT_TOILET_PIN_IN, Souliss_T1n_ToggleCmd, memory_map, LIGHT_TOILET, true);
 
-	int analog_val = analogRead(LIGHT_TRANSDUCER_PIN_IN);
-	float light_intensity = 40000.0/5.0 * (1024-analog_val);
-	ImportAnalog(LIGHT_SENSOR, &light_intensity);
-
-
 	mInput(HVAC_VALVES) = mOutput(HVAC_VALVES);
 
 

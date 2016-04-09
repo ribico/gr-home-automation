@@ -31,6 +31,11 @@ inline void ReadDallasTemp(DallasTemperature& sensor_group, const DeviceAddress 
 
 inline void GetCurrentStatus(U16 phase_fast)
 {
+	// get light sensor
+	int analog_val = analogRead(LIGHT_TRANSDUCER_PIN_IN);
+	float light_intensity = 40000.0/1024.0 * (1024-analog_val);
+	ImportAnalog(LIGHT_SENSOR, &light_intensity);
+
 	// read and send external temp & UR to ROW1B1 slots
 	float tmp;
 	U8 buff[8];
@@ -101,7 +106,7 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	// request temperature for next cycle
 	gTempSensors1.requestTemperatures();
-	gTempSensors2.requestTemperatures();	
+	gTempSensors2.requestTemperatures();
 }
 
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)
