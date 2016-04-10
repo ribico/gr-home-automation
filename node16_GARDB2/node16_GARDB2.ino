@@ -7,6 +7,7 @@ Arduino MICRO
 //#define DEBUG
 
 #include "bconf/StandardArduino.h"             // Define the board type
+#include "conf/usart.h"                     // USART RS485
 
 #include "grhSoulissCommon.h"
 
@@ -18,10 +19,12 @@ Arduino MICRO
 #include "grhSoulissCustom.h"
 #include "grhSoulissSlots.h"
 
+#define TEMP 		0
+#define TEMP_H 	1
 
 inline void DefineTypicals()
 {
-
+	Set_Temperature(TEMP);
 }
 
 inline void ReadInputs()
@@ -30,6 +33,7 @@ inline void ReadInputs()
 
 inline void ProcessLogics()
 {
+		grh_Logic_Temperature(TEMP);
 }
 
 inline void SetOutputs()
@@ -73,7 +77,7 @@ void loop()
 
 		}
 
-		grhFastPeerComms();
+//		grhFastPeerComms();
 	}
 
 	EXECUTESLOW()
