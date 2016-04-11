@@ -29,6 +29,7 @@ inline void DefineTypicals()
 	Set_T12(GARDB1_WATERING_ZONE4);
 	Set_T12(GARDB1_LIGHT_NIGHT);
 	Set_T12(GARDB1_LIGHT_GARDEN);
+	Set_Power(GARDB1_TOTAL_POWER);
 
 	SetInput(GARDB1_WATERING_ZONE1, Souliss_T1n_AutoCmd);
 	SetInput(GARDB1_WATERING_ZONE2, Souliss_T1n_AutoCmd);
@@ -42,6 +43,8 @@ inline void ReadInputs()
 {
 	DigIn(DI5, Souliss_T1n_ToggleCmd, GARDB1_LIGHT_NIGHT);          // Read inputs from DI5
 	DigIn(DI6, Souliss_T1n_ToggleCmd, GARDB1_LIGHT_GARDEN);          // Read inputs from DI5
+
+	Souliss_AnalogIn(AV1, memory_map, GARDB1_TOTAL_POWER, 0.1465 * 220 ,0);
 }
 
 inline void ProcessLogics()
@@ -52,6 +55,8 @@ inline void ProcessLogics()
 	Logic_T12(GARDB1_WATERING_ZONE4);                                  // Execute the logic for Relay 4
 	Logic_T12(GARDB1_LIGHT_NIGHT);                                  // Execute the logic for Relay 5
 	Logic_T12(GARDB1_LIGHT_GARDEN);                                  // Execute the logic for Relay 6
+
+	Logic_Power(GARDB1_TOTAL_POWER);
 }
 
 inline void SetOutputs()

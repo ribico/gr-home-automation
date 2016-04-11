@@ -121,3 +121,5 @@
 # define GARDB1_WATERING_TIME_ZONE2                     7
 # define GARDB1_WATERING_TIME_ZONE3                     8
 # define GARDB1_WATERING_TIME_ZONE4                     9
+# define GARDB1_TOTAL_POWER                             10
+# define GARDB1_TOTAL_POWER_H                           11
