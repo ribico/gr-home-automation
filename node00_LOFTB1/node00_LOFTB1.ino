@@ -62,8 +62,6 @@ inline void ReadInputs()
 		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) | MAIN_3WAY_VALVE_COLLECTOR_MASK); // set distribution bit
 	else
 		SetInput(HVAC_VALVES, mInput(HVAC_VALVES) & ~MAIN_3WAY_VALVE_COLLECTOR_MASK);	// unset distribution bit
-
-	Souliss_SetT62(memory_map, HVAC_BOILER_SANITARY_SETPOINT);
 }
 
 
