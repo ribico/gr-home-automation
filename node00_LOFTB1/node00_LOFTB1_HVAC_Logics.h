@@ -165,7 +165,7 @@ inline void ProcessZonesActivation(U16 phase_fast)
 	{
 		// AUTO MODE -> activate only needed zones
 
-		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
+		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SETPOINT);
 		if ( !IsTempValid(setpoint_temp) )
 			return;
 
@@ -205,7 +205,7 @@ inline void CalculateFloorTempSetpoint(U16 phase_fast)
 		if (temp_EXT != 0)
 			40.4 - 0.92*temp_EXT; // copied from ROHSS heatpump winter climatic curves
 /*
-    float temp_amb_sp = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
+    float temp_amb_sp = mOutputAsFloat(TEMP_AMBIENCE_SETPOINT);
   	float setpoint_floor_water = temp_amb_sp + 2.0; // fixed delta above ambience setpoint
   	setpoint_floor_water += (temp_amb_sp - temp_EXT) / 5.0; // variable with indoor/outdoor delta
 

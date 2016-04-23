@@ -86,7 +86,7 @@ inline void ProcessLogics()
 	Souliss_Logic_T12(memory_map, HEATPUMP_SANITARY_WATER, &data_changed);
 	Souliss_Logic_T12(memory_map, HEATPUMP_COOL, &data_changed);
 
-	grh_Logic_Temperature(TEMP_AMBIENCE_SET_POINT);
+	grh_Logic_Temperature(TEMP_AMBIENCE_SETPOINT);
 	grh_Logic_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
 	grh_Logic_Temperature(HVAC_BOILER_SANITARY_TEMP);
 
@@ -99,6 +99,7 @@ inline void ProcessLogics()
 	Souliss_Logic_T12(memory_map, FANCOIL_MODE, &data_changed);
 	Souliss_Logic_T12(memory_map, HP_SETPOINT_2, &data_changed);
 
+/*
 	// use a T21 for increasing/decreasing ambience temp setpoint
 	float ambience_setpoint = mOutputAsFloat(TEMP_AMBIENCE_SET_POINT);
 	if(mInput(TEMP_SETPOINT_IN) == Souliss_T2n_OpenCmd_SW)
@@ -113,8 +114,10 @@ inline void ProcessLogics()
 		ambience_setpoint -= 0.5;
 		ImportAnalog(TEMP_AMBIENCE_SET_POINT, &ambience_setpoint);
 	}
-
-	Souliss_Logic_T62(memory_map, HVAC_BOILER_SANITARY_SETPOINT, 0.1, &data_changed);
+*/
+	Logic_Temperature_Setpoint(TEMP_AMBIENCE_SETPOINT);
+	Logic_Temperature_Setpoint(TEMP_FLOOR_FLOW_SETPOINT);
+	Logic_Temperature_Setpoint(HVAC_BOILER_SANITARY_SETPOINT);
 }
 
 
@@ -308,7 +311,7 @@ void loop()
 			// logics to turn on night lights when lux is low
 			float lux = mOutputAsFloat(LIGHT_SENSOR);
 			if(lux < NIGHT_LIGHT_LUX_LIMIT)
-				RemoteInput(IP_ADDRESS_GARDB1, GARDB1_LIGHT_NIGHT, Souliss_T1n_AutoCmd + 10);
+				RemoteInput(IP_ADDRESS_GARDB1, GARDB1_LIGHT_GARDEN, Souliss_T1n_AutoCmd + 10);
 		}
 
 		FAST_GatewayComms();

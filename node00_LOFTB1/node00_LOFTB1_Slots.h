@@ -40,9 +40,9 @@
 #define FANCOIL_MODE									18
 #define HP_SETPOINT_2									19
 
-#define TEMP_AMBIENCE_SET_POINT				20
-#define TEMP_AMBIENCE_SET_POINT_H			21
-#define TEMP_SETPOINT_IN							22
+#define TEMP_AMBIENCE_SETPOINT				20
+#define TEMP_AMBIENCE_SETPOINT_H			21
+//#define TEMP_SETPOINT_IN							22
 
 #define TEMP_FLOOR_FLOW_SETPOINT			23
 #define TEMP_FLOOR_FLOW_SETPOINT_H		24
@@ -89,14 +89,16 @@ inline void DefineTypicals()
 	Souliss_SetT12(memory_map, PUMP_COLLECTOR_FANCOIL);
 	Souliss_SetT12(memory_map, PUMP_COLLECTOR_FLOOR);
 
-	Set_Temperature(TEMP_AMBIENCE_SET_POINT);
-	Set_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
+	Set_Temperature_Setpoint(TEMP_AMBIENCE_SETPOINT);
+	Set_Temperature_Setpoint(TEMP_FLOOR_FLOW_SETPOINT);
+	Set_Temperature_Setpoint(HVAC_BOILER_SANITARY_SETPOINT);
+
 	Set_Temperature(HVAC_BOILER_SANITARY_TEMP);
 
 	Souliss_SetT12(memory_map, FANCOIL_MODE);
 	Souliss_SetT12(memory_map, HP_SETPOINT_2);
 
-	Souliss_SetT22(memory_map, TEMP_SETPOINT_IN);
+//	Souliss_SetT22(memory_map, TEMP_SETPOINT_IN);
 
 	// initialize values
 	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
@@ -115,5 +117,5 @@ inline void DefineTypicals()
 	SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd);
 
 	float set_point = AMBIENCE_SETPOINT_DEFAULT; // initial setup
-	ImportAnalog(TEMP_AMBIENCE_SET_POINT, &set_point);
+	ImportAnalog(TEMP_AMBIENCE_SETPOINT, &set_point);
 }
