@@ -19,8 +19,8 @@
 #define IsHeating()					(IsZoneOpen() && IsHeatMode())
 #define IsCooling()					(IsZoneOpen() && IsCoolMode())
 
-#define IsSanitaryWaterCold()			  (temp_HVAC_Boiler_Saniary < SETPOINT_TEMP_SANITARY_WATER_MIN)
-#define IsSanitaryWaterHot()			  (temp_HVAC_Boiler_Saniary > SETPOINT_TEMP_SANITARY_WATER_MAX)
+#define IsSanitaryWaterCold()			  (temp_HVAC_Boiler_Saniary < mOutputAsFloat(HVAC_BOILER_SANITARY_SETPOINT)-SANITARY_WATER_SETPOINT_DB)
+#define IsSanitaryWaterHot()			  (temp_HVAC_Boiler_Saniary > mOutputAsFloat(HVAC_BOILER_SANITARY_SETPOINT)+SANITARY_WATER_SETPOINT_DB)
 #define IsSanitaryWaterOn()	        (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_OnCoil)
 #define IsSanitaryWaterAuto()	      (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoState)
 #define IsSanitaryWaterAutoOn()	    (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOnCoil)

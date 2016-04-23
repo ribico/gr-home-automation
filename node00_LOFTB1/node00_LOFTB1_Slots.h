@@ -118,4 +118,11 @@ inline void DefineTypicals()
 
 	float set_point = AMBIENCE_SETPOINT_DEFAULT; // initial setup
 	ImportAnalog(TEMP_AMBIENCE_SETPOINT, &set_point);
+
+	float set_point = TEMP_FLOOR_FLOW_SETPOINT_DEFAULT; // initial setup
+	ImportAnalog(TEMP_FLOOR_FLOW_SETPOINT, &set_point);
+
+	float set_point = SANITARY_WATER_SETPOINT_DEFAULT; // initial setup
+	ImportAnalog(HVAC_BOILER_SANITARY_SETPOINT, &set_point);
+
 }
