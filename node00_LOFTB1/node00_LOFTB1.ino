@@ -116,6 +116,7 @@ inline void ProcessLogics()
 	Logic_Temperature_Setpoint(TEMP_AMBIENCE_SETPOINT);
 	Logic_Temperature_Setpoint(TEMP_FLOOR_FLOW_SETPOINT);
 	Logic_Temperature_Setpoint(HVAC_BOILER_SANITARY_SETPOINT);
+	Logic_Light_Setpoint(LIGHT_SENSOR_SETPOINT);
 }
 
 
@@ -307,8 +308,7 @@ void loop()
 		SHIFT_2110ms(8)
 		{
 			// logics to turn on night lights when lux is low
-			float lux = mOutputAsFloat(LIGHT_SENSOR);
-			if(lux < NIGHT_LIGHT_LUX_LIMIT)
+			if(mOutputAsFloat(LIGHT_SENSOR) < mOutputAsFloat(LIGHT_SENSOR_SETPOINT))
 				RemoteInput(IP_ADDRESS_GARDB1, GARDB1_LIGHT_GARDEN, Souliss_T1n_AutoCmd + 10);
 		}
 

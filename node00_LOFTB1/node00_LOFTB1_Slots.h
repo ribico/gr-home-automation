@@ -42,21 +42,23 @@
 
 #define TEMP_AMBIENCE_SETPOINT				20
 #define TEMP_AMBIENCE_SETPOINT_H			21
-//#define TEMP_SETPOINT_IN							22
 
-#define TEMP_FLOOR_FLOW_SETPOINT			23
-#define TEMP_FLOOR_FLOW_SETPOINT_H		24
+#define TEMP_FLOOR_FLOW_SETPOINT			22
+#define TEMP_FLOOR_FLOW_SETPOINT_H		23
 
-#define HEATING_MIX_VALVE							25
+#define HEATING_MIX_VALVE							24
 
-#define LIGHT_SENSOR									26
-#define LIGHT_SENSOR_H								27
+#define LIGHT_SENSOR									25
+#define LIGHT_SENSOR_H								26
 
-#define HVAC_BOILER_SANITARY_TEMP			28
-#define HVAC_BOILER_SANITARY_TEMP_H		29
+#define LIGHT_SENSOR_SETPOINT					27
+#define LIGHT_SENSOR_SETPOINT_H				28
 
-#define HVAC_BOILER_SANITARY_SETPOINT			30
-#define HVAC_BOILER_SANITARY_SETPOINT_H		31
+#define HVAC_BOILER_SANITARY_TEMP			29
+#define HVAC_BOILER_SANITARY_TEMP_H		30
+
+#define HVAC_BOILER_SANITARY_SETPOINT			31
+#define HVAC_BOILER_SANITARY_SETPOINT_H		32
 
 
 /////////////////////////////////////////////////////////////
@@ -92,6 +94,7 @@ inline void DefineTypicals()
 	Set_Temperature_Setpoint(TEMP_AMBIENCE_SETPOINT);
 	Set_Temperature_Setpoint(TEMP_FLOOR_FLOW_SETPOINT);
 	Set_Temperature_Setpoint(HVAC_BOILER_SANITARY_SETPOINT);
+	Set_Light_Setpoint(LIGHT_SENSOR_SETPOINT);
 
 	Set_Temperature(HVAC_BOILER_SANITARY_TEMP);
 
@@ -125,4 +128,6 @@ inline void DefineTypicals()
 	set_point = SANITARY_WATER_SETPOINT_DEFAULT; // initial setup
 	ImportAnalog(HVAC_BOILER_SANITARY_SETPOINT, &set_point);
 
+	set_point = NIGHT_LIGHT_LUX_SETPOINT_DEFAULT; // initial setup
+	ImportAnalog(LIGHT_SENSOR_SETPOINT, &set_point);
 }
