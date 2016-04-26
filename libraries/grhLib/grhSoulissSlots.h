@@ -63,7 +63,7 @@
 # define ROW2B3_HUMIDITY			                          5
 
 #define ROW2B4 8
-# define ROW2B4_TEST_T12                                0
+# define ROW2B4_WATERING_ZONE6                          0
 # define ROW1B4_TEMPERATURE			                        1
 # define ROW1B4_HUMIDITY			                          3
 
@@ -111,16 +111,19 @@
 # define GTW2B1_LIGHT_GW			                          4
 
 #define GARDB1 15
-# define GARDB1_WATERING_ZONE1		                      0
-# define GARDB1_WATERING_ZONE2		                      1
-# define GARDB1_WATERING_ZONE3		                      2
-# define GARDB1_WATERING_ZONE4		                      3
-# define GARDB1_WATERING_ZONE5                          4
-# define GARDB1_LIGHT_GARDEN                            5
-# define GARDB1_WATERING_TIME_ZONE1                     6
-# define GARDB1_WATERING_TIME_ZONE2                     7
-# define GARDB1_WATERING_TIME_ZONE3                     8
+# define GARDB1_LIGHT_GARDEN                            0
+# define GARDB1_WATERING		                            1
+# define GARDB1_WATERING_ZONE1		                      2
+# define GARDB1_WATERING_TIME_ZONE1                     3
+# define GARDB1_WATERING_ZONE2		                      4
+# define GARDB1_WATERING_TIME_ZONE2                     5
+# define GARDB1_WATERING_ZONE3		                      6
+# define GARDB1_WATERING_TIME_ZONE3                     7
+# define GARDB1_WATERING_ZONE4		                      8
 # define GARDB1_WATERING_TIME_ZONE4                     9
-# define GARDB1_WATERING_TIME_ZONE5                     9
-# define GARDB1_TOTAL_POWER                             10
-# define GARDB1_TOTAL_POWER_H                           11
+# define GARDB1_WATERING_ZONE5                          10
+# define GARDB1_WATERING_TIME_ZONE5                     11
+# define GARDB1_WATERING_ZONE6                          12
+# define GARDB1_WATERING_TIME_ZONE6                     13
+# define GARDB1_TOTAL_POWER                             14
+# define GARDB1_TOTAL_POWER_H                           15
