@@ -132,6 +132,14 @@ inline void ProcessWateringTimers()
 	Timer_T12(GARDB1_WATERING_ZONE5);
 }
 
+// set AutoCmd for a watering zone (both AutoON time and Activation delay)
+//
+// slot_watering is a T12 slot of a watering zone
+// slot_time is a T61 slot for watering time setting
+// uDelay is used as input to delay activation of this zone and modified by
+// by increasing its value with irrigation time to be used as activation
+// delay for the next zone
+//
 inline void SetWateringZone(U8 slot_watering, U8 slot_time, U8& uDelay)
 {
 		mInput(slot_watering) =  Souliss_T1n_AutoCmd + (U8) mOutput(slot_time);
