@@ -38,8 +38,8 @@
 #define ROW1B4 4
 # define ROW1B4_LIGHT_ENTRANCE_1	                      1
 # define ROW1B4_LIGHT_ENTRANCE_2	                      2
-# define ROW1B4_LIGHT_BATH_1		                        3
-# define ROW1B4_LIGHT_BATH_2		                        4
+# define ROW1B4_LIGHT_BATH2_1		                        3
+# define ROW1B4_LIGHT_BATH2_2		                        4
 # define ROW1B4_TEMPERATURE			                        5
 # define ROW1B4_HUMIDITY			                          7
 

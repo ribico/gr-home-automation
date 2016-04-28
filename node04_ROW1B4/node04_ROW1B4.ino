@@ -30,7 +30,7 @@ float th=0;
 inline void DefineTypicals()
 {
 	Set_LightsGroup(ROW1B4_LIGHT_ENTRANCE_1, ROW1B4_LIGHT_ENTRANCE_2);
-  	Set_LightsGroup(ROW1B4_LIGHT_BATH_1, ROW1B4_LIGHT_BATH_2);
+  	Set_LightsGroup(ROW1B4_LIGHT_BATH2_1, ROW1B4_LIGHT_BATH2_2);
 
 	Set_Temperature(ROW1B4_TEMPERATURE);
 	Set_Humidity(ROW1B4_HUMIDITY);
@@ -40,13 +40,13 @@ inline void DefineTypicals()
 inline void ReadInputs()
 {
 	LightsGroupIn(IN1, ROW1B4_LIGHT_ENTRANCE_1, ROW1B4_LIGHT_ENTRANCE_2);
-	LightsGroupIn(IN2, ROW1B4_LIGHT_BATH_1, ROW1B4_LIGHT_BATH_2);
+	LightsGroupIn(IN2, ROW1B4_LIGHT_BATH2_1, ROW1B4_LIGHT_BATH2_2);
 }
 
 inline void ProcessLogics()
 {
 	Logic_LightsGroup(ROW1B4_LIGHT_ENTRANCE_1, ROW1B4_LIGHT_ENTRANCE_2);\
-	Logic_LightsGroup(ROW1B4_LIGHT_BATH_1, ROW1B4_LIGHT_BATH_2);
+	Logic_LightsGroup(ROW1B4_LIGHT_BATH2_1, ROW1B4_LIGHT_BATH2_2);
 
 	grh_Logic_Humidity(ROW1B4_HUMIDITY);
 	grh_Logic_Temperature(ROW1B4_TEMPERATURE);
@@ -56,14 +56,14 @@ inline void SetOutputs()
 {
 	DigOut(RELAY1, Souliss_T1n_Coil, ROW1B4_LIGHT_ENTRANCE_1);
 	DigOut(RELAY2, Souliss_T1n_Coil, ROW1B4_LIGHT_ENTRANCE_2);
-	DigOut(RELAY3, Souliss_T1n_Coil, ROW1B4_LIGHT_BATH_2);
-	DigOut(RELAY4, Souliss_T1n_Coil, ROW1B4_LIGHT_BATH_1);
+	DigOut(RELAY3, Souliss_T1n_Coil, ROW1B4_LIGHT_BATH2_2);
+	DigOut(RELAY4, Souliss_T1n_Coil, ROW1B4_LIGHT_BATH2_1);
 }
 
 inline void ProcessTimers()
 {
 	Timer_LightsGroup(ROW1B4_LIGHT_ENTRANCE_1, ROW1B4_LIGHT_ENTRANCE_2);
-	Timer_LightsGroup(ROW1B4_LIGHT_BATH_1, ROW1B4_LIGHT_BATH_2);
+	Timer_LightsGroup(ROW1B4_LIGHT_BATH2_1, ROW1B4_LIGHT_BATH2_2);
 
 	th = dht.readHumidity();
 	ImportAnalog(ROW1B4_HUMIDITY, &th);
