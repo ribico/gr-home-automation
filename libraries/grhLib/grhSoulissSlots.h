@@ -64,8 +64,8 @@
 
 #define ROW2B4 8
 # define ROW2B4_WATERING_ZONE6                          0
-# define ROW1B4_TEMPERATURE			                        1
-# define ROW1B4_HUMIDITY			                          3
+# define ROW2B4_TEMPERATURE			                        1
+# define ROW2B4_HUMIDITY			                          3
 
 #define BED1B1 9
 # define BED1B1_LIGHT_BEDROOM1		                      1

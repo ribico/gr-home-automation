@@ -32,8 +32,8 @@ inline void DefineTypicals()
 {
 	Set_T12(ROW2B4_WATERING_ZONE6);
 
-	Set_Temperature(ROW1B4_TEMPERATURE);
-	Set_Humidity(ROW1B4_HUMIDITY);
+	Set_Temperature(ROW2B4_TEMPERATURE);
+	Set_Humidity(ROW2B4_HUMIDITY);
 	dht.begin();
 }
 
@@ -45,8 +45,8 @@ inline void ReadInputs()
 inline void ProcessLogics()
 {
 	Logic_T12(ROW2B4_WATERING_ZONE6);
-	grh_Logic_Humidity(ROW1B4_HUMIDITY);
-	grh_Logic_Temperature(ROW1B4_TEMPERATURE);
+	grh_Logic_Humidity(ROW2B4_HUMIDITY);
+	grh_Logic_Temperature(ROW2B4_TEMPERATURE);
 }
 
 inline void SetOutputs()
@@ -59,10 +59,10 @@ inline void ProcessTimers()
 	Timer_T12(ROW2B4_WATERING_ZONE6);
 
 	th = dht.readHumidity();
-	ImportAnalog(ROW1B4_HUMIDITY, &th);
+	ImportAnalog(ROW2B4_HUMIDITY, &th);
 
 	th = dht.readTemperature();
-	ImportAnalog(ROW1B4_TEMPERATURE, &th);
+	ImportAnalog(ROW2B4_TEMPERATURE, &th);
 }
 
 
