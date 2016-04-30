@@ -11,7 +11,7 @@
 		|->eth-> BED1B1
 	 	|->eth-> BED2B1 ->485-> BED2B2 ->485-> BED2B3
 		|->eth-> GARDB1
-
+		|->WiFi-> LYTB1
 ***************************************************************************/
 
 #ifndef GR_SOULISS_NETWORK_H
@@ -28,6 +28,7 @@
 #define IP_ADDRESS_BED1B1			103
 #define IP_ADDRESS_BED2B1			104
 #define IP_ADDRESS_GARDB1			105
+#define IP_ADDRESS_LYTB1			106
 
 #define IP_ADDRESS_TESTB1			110
 #define IP_ADDRESS_TESTB2			111

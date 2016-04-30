@@ -127,3 +127,6 @@
 # define GARDB1_WATERING_TIME_ZONE6                     13
 # define GARDB1_TOTAL_POWER                             14
 # define GARDB1_TOTAL_POWER_H                           15
+
+#define LYTB1 16
+# define LYTB1_LIGHT                                    0
