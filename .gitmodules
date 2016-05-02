@@ -16,3 +16,6 @@
 [submodule "libraries/DHT-sensor-library"]
 	path = libraries/DHT-sensor-library
 	url = ../DHT-sensor-library.git
+[submodule "libraries/ArduinoJson"]
+	path = libraries/ArduinoJson
+	url = ../ArduinoJson.git
