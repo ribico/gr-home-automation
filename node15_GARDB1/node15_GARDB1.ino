@@ -25,6 +25,8 @@ Arduino UNO + ETH Shield on a IONO SOLO BOARD
 inline void DefineTypicals()
 {
 	// Define logics for the node
+	Set_T12(GARDB1_LIGHT_GARDEN);
+
 	Set_T12(GARDB1_WATERING);
 
 	Set_T12(GARDB1_WATERING_ZONE1);
@@ -45,7 +47,6 @@ inline void DefineTypicals()
 	Set_T12(GARDB1_WATERING_ZONE6); // handled by ROW2B4
 	Set_T61(GARDB1_WATERING_TIME_ZONE6);
 
-	Set_T12(GARDB1_LIGHT_GARDEN);
 	Set_Power(GARDB1_TOTAL_POWER);
 
 
