@@ -112,21 +112,13 @@
 
 #define GARDB1 15
 # define GARDB1_LIGHT_GARDEN                            0
-# define GARDB1_WATERING		                            1
-# define GARDB1_WATERING_ZONE1		                      2
-# define GARDB1_WATERING_TIME_ZONE1                     3
-# define GARDB1_WATERING_ZONE2		                      4
-# define GARDB1_WATERING_TIME_ZONE2                     5
-# define GARDB1_WATERING_ZONE3		                      6
-# define GARDB1_WATERING_TIME_ZONE3                     7
-# define GARDB1_WATERING_ZONE4		                      8
-# define GARDB1_WATERING_TIME_ZONE4                     9
-# define GARDB1_WATERING_ZONE5                          10
-# define GARDB1_WATERING_TIME_ZONE5                     11
-# define GARDB1_WATERING_ZONE6                          12
-# define GARDB1_WATERING_TIME_ZONE6                     13
-# define GARDB1_TOTAL_POWER                             14
-# define GARDB1_TOTAL_POWER_H                           15
+# define GARDB1_WATERING_ZONE1		                      1
+# define GARDB1_WATERING_ZONE2		                      2
+# define GARDB1_WATERING_ZONE3		                      3
+# define GARDB1_WATERING_ZONE4		                      4
+# define GARDB1_WATERING_ZONE5                          5
+# define GARDB1_TOTAL_POWER                             6
+# define GARDB1_TOTAL_POWER_H                           7
 
 #define LYTB1 16
 # define LYTB1_LIGHT                                    0
