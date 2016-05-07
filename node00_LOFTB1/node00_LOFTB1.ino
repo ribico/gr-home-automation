@@ -7,6 +7,8 @@ MEGA with Ethernet only acting as GATEWAY
 //#define DEBUG
 //#define DEBUG_SOULISS
 
+#include "SoulissFramework.h"
+
 #include "bconf/StandardArduino.h"
 #include "conf/ethW5100.h"
 #include "conf/Gateway_wPersistence.h"

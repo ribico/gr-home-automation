@@ -5,7 +5,7 @@ DINO with RS485 only acting as Peer
 ***********************/
 
 //#define DEBUG
-
+#include "SoulissFramework.h"
 
 #include "bconf/DINo_v2_RS485.h"
 
@@ -69,7 +69,7 @@ inline void ProcessTimers()
 	ImportAnalog(ROW2B3_HUMIDITY, &th);
 
 	th = dht.readTemperature();
-	ImportAnalog(ROW2B3_TEMPERATURE, &th);	
+	ImportAnalog(ROW2B3_TEMPERATURE, &th);
 }
 
 

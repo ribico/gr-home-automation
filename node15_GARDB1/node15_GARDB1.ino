@@ -5,6 +5,7 @@ Arduino UNO + ETH Shield on a IONO SOLO BOARD
 
 ***********************/
 //#define DEBUG
+#include "SoulissFramework.h"
 
 #include "bconf/IonoEthernet.h"             // Define the board type
 

@@ -5,6 +5,7 @@ DINO with Ethernet and RS485 acting as Bridge (ETH->RS485)
 
 ***********************/
 //#define DEBUG
+#include "SoulissFramework.h"
 
 #include "bconf/DINo_v2_EthernetBridge_RS485.h"
 #include "conf/SuperNode.h"

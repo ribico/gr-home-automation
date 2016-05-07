@@ -5,7 +5,7 @@ DINO with RS485 only acting as Peer
 ***********************/
 
 //#define DEBUG
-
+#include "SoulissFramework.h"
 
 #include "bconf/DINo_v2_RS485.h"
 
