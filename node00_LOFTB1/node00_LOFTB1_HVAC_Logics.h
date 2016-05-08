@@ -36,9 +36,14 @@ inline void GetCurrentStatus(U16 phase_fast)
 	float light_intensity = 40000.0/1024.0 * (1024-analog_val);
 	ImportAnalog(LIGHT_SENSOR, &light_intensity);
 
+	// get the sanitary temp value from spare sensor
+	ReadDallasTemp(gTempSensors2, HVAC_BOILER_SANITARY_TEMP_ADDR_2, tmp);
+	ImportAnalog(HVAC_BOILER_SANITARY_TEMP, &tmp);
+
+
 	// read and send external temp & UR to ROW1B1 slots
 	float tmp;
-	U8 buff[8];
+	U8 buff[26];
 
 	tmp = dht_ext.readTemperature();
 	Souliss_HalfPrecisionFloating(buff, &tmp);
@@ -46,63 +51,40 @@ inline void GetCurrentStatus(U16 phase_fast)
 	tmp = dht_ext.readHumidity();
 	Souliss_HalfPrecisionFloating(buff+2, &tmp); // 2 bytes offset for UR
 
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
-
 	tmp = dht_loft.readTemperature();
-	Souliss_HalfPrecisionFloating(buff, &tmp);
+	Souliss_HalfPrecisionFloating(buff+4, &tmp);
 
 	tmp = dht_loft.readHumidity();
-	Souliss_HalfPrecisionFloating(buff+2, &tmp); // 2 bytes offset for UR
-
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_LOFT_TEMP, buff, 4); // sending 4 consecutive bytes (2 temp + 2 UR)
-
-
-// get the sanitary temp value from spare sensor
-	ReadDallasTemp(gTempSensors2, HVAC_BOILER_SANITARY_TEMP_ADDR_2, tmp);
-	ImportAnalog(HVAC_BOILER_SANITARY_TEMP, &tmp);
-
-
+	Souliss_HalfPrecisionFloating(buff+6, &tmp); // 2 bytes offset for UR
 
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_SANITARY_TEMP_ADDR, tmp);
-	Souliss_HalfPrecisionFloating(buff, &tmp);
+	Souliss_HalfPrecisionFloating(buff+8, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_HEATING_TEMP_ADDR, tmp);
-	Souliss_HalfPrecisionFloating(buff+2, &tmp);
+	Souliss_HalfPrecisionFloating(buff+10, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_BOTTOM_TEMP_ADDR, tmp);
-	Souliss_HalfPrecisionFloating(buff+4, &tmp);
-
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_BOILER_SANITARY_TEMP, buff, 6);
-
-
+	Souliss_HalfPrecisionFloating(buff+12, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
-	Souliss_HalfPrecisionFloating(buff, &tmp);
+	Souliss_HalfPrecisionFloating(buff+14, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_RETURN_TEMP_ADDR, tmp);
-	Souliss_HalfPrecisionFloating(buff+2, &tmp);
-
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_HEATPUMP_FLOW_TEMP, buff, 4);
-
-
+	Souliss_HalfPrecisionFloating(buff+16, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_FLOW_TEMP_ADDR, tmp);
-	Souliss_HalfPrecisionFloating(buff, &tmp);
+	Souliss_HalfPrecisionFloating(buff+18, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_RETURN_TEMP_ADDR, tmp);
-	Souliss_HalfPrecisionFloating(buff+2, &tmp);
-
-
+	Souliss_HalfPrecisionFloating(buff+20, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
-	Souliss_HalfPrecisionFloating(buff+4, &tmp);
+	Souliss_HalfPrecisionFloating(buff+22, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
-	Souliss_HalfPrecisionFloating(buff+6, &tmp);
+	Souliss_HalfPrecisionFloating(buff+24, &tmp);
 
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_HVAC_FANCOILS_FLOW_TEMP, buff, 8);
-
-
+	SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, buff, 26); // sending 26 consecutive bytes
 
 	// request temperature for next cycle
 	gTempSensors1.requestTemperatures();
