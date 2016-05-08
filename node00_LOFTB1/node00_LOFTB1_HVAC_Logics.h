@@ -36,13 +36,14 @@ inline void GetCurrentStatus(U16 phase_fast)
 	float light_intensity = 40000.0/1024.0 * (1024-analog_val);
 	ImportAnalog(LIGHT_SENSOR, &light_intensity);
 
+	float tmp;
+	
 	// get the sanitary temp value from spare sensor
 	ReadDallasTemp(gTempSensors2, HVAC_BOILER_SANITARY_TEMP_ADDR_2, tmp);
 	ImportAnalog(HVAC_BOILER_SANITARY_TEMP, &tmp);
 
 
 	// read and send external temp & UR to ROW1B1 slots
-	float tmp;
 	U8 buff[26];
 
 	tmp = dht_ext.readTemperature();
