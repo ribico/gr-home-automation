@@ -37,7 +37,7 @@ inline void GetCurrentStatus(U16 phase_fast)
 	ImportAnalog(LIGHT_SENSOR, &light_intensity);
 
 	float tmp;
-	
+
 	// get the sanitary temp value from spare sensor
 	ReadDallasTemp(gTempSensors2, HVAC_BOILER_SANITARY_TEMP_ADDR_2, tmp);
 	ImportAnalog(HVAC_BOILER_SANITARY_TEMP, &tmp);
@@ -85,7 +85,8 @@ inline void GetCurrentStatus(U16 phase_fast)
 	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
 	Souliss_HalfPrecisionFloating(buff+24, &tmp);
 
-	SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, buff, 26); // sending 26 consecutive bytes
+	if(!ReqTyp)
+		SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, buff, 26); // sending 26 consecutive bytes
 
 	// request temperature for next cycle
 	gTempSensors1.requestTemperatures();
