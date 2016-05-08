@@ -215,6 +215,7 @@ Number HEALTNode11 "Health Node 11 [%1d]" <keyring> (gNodes_Health,gTechnicView_
 Number HEALTNode12 "Health Node 12 [%1d]" <keyring> (gNodes_Health,gTechnicView_Node12) {souliss="D98:12:998"}
 Number HEALTNode13 "Health Node 13 [%1d]" <keyring> (gNodes_Health,gTechnicView_Node13) {souliss="D98:13:998"}
 Number HEALTNode14 "Health Node 14 [%1d]" <keyring> (gNodes_Health,gTechnicView_Node14) {souliss="D98:14:998"}
+Number HEALTNode15 "Health Node 15 [%1d]" <keyring> (gNodes_Health,gTechnicView_Node15) {souliss="D98:15:998"}
 
 
 Group gTechnicView "Souliss Vista Nodi"	<prodino> (gDiagnostics)
@@ -233,6 +234,34 @@ Group gTechnicView_Node11 "Node 11 : BED2B2" <prodino>	(gTechnicView)
 Group gTechnicView_Node12 "Node 12 : BED2B3" <prodino>	(gTechnicView)
 Group gTechnicView_Node13 "Node 13 : GTW1B1" <prodino>	(gTechnicView)
 Group gTechnicView_Node14 "Node 14 : GTW2B1" <prodino>	(gTechnicView)
+Group gTechnicView_Node15 "Node 15 : GARDB1" <prodino>	(gTechnicView)
 
 
 Number Temperature_Chart_Period
+
+
+Group       Irrigation
+
+Switch      Irrigation_Master       "Irrigazione OH Rules ON/OFF"         <power>         (Irrigation)
+String      Irrigation_StartTime    "Ora Inizio [%s]"           <calendar>      (Irrigation)
+Number      Irrigation_ScaleFactor  "Fattore di Scala [%d %%]"      <water>         (Irrigation)
+
+Number      Irrigation_TerraceMins  "Terrazzo Garage[%d mins]"  <water>         (Irrigation)
+Number      Irrigation_VegeMins     "Orto e Vasi [%d mins]"      <water>         (Irrigation)
+Number      Irrigation_Lawn1Mins    "Prato 1 [%d mins]"  <water>         (Irrigation)
+Number      Irrigation_Lawn2Mins    "Prato 2 [%d mins]"  <water>         (Irrigation)
+Number      Irrigation_EntMins      "Ingresso [%d mins]"     <water>         (Irrigation)
+Number      Irrigation_BalconyMins  "Balconi [%d mins]"    <water>         (Irrigation)
+
+Switch      Irrigation_Terrace      "Terrazzo Garage"      <water>         (Irrigation)    { souliss="T12:15:1:switch" }
+Switch      Irrigation_Terrace_auto "Terrazzo Garage Auto" <water>         (Irrigation)    { souliss="T12:15:1:automode" }
+Switch      Irrigation_Vege         "Orto e Vasi"          <water>         (Irrigation)    { souliss="T12:15:2:switch" }
+Switch      Irrigation_Vege_auto    "Orto e Vasi Auto"     <water>         (Irrigation)    { souliss="T12:15:2:automode" }
+Switch      Irrigation_Lawn1        "Prato 1"              <water>         (Irrigation)    { souliss="T12:15:3:switch" }
+Switch      Irrigation_Lawn1_auto   "Prato 1 Auto"         <water>         (Irrigation)    { souliss="T12:15:3:automode" }
+Switch      Irrigation_Lawn2        "Prato 2"              <water>         (Irrigation)    { souliss="T12:15:4:switch" }
+Switch      Irrigation_Lawn2_auto   "Prato 2 Auto"         <water>         (Irrigation)    { souliss="T12:15:4:automode" }
+Switch      Irrigation_Ent          "Ingresso"             <water>         (Irrigation)    { souliss="T12:15:5:switch" }
+Switch      Irrigation_Ent_auto     "Ingresso Auto"        <water>         (Irrigation)    { souliss="T12:15:5:automode" }
+Switch      Irrigation_Balcony      "Balconi"              <water>         (Irrigation)    { souliss="T12:8:0:switch" }
+Switch      Irrigation_Balcony_auto "Balconi Auto"         <water>         (Irrigation)    { souliss="T12:8:0:automode" }

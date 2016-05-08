@@ -528,6 +528,49 @@ sitemap default label="Full"
 				}
 			}
 		}
+		Text label="Irrigazione" icon="water"
+		{
+			Switch item=Irrigation_Master
+			Text item=Irrigation_StartTime label="[%s]"
+			Setpoint item=Irrigation_ScaleFactor step=5 minValue=50 maxValue=200
+
+			Frame label="Terrazzo Garage"
+			{
+				Setpoint item=Irrigation_TerraceMins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
+				Switch item=Irrigation_Terrace_auto label="Auto mode" mappings=[ON="Auto", OFF="Manual"]
+				Switch item=Irrigation_Terrace label="Manual ON/OFF"
+			}
+			Frame label="Orto e Vasi"
+			{
+				Setpoint item=Irrigation_VegeMins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
+				Switch item=Irrigation_Vege_auto label="Auto mode"  mappings=[ON="Auto", OFF="Manual"]
+				Switch item=Irrigation_Vege label="Manual ON/OFF"
+			}
+			Frame label="Prato Zona1"
+			{
+				Setpoint item=Irrigation_Lawn2Mins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
+				Switch item=Irrigation_Lawn1_auto label="Auto mode"  mappings=[ON="Auto", OFF="Manual"]
+				Switch item=Irrigation_Lawn1 label="Manual ON/OFF"
+			}
+			Frame label="Prato Zona2"
+			{
+				Setpoint item=Irrigation_Lawn1Mins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
+				Switch item=Irrigation_Lawn2_auto label="Auto mode"  mappings=[ON="Auto", OFF="Manual"]
+				Switch item=Irrigation_Lawn2 label="Manual ON/OFF"
+			}
+			Frame label="Ingresso"
+			{
+				Setpoint item=Irrigation_EntMins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
+				Switch item=Irrigation_Ent_auto label="Auto mode"  mappings=[ON="Auto", OFF="Manual"]
+				Switch item=Irrigation_Ent label="Manual ON/OFF"
+			}
+			Frame label="Balconi"
+			{
+				Setpoint item=Irrigation_BalconyMins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
+				Switch item=Irrigation_Balcony_auto label="Auto mode"  mappings=[ON="Auto", OFF="Manual"]
+				Switch item=Irrigation_Balcony label="Manual ON/OFF"
+			}
+		}
 	}
 
 	Frame label="Operazioni di Gruppo" {

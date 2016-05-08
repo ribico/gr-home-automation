@@ -1,0 +1,101 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+import org.joda.time.*
+
+rule "Irrigation startup"
+when
+    System started
+then
+    postUpdate(Irrigation_StartTime, "03:00")
+
+//    sendCommand(Irrigation_Terrace, OFF)
+//    sendCommand(Irrigation_Vege, OFF)
+//    sendCommand(Irrigation_Lawn1, OFF)
+//    sendCommand(Irrigation_Lawn2, OFF)
+//    sendCommand(Irrigation_Ent, OFF)
+//    sendCommand(Irrigation_Balcony, OFF)
+
+    sendCommand(Irrigation_ScaleFactor, 100)
+
+    sendCommand(Irrigation_TerraceMins, 0)
+    sendCommand(Irrigation_VegeMins, 10)
+    sendCommand(Irrigation_Lawn1Mins, 15)
+    sendCommand(Irrigation_Lawn2Mins, 15)
+    sendCommand(Irrigation_EntMins, 20)
+    sendCommand(Irrigation_BalconyMins, 15)
+end
+
+rule "Irrigation run"
+when
+    Time cron "0 0 0 * * ?"
+then
+    if (Irrigation_Master.state == ON) {
+        // get the scale factor - used to reduce the run times across the board
+        var Number scaleFactor = Irrigation_ScaleFactor.state as DecimalType
+
+        // convert our start time to a joda.time.DateTime for today
+        var DateTime startTime = parse(now.getYear() + "-" + now.getMonthOfYear() + "-" + now.getDayOfMonth() + "T" + Irrigation_StartTime.state + ":00")
+        var DateTime endTime
+
+        // get the raw run times for each zone (in mins)
+        var Number terraceMins = Irrigation_TerraceMins.state as DecimalType
+        var Number vegeMins = Irrigation_VegeMins.state as DecimalType
+        var Number lawn1Mins = Irrigation_Lawn1Mins.state as DecimalType
+        var Number lawn2Mins = Irrigation_Lawn2Mins.state as DecimalType
+        var Number entMins = Irrigation_EntMins.state as DecimalType
+        var Number balconyMins = Irrigation_BalconyMins.state as DecimalType
+
+        // convert to the actual run times (by applying the scale factor)
+        var int terraceTime = ((terraceMins * scaleFactor) / 100).intValue
+        var int vegeTime = ((vegeMins * scaleFactor) / 100).intValue
+        var int lawn1Time = ((lawn1Mins * scaleFactor) / 100).intValue
+        var int lawn2Time = ((lawn2Mins * scaleFactor) / 100).intValue
+        var int entTime = ((entMins * scaleFactor) / 100).intValue
+        var int balconyTime = ((balconyMins * scaleFactor) / 100).intValue
+
+        // turn on each zone in turn (with a minute gap between each zone activation)
+        if (Irrigation_Terrace_auto.state == ON && terraceTime > 0) {
+            endTime = startTime.plusMinutes(terraceTime)
+            createTimer(startTime) [| sendCommand(Irrigation_Terrace, ON) ]
+            createTimer(endTime) [| sendCommand(Irrigation_Terrace, OFF) ]
+            startTime = endTime.plusMinutes(1)
+        }
+
+        if (Irrigation_Vege_auto.state == ON && vegeTime > 0) {
+            endTime = startTime.plusMinutes(vegeTime)
+            createTimer(startTime) [| sendCommand(Irrigation_Vege, ON) ]
+            createTimer(endTime) [| sendCommand(Irrigation_Vege, OFF) ]
+            startTime = endTime.plusMinutes(1)
+        }
+
+        if (Irrigation_Lawn1_auto.state == ON && lawn1Time > 0) {
+            endTime = startTime.plusMinutes(lawn1Time)
+            createTimer(startTime) [| sendCommand(Irrigation_Lawn1, ON) ]
+            createTimer(endTime) [| sendCommand(Irrigation_Lawn1, OFF) ]
+            startTime = endTime.plusMinutes(1)
+        }
+
+        if (Irrigation_Lawn2_auto.state == ON && lawn2Time > 0) {
+            endTime = startTime.plusMinutes(lawn2Time)
+            createTimer(startTime) [| sendCommand(Irrigation_Lawn2, ON) ]
+            createTimer(endTime) [| sendCommand(Irrigation_Lawn2, OFF) ]
+            startTime = endTime.plusMinutes(1)
+        }
+
+        if (Irrigation_Ent_auto.state == ON && entTime > 0) {
+            endTime = startTime.plusMinutes(entTime)
+            createTimer(startTime) [| sendCommand(Irrigation_Ent, ON) ]
+            createTimer(endTime) [| sendCommand(Irrigation_Ent, OFF) ]
+            startTime = endTime.plusMinutes(1)
+        }
+
+        if (Irrigation_Balcony_auto.state == ON && balconyTime > 0) {
+            endTime = startTime.plusMinutes(balconyTime)
+            createTimer(startTime) [| sendCommand(Irrigation_Balcony, ON) ]
+            createTimer(endTime) [| sendCommand(Irrigation_Balcony, OFF) ]
+            startTime = endTime.plusMinutes(1)
+        }
+    }
+end
