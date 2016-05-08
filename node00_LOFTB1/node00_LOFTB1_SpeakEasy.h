@@ -105,7 +105,8 @@
 #define temp_LOFT     pOutputAsFloat(ROW1B1,ROW1B1_LOFT_TEMP)
 #define UR_LOFT       pOutputAsFloat(ROW1B1,ROW1B1_LOFT_UR)
 
-#define temp_HVAC_Boiler_Saniary            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_SANITARY_TEMP)
+//#define temp_HVAC_Boiler_Saniary            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_SANITARY_TEMP)
+#define temp_HVAC_Boiler_Saniary            mOutputAsFloat(HVAC_BOILER_SANITARY_TEMP)
 #define temp_HVAC_Boiler_Heating            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_HEATING_TEMP)
 #define temp_HVAC_Boiler_Bottom             pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_BOTTOM_TEMP)
 
