@@ -8,7 +8,7 @@ rule "Irrigation startup"
 when
     System started
 then
-    postUpdate(Irrigation_StartTime, "03:00")
+//    postUpdate(Irrigation_StartTime, "03:00")
 
 //    sendCommand(Irrigation_Terrace, OFF)
 //    sendCommand(Irrigation_Vege, OFF)
@@ -17,6 +17,7 @@ then
 //    sendCommand(Irrigation_Ent, OFF)
 //    sendCommand(Irrigation_Balcony, OFF)
 
+    sendCommand(Irrigation_MasterTimeMins, 0)
     sendCommand(Irrigation_ScaleFactor, 100)
 
     sendCommand(Irrigation_TerraceMins, 0)
@@ -29,9 +30,21 @@ end
 
 rule "Irrigation run"
 when
-    Time cron "0 0 0 * * ?"
+    Time cron "0 0 0 * * ?" or
+    Item Irrigation_MasterTimeMins received update
 then
-    if (Irrigation_Master.state == ON) {
+    var int minutes = (Irrigation_MasterTimeMins.state as DecimalType).intValue()
+
+     // work out when the alarm is to fire - start from midnight
+     var DateTime alarmTime = parse(now.getYear() + "-" + now.getMonthOfYear() + "-" + now.getDayOfMonth() + "T00:00")
+
+     // add the number of minutes selected
+     alarmTime = alarmTime.plusMinutes(minutes)
+
+     // update the alarm display time
+     Irrigation_StartTime.sendCommand(String::format("%02d:%02d", alarmTime.getHourOfDay(), alarmTime.getMinuteOfHour()))
+
+     if (Irrigation_Master.state == ON) {
         // get the scale factor - used to reduce the run times across the board
         var Number scaleFactor = Irrigation_ScaleFactor.state as DecimalType
 
