@@ -244,7 +244,7 @@ Group       Irrigation
 
 Switch      Irrigation_Master       "Irrigazione OH Rules ON/OFF"         <power>         (Irrigation)
 String      Irrigation_StartTime    "Ora Inizio [%s]"           <calendar>      (Irrigation)
-Number      Irrigation_MasterTimeMins  "Ritardo da Mezzanotte [%d min]"       <clock>          (Alarms)
+Number      Irrigation_MasterTimeMins  "Ritardo da Mezzanotte [%d mins]"       <clock>          (Alarms)
 Number      Irrigation_ScaleFactor  "Fattore di Scala [%d %%]"      <water>         (Irrigation)
 
 Number      Irrigation_TerraceMins  "Terrazzo Garage[%d mins]"  <water>         (Irrigation)

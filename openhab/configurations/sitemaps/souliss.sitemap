@@ -532,7 +532,7 @@ sitemap default label="Full"
 		{
 			Switch item=Irrigation_Master
 			Text item=Irrigation_StartTime label="Ora inizio irrigazione [%s]"
-			Setpoint item=Irrigation_MasterTimeMins minValue=-0 maxValue=690 step=30
+			Setpoint item=Irrigation_MasterTimeMins minValue=0 maxValue=1440 step=30
 			Setpoint item=Irrigation_ScaleFactor step=5 minValue=50 maxValue=200
 
 			Frame label="Terrazzo Garage"

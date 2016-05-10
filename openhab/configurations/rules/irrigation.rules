@@ -4,6 +4,7 @@ import org.openhab.model.script.actions.*
 
 import org.joda.time.*
 
+
 rule "Irrigation startup"
 when
     System started
@@ -22,15 +23,17 @@ then
 
     sendCommand(Irrigation_TerraceMins, 0)
     sendCommand(Irrigation_VegeMins, 10)
-    sendCommand(Irrigation_Lawn1Mins, 15)
-    sendCommand(Irrigation_Lawn2Mins, 15)
-    sendCommand(Irrigation_EntMins, 20)
-    sendCommand(Irrigation_BalconyMins, 15)
+    sendCommand(Irrigation_Lawn1Mins, 10)
+    sendCommand(Irrigation_Lawn2Mins, 10)
+    sendCommand(Irrigation_EntMins, 15)
+    sendCommand(Irrigation_BalconyMins, 10)
+
+    logInfo("Irrigation ", "End of initialization")
 end
 
-rule "Irrigation run"
+rule "Irrigation start time set"
 when
-    Time cron "0 0 0 * * ?" or
+    Time cron "0 5 0 * * ?" or
     Item Irrigation_MasterTimeMins received update
 then
     var int minutes = (Irrigation_MasterTimeMins.state as DecimalType).intValue()
@@ -44,71 +47,126 @@ then
      // update the alarm display time
      Irrigation_StartTime.sendCommand(String::format("%02d:%02d", alarmTime.getHourOfDay(), alarmTime.getMinuteOfHour()))
 
-     if (Irrigation_Master.state == ON) {
-        // get the scale factor - used to reduce the run times across the board
-        var Number scaleFactor = Irrigation_ScaleFactor.state as DecimalType
+    logInfo("Irrigation ", "set start time")
+end
 
-        // convert our start time to a joda.time.DateTime for today
-        var DateTime startTime = parse(now.getYear() + "-" + now.getMonthOfYear() + "-" + now.getDayOfMonth() + "T" + Irrigation_StartTime.state + ":00")
-        var DateTime endTime
+rule "Irrigation"
+when
+  Time cron "0 * * * * ?"
+then
+  if (Irrigation_Master.state == ON)
+  {
+    // get the scale factor - used to reduce the run times across the board
+    var Number scaleFactor = Irrigation_ScaleFactor.state as DecimalType
+    var Number minFromMidnight = Irrigation_MasterTimeMins.state as DecimalType
 
-        // get the raw run times for each zone (in mins)
-        var Number terraceMins = Irrigation_TerraceMins.state as DecimalType
-        var Number vegeMins = Irrigation_VegeMins.state as DecimalType
-        var Number lawn1Mins = Irrigation_Lawn1Mins.state as DecimalType
-        var Number lawn2Mins = Irrigation_Lawn2Mins.state as DecimalType
-        var Number entMins = Irrigation_EntMins.state as DecimalType
-        var Number balconyMins = Irrigation_BalconyMins.state as DecimalType
+    var DateTime localNow = now.plusHours(2)
+    logInfo("NOW", localNow.toString)
 
-        // convert to the actual run times (by applying the scale factor)
-        var int terraceTime = ((terraceMins * scaleFactor) / 100).intValue
-        var int vegeTime = ((vegeMins * scaleFactor) / 100).intValue
-        var int lawn1Time = ((lawn1Mins * scaleFactor) / 100).intValue
-        var int lawn2Time = ((lawn2Mins * scaleFactor) / 100).intValue
-        var int entTime = ((entMins * scaleFactor) / 100).intValue
-        var int balconyTime = ((balconyMins * scaleFactor) / 100).intValue
+    // convert our start time to a joda.time.DateTime for today
+    var DateTime startTime = parse(localNow.getYear() + "-" + localNow.getMonthOfYear() + "-" + localNow.getDayOfMonth() + "T" + Irrigation_StartTime.state + ":00")
 
-        // turn on each zone in turn (with a minute gap between each zone activation)
-        if (Irrigation_Terrace_auto.state == ON && terraceTime > 0) {
-            endTime = startTime.plusMinutes(terraceTime)
-            createTimer(startTime) [| sendCommand(Irrigation_Terrace, ON) ]
-            createTimer(endTime) [| sendCommand(Irrigation_Terrace, OFF) ]
-            startTime = endTime.plusMinutes(1)
-        }
+    // get the raw run times for each zone (in mins)
+    var Number terraceMins = Irrigation_TerraceMins.state as DecimalType
+    var Number vegeMins = Irrigation_VegeMins.state as DecimalType
+    var Number lawn1Mins = Irrigation_Lawn1Mins.state as DecimalType
+    var Number lawn2Mins = Irrigation_Lawn2Mins.state as DecimalType
+    var Number entMins = Irrigation_EntMins.state as DecimalType
+    var Number balconyMins = Irrigation_BalconyMins.state as DecimalType
 
-        if (Irrigation_Vege_auto.state == ON && vegeTime > 0) {
-            endTime = startTime.plusMinutes(vegeTime)
-            createTimer(startTime) [| sendCommand(Irrigation_Vege, ON) ]
-            createTimer(endTime) [| sendCommand(Irrigation_Vege, OFF) ]
-            startTime = endTime.plusMinutes(1)
-        }
+    // convert to the actual run times (by applying the scale factor)
+    var int terraceTime = ((terraceMins * scaleFactor) / 100).intValue
+    var int vegeTime = ((vegeMins * scaleFactor) / 100).intValue
+    var int lawn1Time = ((lawn1Mins * scaleFactor) / 100).intValue
+    var int lawn2Time = ((lawn2Mins * scaleFactor) / 100).intValue
+    var int entTime = ((entMins * scaleFactor) / 100).intValue
+    var int balconyTime = ((balconyMins * scaleFactor) / 100).intValue
 
-        if (Irrigation_Lawn1_auto.state == ON && lawn1Time > 0) {
-            endTime = startTime.plusMinutes(lawn1Time)
-            createTimer(startTime) [| sendCommand(Irrigation_Lawn1, ON) ]
-            createTimer(endTime) [| sendCommand(Irrigation_Lawn1, OFF) ]
-            startTime = endTime.plusMinutes(1)
-        }
+    var DateTime endTerraceTime = startTime.plusMinutes(terraceTime)
+    var DateTime endVegeTime = endTerraceTime.plusMinutes(vegeTime)
+    var DateTime endLawn1Time = endVegeTime.plusMinutes(lawn1Time)
+    var DateTime endLawn2Time = endLawn1Time.plusMinutes(lawn2Time)
+    var DateTime endEntTime = endLawn2Time.plusMinutes(entTime)
+    var DateTime endBalconyTime = endEntTime.plusMinutes(balconyTime)
 
-        if (Irrigation_Lawn2_auto.state == ON && lawn2Time > 0) {
-            endTime = startTime.plusMinutes(lawn2Time)
-            createTimer(startTime) [| sendCommand(Irrigation_Lawn2, ON) ]
-            createTimer(endTime) [| sendCommand(Irrigation_Lawn2, OFF) ]
-            startTime = endTime.plusMinutes(1)
-        }
-
-        if (Irrigation_Ent_auto.state == ON && entTime > 0) {
-            endTime = startTime.plusMinutes(entTime)
-            createTimer(startTime) [| sendCommand(Irrigation_Ent, ON) ]
-            createTimer(endTime) [| sendCommand(Irrigation_Ent, OFF) ]
-            startTime = endTime.plusMinutes(1)
-        }
-
-        if (Irrigation_Balcony_auto.state == ON && balconyTime > 0) {
-            endTime = startTime.plusMinutes(balconyTime)
-            createTimer(startTime) [| sendCommand(Irrigation_Balcony, ON) ]
-            createTimer(endTime) [| sendCommand(Irrigation_Balcony, OFF) ]
-            startTime = endTime.plusMinutes(1)
-        }
+/*
+    logInfo("START", startTime.toString)
+    logInfo("STOP TERRACE",  endTerraceTime.toString)
+    logInfo("STOP VEGE",  endVegeTime.toString)
+    logInfo("STOP LAWN1",  endLawn1Time.toString)
+    logInfo("STOP LAWN2",  endLawn2Time.toString)
+    logInfo("STOP ENT",  endEntTime.toString)
+    logInfo("STOP BALCONY",  endBalconyTime.toString)
+*/
+    if( localNow.isAfter(startTime) && localNow.isBefore(endTerraceTime) )
+    {
+      logInfo("IRRIGAZIONE:", "TERRAZZO")
+      sendCommand(Irrigation_Terrace, ON)
+      sendCommand(Irrigation_Vege, OFF)
+      sendCommand(Irrigation_Lawn1, OFF)
+      sendCommand(Irrigation_Lawn2, OFF)
+      sendCommand(Irrigation_Ent, OFF)
+      sendCommand(Irrigation_Balcony, OFF)
     }
+    else if( localNow.isAfter(endTerraceTime) && localNow.isBefore(endVegeTime) )
+    {
+      logInfo("IRRIGAZIONE", "ORTO")
+      sendCommand(Irrigation_Terrace, OFF)
+      sendCommand(Irrigation_Vege, ON)
+      sendCommand(Irrigation_Lawn1, OFF)
+      sendCommand(Irrigation_Lawn2, OFF)
+      sendCommand(Irrigation_Ent, OFF)
+      sendCommand(Irrigation_Balcony, OFF)
+    }
+    else if( localNow.isAfter(endVegeTime) && localNow.isBefore(endLawn1Time) )
+    {
+      logInfo("IRRIGAZIONE", "PRATO1")
+      sendCommand(Irrigation_Terrace, OFF)
+      sendCommand(Irrigation_Vege, OFF)
+      sendCommand(Irrigation_Lawn1, ON)
+      sendCommand(Irrigation_Lawn2, OFF)
+      sendCommand(Irrigation_Ent, OFF)
+      sendCommand(Irrigation_Balcony, OFF)
+    }
+    else if( localNow.isAfter(endLawn1Time) && localNow.isBefore(endLawn2Time) )
+    {
+      logInfo("IRRIGAZIONE", "PRATO2")
+      sendCommand(Irrigation_Terrace, OFF)
+      sendCommand(Irrigation_Vege, OFF)
+      sendCommand(Irrigation_Lawn1, OFF)
+      sendCommand(Irrigation_Lawn2, ON)
+      sendCommand(Irrigation_Ent, OFF)
+      sendCommand(Irrigation_Balcony, OFF)
+    }
+    else if( localNow.isAfter(endLawn2Time) && localNow.isBefore(endEntTime) )
+    {
+      logInfo("IRRIGAZIONE", "ENTRATA")
+      sendCommand(Irrigation_Terrace, OFF)
+      sendCommand(Irrigation_Vege, OFF)
+      sendCommand(Irrigation_Lawn1, OFF)
+      sendCommand(Irrigation_Lawn2, OFF)
+      sendCommand(Irrigation_Ent, ON)
+      sendCommand(Irrigation_Balcony, OFF)
+    }
+    else if( localNow.isAfter(endEntTime) && localNow.isBefore(endBalconyTime) )
+    {
+      logInfo("IRRIGAZIONE", "BALCONI")
+      sendCommand(Irrigation_Terrace, OFF)
+      sendCommand(Irrigation_Vege, OFF)
+      sendCommand(Irrigation_Lawn1, OFF)
+      sendCommand(Irrigation_Lawn2, OFF)
+      sendCommand(Irrigation_Ent, OFF)
+      sendCommand(Irrigation_Balcony, ON)
+    }
+    else
+    {
+      logInfo("IRRIGAZIONE", "ALL ZONE CLOSED")
+      sendCommand(Irrigation_Terrace, OFF)
+      sendCommand(Irrigation_Vege, OFF)
+      sendCommand(Irrigation_Lawn1, OFF)
+      sendCommand(Irrigation_Lawn2, OFF)
+      sendCommand(Irrigation_Ent, OFF)
+      sendCommand(Irrigation_Balcony, OFF)
+    }
+  }
 end
