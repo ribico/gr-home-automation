@@ -244,15 +244,16 @@ Group       Irrigation
 
 Switch      Irrigation_Master       "Irrigazione OH Rules ON/OFF"         <power>         (Irrigation)
 String      Irrigation_StartTime    "Ora Inizio [%s]"           <calendar>      (Irrigation)
-Number      Irrigation_MasterTimeMins  "Ritardo da Mezzanotte [%d mins]"       <clock>          (Alarms)
+Switch      Irrigation_SetNow       "Imposta ora corrente"      <clock>       (Irrigation)
+Number      Irrigation_MasterTimeMins  "Set ritardo da Mezzanotte [%d mins]"       <clock>          (Irrigation)
 Number      Irrigation_ScaleFactor  "Fattore di Scala [%d %%]"      <water>         (Irrigation)
 
-Number      Irrigation_TerraceMins  "Terrazzo Garage[%d mins]"  <water>         (Irrigation)
-Number      Irrigation_VegeMins     "Orto e Vasi [%d mins]"      <water>         (Irrigation)
-Number      Irrigation_Lawn1Mins    "Prato 1 [%d mins]"  <water>         (Irrigation)
-Number      Irrigation_Lawn2Mins    "Prato 2 [%d mins]"  <water>         (Irrigation)
-Number      Irrigation_EntMins      "Ingresso [%d mins]"     <water>         (Irrigation)
-Number      Irrigation_BalconyMins  "Balconi [%d mins]"    <water>         (Irrigation)
+Number      Irrigation_TerraceMins  "Terrazzo Garage[%d mins]"  <clock>         (Irrigation)
+Number      Irrigation_VegeMins     "Orto e Vasi [%d mins]"      <clock>         (Irrigation)
+Number      Irrigation_Lawn1Mins    "Prato 1 [%d mins]"  <clock>         (Irrigation)
+Number      Irrigation_Lawn2Mins    "Prato 2 [%d mins]"  <clock>         (Irrigation)
+Number      Irrigation_EntMins      "Ingresso [%d mins]"     <clock>         (Irrigation)
+Number      Irrigation_BalconyMins  "Balconi [%d mins]"    <clock>         (Irrigation)
 
 Switch      Irrigation_Terrace      "Terrazzo Garage"      <water>         (Irrigation)    { souliss="T12:15:1:switch" }
 Switch      Irrigation_Terrace_auto "Terrazzo Garage Auto" <water>         (Irrigation)    { souliss="T12:15:1:automode" }

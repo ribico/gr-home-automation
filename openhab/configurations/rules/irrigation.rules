@@ -31,6 +31,16 @@ then
     logInfo("Irrigation ", "End of initialization")
 end
 
+rule "Set time now"
+when
+    Item Irrigation_SetNow received update
+then
+
+  var DateTime localNow = now.plusHours(2)
+  var int minutes = localNow.getHourOfDay() * 60 + localNow.getMinuteOfHour()
+  Irrigation_MasterTimeMins.sendCommand(minutes);
+end
+
 rule "Irrigation start time set"
 when
     Time cron "0 5 0 * * ?" or
