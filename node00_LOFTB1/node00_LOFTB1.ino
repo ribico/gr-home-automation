@@ -260,6 +260,8 @@ void setup()
 
 	SetAsPeerNode(IP_ADDRESS_GARDB1,15);
 
+	SetAsPeerNode(IP_ADDRESS_LYTB1,16);
+
 	// define static routing table (NOT STRICTLY NEEDED if using PEER_Join in peers)
 	RoutingTable(IP_ADDRESS_ROW1B1, RS485_ADDRESS_ROW1SN, 0);
 	RoutingTable(IP_ADDRESS_ROW2B1, RS485_ADDRESS_ROW2SN, 1);
@@ -311,7 +313,7 @@ void loop()
 		{
 			// logics to turn on night lights when lux is low
 			if(mOutputAsFloat(LIGHT_SENSOR) < mOutputAsFloat(LIGHT_SENSOR_SETPOINT))
-				RemoteInput(IP_ADDRESS_GARDB1, GARDB1_LIGHT_GARDEN, Souliss_T1n_AutoCmd + 10);
+				RemoteInput(IP_ADDRESS_GARDB1, GARDB1_LIGHT_GARDEN, Souliss_T1n_AutoCmd + 16);
 		}
 
 		FAST_GatewayComms();
