@@ -6,12 +6,14 @@ Compiling Options:
   Board as Generic ESP8266 Module
   Flash Mode DIO
   Flash Frequency 40 MHz
-  Upload Using Serial
+  Upload Using OTA
   CPU Frequency 80 MHz
   Flash Size 1M (64K SPIFFS)
-  Upload Speed 115200
+  Port souliss-LYTB1 192.168.1.106
 
 ***********************/
+#define WIFI_UDP_DEBUG
+
 #include "SoulissFramework.h"
 
 // **** Define the WiFi name and password ****
@@ -61,6 +63,8 @@ void setup()
   // Define a logic to handle the bulb
   SetLYTLamps(LYTB1_LIGHT);
 
+  UDP_DEBUG_BEGIN;
+
   // Init the OTA
   ArduinoOTA.setHostname("souliss-LYTB1");
   ArduinoOTA.begin();
@@ -75,6 +79,11 @@ void loop()
     // basic communication processing at maximum speed.
     LogicLYTLamps(LYTB1_LIGHT);
     ProcessCommunication();
+
+    FAST_2110ms()
+		{
+      grhSendUDPMessage("aaa");
+		}
 
     FAST_PeerComms();
   }
