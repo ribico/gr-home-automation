@@ -35,6 +35,7 @@
 									Serial.println("Serial started to DEBUG");
 #endif
 
+// use with netcat -ul 1111
 #ifdef WIFI_UDP_DEBUG
 	WiFiUDP Udp;
 	IPAddress remote_ip(192, 168, 1, 209);
