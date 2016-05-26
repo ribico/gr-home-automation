@@ -111,72 +111,174 @@ then
     if( localNow.isAfter(startTime) && localNow.isBefore(endTerraceTime) )
     {
       logInfo("IRRIGAZIONE:", "TERRAZZO")
-      sendCommand(Irrigation_Terrace, ON)
-      sendCommand(Irrigation_Vege, OFF)
-      sendCommand(Irrigation_Lawn1, OFF)
-      sendCommand(Irrigation_Lawn2, OFF)
-      sendCommand(Irrigation_Ent, OFF)
-      sendCommand(Irrigation_Balcony, OFF)
+
+      if(Irrigation_Terrace.state == OFF)
+      {
+        sendNotification("gabriele@ribichini.net", "Irrigazione TERRAZZO")
+        sendCommand(Irrigation_Terrace, ON)
+      }
+
+      if(Irrigation_Vege.state == ON)
+        sendCommand(Irrigation_Vege, OFF)
+
+      if(Irrigation_Lawn1.state == ON)
+        sendCommand(Irrigation_Lawn1, OFF)
+
+      if(Irrigation_Lawn2.state == ON)
+        sendCommand(Irrigation_Lawn2, OFF)
+
+      if(Irrigation_Ent.state == ON)
+        sendCommand(Irrigation_Ent, OFF)
+
+      if(Irrigation_Balcony.state == ON)
+        sendCommand(Irrigation_Balcony, OFF)
     }
     else if( localNow.isAfter(endTerraceTime) && localNow.isBefore(endVegeTime) )
     {
       logInfo("IRRIGAZIONE", "ORTO")
-      sendCommand(Irrigation_Terrace, OFF)
-      sendCommand(Irrigation_Vege, ON)
-      sendCommand(Irrigation_Lawn1, OFF)
-      sendCommand(Irrigation_Lawn2, OFF)
-      sendCommand(Irrigation_Ent, OFF)
-      sendCommand(Irrigation_Balcony, OFF)
+
+      if(Irrigation_Terrace.state == ON)
+        sendCommand(Irrigation_Terrace, OFF)
+
+      if(Irrigation_Vege.state == OFF)
+      {
+        sendNotification("gabriele@ribichini.net", "Irrigazione ORTO")
+        sendCommand(Irrigation_Vege, ON)
+      }
+
+      if(Irrigation_Lawn1.state == ON)
+        sendCommand(Irrigation_Lawn1, OFF)
+
+      if(Irrigation_Lawn2.state == ON)
+        sendCommand(Irrigation_Lawn2, OFF)
+
+      if(Irrigation_Ent.state == ON)
+        sendCommand(Irrigation_Ent, OFF)
+
+      if(Irrigation_Balcony.state == ON)
+        sendCommand(Irrigation_Balcony, OFF)
     }
     else if( localNow.isAfter(endVegeTime) && localNow.isBefore(endLawn1Time) )
     {
       logInfo("IRRIGAZIONE", "PRATO1")
-      sendCommand(Irrigation_Terrace, OFF)
-      sendCommand(Irrigation_Vege, OFF)
-      sendCommand(Irrigation_Lawn1, ON)
-      sendCommand(Irrigation_Lawn2, OFF)
-      sendCommand(Irrigation_Ent, OFF)
-      sendCommand(Irrigation_Balcony, OFF)
+
+      if(Irrigation_Terrace.state == ON)
+        sendCommand(Irrigation_Terrace, OFF)
+
+      if(Irrigation_Vege.state == ON)
+        sendCommand(Irrigation_Vege, OFF)
+
+      if(Irrigation_Lawn1.state == OFF)
+      {
+        sendNotification("gabriele@ribichini.net", "Irrigazione PRATO1")
+        sendCommand(Irrigation_Lawn1, ON)
+      }
+
+      if(Irrigation_Lawn2.state == ON)
+        sendCommand(Irrigation_Lawn2, OFF)
+
+      if(Irrigation_Ent.state == ON)
+        sendCommand(Irrigation_Ent, OFF)
+
+      if(Irrigation_Balcony.state == ON)
+        sendCommand(Irrigation_Balcony, OFF)
     }
     else if( localNow.isAfter(endLawn1Time) && localNow.isBefore(endLawn2Time) )
     {
       logInfo("IRRIGAZIONE", "PRATO2")
-      sendCommand(Irrigation_Terrace, OFF)
-      sendCommand(Irrigation_Vege, OFF)
-      sendCommand(Irrigation_Lawn1, OFF)
-      sendCommand(Irrigation_Lawn2, ON)
-      sendCommand(Irrigation_Ent, OFF)
-      sendCommand(Irrigation_Balcony, OFF)
+
+      if(Irrigation_Terrace.state == ON)
+        sendCommand(Irrigation_Terrace, OFF)
+
+      if(Irrigation_Vege.state == ON)
+        sendCommand(Irrigation_Vege, OFF)
+
+      if(Irrigation_Lawn1.state == ON)
+        sendCommand(Irrigation_Lawn1, OFF)
+
+      if(Irrigation_Lawn2.state == OFF)
+      {
+        sendNotification("gabriele@ribichini.net", "Irrigazione PRATO2")
+        sendCommand(Irrigation_Lawn2, ON)
+      }
+
+      if(Irrigation_Ent.state == ON)
+        sendCommand(Irrigation_Ent, OFF)
+
+      if(Irrigation_Balcony.state == ON)
+        sendCommand(Irrigation_Balcony, OFF)
     }
     else if( localNow.isAfter(endLawn2Time) && localNow.isBefore(endEntTime) )
     {
       logInfo("IRRIGAZIONE", "ENTRATA")
-      sendCommand(Irrigation_Terrace, OFF)
-      sendCommand(Irrigation_Vege, OFF)
-      sendCommand(Irrigation_Lawn1, OFF)
-      sendCommand(Irrigation_Lawn2, OFF)
-      sendCommand(Irrigation_Ent, ON)
-      sendCommand(Irrigation_Balcony, OFF)
+
+      if(Irrigation_Terrace.state == ON)
+        sendCommand(Irrigation_Terrace, OFF)
+
+      if(Irrigation_Vege.state == ON)
+        sendCommand(Irrigation_Vege, OFF)
+
+      if(Irrigation_Lawn1.state == ON)
+        sendCommand(Irrigation_Lawn1, OFF)
+
+      if(Irrigation_Lawn2.state == ON)
+        sendCommand(Irrigation_Lawn2, OFF)
+
+      if(Irrigation_Ent.state == OFF)
+      {
+        sendNotification("gabriele@ribichini.net", "Irrigazione INGRESSO")
+        sendCommand(Irrigation_Ent, ON)
+      }
+
+      if(Irrigation_Balcony.state == ON)
+        sendCommand(Irrigation_Balcony, OFF)
     }
     else if( localNow.isAfter(endEntTime) && localNow.isBefore(endBalconyTime) )
     {
       logInfo("IRRIGAZIONE", "BALCONI")
-      sendCommand(Irrigation_Terrace, OFF)
-      sendCommand(Irrigation_Vege, OFF)
-      sendCommand(Irrigation_Lawn1, OFF)
-      sendCommand(Irrigation_Lawn2, OFF)
-      sendCommand(Irrigation_Ent, OFF)
-      sendCommand(Irrigation_Balcony, ON)
+
+      if(Irrigation_Terrace.state == ON)
+        sendCommand(Irrigation_Terrace, OFF)
+
+      if(Irrigation_Vege.state == ON)
+        sendCommand(Irrigation_Vege, OFF)
+
+      if(Irrigation_Lawn1.state == ON)
+        sendCommand(Irrigation_Lawn1, OFF)
+
+      if(Irrigation_Lawn2.state == ON)
+        sendCommand(Irrigation_Lawn2, OFF)
+
+      if(Irrigation_Ent.state == ON)
+        sendCommand(Irrigation_Ent, OFF)
+
+      if(Irrigation_Balcony.state == OFF)
+      {
+        sendNotification("gabriele@ribichini.net", "Irrigazione BALCONI")
+        sendCommand(Irrigation_Balcony, ON)
+      }
     }
     else
     {
       logInfo("IRRIGAZIONE", "ALL ZONE CLOSED")
-      sendCommand(Irrigation_Terrace, OFF)
-      sendCommand(Irrigation_Vege, OFF)
-      sendCommand(Irrigation_Lawn1, OFF)
-      sendCommand(Irrigation_Lawn2, OFF)
-      sendCommand(Irrigation_Ent, OFF)
-      sendCommand(Irrigation_Balcony, OFF)
+
+      if(Irrigation_Terrace.state == ON)
+        sendCommand(Irrigation_Terrace, OFF)
+
+      if(Irrigation_Vege.state == ON)
+        sendCommand(Irrigation_Vege, OFF)
+
+      if(Irrigation_Lawn1.state == ON)
+        sendCommand(Irrigation_Lawn1, OFF)
+
+      if(Irrigation_Lawn2.state == ON)
+        sendCommand(Irrigation_Lawn2, OFF)
+
+      if(Irrigation_Ent.state == ON)
+        sendCommand(Irrigation_Ent, OFF)
+
+      if(Irrigation_Balcony.state == ON)
+        sendCommand(Irrigation_Balcony, OFF)
     }
   }
 end

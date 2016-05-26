@@ -242,7 +242,7 @@ Number Temperature_Chart_Period
 
 Group       Irrigation
 
-Switch      Irrigation_Master       "Irrigazione OH Rules ON/OFF"         <power>         (Irrigation)
+Switch      Irrigation_Master       "Irrigazione OH Rules ON/OFF"         <water>         (Irrigation)
 String      Irrigation_StartTime    "Ora Inizio [%s]"           <calendar>      (Irrigation)
 Switch      Irrigation_SetNow       "Imposta ora corrente"      <clock>       (Irrigation)
 Number      Irrigation_MasterTimeMins  "Set ritardo da Mezzanotte [%d mins]"       <clock>          (Irrigation)
