@@ -19,13 +19,13 @@ then
 //    sendCommand(Irrigation_Balcony, OFF)
 
     sendCommand(Irrigation_MasterTimeMins, 0)
-    sendCommand(Irrigation_ScaleFactor, 100)
+    sendCommand(Irrigation_ScaleFactor, 60)
 
-    sendCommand(Irrigation_TerraceMins, 0)
+    sendCommand(Irrigation_TerraceMins, 10)
     sendCommand(Irrigation_VegeMins, 10)
     sendCommand(Irrigation_Lawn1Mins, 10)
     sendCommand(Irrigation_Lawn2Mins, 10)
-    sendCommand(Irrigation_EntMins, 15)
+    sendCommand(Irrigation_EntMins, 20)
     sendCommand(Irrigation_BalconyMins, 10)
 
     logInfo("Irrigation ", "End of initialization")
@@ -114,7 +114,7 @@ then
 
       if(Irrigation_Terrace.state == OFF)
       {
-        sendNotification("gabriele@ribichini.net", "Irrigazione TERRAZZO")
+        sendNotification("gabriele@ribichini.net", "Irrigazione TERRAZZO" + " now: " + localNow.toString + " endTerraceTime: " endTerraceTime.toString)
         sendCommand(Irrigation_Terrace, ON)
       }
 
@@ -142,7 +142,7 @@ then
 
       if(Irrigation_Vege.state == OFF)
       {
-        sendNotification("gabriele@ribichini.net", "Irrigazione ORTO")
+        sendNotification("gabriele@ribichini.net", "Irrigazione ORTO" + " now: " + localNow.toString + " endVegeTime: " endVegeTime.toString)
         sendCommand(Irrigation_Vege, ON)
       }
 
@@ -170,7 +170,7 @@ then
 
       if(Irrigation_Lawn1.state == OFF)
       {
-        sendNotification("gabriele@ribichini.net", "Irrigazione PRATO1")
+        sendNotification("gabriele@ribichini.net", "Irrigazione PRATO1" + " now: " + localNow.toString + " endLawn1Time: " endLawn1Time.toString)
         sendCommand(Irrigation_Lawn1, ON)
       }
 
@@ -198,7 +198,7 @@ then
 
       if(Irrigation_Lawn2.state == OFF)
       {
-        sendNotification("gabriele@ribichini.net", "Irrigazione PRATO2")
+        sendNotification("gabriele@ribichini.net", "Irrigazione PRATO2" + " now: " + localNow.toString + " endLawn2Time: " endLawn2Time.toString)
         sendCommand(Irrigation_Lawn2, ON)
       }
 
@@ -226,7 +226,7 @@ then
 
       if(Irrigation_Ent.state == OFF)
       {
-        sendNotification("gabriele@ribichini.net", "Irrigazione INGRESSO")
+        sendNotification("gabriele@ribichini.net", "Irrigazione INGRESSO" + " now: " + localNow.toString + " endEntTime: " endEntTime.toString)
         sendCommand(Irrigation_Ent, ON)
       }
 
@@ -254,7 +254,7 @@ then
 
       if(Irrigation_Balcony.state == OFF)
       {
-        sendNotification("gabriele@ribichini.net", "Irrigazione BALCONI")
+        sendNotification("gabriele@ribichini.net", "Irrigazione BALCONI" + " now: " + localNow.toString + " endBalconyTime: " endBalconyTime.toString)
         sendCommand(Irrigation_Balcony, ON)
       }
     }
