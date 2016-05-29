@@ -67,7 +67,8 @@ void setup()
 
   UDP_DEBUG_BEGIN;
 
-  ForecastIO_Request(buildForecastIORequest("2016-05-02T14:00:00").c_str());
+//  ForecastIO_Request(buildForecastIORequest("2016-05-02T14:00:00").c_str());
+  ForecastIO_TimeMachineRequest("2016-05-02T14:00:00");
   grhSendUDPMessage(forecast_io_response);
 
 

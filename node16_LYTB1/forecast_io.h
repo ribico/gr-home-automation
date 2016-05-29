@@ -8,6 +8,11 @@
 
 char forecast_io_response[MAX_CONTENT_SIZE];
 
+inline String buildForecastIORequest(const char* day_time)
+{
+  return String("/forecast/") + String(API_KEY) + "/" + String(COORDINATES) + "," + day_time + "?" + String(OPTIONS);
+}
+
 inline void ForecastIO_Request(const char* request)
 {
   if (connect(FORECAST_IO_SERVER))
@@ -19,7 +24,7 @@ inline void ForecastIO_Request(const char* request)
   }
 }
 
-inline String buildForecastIORequest(char* day_time)
+inline void ForecastIO_TimeMachineRequest(const char* day_time)
 {
-  return String("/forecast/") + String(API_KEY) + "/" + String(COORDINATES) + "," + day_time + "?" + String(OPTIONS);
+  ForecastIO_Request(buildForecastIORequest(day_time).c_str());
 }
