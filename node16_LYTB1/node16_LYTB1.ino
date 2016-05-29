@@ -37,17 +37,11 @@ Compiling Options:
 #include "grhSoulissCustom.h"
 #include "grhSoulissSlots.h"
 
-#define USE_SSL
-#include "http_request.h"
-
 #define RED_STARTUP         0x50
 #define GREEN_STARTUP       0x10
 #define BLUE_STARTUP        0x00
 
-#define API_KEY "f68f1acb8091e1299995085418c1d163"
-#define COORDINATES "41.7901754,12.4102682"
-#define OPTIONS "exclude=[hourly,minutely,daily,alerts,flags]"
-
+#include "forecast_io.h"
 
 void setup()
 {
@@ -73,19 +67,10 @@ void setup()
 
   UDP_DEBUG_BEGIN;
 
-  String day_time = "2016-05-02T14:00:00";
-  String server = "api.forecast.io";  // server's address
-  String resource = "/forecast/" + String(API_KEY) + "/" + String(COORDINATES) + "," + day_time + "?" + String(OPTIONS);                    // http resource
+  char response[MAX_CONTENT_SIZE];
+  ForecastIO_WeatherRequest(response, buildForecastIORequest("2016-05-02T14:00:00").c_str());
+  grhSendUDPMessage(response);
 
-  if (connect(server.c_str()))
-  {
-    if (sendRequest(server.c_str(), resource.c_str()) && skipResponseHeaders())
-    {
-      char response[MAX_CONTENT_SIZE];
-      readReponseContent(response, sizeof(response));
-      grhSendUDPMessage(response);
-    }
-  }
 
   // Init the OTA
   ArduinoOTA.setHostname("souliss-LYTB1");
