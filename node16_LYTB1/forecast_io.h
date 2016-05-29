@@ -6,13 +6,15 @@
 #define USE_SSL
 #include "http_request.h"
 
-inline void ForecastIO_WeatherRequest(char* response, const char* request)
+char forecast_io_response[MAX_CONTENT_SIZE];
+
+inline void ForecastIO_Request(const char* request)
 {
   if (connect(FORECAST_IO_SERVER))
   {
     if (sendRequest(FORECAST_IO_SERVER, request) && skipResponseHeaders())
     {
-      readReponseContent(response, sizeof(response));
+      readReponseContent(forecast_io_response, MAX_CONTENT_SIZE);
     }
   }
 }

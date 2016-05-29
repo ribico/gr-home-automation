@@ -67,9 +67,8 @@ void setup()
 
   UDP_DEBUG_BEGIN;
 
-  char response[MAX_CONTENT_SIZE];
-  ForecastIO_WeatherRequest(response, buildForecastIORequest("2016-05-02T14:00:00").c_str());
-  grhSendUDPMessage(response);
+  ForecastIO_Request(buildForecastIORequest("2016-05-02T14:00:00").c_str());
+  grhSendUDPMessage(forecast_io_response);
 
 
   // Init the OTA

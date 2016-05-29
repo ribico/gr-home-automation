@@ -10,7 +10,7 @@
 #endif
 
 
-const unsigned long HTTP_TIMEOUT = 10000;  // max respone time from server
+const unsigned long HTTP_TIMEOUT = 5000;  // max respone time from server
 const size_t MAX_CONTENT_SIZE = 512;       // max size of the HTTP response
 
 // Open connection to the HTTP server
