@@ -67,10 +67,12 @@ void setup()
 
   UDP_DEBUG_BEGIN;
 
-//  ForecastIO_Request(buildForecastIORequest("2016-05-02T14:00:00").c_str());
-  ForecastIO_TimeMachineRequest("2016-05-02T14:00:00");
+  ForecastIO_CurrentWeatherRequest();
   grhSendUDPMessage(forecast_io_response);
+  ForecastIO_ParseResponse(CURRENT_WEATHER_IDX);
+  grhSendUDPMessage(wd[CURRENT_WEATHER_IDX].s_icon.c_str());
 
+  ForecastIO_SetColor(LYTB1_LIGHT);
 
   // Init the OTA
   ArduinoOTA.setHostname("souliss-LYTB1");
@@ -86,12 +88,12 @@ void loop()
     // basic communication processing at maximum speed.
     LogicLYTLamps(LYTB1_LIGHT);
     ProcessCommunication();
-
+/*
     FAST_2110ms()
 		{
       grhSendUDPMessage("aaa");
 		}
-
+*/
     FAST_PeerComms();
   }
 
@@ -99,8 +101,18 @@ void loop()
     UPDATESLOW();
 
     // Slowly shut down the lamp
-    SLOW_10s() {
+    SLOW_10s()
+    {
       LYTSleepTimer(LYTB1_LIGHT);
+    }
+
+    SLOW_1h()
+    {
+      ForecastIO_CurrentWeatherRequest();
+//      grhSendUDPMessage(forecast_io_response);
+      ForecastIO_ParseResponse(CURRENT_WEATHER_IDX);
+//      grhSendUDPMessage(wd[CURRENT_WEATHER_IDX].s_icon.c_str());
+      ForecastIO_SetColor(LYTB1_LIGHT);
     }
 
     SLOW_PeerJoin();
