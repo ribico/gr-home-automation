@@ -67,12 +67,14 @@ void setup()
 
   UDP_DEBUG_BEGIN;
 
-  ForecastIO_CurrentWeatherRequest();
-  grhSendUDPMessage(forecast_io_response);
-  ForecastIO_ParseResponse(CURRENT_WEATHER_IDX);
-  grhSendUDPMessage(wd[CURRENT_WEATHER_IDX].s_icon.c_str());
-
-  ForecastIO_SetColor(LYTB1_LIGHT);
+  for (int i=0; i<WEATHER_DATA_COUNT/2; i++)
+  {
+    ForecastIO_TimeMachineRequest(i);
+    grhSendUDPMessage(forecast_io_response);
+    ForecastIO_ParseResponse(CURRENT_WEATHER_IDX+i);
+    grhSendUDPMessage(wd[CURRENT_WEATHER_IDX+i].s_icon.c_str());
+    ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+i]);
+  }
 
   // Init the OTA
   ArduinoOTA.setHostname("souliss-LYTB1");
@@ -88,6 +90,57 @@ void loop()
     // basic communication processing at maximum speed.
     LogicLYTLamps(LYTB1_LIGHT);
     ProcessCommunication();
+
+    SHIFT_91110ms(0)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+0]);
+    }
+    SHIFT_91110ms(100)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+1]);
+    }
+    SHIFT_91110ms(200)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+2]);
+    }
+    SHIFT_91110ms(300)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+3]);
+    }
+    SHIFT_91110ms(400)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+4]);
+    }
+    SHIFT_91110ms(500)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+5]);
+    }
+    SHIFT_91110ms(600)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+6]);
+    }
+    SHIFT_91110ms(700)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+7]);
+    }
+    SHIFT_91110ms(800)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+8]);
+    }
+    SHIFT_91110ms(900)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+9]);
+    }
+    SHIFT_91110ms(1000)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+10]);
+    }
+    SHIFT_91110ms(1100)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+11]);
+    }
+
+
 /*
     FAST_2110ms()
 		{
@@ -108,11 +161,18 @@ void loop()
 
     SLOW_1h()
     {
-      ForecastIO_CurrentWeatherRequest();
-//      grhSendUDPMessage(forecast_io_response);
-      ForecastIO_ParseResponse(CURRENT_WEATHER_IDX);
-//      grhSendUDPMessage(wd[CURRENT_WEATHER_IDX].s_icon.c_str());
-      ForecastIO_SetColor(LYTB1_LIGHT);
+      // move all data of one cell since one hour passed
+      for (int i=0; i<WEATHER_DATA_COUNT-1; i++)
+      {
+        wd[CURRENT_WEATHER_IDX+i].t_time = wd[CURRENT_WEATHER_IDX+i+1].t_time;
+        wd[CURRENT_WEATHER_IDX+i].s_icon = wd[CURRENT_WEATHER_IDX+i+1].s_icon;
+        wd[CURRENT_WEATHER_IDX+i].f_precipIntensity = wd[CURRENT_WEATHER_IDX+i+1].f_precipIntensity;
+        wd[CURRENT_WEATHER_IDX+i].f_precipProbability = wd[CURRENT_WEATHER_IDX+i+1].f_precipProbability;
+      }
+
+      // get the new weather forecast
+      ForecastIO_TimeMachineRequest(+11);
+      ForecastIO_ParseResponse(CURRENT_WEATHER_IDX+11);
     }
 
     SLOW_PeerJoin();

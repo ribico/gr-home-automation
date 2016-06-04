@@ -16,6 +16,19 @@
 
 char forecast_io_response[MAX_CONTENT_SIZE];
 
+struct WeatherData
+{
+//  String summary;
+  time_t t_time;
+  String s_icon;
+  float f_precipIntensity;
+  float f_precipProbability;
+};
+
+#define WEATHER_DATA_COUNT 24
+#define CURRENT_WEATHER_IDX (WEATHER_DATA_COUNT/2 - 1)
+WeatherData wd[WEATHER_DATA_COUNT];
+
 inline String ForecastIO_BuildTimeMachineRequest(const char* day_time)
 {
   return String("/forecast/") + String(API_KEY) + "/" + String(COORDINATES) + "," + day_time + "?" + String(OPTIONS);
@@ -37,27 +50,38 @@ inline void ForecastIO_Request(const char* request)
   }
 }
 
+// day_time : should either be a UNIX time (that is, seconds since midnight GMT
+// on 1 Jan 1970) or a string formatted as follows: [YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]
+// (with an optional time zone formatted as Z for GMT time or {+,-}[HH][MM]
+// for an offset in hours or minutes). For the latter format, if no timezone is
+//  present, local time (at the provided latitude and longitude) is assumed.
+// (This string format is a subset of ISO 8601 time.
+// An as example, 2013-05-06T12:00:00-0400.)
+//
 inline void ForecastIO_TimeMachineRequest(const char* day_time)
 {
   ForecastIO_Request(ForecastIO_BuildTimeMachineRequest(day_time).c_str());
 }
 
-inline void ForecastIO_CurrentWeatherRequest()
+inline void ForecastIO_TimeMachineRequest(int offset_hours)
 {
-  ForecastIO_Request(ForecastIO_BuildCurrentWeatherRequest().c_str());
+  if (offset_hours == 0)
+  {
+    ForecastIO_Request(ForecastIO_BuildCurrentWeatherRequest().c_str());
+  }
+  else
+  {
+    time_t offset_seconds = offset_hours * 3600;
+    String sRequestedTime(wd[CURRENT_WEATHER_IDX].t_time + offset_seconds);
+    ForecastIO_Request(ForecastIO_BuildTimeMachineRequest(sRequestedTime.c_str()).c_str());
+  }
 }
 
-struct WeatherData
+inline void ForecastIO_CurrentWeatherRequest()
 {
-//  String summary;
-  String s_icon;
-  float f_precipIntensity;
-  float f_precipProbability;
-};
+  ForecastIO_TimeMachineRequest(0);
+}
 
-#define WEATHER_DATA_COUNT 24
-#define CURRENT_WEATHER_IDX (WEATHER_DATA_COUNT/2 - 1)
-WeatherData wd[WEATHER_DATA_COUNT];
 
 /*
 {
@@ -89,17 +113,21 @@ bool ForecastIO_ParseResponse(const char* response, WeatherData* pWD)
 {
   String sResponse(response);
 
-  int idx_start = sResponse.indexOf("icon")+7;
-  int idx_stop = sResponse.indexOf('\"',idx_start);
+  int idx_start = sResponse.indexOf("time\":")+6;
+  int idx_stop = sResponse.indexOf(',', idx_start);
+  pWD->t_time = sResponse.substring(idx_start, idx_stop).toInt();
+
+  idx_start = sResponse.indexOf("icon", idx_stop)+7;
+  idx_stop = sResponse.indexOf('\"', idx_start);
   pWD->s_icon = sResponse.substring(idx_start, idx_stop);
 //  grhSendUDPMessage(pWD->s_icon.c_str());
 
-  idx_start = sResponse.indexOf("precipIntensity")+17;
-  idx_stop = sResponse.indexOf(',',idx_start);
+  idx_start = sResponse.indexOf("precipIntensity", idx_stop)+17;
+  idx_stop = sResponse.indexOf(',', idx_start);
   pWD->f_precipIntensity = sResponse.substring(idx_start, idx_stop).toFloat();
 
-  idx_start = sResponse.indexOf("precipProbability")+19;
-  idx_stop = sResponse.indexOf(',',idx_start);
+  idx_start = sResponse.indexOf("precipProbability", idx_stop)+19;
+  idx_stop = sResponse.indexOf(',', idx_start);
   pWD->f_precipProbability = sResponse.substring(idx_start, idx_stop).toFloat();
 
   return true;
@@ -125,30 +153,30 @@ inline bool ForecastIO_ParseResponse(uint8_t idx)
 #define ICON_THUNDERSTORM "thunderstorm"
 #define ICON_TORNADO "tornado"
 
-void ForecastIO_SetColor(U8 slot)
+void ForecastIO_SetColor(U8 slot, WeatherData* pWD)
 {
-  if(wd[CURRENT_WEATHER_IDX].s_icon == ICON_CLEAR_DAY ||
-    wd[CURRENT_WEATHER_IDX].s_icon == ICON_CLEAR_NIGHT ||
-      wd[CURRENT_WEATHER_IDX].s_icon == ICON_WIND)
+  if(pWD->s_icon == ICON_CLEAR_DAY ||
+    pWD->s_icon == ICON_CLEAR_NIGHT ||
+      pWD->s_icon == ICON_WIND)
   {
     SetColor(slot, 0xFF, 0xFF, 0x00);
   }
-  else if(wd[CURRENT_WEATHER_IDX].s_icon == ICON_RAIN ||
-     wd[CURRENT_WEATHER_IDX].s_icon == ICON_SNOW ||
-     wd[CURRENT_WEATHER_IDX].s_icon == ICON_SLEET ||
-     wd[CURRENT_WEATHER_IDX].s_icon == ICON_HAIL ||
-     wd[CURRENT_WEATHER_IDX].s_icon == ICON_THUNDERSTORM ||
-     wd[CURRENT_WEATHER_IDX].s_icon == ICON_TORNADO)
+  else if(pWD->s_icon == ICON_RAIN ||
+     pWD->s_icon == ICON_SNOW ||
+     pWD->s_icon == ICON_SLEET ||
+     pWD->s_icon == ICON_HAIL ||
+     pWD->s_icon == ICON_THUNDERSTORM ||
+     pWD->s_icon == ICON_TORNADO)
   {
     SetColor(slot, 0x00, 0x00, 0xFF);
   }
-  else if(wd[CURRENT_WEATHER_IDX].s_icon == ICON_FOG ||
-     wd[CURRENT_WEATHER_IDX].s_icon == ICON_CLOUDY)
+  else if(pWD->s_icon == ICON_FOG ||
+     pWD->s_icon == ICON_CLOUDY)
   {
     SetColor(slot, 0xFF, 0xFF, 0xFF);
   }
-  else if(wd[CURRENT_WEATHER_IDX].s_icon == ICON_PARTLY_CLOUDY_DAY ||
-     wd[CURRENT_WEATHER_IDX].s_icon == ICON_PARTLY_CLOUDY_NIGHT)
+  else if(pWD->s_icon == ICON_PARTLY_CLOUDY_DAY ||
+     pWD->s_icon == ICON_PARTLY_CLOUDY_NIGHT)
   {
     SetColor(slot, 0xCC, 0xFF, 0xFF);
   }
