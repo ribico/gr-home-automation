@@ -9,14 +9,14 @@ rule "HeatingWater_ProdutionStart"
 when
   Item HP_Circulation_Pump changed from OFF to ON
 then
-  sendNotification("gabriele@ribichini.net", "Inizio produzione accumulo")
+  sendNotification("gabriele@ribichini.net", "Pompa di calore accesa")
 end
 
 rule "HeatingWater_ProdutionEnd"
 when
   Item HP_Circulation_Pump changed from ON to OFF
 then
-  sendNotification("gabriele@ribichini.net", "Fine produzione accumulo")
+  sendNotification("gabriele@ribichini.net", "Pompa di calore spenta")
 end
 
 rule "SanitaryWater_TooCold"
