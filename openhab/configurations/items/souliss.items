@@ -179,7 +179,7 @@ Number HVAC_Temp_Floor_Ret		"Temp. Pavimento Ritorno [%.1f °C]"	<temperature> (
 
 Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima) {souliss="T52:0:20"}
 Rollershutter HVAC_Temp_SP 	"Temp. Ambiente SetPoint" 	<temperature> (gTechnicView_Node0,gClima) {souliss="T22:0:22"}
-Number HVAC_Temp_SetPoint_Floor	"Temp. Pavimento SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima) {souliss="T52:0:23"}
+Number HVAC_Temp_SetPoint_Floor	"Temp. Pavimento SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima) {souliss="T52:0:22"}
 
 Switch Valve_2F_Bedroom1		"Camera 1"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:12:0"}
 Switch Valve_2F_Bath1			"Bagno 1"	<heating>  (gTechnicView_Node0,gHVAC_Valves) {souliss="T1A:0:12:1"}
