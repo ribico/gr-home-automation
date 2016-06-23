@@ -239,7 +239,11 @@ inline void ProcessFloorRequest(U16 phase_fast)
 {
 	if( IsSanitaryWaterAutoOn() )
 	{
-			PumpCollectorToFloorAutoDelay();
+		// set a delay for next activation of Pump Collector To Floor
+		// we don't want to put in circulation the water at the temperature for
+		// sanitary to the floor circuit
+		//
+		PumpCollectorToFloorAutoDelay();
 	}
 	else if( IsHeating() ) // heating request for at least one zone
 	{
@@ -289,6 +293,10 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 {
 	if (IsSanitaryWaterAutoOn())
 	{
+		// set a delay for next activation of Pump Collector To Floor
+		// we don't want to put in circulation the water at the temperature for
+		// sanitary to the floor circuit
+		//
 		PumpCollectorToFancoilAutoDelay();
 	}
 	else if( IsCoolMode() )
