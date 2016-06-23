@@ -49,55 +49,55 @@ inline void GetCurrentStatus(U16 phase_fast)
 	// read and send external temp & UR to ROW1B1 slots
 
 	tmp = dht_ext.readTemperature();
-	if( IsTempValid(tmp) )
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff, &tmp);
 
 	tmp = dht_ext.readHumidity();
-	if( IsTempValid(tmp) )
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+2, &tmp); // 2 bytes offset for UR
 
 	tmp = dht_loft.readTemperature();
-	if( IsTempValid(tmp) )
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+4, &tmp);
 
 	tmp = dht_loft.readHumidity();
-	if( IsTempValid(tmp) )
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+6, &tmp); // 2 bytes offset for UR
 
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_SANITARY_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+8, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_HEATING_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+10, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_BOTTOM_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+12, &tmp);
 
-	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
+	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+14, &tmp);
 
-	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_RETURN_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
+	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+16, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_FLOW_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+18, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_RETURN_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+20, &tmp);
 
-	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
+	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+22, &tmp);
 
-	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
+	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_RETURN_TEMP_ADDR, tmp);
+//	if( IsTempValid(tmp) )
 		Souliss_HalfPrecisionFloating(gTempBuff+24, &tmp);
 
 	if(!ReqTyp())
@@ -298,9 +298,7 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		SetHpFlowToCollector();
 		HpCirculationAutoOnCmd();
 		PumpCollectorToFloorAutoOnCmd();
-
-		if( IsTempValid(temp_HVAC_Floor_Flow) && IsTempValid(temp_HVAC_Floor_Return) )
-			AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
+		AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
 	}
 }
 

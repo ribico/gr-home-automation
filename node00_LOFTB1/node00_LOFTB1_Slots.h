@@ -60,6 +60,9 @@
 #define HVAC_BOILER_SANITARY_SETPOINT			31
 #define HVAC_BOILER_SANITARY_SETPOINT_H		32
 
+#define COLLECTOR_FLOOR_MIX_VALVE_POS					34
+#define COLLECTOR_FLOOR_MIX_VALVE_POS_H				35
+
 
 /////////////////////////////////////////////////////////////
 #include "grhSoulissSlots.h"
@@ -103,6 +106,8 @@ inline void DefineTypicals()
 
 //	Souliss_SetT22(memory_map, TEMP_SETPOINT_IN);
 
+	Set_Analog_Setpoint(COLLECTOR_FLOOR_MIX_VALVE_POS);
+
 	// initialize values
 	SetInput(HEATPUMP_REMOTE_SWITCH, Souliss_T1n_OnCmd);
 //	SetInput(LIGHT_LOFT_1, Souliss_T1n_OnCmd);
@@ -119,7 +124,7 @@ inline void DefineTypicals()
 	SetInput(FANCOIL_MODE, Souliss_T1n_AutoCmd);
 	SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd);
 
-	float set_point = AMBIENCE_SETPOINT_DEFAULT; // initial setup
+	float set_point = AMBIENCE_SETPOINT_DEFAULT_COOL; // initial setup
 	ImportAnalog(TEMP_AMBIENCE_SETPOINT, &set_point);
 
 	set_point = TEMP_FLOOR_FLOW_SETPOINT_DEFAULT; // initial setup
@@ -130,4 +135,7 @@ inline void DefineTypicals()
 
 	set_point = NIGHT_LIGHT_LUX_SETPOINT_DEFAULT; // initial setup
 	ImportAnalog(LIGHT_SENSOR_SETPOINT, &set_point);
+
+	set_point = COLLECTOR_FLOOR_MIX_VALVE_MAX;
+	ImportAnalog(COLLECTOR_FLOOR_MIX_VALVE_POS, &set_point);
 }

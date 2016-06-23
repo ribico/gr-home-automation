@@ -119,6 +119,7 @@ inline void ProcessLogics()
 	Logic_Temperature_Setpoint(TEMP_FLOOR_FLOW_SETPOINT);
 	Logic_Temperature_Setpoint(HVAC_BOILER_SANITARY_SETPOINT);
 	Logic_Light_Setpoint(LIGHT_SENSOR_SETPOINT);
+	Logic_AnalogIn(COLLECTOR_FLOOR_MIX_VALVE_POS);
 }
 
 
@@ -184,6 +185,8 @@ inline void SetOutputs()
 	nLowDigOut(PUMP_COLLECTOR_FLOOR_PIN, Souliss_T1n_OnCoil, PUMP_COLLECTOR_FLOOR);
 
 	nLowDigOut(HP_SETPOINT_2_PIN, Souliss_T1n_OnCoil, HP_SETPOINT_2);
+
+	SetCollectorToFloorMixValve( mOutputAsFloat(COLLECTOR_FLOOR_MIX_VALVE_POS) );
 }
 
 

@@ -113,24 +113,38 @@ inline void AdjustBoilerToFloorFlowTemperature(float setpoint)
 }
 
 
-#define COLLECTOR_FLOOR_MIX_VALVE_MIN	0
-#define COLLECTOR_FLOOR_MIX_VALVE_MAX	200
-U8 gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
-
 inline void AdjustCollectorToFloorFlowTemperature(float setpoint)
 {
+	if( !IsTempValid(temp_HVAC_Floor_Flow) ) //&& IsTempValid(temp_HVAC_Floor_Return) )
+			return;
+			
 	// control the collector-floor mix valve to keep the setpoint
 	// simple proportional control on return floor temperature
-	float error = setpoint - (temp_HVAC_Floor_Flow + temp_HVAC_Floor_Return/2);
+	float error = setpoint - temp_HVAC_Floor_Flow; //(temp_HVAC_Floor_Flow + temp_HVAC_Floor_Return)/2;
+	float current_pos = mOutputAsFloat(COLLECTOR_FLOOR_MIX_VALVE_POS);
 
-	if(gCollectorToFloorMixValvePos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
-		gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
+	if(current_pos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
+		current_pos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
 
-	else if(gCollectorToFloorMixValvePos - error < COLLECTOR_FLOOR_MIX_VALVE_MIN)
-		gCollectorToFloorMixValvePos = COLLECTOR_FLOOR_MIX_VALVE_MIN;
+	else if(current_pos - error < COLLECTOR_FLOOR_MIX_VALVE_MIN)
+		current_pos = COLLECTOR_FLOOR_MIX_VALVE_MIN;
 
 	else
-		gCollectorToFloorMixValvePos -= (U8) error;
+		current_pos -= (U8) error;
 
-	SetCollectorToFloorMixValve(gCollectorToFloorMixValvePos);
+		ImportAnalog(COLLECTOR_FLOOR_MIX_VALVE_POS, &current_pos);
+
+
+	#ifdef DEBUG
+		Serial.print("Floor Flux Setpoint : ");
+		Serial.print(setpoint);
+		Serial.print(" - measured : ");
+		Serial.print(temp_HVAC_Floor_Flow);
+		Serial.print(" - error : ");
+		Serial.print(error);
+		Serial.print(" - current_pos : ");
+		Serial.println(current_pos);
+	#endif
+
+
 }
