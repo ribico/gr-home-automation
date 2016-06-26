@@ -321,10 +321,10 @@ inline bool Fancoils_AmbienceURTooHigh()
 
 inline bool Fancoils_AmbienceTempTooHigh()
 {
-	if( IsTempValid(temp_LIVING) && IsTempValid(temp_DINING) )
+	if( IsTempValid(temp_BED1) && IsTempValid(temp_BED2) && IsTempValid(temp_BED3) )
 	{
-		float current_temp = (temp_LIVING + temp_DINING)/2.0;
-		return (IsFancoilsAutoOff() && (current_temp > AMBIENCE_SETPOINT_DEFAULT_COOL) + SETPOINT_TEMP_DEADBAND_SMALL) ||
+		float current_temp = (temp_BED1 + temp_BED2 + temp_BED3)/3.0;
+		return (IsFancoilsAutoOff() && (current_temp > AMBIENCE_SETPOINT_DEFAULT_COOL + SETPOINT_TEMP_DEADBAND_SMALL)) ||
 					(IsFancoilsAutoOn() && (current_temp > AMBIENCE_SETPOINT_DEFAULT_COOL));
 	}
 	else
