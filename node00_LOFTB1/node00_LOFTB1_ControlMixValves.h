@@ -117,22 +117,19 @@ inline void AdjustCollectorToFloorFlowTemperature(float setpoint)
 {
 	if( !IsTempValid(temp_HVAC_Floor_Flow) ) //&& IsTempValid(temp_HVAC_Floor_Return) )
 			return;
-			
+
 	// control the collector-floor mix valve to keep the setpoint
 	// simple proportional control on return floor temperature
 	float error = setpoint - temp_HVAC_Floor_Flow; //(temp_HVAC_Floor_Flow + temp_HVAC_Floor_Return)/2;
 	float current_pos = mOutputAsFloat(COLLECTOR_FLOOR_MIX_VALVE_POS);
 
-	if(current_pos - error > COLLECTOR_FLOOR_MIX_VALVE_MAX)
+	current_pos -= error;
+	if( current_pos > COLLECTOR_FLOOR_MIX_VALVE_MAX )
 		current_pos = COLLECTOR_FLOOR_MIX_VALVE_MAX;
-
-	else if(current_pos - error < COLLECTOR_FLOOR_MIX_VALVE_MIN)
+	else if( current_pos < COLLECTOR_FLOOR_MIX_VALVE_MIN )
 		current_pos = COLLECTOR_FLOOR_MIX_VALVE_MIN;
 
-	else
-		current_pos -= (U8) error;
-
-		ImportAnalog(COLLECTOR_FLOOR_MIX_VALVE_POS, &current_pos);
+	ImportAnalog(COLLECTOR_FLOOR_MIX_VALVE_POS, &current_pos);
 
 
 	#ifdef DEBUG
