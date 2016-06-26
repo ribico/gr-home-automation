@@ -294,13 +294,43 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		FloorAutoOnCmd(); // only for user interface feedback
 
 		// produce cold water
-		HpSetpoint2AutoCmd(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
+//		HpSetpoint2AutoCmd(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
 		SetHpFlowToCollector();
 		HpCirculationAutoOnCmd();
 		PumpCollectorToFloorAutoOnCmd();
 		AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
 	}
 }
+
+inline bool Fancoils_AmbienceURTooHigh()
+{
+	// check the max UR to eventually activate fancoils
+	float UR_MAX = UR_BED1;
+	UR_MAX = max(UR_MAX, UR_BED2);
+	UR_MAX = max(UR_MAX, UR_LIVING);
+	UR_MAX = max(UR_MAX, UR_BED3);
+	UR_MAX = max(UR_MAX, UR_KITCHEN);
+	UR_MAX = max(UR_MAX, UR_DINING);
+
+	if( IsURValid(UR_MAX) )
+		return 	(IsFancoilsAutoOff() && (UR_MAX > SETPOINT_UR_1)) ||
+					(IsFancoilsAutoOn() && (UR_MAX > SETPOINT_UR_1 - SETPOINT_UR_DEADBAND));
+	else
+		return false;
+}
+
+inline bool Fancoils_AmbienceTempTooHigh()
+{
+	if( IsTempValid(temp_LIVING) && IsTempValid(temp_DINING) )
+	{
+		float current_temp = (temp_LIVING + temp_DINING)/2.0;
+		return (IsFancoilsAutoOff() && (current_temp > AMBIENCE_SETPOINT_DEFAULT_COOL) + SETPOINT_TEMP_DEADBAND_SMALL) ||
+					(IsFancoilsAutoOn() && (current_temp > AMBIENCE_SETPOINT_DEFAULT_COOL));
+	}
+	else
+		return false;
+}
+
 
 inline void ProcessFancoilsRequest(U16 phase_fast)
 {
@@ -314,16 +344,8 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 	}
 	else if( IsCoolMode() )
 	{
-		// check the max UR to eventually activate fancoils
-		float UR_MAX = UR_BED1;
-		UR_MAX = max(UR_MAX, UR_BED2);
-		UR_MAX = max(UR_MAX, UR_LIVING);
-		UR_MAX = max(UR_MAX, UR_BED3);
-		UR_MAX = max(UR_MAX, UR_KITCHEN);
-		UR_MAX = max(UR_MAX, UR_DINING);
-
 		// fancoils hysteresys in auto mode
-		if( (IsFancoilsAutoOff() && (UR_MAX > SETPOINT_UR_1)) || (IsFancoilsAutoOn() && (UR_MAX > SETPOINT_UR_1 - SETPOINT_UR_DEADBAND)) )
+		if( Fancoils_AmbienceURTooHigh() || Fancoils_AmbienceTempTooHigh() )
 				FancoilsAutoOnCmd();
 
 		if( IsFancoilsOn() || IsFancoilsAutoOn() )

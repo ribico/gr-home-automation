@@ -1,16 +1,18 @@
+#define AUTO_CYCLES_COUNT   4
+
 #define IsFloorOn()					(mOutput(FLOOR_MODE) == Souliss_T1n_OnCoil)
 #define IsFloorAutoOn()			(mOutput(FLOOR_MODE) == Souliss_T1n_AutoOnCoil)
 #define IsFloorAutoOff()		(mOutput(FLOOR_MODE) == Souliss_T1n_AutoOffCoil)
 #define IsFloorOff()				(mOutput(FLOOR_MODE) == Souliss_T1n_OffCoil)
 #define IsFloorAuto()				(mOutput(FLOOR_MODE) == Souliss_T1n_AutoState)
-#define FloorAutoOnCmd()    SetInput(FLOOR_MODE, Souliss_T1n_AutoCmd + 4)
+#define FloorAutoOnCmd()    SetInput(FLOOR_MODE, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
 
 #define IsFancoilsOn()				(mOutput(FANCOIL_MODE) == Souliss_T1n_OnCoil)
 #define IsFancoilsOff()				(mOutput(FANCOIL_MODE) == Souliss_T1n_OffCoil)
 #define IsFancoilsAuto()			(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoState)
 #define IsFancoilsAutoOn()		(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoOnCoil)
 #define IsFancoilsAutoOff()		(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoOffCoil)
-#define FancoilsAutoOnCmd()    SetInput(FANCOIL_MODE, Souliss_T1n_AutoCmd + 4)
+#define FancoilsAutoOnCmd()    SetInput(FANCOIL_MODE, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
 
 #define IsHeatMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
 #define IsCoolMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OnCoil)
@@ -25,7 +27,7 @@
 #define IsSanitaryWaterAuto()	      (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoState)
 #define IsSanitaryWaterAutoOn()	    (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOnCoil)
 #define IsSanitaryWaterAutoOff()	  (mOutput(HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOffCoil)
-#define SanitaryWaterAutoOnCmd()    SetInput(HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd + 4 /*cycles*/)
+#define SanitaryWaterAutoOnCmd()    SetInput(HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
 
 #define IsStorageWaterCold()        (temp_HVAC_Boiler_Heating < mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT))
 #define IsStorageWaterHot()					(temp_HVAC_Boiler_Bottom > mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT))
@@ -36,7 +38,7 @@
 
 #define IsHpCirculationOn()				(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil)
 #define IsHpCirculationAutoOn()		(mOutput(HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_AutoOnCoil)
-#define HpCirculationAutoOnCmd()	SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_AutoCmd + 4 /*cycles*/)
+#define HpCirculationAutoOnCmd()	SetInput(HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
 #define HpCirculationAutoDelay()  mAuxiliary(HEATPUMP_CIRCULATION_PUMP) = HP_CMD_DELAY;
 
 #define IsHpFlowToBoiler()				(/*(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK) && */(mOutput(MAIN_3WAY_VALVE) == Souliss_T2n_State_Open))
@@ -49,12 +51,12 @@
 #define IsPumpBoilerToFloorOn()			(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OnCoil)
 #define IsPumpBoilerToFloorOff()		(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_OffCoil)
 #define IsPumpBoilerToFloorAuto()		(mOutput(PUMP_BOILER_FLOOR) == Souliss_T1n_AutoState)
-#define PumpBoilerToFloorAutoOnCmd()   SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_AutoCmd + 4 /*cycles*/)
+#define PumpBoilerToFloorAutoOnCmd()   SetInput(PUMP_BOILER_FLOOR, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
 
 #define IsPumpCollectorToFloorOn()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OnCoil)
 #define IsPumpCollectorToFloorOff()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OffCoil)
 #define IsPumpCollectorToFloorAuto()		(mOutput(PUMP_COLLECTOR_FLOOR) == Souliss_T1n_AutoState)
-#define PumpCollectorToFloorAutoOnCmd()  SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_AutoCmd + 4)
+#define PumpCollectorToFloorAutoOnCmd()  SetInput(PUMP_COLLECTOR_FLOOR, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
 #define PumpCollectorToFloorAutoDelay()  mAuxiliary(PUMP_COLLECTOR_FLOOR) = HP_CMD_DELAY;
 
 #define IsPumpCollectorToFancoilOn()	(mOutput(PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OnCoil)
@@ -75,7 +77,7 @@
 
 #define	IsHpSetpoint1()					(mOutput(HP_SETPOINT_2) == Souliss_T1n_OffCoil)
 #define	IsHpSetpoint2()					(mOutput(HP_SETPOINT_2) == Souliss_T1n_OnCoil)
-#define HpSetpoint2AutoCmd()    SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd + 4)
+#define HpSetpoint2AutoCmd()    SetInput(HP_SETPOINT_2, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
 
 #define FloorZones_None()        mInput(HVAC_ZONES) = HVAC_MASK_NO_ZONES
 #define FloorZones_All()         mInput(HVAC_ZONES) = HVAC_MASK_ALL_ZONES
@@ -119,3 +121,4 @@
 #define temp_HVAC_Floor_Return              pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_RETURN_TEMP)
 
 #define IsTempValid(temp)                   ( (temp != DEVICE_DISCONNECTED_C) && (temp != 0.0) && (temp > -15.0) && (temp < 45.0) )
+#define IsURValid(ur)                       ( (ur != 0.0) && (ur < 99.0) )
