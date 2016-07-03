@@ -319,19 +319,6 @@ inline bool Fancoils_AmbienceURTooHigh()
 		return false;
 }
 
-inline bool Fancoils_AmbienceTempTooHigh()
-{
-	if( IsTempValid(temp_BED1) && IsTempValid(temp_BED2) && IsTempValid(temp_BED3) )
-	{
-		float current_temp = (temp_BED1 + temp_BED2 + temp_BED3)/3.0;
-		return (IsFancoilsAutoOff() && (current_temp > AMBIENCE_SETPOINT_DEFAULT_COOL + SETPOINT_TEMP_DEADBAND_SMALL)) ||
-					(IsFancoilsAutoOn() && (current_temp > AMBIENCE_SETPOINT_DEFAULT_COOL));
-	}
-	else
-		return false;
-}
-
-
 inline void ProcessFancoilsRequest(U16 phase_fast)
 {
 	if (IsSanitaryWaterAutoOn())
@@ -344,14 +331,17 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 	}
 	else if( IsCoolMode() )
 	{
-		// fancoils hysteresys in auto mode
-		if( Fancoils_AmbienceURTooHigh() || Fancoils_AmbienceTempTooHigh() )
-				FancoilsAutoOnCmd();
+		if( IsZoneOpen() ) // at least one floor zone open
+			FancoilsAutoOnCmd();
+
+		if( Fancoils_AmbienceURTooHigh() )
+		{
+			FancoilsAutoOnCmd();
+			HpSetpoint2AutoCmd(); 	// use setpoint2 when UR is too high, floor temp is controlled above the dew point temp
+		}
 
 		if( IsFancoilsOn() || IsFancoilsAutoOn() )
 		{
-			// produce cold water
-			HpSetpoint2AutoCmd(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
 			SetHpFlowToCollector();
 			HpCirculationAutoOnCmd();
 			PumpCollectorToFancoilAutoOnCmd();
