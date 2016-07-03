@@ -302,21 +302,69 @@ inline void ProcessFloorRequest(U16 phase_fast)
 	}
 }
 
-inline bool Fancoils_AmbienceURTooHigh()
+// based on ambience UR average with hysteresys
+//
+// return values:
+// 3 -> UR above SETPOINT_UR_3
+// 2 -> UR above SETPOINT_UR_2
+// 1 -> UR above SETPOINT_UR_1
+// 0 -> UR below SETPOINT_UR_1
+//
+inline U8 Fancoils_AmbienceURLevel()
 {
-	// check the max UR to eventually activate fancoils
-	float UR_MAX = UR_BED1;
-	UR_MAX = max(UR_MAX, UR_BED2);
-	UR_MAX = max(UR_MAX, UR_LIVING);
-	UR_MAX = max(UR_MAX, UR_BED3);
-	UR_MAX = max(UR_MAX, UR_KITCHEN);
-	UR_MAX = max(UR_MAX, UR_DINING);
+	// check UR and eventually activate fancoils
+	float UR_AVE = 0.0;
+	U8 uSensorCount = 0;
 
-	if( IsURValid(UR_MAX) )
-		return 	(IsFancoilsAutoOff() && (UR_MAX > SETPOINT_UR_1)) ||
-					(IsFancoilsAutoOn() && (UR_MAX > SETPOINT_UR_1 - SETPOINT_UR_DEADBAND));
-	else
-		return false;
+	if( IsURValid(UR_BED1) )
+	{
+		UR_AVE += UR_BED1;
+		uSensorCount++;
+	}
+
+	if( IsURValid(UR_BED2) )
+	{
+		UR_AVE += UR_BED2;
+		uSensorCount++;
+	}
+
+	if( IsURValid(UR_LIVING) )
+	{
+		UR_AVE += UR_LIVING;
+		uSensorCount++;
+	}
+
+	if( IsURValid(UR_BED3) )
+	{
+		UR_AVE += UR_BED3;
+		uSensorCount++;
+	}
+
+	if( IsURValid(UR_KITCHEN) )
+	{
+		UR_AVE += UR_KITCHEN;
+		uSensorCount++;
+	}
+
+	if( IsURValid(UR_DINING) )
+	{
+		UR_AVE += UR_DINING;
+		uSensorCount++;
+	}
+
+	if( uSensorCount > 0 )
+		UR_AVE /= uSensorCount;
+
+	if( (IsFancoilsAutoOff() && (UR_AVE > SETPOINT_UR_3)) || (IsFancoilsAutoOn() && (UR_AVE > SETPOINT_UR_3 - SETPOINT_UR_DEADBAND)) )
+			return 3;
+
+	if( (IsFancoilsAutoOff() && (UR_AVE > SETPOINT_UR_2)) || (IsFancoilsAutoOn() && (UR_AVE > SETPOINT_UR_2 - SETPOINT_UR_DEADBAND)) )
+			return 2;
+
+	if( (IsFancoilsAutoOff() && (UR_AVE > SETPOINT_UR_1)) || (IsFancoilsAutoOn() && (UR_AVE > SETPOINT_UR_1 - SETPOINT_UR_DEADBAND)) )
+			return 1;
+
+	return 0;
 }
 
 inline void ProcessFancoilsRequest(U16 phase_fast)
@@ -334,7 +382,9 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 		if( IsZoneOpen() ) // at least one floor zone open
 			FancoilsAutoOnCmd();
 
-		if( Fancoils_AmbienceURTooHigh() )
+		U8 UR_level = Fancoils_AmbienceURLevel();
+
+		if( UR_level > 0 )
 		{
 			FancoilsAutoOnCmd();
 			HpSetpoint2AutoCmd(); 	// use setpoint2 when UR is too high, floor temp is controlled above the dew point temp
@@ -345,7 +395,7 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 			SetHpFlowToCollector();
 			HpCirculationAutoOnCmd();
 			PumpCollectorToFancoilAutoOnCmd();
-			Fancoil_AutoCmd(phase_fast%2); TODO("adjust fancoils speed with UR hysteresys");
+			Fancoil_AutoCmd(phase_fast%2, UR_level);
 		}
 	}
 }
