@@ -179,6 +179,7 @@ inline void ProcessZonesActivation(U16 phase_fast)
 			FloorZone_HeatingLogics(HVAC_MASK_BED3, temp_BED3, setpoint_temp);
 			FloorZone_HeatingLogics(HVAC_MASK_BATH2, temp_BATH2, setpoint_temp);
 			FloorZone_HeatingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, setpoint_temp);
+//			FloorZone_HeatingLogics(HVAC_MASK_LOFT, temp_LOFT, setpoint_temp); // this is a fancoil
 		}
 		else if( IsCoolMode() )
 		{
@@ -188,6 +189,7 @@ inline void ProcessZonesActivation(U16 phase_fast)
 			FloorZone_CoolingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, setpoint_temp);
 			FloorZone_CoolingLogics(HVAC_MASK_BED3, temp_BED3, setpoint_temp);
 			FloorZone_CoolingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, setpoint_temp);
+//			FloorZone_CoolingLogics(HVAC_MASK_LOFT, temp_LOFT, setpoint_temp); // this is a fancoil
 		}
 	}
 
