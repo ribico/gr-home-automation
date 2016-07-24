@@ -19,14 +19,14 @@ then
 //    sendCommand(Irrigation_Balcony, OFF)
 
     sendCommand(Irrigation_MasterTimeMins, 0)
-    sendCommand(Irrigation_ScaleFactor, 60)
+    sendCommand(Irrigation_ScaleFactor, 100)
 
     sendCommand(Irrigation_TerraceMins, 10)
-    sendCommand(Irrigation_VegeMins, 10)
-    sendCommand(Irrigation_Lawn1Mins, 10)
-    sendCommand(Irrigation_Lawn2Mins, 10)
+    sendCommand(Irrigation_VegeMins, 15)
+    sendCommand(Irrigation_Lawn1Mins, 15)
+    sendCommand(Irrigation_Lawn2Mins, 15)
     sendCommand(Irrigation_EntMins, 20)
-    sendCommand(Irrigation_BalconyMins, 10)
+    sendCommand(Irrigation_BalconyMins, 15)
 
     logInfo("Irrigation ", "End of initialization")
 end
