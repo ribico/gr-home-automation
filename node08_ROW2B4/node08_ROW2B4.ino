@@ -27,10 +27,11 @@ DHT dht(ONE_WIRE_PIN, DHT22);
 float th=0;
 //--------------------------------------
 
-
 inline void DefineTypicals()
 {
 	Set_T12(ROW2B4_WATERING_ZONE6);
+	Set_T12(ROW2B4_KITCHEN_POWER);
+	SetInput(ROW2B4_KITCHEN_POWER, Souliss_T1n_AutoCmd); // Initialize in Auto Mode
 
 	Set_Temperature(ROW2B4_TEMPERATURE);
 	Set_Humidity(ROW2B4_HUMIDITY);
@@ -39,12 +40,16 @@ inline void DefineTypicals()
 
 inline void ReadInputs()
 {
-	Souliss_DigIn(IN1, Souliss_T1n_AutoCmd+2, memory_map, ROW2B4_WATERING_ZONE6, true);
+//	Souliss_DigIn(IN1, Souliss_T1n_AutoCmd+2, memory_map, ROW2B4_WATERING_ZONE6, true);
+	Souliss_DigIn(IN4, mInput(ROW2B4_KITCHEN_POWER)+36, memory_map, ROW2B4_KITCHEN_POWER, true);
+
 }
 
 inline void ProcessLogics()
 {
 	Logic_T12(ROW2B4_WATERING_ZONE6);
+	Logic_T12(ROW2B4_KITCHEN_POWER);
+
 	grh_Logic_Humidity(ROW2B4_HUMIDITY);
 	grh_Logic_Temperature(ROW2B4_TEMPERATURE);
 }
@@ -52,11 +57,13 @@ inline void ProcessLogics()
 inline void SetOutputs()
 {
 	nDigOut(RELAY1, Souliss_T1n_Coil, ROW2B4_WATERING_ZONE6);
+	nDigOut(RELAY4, Souliss_T1n_Coil, ROW2B4_KITCHEN_POWER);
 }
 
 inline void ProcessTimers()
 {
 	Timer_T12(ROW2B4_WATERING_ZONE6);
+	// Timer for KITCHEN_POWER managed separately in a slower cycle
 
 	th = dht.readHumidity();
 	ImportAnalog(ROW2B4_HUMIDITY, &th);
@@ -111,5 +118,10 @@ void loop()
 	{
 		UPDATESLOW();
 		SLOW_PeerJoin();
+
+		SLOW_50s()
+		{
+			Timer_T12(ROW2B4_KITCHEN_POWER);
+		}
 	}
 }
