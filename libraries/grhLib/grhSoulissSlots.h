@@ -67,6 +67,7 @@
 # define ROW2B4_TEMPERATURE			                        1
 # define ROW2B4_HUMIDITY			                          3
 # define ROW2B4_KITCHEN_POWER                           5
+# define ROW2B4_LIGHT_EXT_DOOR                          6
 
 #define BED1B1 9
 # define BED1B1_LIGHT_BEDROOM1		                      1

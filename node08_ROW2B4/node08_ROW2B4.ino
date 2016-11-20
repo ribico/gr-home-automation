@@ -38,6 +38,9 @@ inline void DefineTypicals()
 	Set_T12(ROW2B4_KITCHEN_POWER);
 	SetInput(ROW2B4_KITCHEN_POWER, Souliss_T1n_AutoCmd); // Initialize in Auto Mode
 
+	Set_T12(ROW2B4_LIGHT_EXT_DOOR);
+	SetInput(ROW2B4_LIGHT_EXT_DOOR, Souliss_T1n_AutoCmd); // Initialize in Auto Mode
+
 	Set_Temperature(ROW2B4_TEMPERATURE);
 	Set_Humidity(ROW2B4_HUMIDITY);
 	dht.begin();
@@ -45,6 +48,7 @@ inline void DefineTypicals()
 
 inline void ReadInputs()
 {
+	Souliss_DigIn(IN1, Souliss_T1n_OnCmd, memory_map, ROW2B4_LIGHT_EXT_DOOR, true);
 	Souliss_DigInHold(IN4, mInput(ROW2B4_KITCHEN_POWER)+36, Souliss_T1n_AutoCmd, memory_map, ROW2B4_KITCHEN_POWER);
 }
 
@@ -52,6 +56,7 @@ inline void ProcessLogics()
 {
 	Logic_T12(ROW2B4_WATERING_ZONE6);
 	Logic_T12(ROW2B4_KITCHEN_POWER);
+	Logic_T12(ROW2B4_LIGHT_EXT_DOOR);
 
 	grh_Logic_Humidity(ROW2B4_HUMIDITY);
 	grh_Logic_Temperature(ROW2B4_TEMPERATURE);
@@ -60,12 +65,14 @@ inline void ProcessLogics()
 inline void SetOutputs()
 {
 	nDigOut(RELAY1, Souliss_T1n_Coil, ROW2B4_WATERING_ZONE6);
+	nDigOut(RELAY2, Souliss_T1n_Coil, ROW2B4_LIGHT_EXT_DOOR);
 	nDigOut(RELAY4, Souliss_T1n_Coil, ROW2B4_KITCHEN_POWER);
 }
 
 inline void ProcessTimers()
 {
 	Timer_T12(ROW2B4_WATERING_ZONE6);
+	Timer_T12(ROW2B4_LIGHT_EXT_DOOR);
 	// Timer for KITCHEN_POWER managed separately in a slower cycle
 
 	th = dht.readHumidity();
@@ -109,7 +116,7 @@ void loop()
 			SetOutputs();
 		}
 
-		if( mInput(ROW2B4_KITCHEN_POWER) > 0 )
+		if( mOutput(ROW2B4_KITCHEN_POWER) == Souliss_T1n_AutoOnCoil )
 		{
 			U8 remaining_cycles = mInput(ROW2B4_KITCHEN_POWER)-Souliss_T1n_AutoCmd;
 			#ifdef DEBUG
@@ -152,6 +159,14 @@ void loop()
 		    	digitalWrite(LED_KITCHEN_SECURITY, !digitalRead(LED_KITCHEN_SECURITY)); // toggle led
 				}
 			}
+		}
+		else if( mOutput(ROW2B4_KITCHEN_POWER) == Souliss_T1n_OnCoil )
+		{
+			digitalWrite(LED_KITCHEN_SECURITY, true);
+		}
+		else
+		{
+			digitalWrite(LED_KITCHEN_SECURITY, false);
 		}
 
 		FAST_2110ms()
