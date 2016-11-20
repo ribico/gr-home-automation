@@ -25,11 +25,16 @@ DINO with RS485 only acting as Peer
 #include <DHT.h>
 DHT dht(ONE_WIRE_PIN, DHT22);
 float th=0;
+
+#define LED_KITCHEN_SECURITY	6
+
 //--------------------------------------
 
 inline void DefineTypicals()
 {
 	Set_T12(ROW2B4_WATERING_ZONE6);
+	SetInput(ROW2B4_WATERING_ZONE6, Souliss_T1n_AutoCmd);
+
 	Set_T12(ROW2B4_KITCHEN_POWER);
 	SetInput(ROW2B4_KITCHEN_POWER, Souliss_T1n_AutoCmd); // Initialize in Auto Mode
 
@@ -40,9 +45,7 @@ inline void DefineTypicals()
 
 inline void ReadInputs()
 {
-//	Souliss_DigIn(IN1, Souliss_T1n_AutoCmd+2, memory_map, ROW2B4_WATERING_ZONE6, true);
-	Souliss_DigIn(IN4, mInput(ROW2B4_KITCHEN_POWER)+36, memory_map, ROW2B4_KITCHEN_POWER, true);
-
+	Souliss_DigInHold(IN4, mInput(ROW2B4_KITCHEN_POWER)+36, Souliss_T1n_AutoCmd, memory_map, ROW2B4_KITCHEN_POWER);
 }
 
 inline void ProcessLogics()
@@ -75,6 +78,8 @@ inline void ProcessTimers()
 
 void setup()
 {
+  pinMode(LED_KITCHEN_SECURITY, OUTPUT);
+
 	grhOpenSerialOnDebug();
 //	delay(10000);
 
@@ -85,8 +90,6 @@ void setup()
 
 
 	DefineTypicals();
-
-	SetInput(ROW2B4_WATERING_ZONE6, Souliss_T1n_AutoCmd);
 }
 
 void loop()
@@ -104,6 +107,51 @@ void loop()
 			ProcessLogics();
 
 			SetOutputs();
+		}
+
+		if( mInput(ROW2B4_KITCHEN_POWER) > 0 )
+		{
+			U8 remaining_cycles = mInput(ROW2B4_KITCHEN_POWER)-Souliss_T1n_AutoCmd;
+			#ifdef DEBUG
+				Serial.print("remaining_cycles : ");
+				Serial.println(remaining_cycles);
+			#endif
+
+			if( remaining_cycles > 108) // >1.5 hours
+			{
+				FAST_2110ms()
+				{
+		    	digitalWrite(LED_KITCHEN_SECURITY, !digitalRead(LED_KITCHEN_SECURITY)); // toggle led
+				}
+			}
+			else if( remaining_cycles > 72) // >1 hours
+			{
+				FAST_910ms()
+				{
+		    	digitalWrite(LED_KITCHEN_SECURITY, !digitalRead(LED_KITCHEN_SECURITY)); // toggle led
+				}
+			}
+			else if( remaining_cycles > 36) // >0.5 hours
+			{
+				FAST_510ms()
+				{
+		    	digitalWrite(LED_KITCHEN_SECURITY, !digitalRead(LED_KITCHEN_SECURITY)); // toggle led
+				}
+			}
+			else if( remaining_cycles > 12) // >10 min
+			{
+				FAST_210ms()
+				{
+		    	digitalWrite(LED_KITCHEN_SECURITY, !digitalRead(LED_KITCHEN_SECURITY)); // toggle led
+				}
+			}
+			else if( remaining_cycles > 0) // at least one cycle
+			{
+				FAST_110ms()
+				{
+		    	digitalWrite(LED_KITCHEN_SECURITY, !digitalRead(LED_KITCHEN_SECURITY)); // toggle led
+				}
+			}
 		}
 
 		FAST_2110ms()
