@@ -49,7 +49,19 @@ inline void DefineTypicals()
 inline void ReadInputs()
 {
 	Souliss_DigIn(IN1, Souliss_T1n_OnCmd, memory_map, ROW2B4_LIGHT_EXT_DOOR, true);
-	Souliss_DigInHold(IN4, mInput(ROW2B4_KITCHEN_POWER)+36, Souliss_T1n_AutoCmd, memory_map, ROW2B4_KITCHEN_POWER);
+
+	// to filter false activations
+	// at the first short input just do, nothing by copying on mInput the current value
+	// in case of long press go in AutoOn
+
+	if( !(mOutput(ROW2B4_KITCHEN_POWER) & Souliss_T1n_OnCoil) )
+		Souliss_DigInHold(IN4, mInput(ROW2B4_KITCHEN_POWER), mInput(ROW2B4_KITCHEN_POWER)+36, memory_map, ROW2B4_KITCHEN_POWER);
+
+	// once the slot is in AutoOn state
+	// a short press will increase the count-down
+	// a long press will reset the slot to AutoOff
+	else
+		Souliss_DigInHold(IN4, mInput(ROW2B4_KITCHEN_POWER)+36, Souliss_T1n_AutoCmd, memory_map, ROW2B4_KITCHEN_POWER);
 }
 
 inline void ProcessLogics()
