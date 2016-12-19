@@ -261,6 +261,7 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		// sanitary to the floor circuit
 		//
 		PumpCollectorToFloorAutoDelay();
+		HpCirculationAutoDelay();
 	}
 	else if( IsHeating() ) // heating request for at least one zone
 	{
@@ -301,6 +302,13 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		HpCirculationAutoOnCmd();
 		PumpCollectorToFloorAutoOnCmd();
 		AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
+	}
+	else
+	{
+		// set a delay for next activation of Pump Collector To Floor
+		// this prevents false activations
+		PumpCollectorToFloorAutoDelay();
+		HpCirculationAutoDelay();
 	}
 }
 
@@ -383,6 +391,8 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 	{
 		if( IsZoneOpen() ) // at least one floor zone open
 			FancoilsAutoOnCmd();
+		else
+			FancoilsAutoDelay(); // delay to prevent false activations
 
 		U8 UR_level = Fancoils_AmbienceURLevel();
 
@@ -399,5 +409,11 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 			PumpCollectorToFancoilAutoOnCmd();
 			Fancoil_AutoCmd(phase_fast%2, UR_level);
 		}
+	}
+	else
+	{
+		// set a delay for next activation of Pump Collector To Floor
+		// this prevents false activations
+		PumpCollectorToFancoilAutoDelay();
 	}
 }

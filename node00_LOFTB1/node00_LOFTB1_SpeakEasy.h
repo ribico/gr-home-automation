@@ -6,13 +6,15 @@
 #define IsFloorOff()				(mOutput(FLOOR_MODE) == Souliss_T1n_OffCoil)
 #define IsFloorAuto()				(mOutput(FLOOR_MODE) == Souliss_T1n_AutoState)
 #define FloorAutoOnCmd()    SetInput(FLOOR_MODE, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
+#define FloorAutoDelay()    mAuxiliary(FLOOR_MODE) = HP_CMD_DELAY;
 
 #define IsFancoilsOn()				(mOutput(FANCOIL_MODE) == Souliss_T1n_OnCoil)
 #define IsFancoilsOff()				(mOutput(FANCOIL_MODE) == Souliss_T1n_OffCoil)
 #define IsFancoilsAuto()			(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoState)
 #define IsFancoilsAutoOn()		(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoOnCoil)
 #define IsFancoilsAutoOff()		(mOutput(FANCOIL_MODE) == Souliss_T1n_AutoOffCoil)
-#define FancoilsAutoOnCmd()    SetInput(FANCOIL_MODE, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
+#define FancoilsAutoOnCmd()   SetInput(FANCOIL_MODE, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
+#define FancoilsAutoDelay()   mAuxiliary(FANCOIL_MODE) = HP_CMD_DELAY;
 
 #define IsHeatMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OffCoil)
 #define IsCoolMode()				(mOutput(HEATPUMP_COOL) == Souliss_T1n_OnCoil)
