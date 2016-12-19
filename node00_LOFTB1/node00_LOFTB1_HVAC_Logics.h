@@ -173,11 +173,11 @@ inline void ProcessZonesActivation(U16 phase_fast)
 		if( IsHeatMode() )
 		{
 			FloorZone_HeatingLogics(HVAC_MASK_BED1, temp_BED1, setpoint_temp);
-			FloorZone_HeatingLogics(HVAC_MASK_BATH1, temp_BATH1, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BATH1, temp_BATH1, setpoint_temp+AMBIENCE_SETPOINT_DELTA_BATHS);
 			FloorZone_HeatingLogics(HVAC_MASK_BED2, temp_BED2, setpoint_temp);
 			FloorZone_HeatingLogics(HVAC_MASK_LIVING, (temp_LIVING+temp_DINING)/2.0, setpoint_temp);
 			FloorZone_HeatingLogics(HVAC_MASK_BED3, temp_BED3, setpoint_temp);
-			FloorZone_HeatingLogics(HVAC_MASK_BATH2, temp_BATH2, setpoint_temp);
+			FloorZone_HeatingLogics(HVAC_MASK_BATH2, temp_BATH2, setpoint_temp+AMBIENCE_SETPOINT_DELTA_BATHS);
 			FloorZone_HeatingLogics(HVAC_MASK_KITCHEN, temp_KITCHEN, setpoint_temp);
 //			FloorZone_HeatingLogics(HVAC_MASK_LOFT, temp_LOFT, setpoint_temp); // this is a fancoil
 		}
