@@ -243,7 +243,7 @@ Number Temperature_Chart_Period
 
 Group       Irrigation
 
-Switch      Irrigation_Master       "Irrigazione OH Rules ON/OFF"         <water>         (Irrigation)
+Switch      Irrigation_Master       "Irrigazione OH Rules OFF/ON"         <water>         (Irrigation)
 String      Irrigation_StartTime    "Ora Inizio [%s]"           <calendar>      (Irrigation)
 Switch      Irrigation_SetNow       "Imposta ora corrente"      <clock>       (Irrigation)
 Number      Irrigation_MasterTimeMins  "Set ritardo da Mezzanotte [%d mins]"       <clock>          (Irrigation)
@@ -268,3 +268,8 @@ Switch      Irrigation_Ent          "Ingresso"             <water>         (Irri
 Switch      Irrigation_Ent_auto     "Ingresso Auto"        <water>         (Irrigation)    { souliss="T12:15:5:automode" }
 Switch      Irrigation_Balcony      "Balconi"              <water>         (Irrigation)    { souliss="T12:8:0:switch" }
 Switch      Irrigation_Balcony_auto "Balconi Auto"         <water>         (Irrigation)    { souliss="T12:8:0:automode" }
+
+Group Safety
+
+Switch      Kitchen_Valve        "Forno+Fornello"              <light>         (Safety)    { souliss="T12:8:5:switch" }
+Switch      Kitchen_Valve_auto   "Forno+Fornello Auto"         <light>         (Safety)    { souliss="T12:8:5:automode" }
