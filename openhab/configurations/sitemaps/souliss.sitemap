@@ -262,6 +262,7 @@ sitemap default label="Full"
 				Frame label="ACS"
 				{
 					Text item=HVAC_Temp_Sanitary
+					Text item=HVAC_Temp_Sanitary1
 					Switch item=HP_Sanitary_Request_auto label="Auto Mode" mappings=[ON="Auto", OFF="Manual"]
 					Switch item=HP_Sanitary_Request label="On/Off" mappings=[ON="ON", OFF="OFF"]
 				}
@@ -513,6 +514,7 @@ sitemap default label="Full"
 					Frame label="Accumulo"
 					{
 						Text item=HVAC_Temp_Sanitary valuecolor=[<=38="blue",<40="orange",>42="red"]
+						Text item=HVAC_Temp_Sanitary1 valuecolor=[<=38="blue",<40="orange",>42="red"]
 						Text item=HVAC_Temp_Heating valuecolor=[<=25="blue",<=28="orange",>28="red"]
 						Text item=HVAC_Temp_Bottom valuecolor=[<=25="blue",<=28="orange",>28="red"]
 					}
