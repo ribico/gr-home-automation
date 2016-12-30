@@ -23,7 +23,7 @@ Group	g3F_Loft		"Attico"			<bedroom>	(g3F)
 Group	g3F_Terrace		"Terrazzo"			<terrace>	(g3F)
 
 
-Group	gLights			"Luci"				<light-off>	(All)
+Group	gLights			"Luci Interne"				<light>	(All)
 Group:Switch:OR(ON, OFF) 		gLights 		"All Lights [(%d)]"		<light-off> (All)
 Switch Light_2F_Entrance_1	"Ingresso Luce 1" 	(g2F_Entrance,gTechnicView_Node4,gLights,gMyOpenHAB) {souliss="T11:4:1"}
 Switch Light_2F_Entrance_2	"Ingresso Luce 2" 	(g2F_Entrance,gTechnicView_Node4,gLights,gMyOpenHAB) {souliss="T11:4:2"}
@@ -46,19 +46,25 @@ Switch Light_2F_Bedroom2_4	"Camera2 Luce 4"	(g2F_Bedroom2,gTechnicView_Node11,gL
 Switch Light_2F_Bedroom3	"Camera3 Luce" 		(g2F_Bedroom3,gTechnicView_Node5,gLights,gMyOpenHAB) {souliss="T11:5:2"}
 Switch Light_2F_GW1			"Disimpegno1 Luce" 	(g2F_GW1,gTechnicView_Node13,gLights,gMyOpenHAB) {souliss="T11:13:4"}
 Switch Light_2F_GW2			"Disimpegno2 Luce" 	(g2F_GW2,gTechnicView_Node14,gLights,gMyOpenHAB) {souliss="T11:14:4"}
-Switch Light_2F_Balcony_1	"Balcone1 Luce" 	(g2F_Balcony1,gTechnicView_Node9,gLights,gMyOpenHAB) {souliss="T11:9:2"}
-Switch Light_2F_Balcony_2	"Balcone2 Luce" 	(g2F_Balcony2,gTechnicView_Node5,gLights,gMyOpenHAB) {souliss="T11:5:1"}
 Switch Light_2F_Bath1_1		"Bagno1 Luce 1" 	(g2F_Bath1,gTechnicView_Node10,gLights,gMyOpenHAB) {souliss="T11:10:1"}
 Switch Light_2F_Bath1_3		"Bagno1 Luce 3" 	(g2F_Bath1,gTechnicView_Node10,gLights,gMyOpenHAB) {souliss="T11:10:3"}
 Switch Light_2F_Bath1_2		"Bagno1 Luce 2" 	(g2F_Bath1,gTechnicView_Node10,gLights,gMyOpenHAB) {souliss="T11:10:2"}
 Switch Light_2F_Bath2_1		"Bagno2 Luce 1" 	(g2F_Bath2,gTechnicView_Node4,gLights,gMyOpenHAB) {souliss="T11:4:3"}
-Switch Light_3F_Loft_1			"Attico Luce 1" 	(g3F_Loft,gTechnicView_Node0,gLights,gMyOpenHAB) {souliss="T11:0:1"}
 Switch Light_2F_Bath2_2		"Bagno2 Luce 2" 	(g2F_Bath2,gTechnicView_Node4,gLights,gMyOpenHAB) {souliss="T11:4:4"}
+Switch Light_3F_Loft_1			"Attico Luce 1" 	(g3F_Loft,gTechnicView_Node0,gLights,gMyOpenHAB) {souliss="T11:0:1"}
 Switch Light_3F_Loft_2			"Attico Luce 2" 	(g3F_Loft,gTechnicView_Node0,gLights,gMyOpenHAB) {souliss="T11:0:2"}
-Switch Light_3F_Terrace_1		"Terrazzo Luce 1" 	(g3F_Terrace,gTechnicView_Node0,gLights,gMyOpenHAB) {souliss="T11:0:3"}
-Switch Light_3F_Terrace_2		"Terrazzo Luce 2" 	(g3F_Terrace,gTechnicView_Node0,gLights,gMyOpenHAB) {souliss="T11:0:4"}
-Switch Light_3F_Terrace_3		"Terrazzo Luce 3" 	(g3F_Terrace,gTechnicView_Node0,gLights,gMyOpenHAB) {souliss="T11:0:5"}
 Switch Light_3F_Toilet			"Bagno3 Luce 1" 	(g3F_Loft,gTechnicView_Node0,gLights,gMyOpenHAB) {souliss="T11:0:6"}
+
+Group	gLightsExt			"Luci Esterne"				<light>	(All)
+Switch Light_2F_Balcony_1	    "Balcone1 Luce" 	(g2F_Balcony1,gTechnicView_Node9,gLightsExt,gMyOpenHAB) {souliss="T11:9:2"}
+Switch Light_2F_Balcony_2	    "Balcone2 Luce" 	(g2F_Balcony2,gTechnicView_Node5,gLightsExt,gMyOpenHAB) {souliss="T11:5:1"}
+Switch Light_2F_Ext_Door_auto "Portone Modalità Luce Man/Auto" (gTechnicView_Node8,gLightsExt,gMyOpenHAB) {souliss="T12:8:6:automode"}
+Switch Light_2F_Ext_Door      "Portone Luce" (gTechnicView_Node8,gLightsExt,gMyOpenHAB) {souliss="T12:8:6:switch"}
+Switch Light_Facade_auto      "Facciata Modalità Luci Man/Auto" (gTechnicView_Node15,gLightsExt,gMyOpenHAB) {souliss="T12:15:0:automode"}
+Switch Light_Facade           "Facciata Luci" (gTechnicView_Node15,gLightsExt,gMyOpenHAB) {souliss="T12:15:0:switch"}
+Switch Light_3F_Terrace_1		"Terrazzo Luce 1" 	(g3F_Terrace,gTechnicView_Node0,gLightsExt,gMyOpenHAB) {souliss="T11:0:3"}
+Switch Light_3F_Terrace_2		"Terrazzo Luce 2" 	(g3F_Terrace,gTechnicView_Node0,gLightsExt,gMyOpenHAB) {souliss="T11:0:4"}
+Switch Light_3F_Terrace_3		"Terrazzo Luce 3" 	(g3F_Terrace,gTechnicView_Node0,gLightsExt,gMyOpenHAB) {souliss="T11:0:5"}
 
 
 Group gRolleshutters	"Tapparelle"	<rollershutter> (All)
@@ -140,7 +146,10 @@ Switch HP_Circulation_Pump	"Pompa Interna" 		(gTechnicView_Node0,gHPSettings) {s
 Switch HP_Circulation_Pump_auto	"Pompa Interna Auto" 	<lock>	(gTechnicView_Node0,gHPSettings) {souliss="T12:0:9:automode"}
 Switch HP_Sanitary_Request	"ACS" 		        (gTechnicView_Node0,gHPSettings) {souliss="T12:0:10:switch"}
 Switch HP_Sanitary_Request_auto	"ACS Auto" 		<lock> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:10:automode"}
-Switch HP_Heat_Cool			"Modalità Freddo" 		<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:11:switch"}
+Switch HP_Heat_Cool_auto			"Modalità Produzione Freddo Man/auto" 		<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:11:automode"}
+Switch HP_Heat_Cool			"Produzione Freddo" 		<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:11:switch"}
+Switch HP_Setpoint2_auto     "Modalità Setpoint2 Man/Auto" (gTechnicView_Node0,gHPSettings) {souliss="T12:0:19:automode"}
+Switch HP_Setpoint2     "Setpoint2" (gTechnicView_Node0,gHPSettings) {souliss="T12:0:19:switch"}
 
 Rollershutter HVAC_3way_Valve		"Valvola a 3 Vie"			(gHVAC_Valves,gTechnicView_Node0) {souliss="T22:0:14"}
 Switch HVAC_Pump_Boiler_Floor		"Pompa Boiler->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:15:switch"}

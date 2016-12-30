@@ -222,6 +222,7 @@ sitemap default label="Full"
 
 	Frame {
 		Group item=gLights icon="light-off"
+		Group item=gLightsExt icon="light-off"
 		Group item=gRolleshutters
 		Text label="Clima" icon="climate"
 		{
@@ -238,10 +239,9 @@ sitemap default label="Full"
 				Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
 				Switch item=HP_Heat_Cool label="Modalità" mappings=[OFF="Caldo", ON="Freddo"]
 
-				Frame label="Setpoint x AUTO Mode"
+				Frame label="Setpoint x AUTO Mode (modificabile da SoulissApp)"
 				{
 					Text item=HVAC_Temp_SetPoint
-					Switch item=HVAC_Temp_SP label="Regola SetPoint" mappings=[DOWN="-0.5", UP="+0.5"]
 				}
 
 				Frame label="Pavimento"
@@ -271,6 +271,12 @@ sitemap default label="Full"
 
 				Text icon="boy1" label="Avanzate"
 				{
+					Text icon="boy1" label="HP Setpoint 2"
+					{
+						Switch item=HP_Setpoint2_auto label="Modalità" mappings=[ON="Auto", OFF="Manual"]
+						Switch item=HP_Setpoint2 label="Impostazione corrente"
+					}
+
 					Text icon="boy1" label="Pompe"
 					{
 						Switch item=HP_Circulation_Pump_auto mappings=[ON="Auto", OFF="Manual"]
