@@ -48,7 +48,7 @@ inline void DefineTypicals()
 
 inline void ReadInputs()
 {
-	Souliss_DigIn(IN1, Souliss_T1n_OnCmd, memory_map, ROW2B4_LIGHT_EXT_DOOR, true);
+	Souliss_DigIn(IN1, Souliss_T1n_ToggleCmd, memory_map, ROW2B4_LIGHT_EXT_DOOR, true);
 
 	// to filter false activations
 	// at the first short input just do, nothing by copying on mInput the current value
