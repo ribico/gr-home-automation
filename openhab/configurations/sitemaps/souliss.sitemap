@@ -221,7 +221,7 @@ sitemap default label="Full"
 
 
 	Frame {
-		Group item=gLights icon="light-off"
+		Group item=gLightsInt icon="light-off"
 		Group item=gLightsExt icon="light-off"
 		Group item=gRolleshutters
 		Text label="Clima" icon="climate"
@@ -594,15 +594,12 @@ sitemap default label="Full"
 	}
 
 	Frame label="Operazioni di Gruppo" {
-		Switch item=gLights icon="light-off" mappings=[OFF="All Off"]
+		Switch item=gLightsInt icon="light-off" mappings=[OFF="All Off"]
 		Switch item=gRS_Night mappings=[UP="Apri", STOP="X", DOWN="Chiudi"]
 	}
 
 	Frame label="Diagnostics" {
 		Group item=gDiagnostics
+		Text item=gAll_LastUpdate valuecolor=[gAll_LastUpdate>300="red",>240="purple",>120="orange",>0="green",<0 data-blogger-escaped-code="" data-blogger-escaped-red="">
 		}
-
-	Frame label="Date" {
-		Text item=Date
-	}
 }
