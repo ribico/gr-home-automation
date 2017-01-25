@@ -511,7 +511,7 @@ sitemap default label="Full"
 					Text item=Temperature_2F_Bedroom1 label="Camera 1 [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"] labelcolor=[Valve_2F_Bedroom1==ON="red"]
 					Text item=Temperature_2F_Bedroom2 label="Camera 2 [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"] labelcolor=[Valve_2F_Bedroom2==ON="red"]
 					Text item=Temperature_2F_Bedroom3 label="Camera 3 [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"] labelcolor=[Valve_2F_Bedroom3==ON="red"]
-					Text item=Temperature_3F_Loft label="Loft [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"] labelcolor=[Valve_2F_Loft==ON="red"]
+					Text item=Temperature_3F_Loft label="Loft [%.1f °C]" valuecolor=[<=17="blue",<=18="aqua",<=19="yellow",<=20="orange",>23="red"] labelcolor=[Valve_3F_Loft==ON="red"]
 					Text item=Temperature_3F_Ext label="Esterno [%.1f °C]"
 				}
 
@@ -600,9 +600,6 @@ sitemap default label="Full"
 
 	Frame label="Diagnostics" {
 		Group item=gDiagnostics
+		Text item=gAll_LastUpdate valuecolor=[gAll_LastUpdate>300="red",>240="purple",>120="orange",>0="green",<0 data-blogger-escaped-code="" data-blogger-escaped-red="">
 		}
-
-	Frame label="Date" {
-		Text item=Date
-	}
 }
