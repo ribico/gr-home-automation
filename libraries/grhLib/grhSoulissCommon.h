@@ -73,5 +73,9 @@
 #define SHUTTER_SHORT_TIMEOUT		(Souliss_T2n_Timer_Off + 11)
 #define SHUTTER_LONG_TIMEOUT		(Souliss_T2n_Timer_Off + 17)
 
-#define	grh_Logic_Temperature(slot)		Souliss_Logic_T52(memory_map, slot, 0.01, &data_changed)
-#define	grh_Logic_Humidity(slot)		Souliss_Logic_T53(memory_map, slot, 0.02, &data_changed)
+#define	grh_Logic_Temperature(slot)			Souliss_Logic_T52(memory_map, slot, 0.1, &data_changed)
+#define	grh_Logic_HVAC_Temperature(slot)	Souliss_Logic_T52(memory_map, slot, 0.5, &data_changed)
+#define	grh_Logic_EXT_Temperature(slot)		Souliss_Logic_T52(memory_map, slot, 0.5, &data_changed)
+#define	grh_Logic_Humidity(slot)			Souliss_Logic_T53(memory_map, slot, 1.0, &data_changed)
+
+#define grh_SLOW_PeerJoin() SLOW_710s() { JoinNetwork(); }

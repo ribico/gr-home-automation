@@ -87,8 +87,8 @@ inline void ProcessLogics()
 	Souliss_Logic_T12(memory_map, HEATPUMP_COOL, &data_changed);
 
 	grh_Logic_Temperature(TEMP_AMBIENCE_SETPOINT);
-	grh_Logic_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
-	grh_Logic_Temperature(HVAC_BOILER_SANITARY_TEMP);
+	grh_Logic_HVAC_Temperature(TEMP_FLOOR_FLOW_SETPOINT);
+	grh_Logic_HVAC_Temperature(HVAC_BOILER_SANITARY_TEMP);
 
 	Souliss_Logic_T22(memory_map, MAIN_3WAY_VALVE, &data_changed, MAIN_3WAY_VALVE_TIMEOUT);
 	Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);

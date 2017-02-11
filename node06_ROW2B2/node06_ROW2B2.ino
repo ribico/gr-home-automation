@@ -20,10 +20,6 @@ DINO with RS485 only acting as Peer
 #include "grhSoulissSlots.h"
 #include "HW_Setup_DINo_v2.h"
 
-
-#include <DHT.h>
-DHT dht(ONE_WIRE_PIN, DHT22);
-float th=0;
 //--------------------------------------
 
 
@@ -31,10 +27,6 @@ inline void DefineTypicals()
 {
 	Souliss_SetT22(memory_map, ROW2B2_WINDOW_LIVING);
 	Souliss_SetT22(memory_map, ROW2B2_WINDOW_KITCHEN);
-
-	Set_Temperature(ROW2B2_TEMPERATURE);
-	Set_Humidity(ROW2B2_HUMIDITY);
-	dht.begin();
 }
 
 inline void ReadInputs()
@@ -47,9 +39,6 @@ inline void ProcessLogics()
 {
 	Souliss_Logic_T22(memory_map, ROW2B2_WINDOW_LIVING, &data_changed, SHUTTER_SHORT_TIMEOUT);
 	Souliss_Logic_T22(memory_map, ROW2B2_WINDOW_KITCHEN, &data_changed, SHUTTER_LONG_TIMEOUT);
-
-	grh_Logic_Humidity(ROW2B2_HUMIDITY);
-	grh_Logic_Temperature(ROW2B2_TEMPERATURE);
 }
 
 inline void SetOutputs()
@@ -64,12 +53,6 @@ inline void ProcessTimers()
 {
 	Timer_Windows(ROW2B2_WINDOW_LIVING);
 	Timer_Windows(ROW2B2_WINDOW_KITCHEN);
-
-	th = dht.readHumidity();
-	ImportAnalog(ROW2B2_HUMIDITY, &th);
-
-	th = dht.readTemperature();
-	ImportAnalog(ROW2B2_TEMPERATURE, &th);
 }
 
 
@@ -114,6 +97,6 @@ void loop()
 	EXECUTESLOW()
 	{
 		UPDATESLOW();
-		SLOW_PeerJoin();
+		grh_SLOW_PeerJoin();
 	}
 }

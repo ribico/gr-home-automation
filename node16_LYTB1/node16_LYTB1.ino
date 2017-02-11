@@ -118,7 +118,7 @@ void loop()
       LYTSleepTimer(LYTB1_LIGHT);
     }
 
-    SLOW_PeerJoin();
+    grh_SLOW_PeerJoin();
   }
 
   // Look for a new sketch to update over the air

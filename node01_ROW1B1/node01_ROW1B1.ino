@@ -61,23 +61,23 @@ inline void ProcessLogics()
 {
 	Logic_LightsGroup(ROW1B1_LIGHT_LIVING_1, ROW1B1_LIGHT_LIVING_6);
 
-	grh_Logic_Temperature(ROW1B1_EXT_TEMP);
+	grh_Logic_EXT_Temperature(ROW1B1_EXT_TEMP);
 	grh_Logic_Humidity(ROW1B1_EXT_UR);
 
 	grh_Logic_Temperature(ROW1B1_LOFT_TEMP);
 	grh_Logic_Humidity(ROW1B1_LOFT_UR);
 
-	grh_Logic_Temperature(ROW1B1_HVAC_BOILER_SANITARY_TEMP);
-	grh_Logic_Temperature(ROW1B1_HVAC_BOILER_HEATING_TEMP);
-	grh_Logic_Temperature(ROW1B1_HVAC_BOILER_BOTTOM_TEMP);
+	grh_Logic_HVAC_Temperature(ROW1B1_HVAC_BOILER_SANITARY_TEMP);
+	grh_Logic_HVAC_Temperature(ROW1B1_HVAC_BOILER_HEATING_TEMP);
+	grh_Logic_HVAC_Temperature(ROW1B1_HVAC_BOILER_BOTTOM_TEMP);
 
-	grh_Logic_Temperature(ROW1B1_HVAC_HEATPUMP_FLOW_TEMP);
-	grh_Logic_Temperature(ROW1B1_HVAC_HEATPUMP_RETURN_TEMP);
+	grh_Logic_HVAC_Temperature(ROW1B1_HVAC_HEATPUMP_FLOW_TEMP);
+	grh_Logic_HVAC_Temperature(ROW1B1_HVAC_HEATPUMP_RETURN_TEMP);
 
-	grh_Logic_Temperature(ROW1B1_HVAC_FANCOILS_FLOW_TEMP);
-	grh_Logic_Temperature(ROW1B1_HVAC_FANCOILS_RETURN_TEMP);
-	grh_Logic_Temperature(ROW1B1_HVAC_FLOOR_FLOW_TEMP);
-	grh_Logic_Temperature(ROW1B1_HVAC_FLOOR_RETURN_TEMP);
+	grh_Logic_HVAC_Temperature(ROW1B1_HVAC_FANCOILS_FLOW_TEMP);
+	grh_Logic_HVAC_Temperature(ROW1B1_HVAC_FANCOILS_RETURN_TEMP);
+	grh_Logic_HVAC_Temperature(ROW1B1_HVAC_FLOOR_FLOW_TEMP);
+	grh_Logic_HVAC_Temperature(ROW1B1_HVAC_FLOOR_RETURN_TEMP);
 }
 
 inline void SetOutputs()
@@ -137,6 +137,6 @@ void loop()
 	EXECUTESLOW()
 	{
 		UPDATESLOW();
-		SLOW_PeerJoin();
+		grh_SLOW_PeerJoin();
 	}
 }

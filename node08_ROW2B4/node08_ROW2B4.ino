@@ -192,7 +192,7 @@ void loop()
 	EXECUTESLOW()
 	{
 		UPDATESLOW();
-		SLOW_PeerJoin();
+		grh_SLOW_PeerJoin();
 
 		SLOW_50s()
 		{
