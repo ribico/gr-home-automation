@@ -65,10 +65,10 @@ inline void ProcessTimers()
 	Timer_Windows(BED2B3_WINDOW_BATH1);
 	Timer_Windows(BED2B3_WINDOW_BEDROOM2);
 
-	th = dht.readHumidity();
+	th = grh_W_Average(mOutputAsFloat(BED2B3_HUMIDITY), dht.readHumidity());
 	ImportAnalog(BED2B3_HUMIDITY, &th);
 
-	th = dht.readTemperature();
+	th = grh_W_Average(mOutputAsFloat(BED2B3_TEMPERATURE), dht.readTemperature());
 	ImportAnalog(BED2B3_TEMPERATURE, &th);
 }
 

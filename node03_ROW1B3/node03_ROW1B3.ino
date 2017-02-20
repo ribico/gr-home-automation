@@ -64,10 +64,10 @@ inline void ProcessTimers()
 	Timer_LightsGroup(ROW1B3_LIGHT_DINING_1, ROW1B3_LIGHT_DINING_3);
 	Timer_SimpleLight(ROW1B3_LIGHT_STAIRS);
 
-	th = dht.readHumidity();
+	th = grh_W_Average(mOutputAsFloat(ROW1B3_HUMIDITY), dht.readHumidity());
 	ImportAnalog(ROW1B3_HUMIDITY, &th);
 
-	th = dht.readTemperature();
+	th = grh_W_Average(mOutputAsFloat(ROW1B3_TEMPERATURE), dht.readTemperature());
 	ImportAnalog(ROW1B3_TEMPERATURE, &th);
 }
 

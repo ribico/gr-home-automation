@@ -78,4 +78,7 @@
 #define	grh_Logic_EXT_Temperature(slot)		Souliss_Logic_T52(memory_map, slot, 0.5, &data_changed)
 #define	grh_Logic_Humidity(slot)			Souliss_Logic_T53(memory_map, slot, 1.0, &data_changed)
 
+#define grh_Weighted_Average(value1, value2, weight1, weight2)		(!isnan(value1) && !isnan(value2))?((value1*weight1 + value2*weight2) / (weight1+weight2)):(isnan(value1))?value2:value1
+#define grh_W_Average(value1, value2) grh_Weighted_Average(value1, value2, 5.0, 1.0)
+
 #define grh_SLOW_PeerJoin() SLOW_710s() { JoinNetwork(); }

@@ -41,6 +41,9 @@ inline void DefineTypicals()
 	Set_T12(ROW2B4_LIGHT_EXT_DOOR);
 	SetInput(ROW2B4_LIGHT_EXT_DOOR, Souliss_T1n_AutoCmd); // Initialize in Auto Mode
 
+	Set_T12(ROW2B4_LIGHT_AQUARIUM);
+	SetInput(ROW2B4_LIGHT_AQUARIUM, Souliss_T1n_AutoCmd); // Initialize in Auto Mode
+
 	Set_Temperature(ROW2B4_TEMPERATURE);
 	Set_Humidity(ROW2B4_HUMIDITY);
 	dht.begin();
@@ -69,6 +72,7 @@ inline void ProcessLogics()
 	Logic_T12(ROW2B4_WATERING_ZONE6);
 	Logic_T12(ROW2B4_KITCHEN_POWER);
 	Logic_T12(ROW2B4_LIGHT_EXT_DOOR);
+	Logic_T12(ROW2B4_LIGHT_AQUARIUM);
 
 	grh_Logic_Humidity(ROW2B4_HUMIDITY);
 	grh_Logic_Temperature(ROW2B4_TEMPERATURE);
@@ -78,6 +82,7 @@ inline void SetOutputs()
 {
 	nDigOut(RELAY1, Souliss_T1n_Coil, ROW2B4_WATERING_ZONE6);
 	nDigOut(RELAY2, Souliss_T1n_Coil, ROW2B4_LIGHT_EXT_DOOR);
+	nDigOut(RELAY3, Souliss_T1n_Coil, ROW2B4_LIGHT_AQUARIUM);	
 	nDigOut(RELAY4, Souliss_T1n_Coil, ROW2B4_KITCHEN_POWER);
 }
 
@@ -85,12 +90,13 @@ inline void ProcessTimers()
 {
 	Timer_T12(ROW2B4_WATERING_ZONE6);
 	Timer_T12(ROW2B4_LIGHT_EXT_DOOR);
+	Timer_T12(ROW2B4_LIGHT_AQUARIUM);
 	// Timer for KITCHEN_POWER managed separately in a slower cycle
 
-	th = dht.readHumidity();
+	th = grh_W_Average(mOutputAsFloat(ROW2B4_HUMIDITY), dht.readHumidity());
 	ImportAnalog(ROW2B4_HUMIDITY, &th);
 
-	th = dht.readTemperature();
+	th = grh_W_Average(mOutputAsFloat(ROW2B4_TEMPERATURE), dht.readTemperature());
 	ImportAnalog(ROW2B4_TEMPERATURE, &th);
 }
 

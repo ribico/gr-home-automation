@@ -36,69 +36,86 @@ inline void GetCurrentStatus(U16 phase_fast)
 {
 	// get light sensor
 	int analog_val = analogRead(LIGHT_TRANSDUCER_PIN_IN);
-	float light_intensity = 40000.0/1024.0 * (1024-analog_val);
+	float current_intensity = 40000.0/1024.0 * (1024-analog_val);
+	float light_intensity = grh_W_Average(mOutputAsFloat(LIGHT_SENSOR), current_intensity);
 	ImportAnalog(LIGHT_SENSOR, &light_intensity);
 
 	float tmp;
 
 	// get the sanitary temp value from spare sensor
 	ReadDallasTemp(gTempSensors2, HVAC_BOILER_SANITARY_TEMP_ADDR_2, tmp);
+	
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(mOutputAsFloat(HVAC_BOILER_SANITARY_TEMP), tmp);
 	ImportAnalog(HVAC_BOILER_SANITARY_TEMP, &tmp);
 
 
 	// read and send external temp & UR to ROW1B1 slots
 
 	tmp = dht_ext.readTemperature();
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_EXT, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff, &tmp);
 
 	tmp = dht_ext.readHumidity();
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+2, &tmp); // 2 bytes offset for UR
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(UR_EXT, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+2, &tmp); // 2 bytes offset for UR
 
 	tmp = dht_loft.readTemperature();
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+4, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_LOFT, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+4, &tmp);
 
 	tmp = dht_loft.readHumidity();
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+6, &tmp); // 2 bytes offset for UR
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(UR_LOFT, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+6, &tmp); // 2 bytes offset for UR
 
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_SANITARY_TEMP_ADDR, tmp);
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+8, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_HVAC_Boiler_Saniary, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+8, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_HEATING_TEMP_ADDR, tmp);
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+10, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_HVAC_Boiler_Heating, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+10, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_BOILER_BOTTOM_TEMP_ADDR, tmp);
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+12, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_HVAC_Boiler_Bottom, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+12, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+14, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_HVAC_HEATPUMP_Flow, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+14, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+16, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_HVAC_HEATPUMP_Return, tmp);	
+	Souliss_HalfPrecisionFloating(gTempBuff+16, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_FLOW_TEMP_ADDR, tmp);
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+18, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_HVAC_Fancoil_Flow, tmp);	
+	Souliss_HalfPrecisionFloating(gTempBuff+18, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_RETURN_TEMP_ADDR, tmp);
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+20, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_HVAC_Fancoil_Return, tmp);	
+	Souliss_HalfPrecisionFloating(gTempBuff+20, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+22, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_HVAC_Floor_Flow, tmp);	
+	Souliss_HalfPrecisionFloating(gTempBuff+22, &tmp);
 
 	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_RETURN_TEMP_ADDR, tmp);
-//	if( IsTempValid(tmp) )
-		Souliss_HalfPrecisionFloating(gTempBuff+24, &tmp);
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_HVAC_Floor_Return, tmp);	
+	Souliss_HalfPrecisionFloating(gTempBuff+24, &tmp);
 
 	if(!ReqTyp())
 		SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, gTempBuff, 26); // sending 26 consecutive bytes
