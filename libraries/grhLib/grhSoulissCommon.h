@@ -38,7 +38,7 @@
 // use with netcat -ul 1111
 #ifdef WIFI_UDP_DEBUG
 	WiFiUDP Udp;
-	IPAddress remote_ip(192, 168, 1, 209);
+	IPAddress remote_ip(192, 168, 1, 204);
 	#define UDP_PORT 1111
 
 	#define UDP_DEBUG_BEGIN Udp.begin(UDP_PORT)
