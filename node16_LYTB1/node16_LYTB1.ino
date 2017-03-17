@@ -38,8 +38,7 @@ Compiling Options:
 #include "grhSoulissCustom.h"
 #include "grhSoulissSlots.h"
 
-#define USE_SSL
-#include "http_request.h"
+#include "forecast_io.h"
 
 #define RED_STARTUP         0x50
 #define GREEN_STARTUP       0x10
@@ -57,10 +56,8 @@ WiFiUDP ntpUDP;
 
 // You can specify the time server pool and the offset, (in seconds)
 // additionaly you can specify the update interval (in milliseconds).
- NTPClient timeClient(ntpUDP, "192.168.1.4", 3600, 60000);
-=======
-#include "forecast_io.h"
->>>>>>> origin/forecast_io_2
+NTPClient timeClient(ntpUDP, "192.168.1.4", 3600, 60000);
+
 
 void setup()
 {
@@ -162,13 +159,12 @@ void loop()
     }
 
 
-/*
     FAST_2110ms()
 		{
       timeClient.update();
       grhSendUDPMessage(timeClient.getFormattedTime().c_str());
 		}
-*/
+
     FAST_PeerComms();
   }
 
