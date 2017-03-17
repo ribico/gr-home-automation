@@ -83,6 +83,7 @@ void setup()
 
   UDP_DEBUG_BEGIN;
 
+/*
   for (int i=0; i<WEATHER_DATA_COUNT/2; i++)
   {
     ForecastIO_TimeMachineRequest(i);
@@ -91,7 +92,8 @@ void setup()
     grhSendUDPMessage(wd[CURRENT_WEATHER_IDX+i].s_icon.c_str());
     ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+i]);
   }
-  
+*/
+
   timeClient.begin();
 
   // Init the OTA
@@ -109,6 +111,7 @@ void loop()
     LogicLYTLamps(LYTB1_LIGHT);
     ProcessCommunication();
 
+/*
     SHIFT_91110ms(0)
     {
       ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+0]);
@@ -157,13 +160,7 @@ void loop()
     {
       ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+11]);
     }
-
-
-    FAST_2110ms()
-		{
-      timeClient.update();
-      grhSendUDPMessage(timeClient.getFormattedTime().c_str());
-		}
+*/
 
     FAST_PeerComms();
   }
@@ -173,6 +170,10 @@ void loop()
 
     // Slowly shut down the lamp
     SLOW_10s() {
+      timeClient.update();
+      grhSendUDPMessage(timeClient.getFormattedTime().c_str());
+
+      // Slowly shut down the lamp
       LYTSleepTimer(LYTB1_LIGHT);
     }
 
