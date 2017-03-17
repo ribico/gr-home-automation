@@ -58,6 +58,9 @@ WiFiUDP ntpUDP;
 // You can specify the time server pool and the offset, (in seconds)
 // additionaly you can specify the update interval (in milliseconds).
  NTPClient timeClient(ntpUDP, "192.168.1.4", 3600, 60000);
+=======
+#include "forecast_io.h"
+>>>>>>> origin/forecast_io_2
 
 void setup()
 {
@@ -83,18 +86,13 @@ void setup()
 
   UDP_DEBUG_BEGIN;
 
-  String day_time = "2016-05-02T14:00:00";
-  String server = "api.forecast.io";  // server's address
-  String resource = "/forecast/" + String(API_KEY) + "/" + String(COORDINATES) + "," + day_time + "?" + String(OPTIONS);                    // http resource
-
-  if (connect(server.c_str()))
+  for (int i=0; i<WEATHER_DATA_COUNT/2; i++)
   {
-    if (sendRequest(server.c_str(), resource.c_str()) && skipResponseHeaders())
-    {
-      char response[MAX_CONTENT_SIZE];
-      readReponseContent(response, sizeof(response));
-      grhSendUDPMessage(response);
-    }
+    ForecastIO_TimeMachineRequest(i);
+    grhSendUDPMessage(forecast_io_response);
+    ForecastIO_ParseResponse(CURRENT_WEATHER_IDX+i);
+    grhSendUDPMessage(wd[CURRENT_WEATHER_IDX+i].s_icon.c_str());
+    ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+i]);
   }
   
   timeClient.begin();
@@ -114,12 +112,63 @@ void loop()
     LogicLYTLamps(LYTB1_LIGHT);
     ProcessCommunication();
 
+    SHIFT_91110ms(0)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+0]);
+    }
+    SHIFT_91110ms(100)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+1]);
+    }
+    SHIFT_91110ms(200)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+2]);
+    }
+    SHIFT_91110ms(300)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+3]);
+    }
+    SHIFT_91110ms(400)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+4]);
+    }
+    SHIFT_91110ms(500)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+5]);
+    }
+    SHIFT_91110ms(600)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+6]);
+    }
+    SHIFT_91110ms(700)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+7]);
+    }
+    SHIFT_91110ms(800)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+8]);
+    }
+    SHIFT_91110ms(900)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+9]);
+    }
+    SHIFT_91110ms(1000)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+10]);
+    }
+    SHIFT_91110ms(1100)
+    {
+      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+11]);
+    }
+
+
+/*
     FAST_2110ms()
 		{
       timeClient.update();
       grhSendUDPMessage(timeClient.getFormattedTime().c_str());
 		}
-
+*/
     FAST_PeerComms();
   }
 
@@ -131,7 +180,23 @@ void loop()
       LYTSleepTimer(LYTB1_LIGHT);
     }
 
-    grh_SLOW_PeerJoin();
+    SLOW_1h()
+    {
+      // move all data of one cell since one hour passed
+      for (int i=0; i<WEATHER_DATA_COUNT-1; i++)
+      {
+        wd[CURRENT_WEATHER_IDX+i].t_time = wd[CURRENT_WEATHER_IDX+i+1].t_time;
+        wd[CURRENT_WEATHER_IDX+i].s_icon = wd[CURRENT_WEATHER_IDX+i+1].s_icon;
+        wd[CURRENT_WEATHER_IDX+i].f_precipIntensity = wd[CURRENT_WEATHER_IDX+i+1].f_precipIntensity;
+        wd[CURRENT_WEATHER_IDX+i].f_precipProbability = wd[CURRENT_WEATHER_IDX+i+1].f_precipProbability;
+      }
+
+      // get the new weather forecast
+      ForecastIO_TimeMachineRequest(+11);
+      ForecastIO_ParseResponse(CURRENT_WEATHER_IDX+11);
+    }
+
+    SLOW_PeerJoin();
   }
 
   // Look for a new sketch to update over the air
