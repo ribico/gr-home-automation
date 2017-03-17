@@ -21,6 +21,7 @@ Compiling Options:
 #define WiFi_SSID               "ribico-loft"
 #define WiFi_Password           "12345678"
 
+#include "NTPClient.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <EEPROM.h>
@@ -48,6 +49,15 @@ Compiling Options:
 #define COORDINATES "41.7901754,12.4102682"
 #define OPTIONS "exclude=[hourly,minutely,daily,alerts,flags]"
 
+WiFiUDP ntpUDP;
+
+// By default 'time.nist.gov' is used with 60 seconds update interval and
+// no offset
+//NTPClient timeClient(ntpUDP);
+
+// You can specify the time server pool and the offset, (in seconds)
+// additionaly you can specify the update interval (in milliseconds).
+ NTPClient timeClient(ntpUDP, "192.168.1.4", 3600, 60000);
 
 void setup()
 {
@@ -86,6 +96,8 @@ void setup()
       grhSendUDPMessage(response);
     }
   }
+  
+  timeClient.begin();
 
   // Init the OTA
   ArduinoOTA.setHostname("souliss-LYTB1");
@@ -104,7 +116,8 @@ void loop()
 
     FAST_2110ms()
 		{
-      grhSendUDPMessage("aaa");
+      timeClient.update();
+      grhSendUDPMessage(timeClient.getFormattedTime().c_str());
 		}
 
     FAST_PeerComms();
