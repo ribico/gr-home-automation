@@ -62,16 +62,41 @@ void setup()
       If you don't use the WebConfig use a dummy sketch that connects to
       your WiFi and then use this sketch
   ****/
-  SetColor(LYTB1_LIGHT, RED_STARTUP, GREEN_STARTUP, BLUE_STARTUP);
+  SetColor(LYTB1_RGB_LIGHT, RED_STARTUP, GREEN_STARTUP, BLUE_STARTUP);
 
   grhSetIpAddress(IP_ADDRESS_LYTB1);
 
   // Define a logic to handle the bulb
-  SetLYTLamps(LYTB1_LIGHT);
+  SetLYTLamps(LYTB1_RGB_LIGHT);
 
   Set_Analog_Setpoint(LYTB1_AQUARIUM_LIGHT_DURATION);
-  float def_value = AQUARIUM_LIGHT_DEFAULT_DURATION; // initial setup
+  float def_value = AQUARIUM_LIGHT_DEFAULT_DURATION;
 	ImportAnalog(LYTB1_AQUARIUM_LIGHT_DURATION, &def_value);
+
+  Set_Analog_Setpoint(LYTB1_WATERING_ZONE1_DURATION);
+  def_value = WATERING_ZONE1_DEFAULT_DURATION;
+	ImportAnalog(LYTB1_WATERING_ZONE1_DURATION, &def_value);
+
+  Set_Analog_Setpoint(LYTB1_WATERING_ZONE2_DURATION);
+  def_value = WATERING_ZONE2_DEFAULT_DURATION;
+	ImportAnalog(LYTB1_WATERING_ZONE2_DURATION, &def_value);
+
+  Set_Analog_Setpoint(LYTB1_WATERING_ZONE3_DURATION);
+  def_value = WATERING_ZONE3_DEFAULT_DURATION;
+	ImportAnalog(LYTB1_WATERING_ZONE3_DURATION, &def_value);
+
+  Set_Analog_Setpoint(LYTB1_WATERING_ZONE4_DURATION);
+  def_value = WATERING_ZONE4_DEFAULT_DURATION;
+	ImportAnalog(LYTB1_WATERING_ZONE4_DURATION, &def_value);
+
+  Set_Analog_Setpoint(LYTB1_WATERING_ZONE5_DURATION);
+  def_value = WATERING_ZONE5_DEFAULT_DURATION;
+	ImportAnalog(LYTB1_WATERING_ZONE5_DURATION, &def_value);
+
+  Set_Analog_Setpoint(LYTB1_WATERING_ZONE6_DURATION);
+  def_value = WATERING_ZONE6_DEFAULT_DURATION;
+	ImportAnalog(LYTB1_WATERING_ZONE6_DURATION, &def_value);
+
 
   UDP_DEBUG_BEGIN;
   SCHEDULER_BEGIN;
@@ -99,11 +124,17 @@ void loop()
 
     // Is an unusual approach, but to get fast response to color change we run the LYT logic and
     // basic communication processing at maximum speed.
-    LogicLYTLamps(LYTB1_LIGHT);
+    LogicLYTLamps(LYTB1_RGB_LIGHT);
 
     FAST_110ms()
     {
       Logic_AnalogIn(LYTB1_AQUARIUM_LIGHT_DURATION);
+      Logic_AnalogIn(LYTB1_WATERING_ZONE1_DURATION);
+      Logic_AnalogIn(LYTB1_WATERING_ZONE2_DURATION);
+      Logic_AnalogIn(LYTB1_WATERING_ZONE3_DURATION);
+      Logic_AnalogIn(LYTB1_WATERING_ZONE4_DURATION);
+      Logic_AnalogIn(LYTB1_WATERING_ZONE5_DURATION);
+      Logic_AnalogIn(LYTB1_WATERING_ZONE6_DURATION);
     }
 
     ProcessCommunication();
@@ -111,51 +142,51 @@ void loop()
 /*
     SHIFT_91110ms(0)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+0]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+0]);
     }
     SHIFT_91110ms(100)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+1]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+1]);
     }
     SHIFT_91110ms(200)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+2]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+2]);
     }
     SHIFT_91110ms(300)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+3]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+3]);
     }
     SHIFT_91110ms(400)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+4]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+4]);
     }
     SHIFT_91110ms(500)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+5]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+5]);
     }
     SHIFT_91110ms(600)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+6]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+6]);
     }
     SHIFT_91110ms(700)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+7]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+7]);
     }
     SHIFT_91110ms(800)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+8]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+8]);
     }
     SHIFT_91110ms(900)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+9]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+9]);
     }
     SHIFT_91110ms(1000)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+10]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+10]);
     }
     SHIFT_91110ms(1100)
     {
-      ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+11]);
+      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+11]);
     }
 */
 
@@ -171,7 +202,7 @@ void loop()
       SchedulerRun();
 
       // Slowly shut down the lamp
-      LYTSleepTimer(LYTB1_LIGHT);
+      LYTSleepTimer(LYTB1_RGB_LIGHT);
 
 
     }
