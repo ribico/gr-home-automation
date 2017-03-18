@@ -125,3 +125,6 @@
 
 #define LYTB1 16
 # define LYTB1_LIGHT                                    0
+# define LYTB1_LIGHT_H                                  1
+# define LYTB1_AQUARIUM_LIGHT_DURATION                2
+# define LYTB1_AQUARIUM_LIGHT_DURATION_H              3

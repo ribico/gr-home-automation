@@ -21,7 +21,6 @@ Compiling Options:
 #define WiFi_SSID               "ribico-loft"
 #define WiFi_Password           "12345678"
 
-#include "NTPClient.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <EEPROM.h>
@@ -39,24 +38,13 @@ Compiling Options:
 #include "grhSoulissSlots.h"
 
 #include "forecast_io.h"
+#include "node16_LYTB1_scheduler.h"
 
 #define RED_STARTUP         0x50
 #define GREEN_STARTUP       0x10
 #define BLUE_STARTUP        0x00
 
-#define API_KEY "f68f1acb8091e1299995085418c1d163"
-#define COORDINATES "41.7901754,12.4102682"
-#define OPTIONS "exclude=[hourly,minutely,daily,alerts,flags]"
 
-WiFiUDP ntpUDP;
-
-// By default 'time.nist.gov' is used with 60 seconds update interval and
-// no offset
-//NTPClient timeClient(ntpUDP);
-
-// You can specify the time server pool and the offset, (in seconds)
-// additionaly you can specify the update interval (in milliseconds).
-NTPClient timeClient(ntpUDP, "192.168.1.4", 3600, 60000);
 
 
 void setup()
@@ -81,7 +69,12 @@ void setup()
   // Define a logic to handle the bulb
   SetLYTLamps(LYTB1_LIGHT);
 
+  Set_Analog_Setpoint(LYTB1_AQUARIUM_LIGHT_DURATION);
+  float def_value = AQUARIUM_LIGHT_DEFAULT_DURATION; // initial setup
+	ImportAnalog(LYTB1_AQUARIUM_LIGHT_DURATION, &def_value);
+
   UDP_DEBUG_BEGIN;
+  SCHEDULER_BEGIN;
 
 /*
   for (int i=0; i<WEATHER_DATA_COUNT/2; i++)
@@ -93,8 +86,6 @@ void setup()
     ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+i]);
   }
 */
-
-  timeClient.begin();
 
   // Init the OTA
   ArduinoOTA.setHostname("souliss-LYTB1");
@@ -109,6 +100,12 @@ void loop()
     // Is an unusual approach, but to get fast response to color change we run the LYT logic and
     // basic communication processing at maximum speed.
     LogicLYTLamps(LYTB1_LIGHT);
+
+    FAST_110ms()
+    {
+      Logic_AnalogIn(LYTB1_AQUARIUM_LIGHT_DURATION);
+    }
+
     ProcessCommunication();
 
 /*
@@ -170,11 +167,13 @@ void loop()
 
     // Slowly shut down the lamp
     SLOW_10s() {
-      timeClient.update();
-      grhSendUDPMessage(timeClient.getFormattedTime().c_str());
+
+      SchedulerRun();
 
       // Slowly shut down the lamp
       LYTSleepTimer(LYTB1_LIGHT);
+
+
     }
 
     SLOW_1h()
