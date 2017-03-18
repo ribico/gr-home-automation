@@ -32,7 +32,7 @@ NTPClient timeClient(ntpUDP, NTP_SERVER_IP, 3600, 60000);
 
 
 #define AquariumLightStartHours() AQUARIUM_LIGHT_DEFAULT_START_HOURS
-#define AquariumLightEndHours() (AquariumLightStartHours()+AquariumLightDuration())%24
+#define AquariumLightEndHours() ((AquariumLightStartHours()+AquariumLightDuration())%24)
 #define AquariumLightDuration() ((int) mOutputAsFloat(LYTB1_AQUARIUM_LIGHT_DURATION))
 #define AquariumLightAutoOn() RemoteInput(RS485_ADDRESS_ROW2B4, ROW2B4_LIGHT_AQUARIUM, Souliss_T1n_AutoCmd + AUTO_ON_STEPS)
 
