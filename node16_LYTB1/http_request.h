@@ -62,6 +62,20 @@ bool skipResponseHeaders() {
   return ok;
 }
 
+// Skip HTTP until a string is found
+bool skipResponseSection(const char* endOfSkip) {
+
+  client.setTimeout(HTTP_TIMEOUT);
+  bool ok = client.find(endOfSkip);
+
+  if (!ok) {
+    grhSendUDPMessage("No response or invalid response!");
+  }
+
+  return ok;
+}
+
+
 // Read the body of the response from the HTTP server
 void readReponseContent(char* content, size_t maxSize) {
   size_t length = client.readBytes(content, maxSize);

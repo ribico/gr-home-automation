@@ -45,7 +45,14 @@ Compiling Options:
 #define BLUE_STARTUP        0x00
 
 
-
+inline void FlashForecastIOColor()
+{
+    ForecastIO_CurrentWeatherRequest();
+//  grhSendUDPMessage(forecast_io_response);
+    String sIcon = ForecastIO_ParseDayIcon(forecast_io_response);
+    grhSendUDPMessage(sIcon.c_str());
+    ForecastIO_SetColor(LYTB1_RGB_LIGHT, sIcon);
+}
 
 void setup()
 {
@@ -97,20 +104,20 @@ void setup()
   def_value = WATERING_ZONE6_DEFAULT_DURATION;
 	ImportAnalog(LYTB1_WATERING_ZONE6_DURATION, &def_value);
 
+  // copy initial value to mOutput to avoid calculation with NaN
+  Logic_AnalogIn(LYTB1_AQUARIUM_LIGHT_DURATION);
+  Logic_AnalogIn(LYTB1_WATERING_ZONE1_DURATION);
+  Logic_AnalogIn(LYTB1_WATERING_ZONE2_DURATION);
+  Logic_AnalogIn(LYTB1_WATERING_ZONE3_DURATION);
+  Logic_AnalogIn(LYTB1_WATERING_ZONE4_DURATION);
+  Logic_AnalogIn(LYTB1_WATERING_ZONE5_DURATION);
+  Logic_AnalogIn(LYTB1_WATERING_ZONE6_DURATION);
+
 
   UDP_DEBUG_BEGIN;
   SCHEDULER_BEGIN;
 
-/*
-  for (int i=0; i<WEATHER_DATA_COUNT/2; i++)
-  {
-    ForecastIO_TimeMachineRequest(i);
-    grhSendUDPMessage(forecast_io_response);
-    ForecastIO_ParseResponse(CURRENT_WEATHER_IDX+i);
-    grhSendUDPMessage(wd[CURRENT_WEATHER_IDX+i].s_icon.c_str());
-    ForecastIO_SetColor(LYTB1_LIGHT, &wd[CURRENT_WEATHER_IDX+i]);
-  }
-*/
+  FlashForecastIOColor();
 
   // Init the OTA
   ArduinoOTA.setHostname("souliss-LYTB1");
@@ -139,57 +146,6 @@ void loop()
 
     ProcessCommunication();
 
-/*
-    SHIFT_91110ms(0)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+0]);
-    }
-    SHIFT_91110ms(100)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+1]);
-    }
-    SHIFT_91110ms(200)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+2]);
-    }
-    SHIFT_91110ms(300)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+3]);
-    }
-    SHIFT_91110ms(400)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+4]);
-    }
-    SHIFT_91110ms(500)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+5]);
-    }
-    SHIFT_91110ms(600)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+6]);
-    }
-    SHIFT_91110ms(700)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+7]);
-    }
-    SHIFT_91110ms(800)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+8]);
-    }
-    SHIFT_91110ms(900)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+9]);
-    }
-    SHIFT_91110ms(1000)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+10]);
-    }
-    SHIFT_91110ms(1100)
-    {
-      ForecastIO_SetColor(LYTB1_RGB_LIGHT, &wd[CURRENT_WEATHER_IDX+11]);
-    }
-*/
-
     FAST_PeerComms();
   }
 
@@ -197,30 +153,18 @@ void loop()
     UPDATESLOW();
 
     // Slowly shut down the lamp
-    SLOW_10s() {
-
+    SLOW_10s()
+    {
       SchedulerRun();
 
       // Slowly shut down the lamp
       LYTSleepTimer(LYTB1_RGB_LIGHT);
-
-
     }
 
     SLOW_1h()
     {
-      // move all data of one cell since one hour passed
-      for (int i=0; i<WEATHER_DATA_COUNT-1; i++)
-      {
-        wd[CURRENT_WEATHER_IDX+i].t_time = wd[CURRENT_WEATHER_IDX+i+1].t_time;
-        wd[CURRENT_WEATHER_IDX+i].s_icon = wd[CURRENT_WEATHER_IDX+i+1].s_icon;
-        wd[CURRENT_WEATHER_IDX+i].f_precipIntensity = wd[CURRENT_WEATHER_IDX+i+1].f_precipIntensity;
-        wd[CURRENT_WEATHER_IDX+i].f_precipProbability = wd[CURRENT_WEATHER_IDX+i+1].f_precipProbability;
-      }
-
       // get the new weather forecast
-      ForecastIO_TimeMachineRequest(+11);
-      ForecastIO_ParseResponse(CURRENT_WEATHER_IDX+11);
+      FlashForecastIOColor();
     }
 
     SLOW_PeerJoin();
