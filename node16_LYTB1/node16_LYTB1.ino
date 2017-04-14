@@ -104,6 +104,10 @@ void setup()
   def_value = WATERING_ZONE6_DEFAULT_DURATION;
 	ImportAnalog(LYTB1_WATERING_ZONE6_DURATION, &def_value);
 
+  Set_Analog_Setpoint(LYTB1_SANITARY_WATER_PRODUCTION_DURATION);
+  def_value = SANITARY_WATER_PRODUCTION_DEFAULT_DURATION;
+	ImportAnalog(LYTB1_SANITARY_WATER_PRODUCTION_DURATION, &def_value);
+
   // copy initial value to mOutput to avoid calculation with NaN
   Logic_AnalogIn(LYTB1_AQUARIUM_LIGHT_DURATION);
   Logic_AnalogIn(LYTB1_WATERING_ZONE1_DURATION);
@@ -112,6 +116,7 @@ void setup()
   Logic_AnalogIn(LYTB1_WATERING_ZONE4_DURATION);
   Logic_AnalogIn(LYTB1_WATERING_ZONE5_DURATION);
   Logic_AnalogIn(LYTB1_WATERING_ZONE6_DURATION);
+  Logic_AnalogIn(LYTB1_SANITARY_WATER_PRODUCTION_DURATION);
 
 
   UDP_DEBUG_BEGIN;
@@ -142,6 +147,28 @@ void loop()
       Logic_AnalogIn(LYTB1_WATERING_ZONE4_DURATION);
       Logic_AnalogIn(LYTB1_WATERING_ZONE5_DURATION);
       Logic_AnalogIn(LYTB1_WATERING_ZONE6_DURATION);
+      Logic_AnalogIn(LYTB1_SANITARY_WATER_PRODUCTION_DURATION);
+    }
+
+    SHIFT_11110ms(50)
+    {
+      SCHEDULER_TIME_UPDATE;
+      grhSendUDPMessage(timeClient.getFormattedTime().c_str());
+
+      AquariumLightScheduler();
+    }
+    SHIFT_11110ms(100)
+    {
+      WateringZone1Scheduler();
+      WateringZone2Scheduler();
+      WateringZone3Scheduler();
+      WateringZone4Scheduler();
+      WateringZone5Scheduler();
+      WateringZone6Scheduler();
+    }
+    SHIFT_11110ms(150)
+    {
+      SanitaryWaterScheduler();
     }
 
     ProcessCommunication();
@@ -155,8 +182,6 @@ void loop()
     // Slowly shut down the lamp
     SLOW_10s()
     {
-      SchedulerRun();
-
       // Slowly shut down the lamp
       LYTSleepTimer(LYTB1_RGB_LIGHT);
     }
