@@ -32,8 +32,8 @@ inline void HeatingMixValve_StepMove(U8 direction, U8 duration_on, U16 duration_
 */
 	if( direction == 0 || duration_on == 0 || duration_cycle == 0)
 	{
-		mInput(HVAC_VALVES) = mOutput(HVAC_VALVES);
-		Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
+		mInput(LOFTB1_HVAC_VALVES) = mOutput(LOFTB1_HVAC_VALVES);
+		Souliss_Logic_T1A(memory_map, LOFTB1_HVAC_VALVES, &data_changed);
 		return;
 	}
 
@@ -56,7 +56,7 @@ inline void HeatingMixValve_StepMove(U8 direction, U8 duration_on, U16 duration_
 		else if( direction == HEATINGMIXVALVE_WARM_DIRECTION )
 			HeatingMixValveOn_WarmDirection();
 
-		Souliss_Logic_T1A(memory_map, HVAC_VALVES, &data_changed);
+		Souliss_Logic_T1A(memory_map, LOFTB1_HVAC_VALVES, &data_changed);
 /*
 		#ifdef DEBUG
 			Serial.print("mInput(HVAC_VALVES): ");
@@ -121,7 +121,7 @@ inline void AdjustCollectorToFloorFlowTemperature(float setpoint)
 	// control the collector-floor mix valve to keep the setpoint
 	// simple proportional control on return floor temperature
 	float error = setpoint - temp_HVAC_Floor_Flow; //(temp_HVAC_Floor_Flow + temp_HVAC_Floor_Return)/2;
-	float current_pos = mOutputAsFloat(COLLECTOR_FLOOR_MIX_VALVE_POS);
+	float current_pos = mOutputAsFloat(LOFTB1_COLLECTOR_FLOOR_MIX_VALVE_POS);
 
 	current_pos -= error;
 	if( current_pos > COLLECTOR_FLOOR_MIX_VALVE_MAX )
@@ -129,7 +129,7 @@ inline void AdjustCollectorToFloorFlowTemperature(float setpoint)
 	else if( current_pos < COLLECTOR_FLOOR_MIX_VALVE_MIN )
 		current_pos = COLLECTOR_FLOOR_MIX_VALVE_MIN;
 
-	ImportAnalog(COLLECTOR_FLOOR_MIX_VALVE_POS, &current_pos);
+	ImportAnalog(LOFTB1_COLLECTOR_FLOOR_MIX_VALVE_POS, &current_pos);
 
 
 	#ifdef DEBUG

@@ -1,3 +1,70 @@
+#define LOFTB1 0
+#   define LOFTB1_LIGHT_STAIRS										0
+#   define LOFTB1_LIGHT_LOFT_1            				1
+#   define LOFTB1_LIGHT_LOFT_2            				2
+#   define LOFTB1_LIGHT_TERRACE_1                 3
+#   define LOFTB1_LIGHT_TERRACE_2                 4
+#   define LOFTB1_LIGHT_TERRACE_3                 5
+#   define LOFTB1_LIGHT_TOILET                    6
+
+#   define LOFTB1_FLOOR_MODE 			  							7
+#   define LOFTB1_HEATPUMP_REMOTE_SWITCH          8
+#   define LOFTB1_HEATPUMP_CIRCULATION_PUMP       9
+#   define LOFTB1_HEATPUMP_SANITARY_WATER       	10
+#   define LOFTB1_HEATPUMP_COOL                		11
+
+#   define LOFTB1_HVAC_ZONES											12
+#	    define HVAC_MASK_NO_ZONES							0x00
+#	    define HVAC_MASK_ALL_ZONES						0xFF
+#	    define HVAC_MASK_ALL_COOLING_ZONES (HVAC_MASK_BED1|HVAC_MASK_BED2|HVAC_MASK_LIVING|HVAC_MASK_BED3|HVAC_MASK_KITCHEN|HVAC_MASK_LOFT)
+#	    define HVAC_MASK_BED1									0x01
+#	    define HVAC_MASK_BATH1								0x02
+#	    define HVAC_MASK_BED2									0x04
+#	    define HVAC_MASK_LIVING								0x08
+#	    define HVAC_MASK_BED3									0x10
+#	    define HVAC_MASK_BATH2								0x20
+#	    define HVAC_MASK_KITCHEN							0x40
+#	    define HVAC_MASK_LOFT									0x80
+
+#   define LOFTB1_HVAC_VALVES 												13
+#	    define MAIN_3WAY_VALVE_BOILER_MASK				0x01
+#	    define MAIN_3WAY_VALVE_COLLECTOR_MASK			0x02
+#	    define HEATING_MIX_VALVE_SWITCH_MASK			0x04
+#	    define HEATING_MIX_VALVE_DIRECTION_MASK		0x08
+
+#   define LOFTB1_MAIN_3WAY_VALVE								14
+
+#   define LOFTB1_PUMP_BOILER_FLOOR 						15
+#   define LOFTB1_PUMP_COLLECTOR_FANCOIL 				16
+#   define LOFTB1_PUMP_COLLECTOR_FLOOR 					17
+
+#   define LOFTB1_FANCOIL_MODE									18
+#   define LOFTB1_HP_SETPOINT_2									19
+
+#   define LOFTB1_TEMP_AMBIENCE_SETPOINT				20
+#   define LOFTB1_TEMP_AMBIENCE_SETPOINT_H			21
+
+#   define LOFTB1_TEMP_FLOOR_FLOW_SETPOINT			22
+#   define LOFTB1_TEMP_FLOOR_FLOW_SETPOINT_H		23
+
+#   define LOFTB1_HEATING_MIX_VALVE							24
+
+#   define LOFTB1_LIGHT_SENSOR									25
+#   define LOFTB1_LIGHT_SENSOR_H								26
+
+#   define LOFTB1_LIGHT_SENSOR_SETPOINT					27
+#   define LOFTB1_LIGHT_SENSOR_SETPOINT_H				28
+
+#   define LOFTB1_HVAC_BOILER_SANITARY_TEMP			29
+#   define LOFTB1_HVAC_BOILER_SANITARY_TEMP_H		30
+
+#   define LOFTB1_HVAC_BOILER_SANITARY_SETPOINT			31
+#   define LOFTB1_HVAC_BOILER_SANITARY_SETPOINT_H		32
+
+#   define LOFTB1_COLLECTOR_FLOOR_MIX_VALVE_POS					34
+#   define LOFTB1_COLLECTOR_FLOOR_MIX_VALVE_POS_H				35
+
+
 #define ROW1B1 1
 # define ROW1B1_LIGHT_LIVING_1			                    0
 # define ROW1B1_LIGHT_LIVING_2			                    1
@@ -139,3 +206,5 @@
 # define LYTB1_WATERING_ZONE5_DURATION_H                15
 # define LYTB1_WATERING_ZONE6_DURATION                  16
 # define LYTB1_WATERING_ZONE6_DURATION_H                17
+# define LYTB1_SANITARY_WATER_PRODUCTION_DURATION       18
+# define LYTB1_SANITARY_WATER_PRODUCTION_DURATION_H     19

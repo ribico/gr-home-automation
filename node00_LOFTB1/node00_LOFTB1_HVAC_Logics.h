@@ -37,8 +37,8 @@ inline void GetCurrentStatus(U16 phase_fast)
 	// get light sensor
 	int analog_val = analogRead(LIGHT_TRANSDUCER_PIN_IN);
 	float current_intensity = 40000.0/1024.0 * (1024-analog_val);
-	float light_intensity = grh_W_Average(mOutputAsFloat(LIGHT_SENSOR), current_intensity);
-	ImportAnalog(LIGHT_SENSOR, &light_intensity);
+	float light_intensity = grh_W_Average(mOutputAsFloat(LOFTB1_LIGHT_SENSOR), current_intensity);
+	ImportAnalog(LOFTB1_LIGHT_SENSOR, &light_intensity);
 
 	float tmp;
 
@@ -46,8 +46,8 @@ inline void GetCurrentStatus(U16 phase_fast)
 	ReadDallasTemp(gTempSensors2, HVAC_BOILER_SANITARY_TEMP_ADDR_2, tmp);
 	
 	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(mOutputAsFloat(HVAC_BOILER_SANITARY_TEMP), tmp);
-	ImportAnalog(HVAC_BOILER_SANITARY_TEMP, &tmp);
+		tmp = grh_W_Average(mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_TEMP), tmp);
+	ImportAnalog(LOFTB1_HVAC_BOILER_SANITARY_TEMP, &tmp);
 
 
 	// read and send external temp & UR to ROW1B1 slots
@@ -181,7 +181,7 @@ inline void ProcessZonesActivation(U16 phase_fast)
 	{
 		// AUTO MODE -> activate only needed zones
 
-		float setpoint_temp = mOutputAsFloat(TEMP_AMBIENCE_SETPOINT);
+		float setpoint_temp = mOutputAsFloat(LOFTB1_TEMP_AMBIENCE_SETPOINT);
 		if ( !IsTempValid(setpoint_temp) )
 			return;
 
@@ -211,7 +211,7 @@ inline void ProcessZonesActivation(U16 phase_fast)
 	}
 
 	// process zones logics both for floor on and off
-	Souliss_Logic_T1A(memory_map, HVAC_ZONES, &data_changed);
+	Souliss_Logic_T1A(memory_map, LOFTB1_HVAC_ZONES, &data_changed);
 }
 
 inline void CalculateFloorTempSetpoint(U16 phase_fast)
@@ -242,7 +242,7 @@ inline void CalculateFloorTempSetpoint(U16 phase_fast)
   	if( setpoint_floor_water > SETPOINT_TEMP_FLOOR_FLOW_MAX )
   		setpoint_floor_water = SETPOINT_TEMP_FLOOR_FLOW_MAX;
 
-  	ImportAnalog(TEMP_FLOOR_FLOW_SETPOINT, &setpoint_floor_water);
+  	ImportAnalog(LOFTB1_TEMP_FLOOR_FLOW_SETPOINT, &setpoint_floor_water);
   }
   else if( IsCooling() ) // cooling at least one zone
 	{
@@ -265,7 +265,7 @@ inline void CalculateFloorTempSetpoint(U16 phase_fast)
   		dew_point_MAX = SETPOINT_TEMP_FLOOR_FLOW_MIN;
 
   	// variable setpoint according to UR and dew point
-  	ImportAnalog(TEMP_FLOOR_FLOW_SETPOINT, &dew_point_MAX);
+  	ImportAnalog(LOFTB1_TEMP_FLOOR_FLOW_SETPOINT, &dew_point_MAX);
   }
 }
 
@@ -318,7 +318,7 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		SetHpFlowToCollector();
 		HpCirculationAutoOnCmd();
 		PumpCollectorToFloorAutoOnCmd();
-		AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
+		AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(LOFTB1_TEMP_FLOOR_FLOW_SETPOINT) );
 	}
 	else
 	{
