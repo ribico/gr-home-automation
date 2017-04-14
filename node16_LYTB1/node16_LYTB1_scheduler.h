@@ -31,40 +31,54 @@ WiFiUDP ntpUDP;
 // additionaly you can specify the update interval (in milliseconds).
 NTPClient timeClient(ntpUDP, NTP_SERVER_IP, 3600, 60000);
 
+inline bool IsCurrentTimeInRange(unsigned start_h, unsigned start_m, unsigned end_h, unsigned end_m)
+{
+    unsigned current_h = timeClient.getHours();
+    unsigned current_m = timeClient.getMinutes();
+
+    if(end_h > start_h) // range not crossing midnight
+    {
+        if( current_h >= start_h && current_m >= start_m ) // after the start time
+        {
+            if ( current_h < end_h || ( (current_h == end_h && (current_m < end_m) ) ) )// before the end time
+            {
+                return true; // in the range
+            }    
+        }
+    }
+    else // range over midnight
+    {
+        if( current_h >= start_h && current_m >= start_m ) // after the start time
+            return true;
+
+        if( current_h < end_h && current_m < end_m ) // before end time
+            return true; 
+    }
+ 
+    return false;
+}
+
 
 // helper macros
 #define END_H(start_h,start_m,duration_h,duration_m) ( (start_h + duration_h + (start_m+duration_m)/60)%24 )
 #define END_M(start_h,start_m,duration_h,duration_m) ( (start_m+duration_m)%60 )
 #define DURATION(slot) ((int) mOutputAsFloat(slot))
 
-
 #define AquariumLightStartHours() AQUARIUM_LIGHT_DEFAULT_START_HOURS
 #define AquariumLightEndHours() END_H(AQUARIUM_LIGHT_DEFAULT_START_HOURS, 0, DURATION(LYTB1_AQUARIUM_LIGHT_DURATION), 0)
 #define AquariumLightAutoOn() RemoteInput(RS485_ADDRESS_ROW2B4, ROW2B4_LIGHT_AQUARIUM, Souliss_T1n_AutoCmd + AUTO_ON_STEPS)
+
 
 inline void AquariumLightScheduler()
 {
     grhSendUDPMessage( (String("Aquarium: start: ") + String(AquariumLightStartHours()) + String(":00 stop: ") 
                         + String(AquariumLightEndHours()) + String(":00")).c_str());
 
-    int current_hours = timeClient.getHours();
-
-    if(AquariumLightEndHours() > AquariumLightStartHours()) // ending before midnight
+    if(IsCurrentTimeInRange(AquariumLightStartHours(), 0, AquariumLightEndHours(), 0))
     {
-        if( current_hours >= AquariumLightStartHours() && current_hours < AquariumLightEndHours() )
-        {
-            grhSendUDPMessage("AquariumLightAutoOn command");
-            AquariumLightAutoOn();
-        }
-    }
-    else // ending after midnight
-    {
-        if( current_hours >= AquariumLightStartHours() || current_hours < AquariumLightEndHours() )
-        {
-            grhSendUDPMessage("AquariumLightAutoOn command");
-            AquariumLightAutoOn();
-        }
-    }         
+        grhSendUDPMessage("AquariumLightAutoOn command");
+        AquariumLightAutoOn();
+    }        
 }
 
 
@@ -83,15 +97,11 @@ inline void WateringZone1Scheduler()
                         String(" stop: ") +
                         String(WateringZone1EndHours()) + String(":") + String(WateringZone1EndMin())).c_str());
 
-    int current_hours = timeClient.getHours();
-    int current_minutes = timeClient.getMinutes();
-    if( current_hours >= WateringZone1StartHours() && current_minutes >= WateringZone1StartMin() )
-        if ( current_hours < WateringZone1EndHours() || 
-            ( (current_hours == WateringZone1EndHours()) && (current_minutes < WateringZone1EndMin()) ) )
-        {
-            grhSendUDPMessage("WateringZone1AutoOn command");
-            WateringZone1AutoOn();
-        }    
+    if( IsCurrentTimeInRange(WateringZone1StartHours(), WateringZone1StartMin(), WateringZone1EndHours(), WateringZone1EndMin()) )
+    {
+        grhSendUDPMessage("WateringZone1AutoOn command");
+        WateringZone1AutoOn();        
+    }
 }
 
 
@@ -109,15 +119,11 @@ inline void WateringZone2Scheduler()
                         String(" stop: ") +
                         String(WateringZone2EndHours()) + String(":") + String(WateringZone2EndMin())).c_str());
 
-    int current_hours = timeClient.getHours();
-    int current_minutes = timeClient.getMinutes();
-    if( current_hours >= WateringZone2StartHours() && current_minutes >= WateringZone2StartMin() )
-        if ( current_hours < WateringZone2EndHours() || 
-            ( (current_hours == WateringZone2EndHours()) && (current_minutes < WateringZone2EndMin()) ) )
-        {
-            grhSendUDPMessage("WateringZone2AutoOn command");
-            WateringZone2AutoOn();
-        }    
+    if( IsCurrentTimeInRange(WateringZone2StartHours(), WateringZone2StartMin(), WateringZone2EndHours(), WateringZone2EndMin()) )
+    {
+        grhSendUDPMessage("WateringZone2AutoOn command");
+        WateringZone2AutoOn();        
+    }
 }
 
 
@@ -136,15 +142,11 @@ inline void WateringZone3Scheduler()
                         String(" stop: ") +
                         String(WateringZone3EndHours()) + String(":") + String(WateringZone3EndMin())).c_str());
 
-    int current_hours = timeClient.getHours();
-    int current_minutes = timeClient.getMinutes();
-    if( current_hours >= WateringZone3StartHours() && current_minutes >= WateringZone3StartMin() )
-        if ( current_hours < WateringZone3EndHours() || 
-            ( (current_hours == WateringZone3EndHours()) && (current_minutes < WateringZone3EndMin()) ) )
-        {
-            grhSendUDPMessage("WateringZone3AutoOn command");
-            WateringZone3AutoOn();
-        }    
+    if( IsCurrentTimeInRange(WateringZone3StartHours(), WateringZone3StartMin(), WateringZone3EndHours(), WateringZone3EndMin()) )
+    {
+        grhSendUDPMessage("WateringZone3AutoOn command");
+        WateringZone3AutoOn();        
+    }
 }
 
 
@@ -162,15 +164,11 @@ inline void WateringZone4Scheduler()
                         String(" stop: ") +
                         String(WateringZone4EndHours()) + String(":") + String(WateringZone4EndMin())).c_str());
 
-    int current_hours = timeClient.getHours();
-    int current_minutes = timeClient.getMinutes();
-    if( current_hours >= WateringZone4StartHours() && current_minutes >= WateringZone4StartMin() )
-        if ( current_hours < WateringZone4EndHours() || 
-            ( (current_hours == WateringZone4EndHours()) && (current_minutes < WateringZone4EndMin()) ) )
-        {
-            grhSendUDPMessage("WateringZone4AutoOn command");
-            WateringZone4AutoOn();
-        }    
+    if( IsCurrentTimeInRange(WateringZone4StartHours(), WateringZone4StartMin(), WateringZone4EndHours(), WateringZone4EndMin()) )
+    {
+        grhSendUDPMessage("WateringZone4AutoOn command");
+        WateringZone4AutoOn();        
+    }
 }
 
 
@@ -188,15 +186,11 @@ inline void WateringZone5Scheduler()
                         String(" stop: ") +
                         String(WateringZone5EndHours()) + String(":") + String(WateringZone5EndMin())).c_str());
 
-    int current_hours = timeClient.getHours();
-    int current_minutes = timeClient.getMinutes();
-    if( current_hours >= WateringZone5StartHours() && current_minutes >= WateringZone5StartMin() )
-        if ( current_hours < WateringZone5EndHours() || 
-            ( (current_hours == WateringZone5EndHours()) && (current_minutes < WateringZone5EndMin()) ) )
-        {
-            grhSendUDPMessage("WateringZone5AutoOn command");
-            WateringZone5AutoOn();
-        }    
+    if( IsCurrentTimeInRange(WateringZone5StartHours(), WateringZone5StartMin(), WateringZone5EndHours(), WateringZone5EndMin()) )
+    {
+        grhSendUDPMessage("WateringZone5AutoOn command");
+        WateringZone5AutoOn();        
+    }
 }
 
 
@@ -214,15 +208,11 @@ inline void WateringZone6Scheduler()
                         String(" stop: ") +
                         String(WateringZone6EndHours()) + String(":") + String(WateringZone6EndMin())).c_str());
 
-    int current_hours = timeClient.getHours();
-    int current_minutes = timeClient.getMinutes();
-    if( current_hours >= WateringZone6StartHours() && current_minutes >= WateringZone6StartMin() )
-        if ( current_hours < WateringZone6EndHours() || 
-            ( (current_hours == WateringZone6EndHours()) && (current_minutes < WateringZone6EndMin()) ) )
-        {
-            grhSendUDPMessage("WateringZone6AutoOn command");
-            WateringZone6AutoOn();
-        }    
+    if( IsCurrentTimeInRange(WateringZone6StartHours(), WateringZone6StartMin(), WateringZone6EndHours(), WateringZone6EndMin()) )
+    {
+        grhSendUDPMessage("WateringZone6AutoOn command");
+        WateringZone6AutoOn();        
+    }
 }
 
 #define SanitaryWaterStartHours() SANITARY_WATER_PRODUCTION_DEFAULT_START_HOURS
@@ -239,15 +229,11 @@ inline void SanitaryWaterScheduler()
                         String(" stop: ") +
                         String(SanitaryWaterEndHours()) + String(":") + String(SanitaryWaterEndMin())).c_str());
 
-    int current_hours = timeClient.getHours();
-    int current_minutes = timeClient.getMinutes();
-    if( current_hours >= SanitaryWaterStartHours() && current_minutes >= SanitaryWaterStartMin() )
-        if ( current_hours < SanitaryWaterEndHours() || 
-            ( (current_hours == SanitaryWaterEndHours()) && (current_minutes < SanitaryWaterEndMin()) ) )
-        {
-            grhSendUDPMessage("SanitaryWaterAutoOn command");
-            SanitaryWaterAutoOn();
-        }    
+    if( IsCurrentTimeInRange(SanitaryWaterStartHours(), SanitaryWaterStartMin(), SanitaryWaterEndHours(), SanitaryWaterEndMin()) )
+    {
+        grhSendUDPMessage("SanitaryWaterAutoOn command");
+        SanitaryWaterAutoOn();        
+    }
 }
 
 
