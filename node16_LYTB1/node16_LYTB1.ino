@@ -44,6 +44,14 @@ Compiling Options:
 #define GREEN_STARTUP       0x10
 #define BLUE_STARTUP        0x00
 
+#define EEPROM_ADDR_AQUARIUM_LIGHT_DEFAULT_DURATION 0
+#define EEPROM_ADDR_WATERING_ZONE1_DEFAULT_DURATION 2
+#define EEPROM_ADDR_WATERING_ZONE2_DEFAULT_DURATION 4
+#define EEPROM_ADDR_WATERING_ZONE3_DEFAULT_DURATION 6
+#define EEPROM_ADDR_WATERING_ZONE4_DEFAULT_DURATION 8
+#define EEPROM_ADDR_WATERING_ZONE5_DEFAULT_DURATION 10
+#define EEPROM_ADDR_WATERING_ZONE5_DEFAULT_DURATION 12
+#define EEPROM_ADDR_SANITARY_WATER_PRODUCTION_DEFAULT_DURATION 14
 
 inline void FlashForecastIOColor()
 {
@@ -59,6 +67,7 @@ void setup()
   // Init the network stack and the bulb, turn on with a warm amber
   Initialize();
   InitLYT();
+  Store_Init(); //initialize the EEPROM
 
   /****
       Generally set a PWM output before the connection will lead the
@@ -76,36 +85,55 @@ void setup()
   // Define a logic to handle the bulb
   SetLYTLamps(LYTB1_RGB_LIGHT);
 
+  uint16_t stored_val = 0;
+  float = def_value;
+
   Set_Analog_Setpoint(LYTB1_AQUARIUM_LIGHT_DURATION);
-  float def_value = AQUARIUM_LIGHT_DEFAULT_DURATION;
+  stored_val = Return_16bit(EEPROM_ADDR_AQUARIUM_LIGHT_DEFAULT_DURATION);
+//  def_value = AQUARIUM_LIGHT_DEFAULT_DURATION;
+  def_value = stored_val;
 	ImportAnalog(LYTB1_AQUARIUM_LIGHT_DURATION, &def_value);
 
   Set_Analog_Setpoint(LYTB1_WATERING_ZONE1_DURATION);
-  def_value = WATERING_ZONE1_DEFAULT_DURATION;
+  stored_val = Return_16bit(EEPROM_ADDR_WATERING_ZONE1_DEFAULT_DURATION);
+  def_value = stored_val;
+//  def_value = WATERING_ZONE1_DEFAULT_DURATION;
 	ImportAnalog(LYTB1_WATERING_ZONE1_DURATION, &def_value);
 
   Set_Analog_Setpoint(LYTB1_WATERING_ZONE2_DURATION);
-  def_value = WATERING_ZONE2_DEFAULT_DURATION;
+  stored_val = Return_16bit(EEPROM_ADDR_WATERING_ZONE2_DEFAULT_DURATION);
+  def_value = stored_val;
+//  def_value = WATERING_ZONE2_DEFAULT_DURATION;
 	ImportAnalog(LYTB1_WATERING_ZONE2_DURATION, &def_value);
 
   Set_Analog_Setpoint(LYTB1_WATERING_ZONE3_DURATION);
-  def_value = WATERING_ZONE3_DEFAULT_DURATION;
+  stored_val = Return_16bit(EEPROM_ADDR_WATERING_ZONE3_DEFAULT_DURATION);
+  def_value = stored_val;
+//  def_value = WATERING_ZONE3_DEFAULT_DURATION;
 	ImportAnalog(LYTB1_WATERING_ZONE3_DURATION, &def_value);
 
   Set_Analog_Setpoint(LYTB1_WATERING_ZONE4_DURATION);
-  def_value = WATERING_ZONE4_DEFAULT_DURATION;
+  stored_val = Return_16bit(EEPROM_ADDR_WATERING_ZONE4_DEFAULT_DURATION);
+  def_value = stored_val;
+//  def_value = WATERING_ZONE4_DEFAULT_DURATION;
 	ImportAnalog(LYTB1_WATERING_ZONE4_DURATION, &def_value);
 
   Set_Analog_Setpoint(LYTB1_WATERING_ZONE5_DURATION);
-  def_value = WATERING_ZONE5_DEFAULT_DURATION;
+  stored_val = Return_16bit(EEPROM_ADDR_WATERING_ZONE5_DEFAULT_DURATION);
+  def_value = stored_val;
+//  def_value = WATERING_ZONE5_DEFAULT_DURATION;
 	ImportAnalog(LYTB1_WATERING_ZONE5_DURATION, &def_value);
 
   Set_Analog_Setpoint(LYTB1_WATERING_ZONE6_DURATION);
-  def_value = WATERING_ZONE6_DEFAULT_DURATION;
+  stored_val = Return_16bit(EEPROM_ADDR_WATERING_ZONE6_DEFAULT_DURATION);
+  def_value = stored_val;
+//  def_value = WATERING_ZONE6_DEFAULT_DURATION;
 	ImportAnalog(LYTB1_WATERING_ZONE6_DURATION, &def_value);
 
   Set_Analog_Setpoint(LYTB1_SANITARY_WATER_PRODUCTION_DURATION);
-  def_value = SANITARY_WATER_PRODUCTION_DEFAULT_DURATION;
+  stored_val = Return_16bit(EEPROM_ADDR_SANITARY_WATER_PRODUCTION_DEFAULT_DURATION);
+  def_value = stored_val;
+//  def_value = SANITARY_WATER_PRODUCTION_DEFAULT_DURATION;
 	ImportAnalog(LYTB1_SANITARY_WATER_PRODUCTION_DURATION, &def_value);
 
   // copy initial value to mOutput to avoid calculation with NaN
@@ -140,14 +168,53 @@ void loop()
 
     FAST_110ms()
     {
-      Logic_AnalogIn(LYTB1_AQUARIUM_LIGHT_DURATION);
-      Logic_AnalogIn(LYTB1_WATERING_ZONE1_DURATION);
-      Logic_AnalogIn(LYTB1_WATERING_ZONE2_DURATION);
-      Logic_AnalogIn(LYTB1_WATERING_ZONE3_DURATION);
-      Logic_AnalogIn(LYTB1_WATERING_ZONE4_DURATION);
-      Logic_AnalogIn(LYTB1_WATERING_ZONE5_DURATION);
-      Logic_AnalogIn(LYTB1_WATERING_ZONE6_DURATION);
-      Logic_AnalogIn(LYTB1_SANITARY_WATER_PRODUCTION_DURATION);
+      if( Logic_AnalogIn(LYTB1_AQUARIUM_LIGHT_DURATION) )
+      {
+        Store_16bit( EEPROM_ADDR_AQUARIUM_LIGHT_DEFAULT_DURATION, mOutput(LYTB1_AQUARIUM_LIGHT_DURATION) );
+        Store_Commit();
+      }
+
+      if( Logic_AnalogIn(LYTB1_WATERING_ZONE1_DURATION) )
+      {      
+        Store_16bit( EEPROM_ADDR_WATERING_ZONE1_DEFAULT_DURATION, mOutput(LYTB1_WATERING_ZONE1_DURATION) );
+        Store_Commit();
+      }      
+
+      if( Logic_AnalogIn(LYTB1_WATERING_ZONE2_DURATION) )
+      {
+        Store_16bit( EEPROM_ADDR_WATERING_ZONE2_DEFAULT_DURATION, mOutput(LYTB1_WATERING_ZONE2_DURATION) );
+        Store_Commit();
+      }
+      
+      if( Logic_AnalogIn(LYTB1_WATERING_ZONE3_DURATION) )
+      {
+        Store_16bit( EEPROM_ADDR_WATERING_ZONE3_DEFAULT_DURATION, mOutput(LYTB1_WATERING_ZONE3_DURATION) );
+        Store_Commit();
+      }
+
+      if( Logic_AnalogIn(LYTB1_WATERING_ZONE4_DURATION) )
+      {
+        Store_16bit( EEPROM_ADDR_WATERING_ZONE4_DEFAULT_DURATION, mOutput(LYTB1_WATERING_ZONE4_DURATION) );
+        Store_Commit();
+      }
+
+      if( Logic_AnalogIn(LYTB1_WATERING_ZONE5_DURATION) )
+      {
+        Store_16bit( EEPROM_ADDR_WATERING_ZONE5_DEFAULT_DURATION, mOutput(LYTB1_WATERING_ZONE5_DURATION) );
+        Store_Commit();
+      }
+
+      if( Logic_AnalogIn(LYTB1_WATERING_ZONE6_DURATION) )
+      {      
+        Store_16bit( EEPROM_ADDR_WATERING_ZONE6_DEFAULT_DURATION, mOutput(LYTB1_WATERING_ZONE6_DURATION) );
+        Store_Commit();
+      }
+
+      if( Logic_AnalogIn(LYTB1_SANITARY_WATER_PRODUCTION_DURATION) )
+      {
+        Store_16bit( EEPROM_ADDR_SANITARY_WATER_PRODUCTION_DEFAULT_DURATION, mOutput(LYTB1_SANITARY_WATER_PRODUCTION_DURATION) );
+        Store_Commit();
+      }
     }
 
     SHIFT_11110ms(50)
