@@ -36,7 +36,11 @@ inline bool IsCurrentTimeInRange(unsigned start_h, unsigned start_m, unsigned en
     unsigned current_h = timeClient.getHours();
     unsigned current_m = timeClient.getMinutes();
 
-    if(end_h > start_h) // range not crossing midnight
+//    grhSendUDPMessage( (String("current: ") + String(current_h)+String(":")+String(current_m)).c_str() );
+//    grhSendUDPMessage( (String("start: ") + String(start_h)+String(":")+String(start_m)).c_str() );
+//    grhSendUDPMessage( (String("stop: ") + String(end_h)+String(":")+String(end_m)).c_str() );
+
+    if(end_h >= start_h) // range not crossing midnight
     {
         if( current_h >= start_h && current_m >= start_m ) // after the start time
         {
