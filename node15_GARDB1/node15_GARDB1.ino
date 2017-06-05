@@ -40,13 +40,33 @@ inline void DefineTypicals()
 	SetInput(GARDB1_WATERING_ZONE3, Souliss_T1n_AutoCmd);
 	SetInput(GARDB1_WATERING_ZONE4, Souliss_T1n_AutoCmd);
 	SetInput(GARDB1_WATERING_ZONE5, Souliss_T1n_AutoCmd);
-	SetInput(GARDB1_LIGHT_GARDEN, Souliss_T1n_AutoCmd);}
+	SetInput(GARDB1_LIGHT_GARDEN, Souliss_T1n_AutoCmd);
+}
+
+double read_count = 0;
+double Isum = 0;
+float Irms;
+
+#define I_OFFSET	0	// TODO: modify this
+#define I_RATIO		1	// TODO: modify this
+
+inline void ReadCurrent()
+{
+	float current = aRead(AI1) - I_OFFSET;
+	read_count++;
+	Isum += current * current;
+}
+
+inline void CalculateIrms()
+{
+	Irms = I_RATIO * sqrt(Isum / read_count);
+	read_count = 0;
+	Isum = 0;
+}
 
 inline void ReadInputs()
 {
 	//DigIn(DI5, Souliss_T1n_ToggleCmd, GARDB1_LIGHT_GARDEN);          // Read inputs from DI5
-
-	Souliss_AnalogIn(AV1, memory_map, GARDB1_TOTAL_POWER, 0.1465 * 220 ,0);
 }
 
 inline void ProcessLogics()
@@ -97,6 +117,8 @@ void loop()
 {
 	EXECUTEFAST() {
 		UPDATEFAST();
+		
+		ReadCurrent();
 
 		FAST_30ms()
 		{
@@ -121,5 +143,11 @@ void loop()
 	{
 		UPDATESLOW();
 		grh_SLOW_PeerJoin();
+
+		SLOW_10s()
+		{
+			CalculateIrms();
+			ImportAnalog(GARDB1_TOTAL_POWER, &Irms);
+		}
 	}
 }
