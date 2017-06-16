@@ -223,6 +223,7 @@ sitemap default label="Full"
 	Frame {
 		Group item=gLightsInt icon="light-off"
 		Group item=gLightsExt icon="light-off"
+		Group item=gLightsAuto icon="light-off"
 		Group item=gRolleshutters
 		Text label="Clima" icon="climate"
 		{
@@ -536,60 +537,25 @@ sitemap default label="Full"
 				}
 			}
 		}
-		Text label="Irrigazione" icon="water"
+
+		Text label="Irrigazione" icon="faucet"
 		{
-			Switch item=Irrigation_Master
-			Text item=Irrigation_StartTime label="Ora inizio irrigazione [%s]"
-			Switch item=Irrigation_SetNow mappings=[ON="Adesso!"]
-			Setpoint item=Irrigation_MasterTimeMins minValue=0 maxValue=1440 step=30
-			Setpoint item=Irrigation_ScaleFactor step=10 minValue=50 maxValue=200
-
-			Frame label="Terrazzo Garage"
-			{
-				Setpoint item=Irrigation_TerraceMins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
-				Switch item=Irrigation_Terrace_auto label="Modalità" mappings=[ON="Auto", OFF="Manual"]
-				Switch item=Irrigation_Terrace label="Stato corrente"
-			}
-			Frame label="Orto e Vasi"
-			{
-				Setpoint item=Irrigation_VegeMins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
-				Switch item=Irrigation_Vege_auto label="Modalità"  mappings=[ON="Auto", OFF="Manual"]
-				Switch item=Irrigation_Vege label="Stato corrente"
-			}
-			Frame label="Prato Zona1"
-			{
-				Setpoint item=Irrigation_Lawn2Mins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
-				Switch item=Irrigation_Lawn1_auto label="Modalità"  mappings=[ON="Auto", OFF="Manual"]
-				Switch item=Irrigation_Lawn1 label="Stato corrente"
-			}
-			Frame label="Prato Zona2"
-			{
-				Setpoint item=Irrigation_Lawn1Mins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
-				Switch item=Irrigation_Lawn2_auto label="Modalità"  mappings=[ON="Auto", OFF="Manual"]
-				Switch item=Irrigation_Lawn2 label="Stato corrente"
-			}
-			Frame label="Ingresso"
-			{
-				Setpoint item=Irrigation_EntMins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
-				Switch item=Irrigation_Ent_auto label="Modalità"  mappings=[ON="Auto", OFF="Manual"]
-				Switch item=Irrigation_Ent label="Stato corrente"
-			}
-			Frame label="Balconi"
-			{
-				Setpoint item=Irrigation_BalconyMins label="Minuti Irrigazione [%d mins]" step=1 minValue=0 maxValue=30
-				Switch item=Irrigation_Balcony_auto label="Modalità"  mappings=[ON="Auto", OFF="Manual"]
-				Switch item=Irrigation_Balcony label="Stato corrente"
-			}
+			Group item=gIrrigation icon="water"
+			Group item=gIrrigation_Scheduler icon="clock"
+			Group item=gIrrigation_Auto icon="light"
 		}
-
 
 		Text label="Sicurezza" icon="lock"
 		{
 			Frame label="Cucina"
 			{
-				Switch item=Kitchen_Valve_auto label="Modalità" icon="siren" mappings=[ON="Auto", OFF="Manual"]
-				Switch item=Kitchen_Valve label="Stato corrente" icon="siren"
+				Switch item=Kitchen_Valve_auto label="Modalità" icon="siren-off" mappings=[ON="Auto", OFF="Manual"]
+				Switch item=Kitchen_Valve label="Stato corrente" icon="fire-off"
 			}
+		}
+		Text label="Power Management" icon="energy"
+		{
+			Text item=Power_Tot label="Consumo tot [%.1f kW]" valuecolor=[<=1="green",<=2="orange",>2="red"]
 		}
 	}
 
