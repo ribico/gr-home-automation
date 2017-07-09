@@ -1,4 +1,4 @@
-#define AUTO_CYCLES_COUNT   4
+#define AUTO_CYCLES_COUNT   8
 
 #define IsFloorOn()					(mOutput(LOFTB1_FLOOR_MODE) == Souliss_T1n_OnCoil)
 #define IsFloorAutoOn()			(mOutput(LOFTB1_FLOOR_MODE) == Souliss_T1n_AutoOnCoil)
