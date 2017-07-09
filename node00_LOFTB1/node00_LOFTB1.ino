@@ -122,8 +122,7 @@ inline void ProcessLogics()
 	Logic_AnalogIn(LOFTB1_COLLECTOR_FLOOR_MIX_VALVE_POS);
 }
 
-
-inline void SetOutputs()
+inline void SetOutputs1()
 {
 	nLowDigOut(LIGHT_LOFT_1_PIN, Souliss_T1n_OnCoil, LOFTB1_LIGHT_LOFT_1);
 	nLowDigOut(LIGHT_LOFT_2_PIN, Souliss_T1n_OnCoil, LOFTB1_LIGHT_LOFT_2);
@@ -136,17 +135,40 @@ inline void SetOutputs()
 	nLowDigOut(HEATPUMP_CIRCULATION_PUMP_PIN, Souliss_T1n_OnCoil, LOFTB1_HEATPUMP_CIRCULATION_PUMP);
 	nLowDigOut(HEATPUMP_SANITARY_REQUEST_PIN, Souliss_T1n_OnCoil, LOFTB1_HEATPUMP_SANITARY_WATER);
 	nLowDigOut(HEATPUMP_COOL_PIN, Souliss_T1n_OnCoil, LOFTB1_HEATPUMP_COOL);
+}
 
+inline void SetOutputs2a()
+{
 	// HVAC zone valves
+	#ifdef DEBUG
+			Serial.print("SetOutputs2a - mOutput(HVAC_ZONES): ");
+			Serial.println(mOutput(LOFTB1_HVAC_ZONES), BIN);	
+	#endif
+
 	digitalWrite(ZONE_SWITCH_KITCHEN_PIN, 	!(mOutput(LOFTB1_HVAC_ZONES) & HVAC_MASK_KITCHEN)	);
 	digitalWrite(ZONE_SWITCH_BATH_2_PIN, 	!(mOutput(LOFTB1_HVAC_ZONES) & HVAC_MASK_BATH2) 	);
+}
+
+inline void SetOutputs2b()
+{
 	digitalWrite(ZONE_SWITCH_BED_3_PIN, 	!(mOutput(LOFTB1_HVAC_ZONES) & HVAC_MASK_BED3) 	);
 	digitalWrite(ZONE_SWITCH_LIVING_PIN, 	!(mOutput(LOFTB1_HVAC_ZONES) & HVAC_MASK_LIVING) 	);
+}
+
+inline void SetOutputs2c()
+{
 	digitalWrite(ZONE_SWITCH_BED_2_PIN, 	!(mOutput(LOFTB1_HVAC_ZONES) & HVAC_MASK_BED2) 	);
 	digitalWrite(ZONE_SWITCH_BATH_1_PIN, 	!(mOutput(LOFTB1_HVAC_ZONES) & HVAC_MASK_BATH1) 	);
+}
+
+inline void SetOutputs2d()
+{
 	digitalWrite(ZONE_SWITCH_BED_1_PIN, 	!(mOutput(LOFTB1_HVAC_ZONES) & HVAC_MASK_BED1)		);
 	digitalWrite(ZONE_SWITCH_LOFT_PIN, 		!(mOutput(LOFTB1_HVAC_ZONES) & HVAC_MASK_LOFT)		);
+}
 
+inline void SetOutputs3()
+{
 	#ifdef DEBUG
 		if(mOutput(LOFTB1_HVAC_VALVES) & HEATING_MIX_VALVE_SWITCH_MASK)
 		{
@@ -288,8 +310,22 @@ void loop()
 			ProcessLogics();
 
 		SHIFT_50ms(2)
-			SetOutputs();
+			SetOutputs1();
 
+		SHIFT_1110ms(1)
+			SetOutputs2a();
+
+		SHIFT_1110ms(2)
+			SetOutputs2b();
+
+		SHIFT_1110ms(3)
+			SetOutputs2c();
+
+		SHIFT_1110ms(4)
+			SetOutputs2d();
+
+		SHIFT_1110ms(5)
+			SetOutputs3();
 
 		SHIFT_2110ms(1)
 			GetCurrentStatus(phase_fast);
