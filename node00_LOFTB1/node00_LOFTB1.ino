@@ -118,8 +118,9 @@ inline void ProcessLogics()
 	Logic_Temperature_Setpoint(LOFTB1_TEMP_AMBIENCE_SETPOINT);
 	Logic_Temperature_Setpoint(LOFTB1_TEMP_FLOOR_FLOW_SETPOINT);
 	Logic_Temperature_Setpoint(LOFTB1_HVAC_BOILER_SANITARY_SETPOINT);
-	Logic_Light_Setpoint(LOFTB1_LIGHT_SENSOR_SETPOINT);
 	Logic_AnalogIn(LOFTB1_COLLECTOR_FLOOR_MIX_VALVE_POS);
+
+	Souliss_Logic_T11(memory_map, LOFTB1_HVAC_FULL_AUTO, &data_changed);
 }
 
 inline void SetOutputs1()
@@ -237,6 +238,8 @@ inline void ProcessTimers()
 	Souliss_T12_Timer(memory_map, LOFTB1_HP_SETPOINT_2);
 
 	Timer_HeatingMixValve();
+
+	Souliss_T11_Timer(memory_map, LOFTB1_HVAC_FULL_AUTO);
 }
 
 
@@ -327,32 +330,34 @@ void loop()
 		SHIFT_1110ms(5)
 			SetOutputs3();
 
-		SHIFT_2110ms(1)
+		SHIFT_2110ms(10)
 			GetCurrentStatus(phase_fast);
 
-		SHIFT_2110ms(2)
+		SHIFT_2110ms(20)
+			ProcessFullAutoLogics();
+
+		SHIFT_2110ms(30)
 			ProcessSanitaryWaterRequest(phase_fast);
 
-		SHIFT_2110ms(3)
+		SHIFT_2110ms(40)
 			ProcessZonesActivation(phase_fast);
 
-		SHIFT_2110ms(4)
+		SHIFT_2110ms(50)
 			CalculateFloorTempSetpoint(phase_fast);
 
-		SHIFT_2110ms(5)
+		SHIFT_2110ms(60)
 			ProcessFloorRequest(phase_fast);
 
-		SHIFT_2110ms(6)
+		SHIFT_2110ms(70)
 			ProcessFancoilsRequest(phase_fast);
 
-		SHIFT_2110ms(7)
+		SHIFT_2110ms(80)
 			ProcessTimers();
 
-		SHIFT_2110ms(8)
+		SHIFT_2110ms(90)
 		{
-			// logics to turn on night lights when lux is low
-			if(mOutputAsFloat(LOFTB1_LIGHT_SENSOR) < mOutputAsFloat(LOFTB1_LIGHT_SENSOR_SETPOINT))
-				RemoteInput(IP_ADDRESS_GARDB1, GARDB1_LIGHT_GARDEN, Souliss_T1n_AutoCmd + 16);
+			if( IsNight() )
+				FacadeLightsAutoOnCmd();
 		}
 
 		FAST_GatewayComms();

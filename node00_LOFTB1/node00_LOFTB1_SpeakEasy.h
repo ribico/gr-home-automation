@@ -17,7 +17,10 @@
 #define FancoilsAutoDelay()   mAuxiliary(LOFTB1_FANCOIL_MODE) = HP_CMD_DELAY;
 
 #define IsHeatMode()				(mOutput(LOFTB1_HEATPUMP_COOL) == Souliss_T1n_OffCoil)
+#define SetHeatMode()               SetInput(LOFTB1_HEATPUMP_COOL, Souliss_T1n_OffCoil)
+
 #define IsCoolMode()				(mOutput(LOFTB1_HEATPUMP_COOL) == Souliss_T1n_OnCoil)
+#define SetCoolMode()               SetInput(LOFTB1_HEATPUMP_COOL, Souliss_T1n_OnCoil)
 
 #define IsZoneOpen()				mOutput(LOFTB1_HVAC_ZONES)
 #define IsHeating()					(IsZoneOpen() && IsHeatMode())
@@ -124,3 +127,11 @@
 
 #define IsTempValid(temp)                   ( (temp != DEVICE_DISCONNECTED_C) && (temp != 0.0) && (temp > -15.0) && (temp < 45.0) )
 #define IsURValid(ur)                       ( (ur != 0.0) && (ur < 99.0) )
+
+#define IsNight()                           ( mOutputAsFloat(LOFTB1_LIGHT_SENSOR) < LUX_VALUE_NIGHT )
+#define IsSunShining()                      ( mOutputAsFloat(LOFTB1_LIGHT_SENSOR) > LUX_VALUE_SUN )
+
+#define FacadeLightsAutoOnCmd()             ( RemoteInput(IP_ADDRESS_GARDB1, GARDB1_LIGHT_GARDEN, Souliss_T1n_AutoCmd + 16) )
+
+#define Is_HVAC_FullAuto_On()				(mOutput(LOFTB1_HVAC_FULL_AUTO) == Souliss_T1n_OnCoil)
+#define Is_HVAC_FullAuto_Off()				(mOutput(LOFTB1_HVAC_FULL_AUTO) == Souliss_T1n_OffCoil)

@@ -448,3 +448,62 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 		PumpCollectorToFancoilAutoDelay();
 	}
 }
+
+#define IsAmbienceTempTooCool(ambience_temp)	( ambience_temp < AMBIENCE_SETPOINT_DEFAULT_HEAT-AMBIENCE_SETPOINT_DELTA_FULLAUTO )
+#define IsAmbienceTempTooWarm(ambience_temp)	( ambience_temp > AMBIENCE_SETPOINT_DEFAULT_COOL+AMBIENCE_SETPOINT_DELTA_FULLAUTO )
+#define IsAmbienceTempOK(ambience_temp)		( !IsAmbienceTempTooCool(ambience_temp) && !IsAmbienceTempTooWarm(ambience_temp) )
+
+// Modify the ambience temperature setpoint and HEAT/COOL mode according to measured ambience temperature
+// and presence of sun (production of photovoltaic system)
+void ProcessFullAutoLogics()
+{
+	if( Is_HVAC_FullAuto_On() )
+	{
+		float ambience_temp = temp_LIVING;
+		if( !IsTempValid(ambience_temp) )
+			ambience_temp = temp_DINING;
+
+		if( !IsTempValid(ambience_temp) )
+			return; // two sensors broken ?? -> do nothing
+	
+
+		if( IsAmbienceTempOK(ambience_temp) )
+		{
+			// do nothing since ambient temperature is just fine (18..26.5)
+			return;
+		}
+
+		if( IsAmbienceTempTooCool(ambience_temp) )
+		{
+			SetHeatMode();
+
+			float ambience_set_point = AMBIENCE_SETPOINT_DEFAULT_HEAT;
+
+			// ambience setpoint is changed according to the presence of sun
+			if(IsSunShining())
+				ambience_set_point += AMBIENCE_SETPOINT_DELTA_FULLAUTO;
+			else
+				ambience_set_point -= AMBIENCE_SETPOINT_DELTA_FULLAUTO;				
+
+			ImportAnalog(LOFTB1_TEMP_AMBIENCE_SETPOINT, &ambience_set_point);
+			return;
+		}
+
+		if( IsAmbienceTempTooWarm(ambience_temp) )
+		{
+			SetCoolMode();
+
+			float ambience_set_point = AMBIENCE_SETPOINT_DEFAULT_COOL;
+			// ambience setpoint is changed according to the presence of sun
+
+			if(IsSunShining())
+				ambience_set_point -= AMBIENCE_SETPOINT_DELTA_FULLAUTO;
+			else
+				ambience_set_point += AMBIENCE_SETPOINT_DELTA_FULLAUTO;				
+
+			ImportAnalog(LOFTB1_TEMP_AMBIENCE_SETPOINT, &ambience_set_point);
+			return;
+		}
+
+	}
+}

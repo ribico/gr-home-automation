@@ -30,7 +30,6 @@ inline void DefineTypicals()
 	Set_Temperature_Setpoint(LOFTB1_TEMP_AMBIENCE_SETPOINT);
 	Set_Temperature_Setpoint(LOFTB1_TEMP_FLOOR_FLOW_SETPOINT);
 	Set_Temperature_Setpoint(LOFTB1_HVAC_BOILER_SANITARY_SETPOINT);
-	Set_Light_Setpoint(LOFTB1_LIGHT_SENSOR_SETPOINT);
 
 	Set_Temperature(LOFTB1_HVAC_BOILER_SANITARY_TEMP);
 
@@ -46,6 +45,8 @@ inline void DefineTypicals()
 //	SetInput(LOFTB1_LIGHT_LOFT_1, Souliss_T1n_OnCmd);
 
 	Souliss_SetT22(memory_map, LOFTB1_HEATING_MIX_VALVE);
+
+	Souliss_SetT11(memory_map, LOFTB1_HVAC_FULL_AUTO);
 
 
 	SetInput(LOFTB1_HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd);
@@ -65,9 +66,6 @@ inline void DefineTypicals()
 
 	set_point = SANITARY_WATER_SETPOINT_DEFAULT; // initial setup
 	ImportAnalog(LOFTB1_HVAC_BOILER_SANITARY_SETPOINT, &set_point);
-
-	set_point = NIGHT_LIGHT_LUX_SETPOINT_DEFAULT; // initial setup
-	ImportAnalog(LOFTB1_LIGHT_SENSOR_SETPOINT, &set_point);
 
 	set_point = COLLECTOR_FLOOR_MIX_VALVE_MAX;
 	ImportAnalog(LOFTB1_COLLECTOR_FLOOR_MIX_VALVE_POS, &set_point);
