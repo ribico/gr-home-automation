@@ -12,6 +12,12 @@ DHT dht_loft(LOFT_DHT22_PIN, DHT22);
 
 U8 gTempBuff[26];
 
+inline float ReadTempFromSolarSystem(U8 pin)
+{
+	int analog_val = analogRead(pin);
+	return analog_val*1.87 - 414.1;
+}
+
 inline void GetCurrentStatus(U16 phase_fast)
 {
 	// get light sensor
@@ -21,49 +27,46 @@ inline void GetCurrentStatus(U16 phase_fast)
 	ImportAnalog(LOFTB1_LIGHT_SENSOR, &light_intensity);
 
 	float tmp;
+
 /*
-//	analog_val = analogRead(TEMP_SANITARY_WATER_PIN_IN);
-//	int analog_val1 = analogRead(TEMP_SOLAR_EXT_PIN_IN);
-//	Serial.print("Analog reads : ");
-//	Serial.print(analog_val);
-//	Serial.print(" - ");
-//	Serial.println(analog_val1);
-
-	tmp = NTC10k_ToCelsius( TEMP_SANITARY_WATER_NTC10K_PIN_IN, NTC10K_A1_PAD_RESISTANCE );
-	tmp = grh_W_Average(mOutputAsFloat(LOFTB2_HVAC_SPARE_SANITARY_WATER_TEMP), tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff, &tmp);
-
 // get temperatures from PT1000 in the solar system
-	// 235 : 27.0°C
-	// 244 = 44.2°C
-	// T = n*1.87 - 412.1
-	analog_val = analogRead(TEMP_SOLAR_EXT_PIN_IN);
-	tmp = analog_val*1.87 - 412.1;
-	tmp = grh_W_Average(mOutputAsFloat(LOFTB2_HVAC_SOLAR_EXT_TEMP), tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff+2, &tmp);
-	Serial.print("Analog reads : ");
-	Serial.println(analog_val);
+	tmp = ReadTempFromSolarSystem(TEMP_SOLAR_EXT_PIN_IN);	
+	Serial.print("EXT : ");
+	Serial.print(tmp);
+	tmp = grh_W_Average(pOutputAsFloat(LOFTB2, LOFTB2_HVAC_SOLAR_EXT_TEMP), tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff, &tmp);
 	
-	analog_val = analogRead(TEMP_SOLAR_INT_PIN_IN);
-	tmp = analog_val*1.87 - 412.1;
-	tmp = grh_W_Average(mOutputAsFloat(LOFTB2_HVAC_SOLAR_INT_TEMP), tmp);
+	tmp = ReadTempFromSolarSystem(TEMP_SOLAR_INT_PIN_IN);	
+	Serial.print(" INT : ");
+	Serial.print(tmp);
+	tmp = grh_W_Average(pOutputAsFloat(LOFTB2, LOFTB2_HVAC_SOLAR_INT_TEMP), tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+2, &tmp);
+
+	tmp = ReadTempFromSolarSystem(TEMP_SOLAR_HEAT_EXC_PIN_IN);	
+	Serial.print(" H EXC : ");
+	Serial.print(tmp);
+	tmp = grh_W_Average(pOutputAsFloat(LOFTB2, LOFTB2_HVAC_SOLAR_HEAT_EXC_TEMP), tmp);
 	Souliss_HalfPrecisionFloating(gTempBuff+4, &tmp);
 
-	analog_val = analogRead(TEMP_SOLAR_HEAT_EXC_PIN_IN);
-	tmp = analog_val*1.87 - 412.1;
-	tmp = grh_W_Average(mOutputAsFloat(LOFTB2_HVAC_SOLAR_HEAT_EXC_TEMP), tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff+6, &tmp);
+	tmp = NTC10k_ToCelsius( TEMP_BOILER_BOTTOM_NTC10K_PIN_IN, NTC10K_A1_PAD_RESISTANCE );
+	Serial.print(" BOTTOM : ");
+	Serial.print(tmp);
+	tmp = grh_W_Average(pOutputAsFloat(LOFTB2, LOFTB2_HVAC_BOILER_BOTTOM_TEMP), tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff, &tmp);
 
 	if(!ReqTyp())
-		SendData(IP_ADDRESS_LOFTB2, LOFTB2_HVAC_SPARE_SANITARY_WATER_TEMP, gTempBuff, 8); // sending 8 consecutive bytes
+		SendData(IP_ADDRESS_LOFTB2, LOFTB2_HVAC_SOLAR_EXT_TEMP, gTempBuff, 8); // sending 8 consecutive bytes
 */
-	analog_val = analogRead(TEMP_SANITARY_WATER_PIN_IN);
-	tmp = analog_val*1.87 - 412.1;
+
+	tmp = ReadTempFromSolarSystem(TEMP_SANITARY_WATER_PIN_IN);
+	Serial.print(" SANITARY : ");
+	Serial.print(tmp);
 	tmp = grh_W_Average(mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_TEMP), tmp);
 	ImportAnalog(LOFTB1_HVAC_BOILER_SANITARY_TEMP, &tmp);
 
-	analog_val = analogRead(TEMP_BOILER_HEATING_PIN_IN);
-	tmp = analog_val*1.87 - 412.1;
+	tmp = ReadTempFromSolarSystem(TEMP_BOILER_HEATING_PIN_IN);
+	Serial.print(" HEATING : ");
+	Serial.println(tmp);
 	tmp = grh_W_Average(mOutputAsFloat(LOFTB1_HVAC_BOILER_HEATING_TEMP), tmp);
 	ImportAnalog(LOFTB1_HVAC_BOILER_HEATING_TEMP, &tmp);
 
