@@ -88,11 +88,6 @@
 # define ROW1B1_HVAC_FANCOILS_RETURN_TEMP 							    26
 # define ROW1B1_HVAC_FLOOR_FLOW_TEMP									28
 # define ROW1B1_HVAC_FLOOR_RETURN_TEMP									30
-# define ROW1B1_HVAC_SOLAR_EXT_TEMP     								32
-# define ROW1B1_HVAC_SOLAR_INT_TEMP									    34
-# define ROW1B1_HVAC_SOLAR_HEAT_EXC_TEMP    						    35
-
-
 
 #define ROW1B2 2
 # define ROW1B2_LIGHT_KITCHEN_1		                      1
@@ -215,3 +210,8 @@
 # define LYTB1_WATERING_ZONE6_DURATION_H                17
 # define LYTB1_SANITARY_WATER_PRODUCTION_DURATION       18
 # define LYTB1_SANITARY_WATER_PRODUCTION_DURATION_H     19
+
+#define LOFTB2 17
+# define LOFTB2_HVAC_SOLAR_EXT_TEMP						0
+# define LOFTB2_HVAC_SOLAR_INT_TEMP					    2
+# define LOFTB2_HVAC_SOLAR_HEAT_EXC_TEMP			    4
