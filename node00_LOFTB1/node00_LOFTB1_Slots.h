@@ -32,6 +32,7 @@ inline void DefineTypicals()
 	Set_Temperature_Setpoint(LOFTB1_HVAC_BOILER_SANITARY_SETPOINT);
 
 	Set_Temperature(LOFTB1_HVAC_BOILER_SANITARY_TEMP);
+	Set_Temperature(LOFTB1_HVAC_BOILER_HEATING_TEMP);
 
 	Souliss_SetT12(memory_map, LOFTB1_FANCOIL_MODE);
 	Souliss_SetT12(memory_map, LOFTB1_HP_SETPOINT_2);
