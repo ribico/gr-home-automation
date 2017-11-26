@@ -45,8 +45,8 @@ DallasTemperature gTempSensors1(&gOneWire1);
 #define DALLAS_13_ADDRESS  { 0x28, 0xA3, 0xFE, 0x50, 0x07, 0x00, 0x00, 0xBD }
 #define DALLAS_14_ADDRESS  { 0x28, 0xC8, 0xC8, 0x51, 0x07, 0x00, 0x00, 0x11 }
 
-const DeviceAddress HVAC_BOILER_SANITARY_SPARE_TEMP_ADDR = DALLAS_13_ADDRESS;
-const DeviceAddress HVAC_BOILER_BOTTOM_TEMP_ADDR = DALLAS_2_ADDRESS;
+const DeviceAddress HVAC_BOILER_SANITARY_TEMP_ADDR = DALLAS_13_ADDRESS;
+const DeviceAddress HVAC_BOILER_HEATING_TEMP_ADDR = DALLAS_14_ADDRESS;
 const DeviceAddress HVAC_HEATPUMP_FLOW_TEMP_ADDR = DALLAS_5_ADDRESS;
 const DeviceAddress HVAC_HEATPUMP_RETURN_TEMP_ADDR = DALLAS_10_ADDRESS;
 const DeviceAddress HVAC_FANCOILS_FLOW_TEMP_ADDR = DALLAS_6_ADDRESS;
@@ -71,11 +71,11 @@ inline void ReadDallasTemp(DallasTemperature& sensor_group, const DeviceAddress 
 
 inline void DefineTypicals()
 {
-	Set_Temperature(LOFTB2_HVAC_SPARE_SANITARY_WATER_TEMP);
+	Set_Temperature(LOFTB2_HVAC_SANITARY_WATER_TEMP);
+	Set_Temperature(LOFTB2_HVAC_BOILER_HEATING_TEMP);
 	Set_Temperature(LOFTB2_HVAC_SOLAR_EXT_TEMP);
 	Set_Temperature(LOFTB2_HVAC_SOLAR_INT_TEMP);
 	Set_Temperature(LOFTB2_HVAC_SOLAR_HEAT_EXC_TEMP);
-	Set_Temperature(LOFTB2_HVAC_BOILER_BOTTOM_TEMP);
 	Set_Temperature(LOFTB2_HVAC_HEATPUMP_FLOW_TEMP);
 	Set_Temperature(LOFTB2_HVAC_HEATPUMP_RETURN_TEMP);
 	Set_Temperature(LOFTB2_HVAC_FLOOR_FLOW_TEMP);
@@ -91,11 +91,11 @@ inline void ReadInputs()
 
 inline void ProcessLogics()
 {
-	grh_Logic_HVAC_Temperature(LOFTB2_HVAC_SPARE_SANITARY_WATER_TEMP);
+	grh_Logic_HVAC_Temperature(LOFTB2_HVAC_SANITARY_WATER_TEMP);
+	grh_Logic_HVAC_Temperature(LOFTB2_HVAC_BOILER_HEATING_TEMP);
 	grh_Logic_HVAC_Temperature(LOFTB2_HVAC_SOLAR_EXT_TEMP);
 	grh_Logic_HVAC_Temperature(LOFTB2_HVAC_SOLAR_INT_TEMP);
 	grh_Logic_HVAC_Temperature(LOFTB2_HVAC_SOLAR_HEAT_EXC_TEMP);
-	grh_Logic_HVAC_Temperature(LOFTB2_HVAC_BOILER_BOTTOM_TEMP);
 	grh_Logic_HVAC_Temperature(LOFTB2_HVAC_HEATPUMP_FLOW_TEMP);
 	grh_Logic_HVAC_Temperature(LOFTB2_HVAC_HEATPUMP_RETURN_TEMP);
 	grh_Logic_HVAC_Temperature(LOFTB2_HVAC_FLOOR_FLOW_TEMP);
@@ -150,30 +150,44 @@ void loop()
 		FAST_2110ms()
 		{
 			float tmp;
-			ReadDallasTemp(gTempSensors1, HVAC_BOILER_SANITARY_SPARE_TEMP_ADDR, tmp);
-//			if( IsTempValid(tmp) )
-//				tmp = grh_W_Average(temp_HVAC_Boiler_Heating, tmp);
-			ImportAnalog(LOFTB2_HVAC_SPARE_SANITARY_WATER_TEMP, &tmp);
+			ReadDallasTemp(gTempSensors1, HVAC_BOILER_SANITARY_TEMP_ADDR, tmp);
+			if( IsTempValid(tmp) )
+				tmp = grh_W_Average(Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + LOFTB2_HVAC_SANITARY_WATER_TEMP), tmp);
+			ImportAnalog(LOFTB2_HVAC_SANITARY_WATER_TEMP, &tmp);
 
-			ReadDallasTemp(gTempSensors1, HVAC_BOILER_BOTTOM_TEMP_ADDR, tmp);
-			ImportAnalog(LOFTB2_HVAC_BOILER_BOTTOM_TEMP, &tmp);
-			
+			ReadDallasTemp(gTempSensors1, HVAC_BOILER_HEATING_TEMP_ADDR, tmp);
+			if( IsTempValid(tmp) )
+				tmp = grh_W_Average(Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + LOFTB2_HVAC_BOILER_HEATING_TEMP), tmp);
+			ImportAnalog(LOFTB2_HVAC_BOILER_HEATING_TEMP, &tmp);
+		
 			ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
+			if( IsTempValid(tmp) )
+				tmp = grh_W_Average(Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + LOFTB2_HVAC_HEATPUMP_FLOW_TEMP), tmp);
 			ImportAnalog(LOFTB2_HVAC_HEATPUMP_FLOW_TEMP, &tmp);
 
 			ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
+			if( IsTempValid(tmp) )
+				tmp = grh_W_Average(Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + LOFTB2_HVAC_HEATPUMP_RETURN_TEMP), tmp);
 			ImportAnalog(LOFTB2_HVAC_HEATPUMP_RETURN_TEMP, &tmp);
 
 			ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_FLOW_TEMP_ADDR, tmp);
+			if( IsTempValid(tmp) )
+				tmp = grh_W_Average(Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + LOFTB2_HVAC_FANCOILS_FLOW_TEMP), tmp);
 			ImportAnalog(LOFTB2_HVAC_FANCOILS_FLOW_TEMP, &tmp);
 
 			ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_RETURN_TEMP_ADDR, tmp);
+			if( IsTempValid(tmp) )
+				tmp = grh_W_Average(Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + LOFTB2_HVAC_FANCOILS_RETURN_TEMP), tmp);
 			ImportAnalog(LOFTB2_HVAC_FANCOILS_RETURN_TEMP, &tmp);
 
 			ReadDallasTemp(gTempSensors1, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
+			if( IsTempValid(tmp) )
+				tmp = grh_W_Average(Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + LOFTB2_HVAC_FLOOR_FLOW_TEMP), tmp);
 			ImportAnalog(LOFTB2_HVAC_FLOOR_FLOW_TEMP, &tmp);
 
 			ReadDallasTemp(gTempSensors1, HVAC_FLOOR_RETURN_TEMP_ADDR, tmp);
+			if( IsTempValid(tmp) )
+				tmp = grh_W_Average(Souliss_SinglePrecisionFloating(memory_map + MaCaco_OUT_s + LOFTB2_HVAC_FLOOR_RETURN_TEMP), tmp);
 			ImportAnalog(LOFTB2_HVAC_FLOOR_RETURN_TEMP, &tmp);
 
 			gTempSensors1.requestTemperatures();
