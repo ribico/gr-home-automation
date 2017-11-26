@@ -1,7 +1,14 @@
 
 
 // DEFINE INPUT PINs
-#define LIGHT_TRANSDUCER_PIN_IN									A15
+#define TEMP_SANITARY_WATER_NTC10K_PIN_IN		A1
+#define TEMP_SOLAR_EXT_PIN_IN					A9
+#define TEMP_SOLAR_INT_PIN_IN					A10
+#define TEMP_BOILER_HEATING_PIN_IN				A11
+#define TEMP_SOLAR_HEAT_EXC_PIN_IN				A12
+#define TEMP_SANITARY_WATER_PIN_IN				A13
+
+#define LIGHT_TRANSDUCER_PIN_IN					A15
 
 #define LIGHT_STAIRS_PIN_IN                     48
 #define LIGHT_LOFT_PIN_IN                     	49
@@ -41,7 +48,7 @@
 #define LIGHT_TOILET_PIN                        35
 
 #define HEATPUMP_REMOTE_SWITCH_PIN              36
-#define HEATPUMP_CIRCULATION_PUMP_PIN   				37
+#define HEATPUMP_CIRCULATION_PUMP_PIN   		37
 #define HEATPUMP_SANITARY_REQUEST_PIN           38
 #define HEATPUMP_COOL_PIN                       39
 #define ZONE_SWITCH_BED_1_PIN                   40

@@ -42,13 +42,35 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	float tmp;
 
+//	analog_val = analogRead(TEMP_SANITARY_WATER_PIN_IN);
+//	int analog_val1 = analogRead(TEMP_SOLAR_EXT_PIN_IN);
+//	Serial.print("Analog reads : ");
+//	Serial.print(analog_val);
+//	Serial.print(" - ");
+//	Serial.println(analog_val1);
+
+// get temperatures from PT1000 in the solar system
+	// 230 : 16.2°C
+	// 245 = 44.3°C
+	// T = n*1.873 - 414.667
+/*	analog_val = analogRead(TEMP_SOLAR_EXT_PIN_IN);
+	tmp = analog_val*1.873 - 414.667;
+	tmp = grh_W_Average(mOutputAsFloat(ROW1B1_HVAC_SOLAR_EXT_TEMP), tmp);
+	ImportAnalog(ROW1B1_HVAC_SOLAR_EXT_TEMP, &tmp);
+*/	
+	analog_val = analogRead(TEMP_SANITARY_WATER_PIN_IN);
+	tmp = analog_val*1.873 - 414.667;
+	tmp = grh_W_Average(mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_TEMP), tmp);
+	ImportAnalog(LOFTB1_HVAC_BOILER_SANITARY_TEMP, &tmp);
+
 	// get the sanitary temp value from spare sensor
+/*
 	ReadDallasTemp(gTempSensors2, HVAC_BOILER_SANITARY_TEMP_ADDR_2, tmp);
 	
 	if( IsTempValid(tmp) )
 		tmp = grh_W_Average(mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_TEMP), tmp);
 	ImportAnalog(LOFTB1_HVAC_BOILER_SANITARY_TEMP, &tmp);
-
+*/
 
 	// read and send external temp & UR to ROW1B1 slots
 
