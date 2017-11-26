@@ -125,7 +125,7 @@
 #define temp_HVAC_Floor_Flow                pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_FLOW_TEMP)
 #define temp_HVAC_Floor_Return              pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_RETURN_TEMP)
 
-#define IsTempValid(temp)                   ( (temp != DEVICE_DISCONNECTED_C) && (temp != 0.0) && (temp > -15.0) && (temp < 45.0) )
+#define IsTempValid(temp)                   ( (temp != DEVICE_DISCONNECTED_C) && (temp != 0.0) && (temp > -15.0) && (temp < 65.0) )
 #define IsURValid(ur)                       ( (ur != 0.0) && (ur < 99.0) )
 
 #define IsNight()                           ( mOutputAsFloat(LOFTB1_LIGHT_SENSOR) < LUX_VALUE_NIGHT )
