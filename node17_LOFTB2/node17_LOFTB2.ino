@@ -23,6 +23,7 @@ DINO with ETH only acting as Peer
 
 inline void DefineTypicals()
 {
+	Set_Temperature(LOFTB2_HVAC_SPARE_SANITARY_WATER_TEMP);
 	Set_Temperature(LOFTB2_HVAC_SOLAR_EXT_TEMP);
 	Set_Temperature(LOFTB2_HVAC_SOLAR_INT_TEMP);
 	Set_Temperature(LOFTB2_HVAC_SOLAR_HEAT_EXC_TEMP);
