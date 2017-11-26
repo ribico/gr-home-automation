@@ -291,6 +291,8 @@ void setup()
 
 	SetAsPeerNode(IP_ADDRESS_LYTB1,16);
 
+	SetAsPeerNode(IP_ADDRESS_LOFTB2,17);
+
 	// define static routing table (NOT STRICTLY NEEDED if using PEER_Join in peers)
 	RoutingTable(IP_ADDRESS_ROW1B1, RS485_ADDRESS_ROW1SN, 0);
 	RoutingTable(IP_ADDRESS_ROW2B1, RS485_ADDRESS_ROW2SN, 1);
