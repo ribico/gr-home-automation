@@ -10,26 +10,6 @@ DHT dht_loft(LOFT_DHT22_PIN, DHT22);
 //--------------------------------------
 
 
-//--------------------------------------
-// USED FOR DALLAS TEMP SENSOR
-OneWire gOneWire1(DALLAS_WIRE_BUS1_PIN);
-DallasTemperature gTempSensors1(&gOneWire1);
-
-OneWire gOneWire2(DALLAS_WIRE_BUS2_PIN); // spare sensor for sanitary water
-DallasTemperature gTempSensors2(&gOneWire2);
-
-
-inline void ReadDallasTemp(DallasTemperature& sensor_group, const DeviceAddress address, float& ret_val, U8 retry = 3)
-{
-	for(int i=0; i<retry; i++)
-	{
-		ret_val = sensor_group.getTempC(address);
-		if(IsTempValid(ret_val))
-			return;
-	}
-}
-
-
 U8 gTempBuff[26];
 
 inline void GetCurrentStatus(U16 phase_fast)
@@ -41,7 +21,7 @@ inline void GetCurrentStatus(U16 phase_fast)
 	ImportAnalog(LOFTB1_LIGHT_SENSOR, &light_intensity);
 
 	float tmp;
-
+/*
 //	analog_val = analogRead(TEMP_SANITARY_WATER_PIN_IN);
 //	int analog_val1 = analogRead(TEMP_SOLAR_EXT_PIN_IN);
 //	Serial.print("Analog reads : ");
@@ -49,19 +29,43 @@ inline void GetCurrentStatus(U16 phase_fast)
 //	Serial.print(" - ");
 //	Serial.println(analog_val1);
 
+	tmp = NTC10k_ToCelsius( TEMP_SANITARY_WATER_NTC10K_PIN_IN, NTC10K_A1_PAD_RESISTANCE );
+	tmp = grh_W_Average(mOutputAsFloat(LOFTB2_HVAC_SPARE_SANITARY_WATER_TEMP), tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff, &tmp);
+
 // get temperatures from PT1000 in the solar system
-	// 230 : 16.2°C
-	// 245 = 44.3°C
-	// T = n*1.873 - 414.667
-/*	analog_val = analogRead(TEMP_SOLAR_EXT_PIN_IN);
-	tmp = analog_val*1.873 - 414.667;
-	tmp = grh_W_Average(mOutputAsFloat(ROW1B1_HVAC_SOLAR_EXT_TEMP), tmp);
-	ImportAnalog(ROW1B1_HVAC_SOLAR_EXT_TEMP, &tmp);
-*/	
+	// 235 : 27.0°C
+	// 244 = 44.2°C
+	// T = n*1.87 - 412.1
+	analog_val = analogRead(TEMP_SOLAR_EXT_PIN_IN);
+	tmp = analog_val*1.87 - 412.1;
+	tmp = grh_W_Average(mOutputAsFloat(LOFTB2_HVAC_SOLAR_EXT_TEMP), tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+2, &tmp);
+	Serial.print("Analog reads : ");
+	Serial.println(analog_val);
+	
+	analog_val = analogRead(TEMP_SOLAR_INT_PIN_IN);
+	tmp = analog_val*1.87 - 412.1;
+	tmp = grh_W_Average(mOutputAsFloat(LOFTB2_HVAC_SOLAR_INT_TEMP), tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+4, &tmp);
+
+	analog_val = analogRead(TEMP_SOLAR_HEAT_EXC_PIN_IN);
+	tmp = analog_val*1.87 - 412.1;
+	tmp = grh_W_Average(mOutputAsFloat(LOFTB2_HVAC_SOLAR_HEAT_EXC_TEMP), tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+6, &tmp);
+
+	if(!ReqTyp())
+		SendData(IP_ADDRESS_LOFTB2, LOFTB2_HVAC_SPARE_SANITARY_WATER_TEMP, gTempBuff, 8); // sending 8 consecutive bytes
+*/
 	analog_val = analogRead(TEMP_SANITARY_WATER_PIN_IN);
-	tmp = analog_val*1.873 - 414.667;
+	tmp = analog_val*1.87 - 412.1;
 	tmp = grh_W_Average(mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_TEMP), tmp);
 	ImportAnalog(LOFTB1_HVAC_BOILER_SANITARY_TEMP, &tmp);
+
+	analog_val = analogRead(TEMP_BOILER_HEATING_PIN_IN);
+	tmp = analog_val*1.87 - 412.1;
+	tmp = grh_W_Average(mOutputAsFloat(LOFTB1_HVAC_BOILER_HEATING_TEMP), tmp);
+	ImportAnalog(LOFTB1_HVAC_BOILER_HEATING_TEMP, &tmp);
 
 	// get the sanitary temp value from spare sensor
 /*
@@ -72,79 +76,6 @@ inline void GetCurrentStatus(U16 phase_fast)
 	ImportAnalog(LOFTB1_HVAC_BOILER_SANITARY_TEMP, &tmp);
 */
 
-	// read and send external temp & UR to ROW1B1 slots
-
-	tmp = dht_ext.readTemperature();
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_EXT, tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff, &tmp);
-
-	tmp = dht_ext.readHumidity();
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(UR_EXT, tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff+2, &tmp); // 2 bytes offset for UR
-
-	tmp = dht_loft.readTemperature();
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_LOFT, tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff+4, &tmp);
-
-	tmp = dht_loft.readHumidity();
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(UR_LOFT, tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff+6, &tmp); // 2 bytes offset for UR
-
-	ReadDallasTemp(gTempSensors1, HVAC_BOILER_SANITARY_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_HVAC_Boiler_Saniary, tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff+8, &tmp);
-
-	ReadDallasTemp(gTempSensors1, HVAC_BOILER_HEATING_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_HVAC_Boiler_Heating, tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff+10, &tmp);
-
-	ReadDallasTemp(gTempSensors1, HVAC_BOILER_BOTTOM_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_HVAC_Boiler_Bottom, tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff+12, &tmp);
-
-	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_FLOW_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_HVAC_HEATPUMP_Flow, tmp);
-	Souliss_HalfPrecisionFloating(gTempBuff+14, &tmp);
-
-	ReadDallasTemp(gTempSensors1, HVAC_HEATPUMP_RETURN_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_HVAC_HEATPUMP_Return, tmp);	
-	Souliss_HalfPrecisionFloating(gTempBuff+16, &tmp);
-
-	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_FLOW_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_HVAC_Fancoil_Flow, tmp);	
-	Souliss_HalfPrecisionFloating(gTempBuff+18, &tmp);
-
-	ReadDallasTemp(gTempSensors1, HVAC_FANCOILS_RETURN_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_HVAC_Fancoil_Return, tmp);	
-	Souliss_HalfPrecisionFloating(gTempBuff+20, &tmp);
-
-	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_FLOW_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_HVAC_Floor_Flow, tmp);	
-	Souliss_HalfPrecisionFloating(gTempBuff+22, &tmp);
-
-	ReadDallasTemp(gTempSensors1, HVAC_FLOOR_RETURN_TEMP_ADDR, tmp);
-	if( IsTempValid(tmp) )
-		tmp = grh_W_Average(temp_HVAC_Floor_Return, tmp);	
-	Souliss_HalfPrecisionFloating(gTempBuff+24, &tmp);
-
-	if(!ReqTyp())
-		SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, gTempBuff, 26); // sending 26 consecutive bytes
-
-	// request temperature for next cycle
-	gTempSensors1.requestTemperatures();
-	gTempSensors2.requestTemperatures();
 }
 
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)
@@ -313,30 +244,22 @@ inline void ProcessFloorRequest(U16 phase_fast)
 	{
 		FloorAutoOnCmd(); // only for user interface feedback
 
-		// direct floor heating from the heatpump
-		SetHpFlowToCollector();
-		HpCirculationAutoOnCmd();
-		PumpCollectorToFloorAutoOnCmd();
-		SetCollectorToFloorMixValve_FullOpen();
-
-/*
-		// floor heating from the storage
-		// control hot water storage if there's heating requests from any zone
-		if( IsTempValid(temp_HVAC_Boiler_Heating) && IsTempValid(temp_HVAC_Boiler_Bottom) )
+		// check the storage water temperature 
+		if( IsTempValid(temp_HVAC_Boiler_Heating) && temp_HVAC_Boiler_Heating < 28 )
 		{
-			if( (!IsStorageWaterInProduction() && IsStorageWaterCold()) || (IsStorageWaterInProduction() && !IsStorageWaterHot()) )
-			{
-	      HpSetpoint2AutoCmd(); 	// fixed HP setpoint 2, do not care about standard HP climatic curves
-	      SetHpFlowToBoiler();
-	      HpCirculationAutoOnCmd();
-			}
+			// storage too coold -> direct floor heating from the heatpump
+			SetHpFlowToCollector();
+			HpCirculationAutoOnCmd();
+			PumpCollectorToFloorAutoOnCmd();
+			SetCollectorToFloorMixValve_FullOpen();
 		}
-
-		PumpBoilerToFloorAutoOnCmd();
-
-		if( IsTempValid(temp_HVAC_Floor_Flow) && IsTempValid(temp_HVAC_Floor_Return) )
-			AdjustBoilerToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
-*/
+		else
+		{
+			// storage warm enough for heating
+			PumpBoilerToFloorAutoOnCmd();
+//			if( IsTempValid(temp_HVAC_Floor_Flow) && IsTempValid(temp_HVAC_Floor_Return) )
+//				AdjustBoilerToFloorFlowTemperature( mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT) );
+		}
 	}
 	else if( IsCooling() ) // cooling at least one zone
 	{

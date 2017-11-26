@@ -28,10 +28,6 @@ MEGA with Ethernet only acting as GATEWAY
 #include "HW_Setup_Mega_2560.h"
 #include "NTC.h"
 
-#include "OneWire.h"
-#include "DallasTemperature.h"
-
-
 #include "node00_LOFTB1_PinMapping.h"
 #include "node00_LOFTB1_Parameters.h"
 #include "node00_LOFTB1_Slots.h"
@@ -255,17 +251,6 @@ void setup()
 	SetAsGateway(IP_ADDRESS_TESTB1);
 	SetAddressingServer();
 	grhInitMEGA();
-
-	// Initialize dallas temperature sensors
-	gTempSensors1.begin();
-  gTempSensors1.setResolution(DALLAS_TEMP_RESOLUTION);
-  gTempSensors1.setWaitForConversion(true); // asynchronous temp conversions
-  gTempSensors1.requestTemperatures();
-
-	gTempSensors2.begin();
-  gTempSensors2.setResolution(DALLAS_TEMP_RESOLUTION);
-  gTempSensors2.setWaitForConversion(true); // asynchronous temp conversions
-  gTempSensors2.requestTemperatures();
 
 	// LIST OF NODES
 	SetAsPeerNode(IP_ADDRESS_ROW1B1,1);

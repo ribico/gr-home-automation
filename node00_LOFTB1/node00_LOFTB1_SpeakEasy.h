@@ -114,7 +114,7 @@
 
 //#define temp_HVAC_Boiler_Saniary            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_SANITARY_TEMP)
 #define temp_HVAC_Boiler_Saniary            (IsTempValid(mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_TEMP)) ? mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_TEMP) : pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_SANITARY_TEMP))
-#define temp_HVAC_Boiler_Heating            pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_HEATING_TEMP)
+#define temp_HVAC_Boiler_Heating            mOutputAsFloat(LOFTB1_HVAC_BOILER_HEATING_TEMP)
 #define temp_HVAC_Boiler_Bottom             pOutputAsFloat(ROW1B1,ROW1B1_HVAC_BOILER_BOTTOM_TEMP)
 
 #define temp_HVAC_HEATPUMP_Flow             pOutputAsFloat(ROW1B1,ROW1B1_HVAC_HEATPUMP_FLOW_TEMP)
@@ -125,7 +125,7 @@
 #define temp_HVAC_Floor_Flow                pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_FLOW_TEMP)
 #define temp_HVAC_Floor_Return              pOutputAsFloat(ROW1B1,ROW1B1_HVAC_FLOOR_RETURN_TEMP)
 
-#define IsTempValid(temp)                   ( (temp != DEVICE_DISCONNECTED_C) && (temp != 0.0) && (temp > -15.0) && (temp < 65.0) )
+#define IsTempValid(temp)                   ( (temp != 0.0) && (temp > -15.0) && (temp < 65.0) )
 #define IsURValid(ur)                       ( (ur != 0.0) && (ur < 99.0) )
 
 #define IsNight()                           ( mOutputAsFloat(LOFTB1_LIGHT_SENSOR) < LUX_VALUE_NIGHT )
