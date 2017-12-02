@@ -79,6 +79,30 @@ inline void GetCurrentStatus(U16 phase_fast)
 	ImportAnalog(LOFTB1_HVAC_BOILER_SANITARY_TEMP, &tmp);
 */
 
+	// read and send external temp & UR to ROW1B1 slots
+
+	tmp = dht_ext.readTemperature();
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_EXT, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff, &tmp);
+
+	tmp = dht_ext.readHumidity();
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(UR_EXT, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+2, &tmp); // 2 bytes offset for UR
+
+	tmp = dht_loft.readTemperature();
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(temp_LOFT, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+4, &tmp);
+
+	tmp = dht_loft.readHumidity();
+	if( IsTempValid(tmp) )
+		tmp = grh_W_Average(UR_LOFT, tmp);
+	Souliss_HalfPrecisionFloating(gTempBuff+6, &tmp); // 2 bytes offset for UR
+
+	if(!ReqTyp())
+		SendData(IP_ADDRESS_ROW1B1, ROW1B1_EXT_TEMP, gTempBuff, 8); // sending 8 consecutive bytes
 }
 
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)
