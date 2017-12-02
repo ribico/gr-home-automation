@@ -118,6 +118,7 @@ inline void ProcessLogics()
 	Logic_AnalogIn(LOFTB1_COLLECTOR_FLOOR_MIX_VALVE_POS);
 
 	Souliss_Logic_T11(memory_map, LOFTB1_HVAC_FULL_AUTO, &data_changed);
+	Souliss_Logic_T11(memory_map, LOFTB1_HVAC_VALVES_AUTO, &data_changed);
 }
 
 inline void SetOutputs1()
@@ -237,6 +238,7 @@ inline void ProcessTimers()
 	Timer_HeatingMixValve();
 
 	Souliss_T11_Timer(memory_map, LOFTB1_HVAC_FULL_AUTO);
+	Souliss_T11_Timer(memory_map, LOFTB1_HVAC_VALVES_AUTO);
 }
 
 

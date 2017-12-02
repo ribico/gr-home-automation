@@ -48,7 +48,7 @@ inline void DefineTypicals()
 	Souliss_SetT22(memory_map, LOFTB1_HEATING_MIX_VALVE);
 
 	Souliss_SetT11(memory_map, LOFTB1_HVAC_FULL_AUTO);
-
+	Souliss_SetT11(memory_map, LOFTB1_HVAC_VALVES_AUTO);
 
 	SetInput(LOFTB1_HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd);
 	SetInput(LOFTB1_HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_AutoCmd);
@@ -58,6 +58,7 @@ inline void DefineTypicals()
 //	SetInput(LOFTB1_FLOOR_MODE, Souliss_T1n_AutoCmd);
 	SetInput(LOFTB1_FANCOIL_MODE, Souliss_T1n_AutoCmd);
 	SetInput(LOFTB1_HP_SETPOINT_2, Souliss_T1n_AutoCmd);
+	SetInput(LOFTB1_HVAC_VALVES_AUTO, Souliss_T1n_OnCmd); // start with all valves auto mode
 
 	float set_point = AMBIENCE_SETPOINT_DEFAULT_HEAT; // initial setup
 	ImportAnalog(LOFTB1_TEMP_AMBIENCE_SETPOINT, &set_point);

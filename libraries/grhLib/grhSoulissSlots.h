@@ -53,7 +53,7 @@
 #   define LOFTB1_LIGHT_SENSOR_H								26
 
 #   define LOFTB1_HVAC_FULL_AUTO					27
-#   define XXXXX_SPARE				                28
+#   define LOFTB1_HVAC_VALVES_AUTO	                28
 
 #   define LOFTB1_HVAC_BOILER_SANITARY_TEMP			29
 #   define LOFTB1_HVAC_BOILER_SANITARY_TEMP_H		30
