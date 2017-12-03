@@ -67,6 +67,7 @@
 #define PumpCollectorToFloorAutoDelay()  mAuxiliary(LOFTB1_PUMP_COLLECTOR_FLOOR) = HP_CMD_DELAY;
 
 #define IsPumpCollectorToFancoilOn()	(mOutput(LOFTB1_PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OnCoil)
+#define IsPumpCollectorToFancoilAutoOn()	(mOutput(LOFTB1_PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_AutoOnCoil)
 #define IsPumpCollectorToFancoilOff()	(mOutput(LOFTB1_PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_OffCoil)
 #define IsPumpCollectorToFancoilAuto()	(mOutput(LOFTB1_PUMP_COLLECTOR_FANCOIL) == Souliss_T1n_AutoState)
 #define PumpCollectorToFancoilAutoOnCmd()  SetInput(LOFTB1_PUMP_COLLECTOR_FANCOIL, Souliss_T1n_AutoCmd + 4)

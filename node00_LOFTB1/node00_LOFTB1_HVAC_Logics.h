@@ -424,16 +424,26 @@ inline void ProcessHVACValvesAuto(U16 phase_fast)
 	if( Is_HVAC_ValvesAuto_Off() )
 		return;
 
+//	Serial.print("ProcessHVACValvesAuto ");
+
 	// 3WAY VALVE (HP FLOW to collector or boiler)
 	if( IsSanitaryWaterOn() || IsSanitaryWaterAutoOn() )
+	{
+//		Serial.print("Sanitary Water ");
 		SetHpFlowToBoiler(); 		// upstream to boiler
-	
+	}
 	else if( IsPumpBoilerToFloorOn() || IsPumpBoilerToFloorAutoOn() )
+	{
+//		Serial.print("Boiler To Floor ");
 		SetHpFlowToBoiler(); 		// close path from collector to boiler
-
-	else if( IsPumpCollectorToFloorOn() || IsPumpCollectorToFloorAutoOn() )
+	}
+	else if( IsPumpCollectorToFloorOn() || IsPumpCollectorToFloorAutoOn() || 
+			IsPumpCollectorToFancoilOn() || IsPumpCollectorToFancoilAutoOn() )
+	{
+//		Serial.print("Collector To Floor ");
 		SetHpFlowToCollector();
-
+	}	
+//	Serial.println();
 	// BOILER MIX VALVE REGULATION ???
 }
 
