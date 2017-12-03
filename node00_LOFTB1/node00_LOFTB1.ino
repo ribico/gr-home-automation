@@ -342,9 +342,12 @@ void loop()
 			ProcessFancoilsRequest(phase_fast);
 
 		SHIFT_2110ms(80)
-			ProcessTimers();
+			ProcessHVACValvesAuto(phase_fast);
 
 		SHIFT_2110ms(90)
+			ProcessTimers();
+
+		SHIFT_2110ms(100)
 		{
 			if( IsNight() )
 				FacadeLightsAutoOnCmd();

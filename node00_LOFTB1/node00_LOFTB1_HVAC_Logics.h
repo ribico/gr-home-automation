@@ -112,9 +112,7 @@ inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 	{
 		if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
 		{
-			SetHpFlowToBoiler(); 		// upstream to boiler
 			SanitaryWaterAutoOnCmd(); // set to AutoOff automatically after T12 timeout
-
 			HpCirculationAutoDelay();	// set HP circulation pump to OFF and set a delay timer for restart
 		}
 	}
@@ -272,10 +270,10 @@ inline void ProcessFloorRequest(U16 phase_fast)
 		FloorAutoOnCmd(); // only for user interface feedback
 
 		// check the storage water temperature 
-		if( IsTempValid(temp_HVAC_Boiler_Heating) && temp_HVAC_Boiler_Heating < 28 )
+		if( IsTempValid(temp_HVAC_Boiler_Heating) && temp_HVAC_Boiler_Heating < 30 )
 		{
 			// storage too coold -> direct floor heating from the heatpump
-			SetHpFlowToCollector();
+//			SetHpFlowToCollector(); // DONE BY ProcessHVACValvesAuto
 			HpCirculationAutoOnCmd();
 			PumpCollectorToFloorAutoOnCmd();
 			SetCollectorToFloorMixValve_FullOpen();
@@ -294,7 +292,7 @@ inline void ProcessFloorRequest(U16 phase_fast)
 
 		// produce cold water
 //		HpSetpoint2AutoCmd(); 	// always use setpoint2 when cooling, floor temp is controlled above the dew point temp
-		SetHpFlowToCollector();
+//		SetHpFlowToCollector(); // DONE BY ProcessHVACValvesAuto
 		HpCirculationAutoOnCmd();
 		PumpCollectorToFloorAutoOnCmd();
 		AdjustCollectorToFloorFlowTemperature( mOutputAsFloat(LOFTB1_TEMP_FLOOR_FLOW_SETPOINT) );
@@ -407,7 +405,7 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 
 		if( IsFancoilsOn() || IsFancoilsAutoOn() )
 		{
-			SetHpFlowToCollector();
+//			SetHpFlowToCollector(); // DONE BY ProcessHVACValvesAuto
 			HpCirculationAutoOnCmd();
 			PumpCollectorToFancoilAutoOnCmd();
 			Fancoil_AutoCmd(phase_fast%2, UR_level);
@@ -420,6 +418,25 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 		PumpCollectorToFancoilAutoDelay();
 	}
 }
+
+inline void ProcessHVACValvesAuto(U16 phase_fast)
+{
+	if( Is_HVAC_ValvesAuto_Off() )
+		return;
+
+	// 3WAY VALVE (HP FLOW to collector or boiler)
+	if( IsSanitaryWaterOn() || IsSanitaryWaterAutoOn() )
+		SetHpFlowToBoiler(); 		// upstream to boiler
+	
+	else if( IsPumpBoilerToFloorOn() || IsPumpBoilerToFloorAutoOn() )
+		SetHpFlowToBoiler(); 		// close path from collector to boiler
+
+	else if( IsPumpCollectorToFloorOn() || IsPumpCollectorToFloorAutoOn() )
+		SetHpFlowToCollector();
+
+	// BOILER MIX VALVE REGULATION ???
+}
+
 
 #define IsAmbienceTempTooCool(ambience_temp)	( ambience_temp < AMBIENCE_SETPOINT_DEFAULT_HEAT-AMBIENCE_SETPOINT_DELTA_FULLAUTO )
 #define IsAmbienceTempTooWarm(ambience_temp)	( ambience_temp > AMBIENCE_SETPOINT_DEFAULT_COOL+AMBIENCE_SETPOINT_DELTA_FULLAUTO )

@@ -132,3 +132,6 @@
 
 #define Is_HVAC_FullAuto_On()				(mOutput(LOFTB1_HVAC_FULL_AUTO) == Souliss_T1n_OnCoil)
 #define Is_HVAC_FullAuto_Off()				(mOutput(LOFTB1_HVAC_FULL_AUTO) == Souliss_T1n_OffCoil)
+
+#define Is_HVAC_ValvesAuto_On()				(mOutput(LOFTB1_HVAC_VALVES_AUTO) == Souliss_T1n_OnCoil)
+#define Is_HVAC_ValvedAuto_Off()			(mOutput(LOFTB1_HVAC_VALVES_AUTO) == Souliss_T1n_OffCoil)
