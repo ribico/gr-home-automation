@@ -345,9 +345,12 @@ void loop()
 			ProcessHVACValvesAuto(phase_fast);
 
 		SHIFT_2110ms(90)
-			ProcessTimers();
+			ProcessHpSetpoint2Auto(phase_fast);
 
 		SHIFT_2110ms(100)
+			ProcessTimers();
+
+		SHIFT_2110ms(110)
 		{
 			if( IsNight() )
 				FacadeLightsAutoOnCmd();

@@ -437,6 +437,18 @@ inline void ProcessHVACValvesAuto(U16 phase_fast)
 	// BOILER MIX VALVE REGULATION ???
 }
 
+inline void ProcessHpSetpoint2Auto(U16 phase_fast)
+{
+	if( !IsHpSetpoint2Auto() )
+		return;
+
+// this is setting the Setpoint2 based on light sensor..
+// it should be based on power exchance with the public network
+// to take into consideration also local loads
+	if( mOutputAsFloat(LOFTB1_LIGHT_SENSOR) > LUX_VALUE_SUN + 2000) // strong sun
+		HpSetpoint2AutoCmd();
+}
+
 
 #define IsAmbienceTempTooCool(ambience_temp)	( ambience_temp < AMBIENCE_SETPOINT_DEFAULT_HEAT-AMBIENCE_SETPOINT_DELTA_FULLAUTO )
 #define IsAmbienceTempTooWarm(ambience_temp)	( ambience_temp > AMBIENCE_SETPOINT_DEFAULT_COOL+AMBIENCE_SETPOINT_DELTA_FULLAUTO )

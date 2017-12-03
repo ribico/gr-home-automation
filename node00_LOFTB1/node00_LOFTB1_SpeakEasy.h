@@ -80,6 +80,7 @@
 #define SetCollectorToFloorMixValve_FullOpen()   analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, COLLECTOR_FLOOR_MIX_VALVE_MAX)
 #define SetCollectorToFloorMixValve_FullClose()  analogWrite(COLLECTOR_FLOOR_MIX_VALVE_PIN, COLLECTOR_FLOOR_MIX_VALVE_MIN)
 
+#define IsHpSetpoint2Auto()	            (mOutput(LOFTB1_HP_SETPOINT_2) == Souliss_T1n_AutoState)
 #define	IsHpSetpoint1()					(mOutput(LOFTB1_HP_SETPOINT_2) == Souliss_T1n_OffCoil)
 #define	IsHpSetpoint2()					(mOutput(LOFTB1_HP_SETPOINT_2) == Souliss_T1n_OnCoil)
 #define HpSetpoint2AutoCmd()    SetInput(LOFTB1_HP_SETPOINT_2, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
