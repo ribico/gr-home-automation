@@ -26,25 +26,25 @@
 #define IsHeating()					(IsZoneOpen() && IsHeatMode())
 #define IsCooling()					(IsZoneOpen() && IsCoolMode())
 
-#define IsSanitaryWaterCold()			  (temp_HVAC_Boiler_Saniary < mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_SETPOINT)-SANITARY_WATER_SETPOINT_DB)
-#define IsSanitaryWaterHot()			  (temp_HVAC_Boiler_Saniary > mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_SETPOINT)+SANITARY_WATER_SETPOINT_DB)
+#define IsSanitaryWaterCold()       (temp_HVAC_Boiler_Sanitary < mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_SETPOINT)-SANITARY_WATER_SETPOINT_DB)
+#define IsSanitaryWaterHot()        (temp_HVAC_Boiler_Sanitary > mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_SETPOINT)+SANITARY_WATER_SETPOINT_DB)
 #define IsSanitaryWaterOn()	        (mOutput(LOFTB1_HEATPUMP_SANITARY_WATER) == Souliss_T1n_OnCoil)
-#define IsSanitaryWaterAuto()	      (mOutput(LOFTB1_HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoState)
+#define IsSanitaryWaterAuto()	    (mOutput(LOFTB1_HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoState)
 #define IsSanitaryWaterAutoOn()	    (mOutput(LOFTB1_HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOnCoil)
-#define IsSanitaryWaterAutoOff()	  (mOutput(LOFTB1_HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOffCoil)
+#define IsSanitaryWaterAutoOff()	(mOutput(LOFTB1_HEATPUMP_SANITARY_WATER) == Souliss_T1n_AutoOffCoil)
 #define SanitaryWaterAutoOnCmd()    SetInput(LOFTB1_HEATPUMP_SANITARY_WATER, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
 
-#define IsStorageWaterCold()        (temp_HVAC_Boiler_Heating < mOutputAsFloat(LOFTB1_TEMP_FLOOR_FLOW_SETPOINT))
-#define IsStorageWaterHot()					(temp_HVAC_Boiler_Bottom > mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT))
-#define IsStorageWaterInProduction()  (IsHpFlowToBoiler() && IsHotWaterInProduction())
+#define IsStorageWaterCold()            (temp_HVAC_Boiler_Heating < mOutputAsFloat(LOFTB1_TEMP_FLOOR_FLOW_SETPOINT))
+#define IsStorageWaterHot()				(temp_HVAC_Boiler_Bottom > mOutputAsFloat(TEMP_FLOOR_FLOW_SETPOINT))
+#define IsStorageWaterInProduction()    (IsHpFlowToBoiler() && IsHotWaterInProduction())
 
 #define IsHotWaterInProduction()		(IsHeatMode() && (IsHpCirculationOn() || IsHpCirculationAutoOn()) )
 #define IsCoolWaterInProduction()		(IsCoolMode() && (IsHpCirculationOn() || IsHpCirculationAutoOn()) )
 
 #define IsHpCirculationOn()				(mOutput(LOFTB1_HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_OnCoil)
-#define IsHpCirculationAutoOn()		(mOutput(LOFTB1_HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_AutoOnCoil)
-#define HpCirculationAutoOnCmd()	SetInput(LOFTB1_HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
-#define HpCirculationAutoDelay()  mAuxiliary(LOFTB1_HEATPUMP_CIRCULATION_PUMP) = HP_CMD_DELAY;
+#define IsHpCirculationAutoOn()		    (mOutput(LOFTB1_HEATPUMP_CIRCULATION_PUMP) == Souliss_T1n_AutoOnCoil)
+#define HpCirculationAutoOnCmd()	    SetInput(LOFTB1_HEATPUMP_CIRCULATION_PUMP, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
+#define HpCirculationAutoDelay()        mAuxiliary(LOFTB1_HEATPUMP_CIRCULATION_PUMP) = HP_CMD_DELAY;
 
 #define IsHpFlowToBoiler()				(/*(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_BOILER_MASK) && */(mOutput(LOFTB1_MAIN_3WAY_VALVE) == Souliss_T2n_State_Open))
 #define IsHpFlowToCollector()			(/*(mOutput(HVAC_VALVES) & MAIN_3WAY_VALVE_COLLECTOR_MASK) &&*/ (mOutput(LOFTB1_MAIN_3WAY_VALVE) == Souliss_T2n_State_Close))
@@ -54,13 +54,15 @@
 #define SetHpFlowToCollector()	 		if(!IsHpFlowToCollector() && !Is3WayValveMovingToCollector()) 	SetInput(LOFTB1_MAIN_3WAY_VALVE, Souliss_T2n_CloseCmd_SW)
 
 #define IsPumpBoilerToFloorOn()			(mOutput(LOFTB1_PUMP_BOILER_FLOOR) == Souliss_T1n_OnCoil)
+#define IsPumpBoilerToFloorAutoOn()		(mOutput(LOFTB1_PUMP_BOILER_FLOOR) == Souliss_T1n_AutoOnCoil)
 #define IsPumpBoilerToFloorOff()		(mOutput(LOFTB1_PUMP_BOILER_FLOOR) == Souliss_T1n_OffCoil)
 #define IsPumpBoilerToFloorAuto()		(mOutput(LOFTB1_PUMP_BOILER_FLOOR) == Souliss_T1n_AutoState)
 #define PumpBoilerToFloorAutoOnCmd()   SetInput(LOFTB1_PUMP_BOILER_FLOOR, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
 
 #define IsPumpCollectorToFloorOn()		(mOutput(LOFTB1_PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OnCoil)
+#define IsPumpCollectorToFloorAutoOn()	(mOutput(LOFTB1_PUMP_COLLECTOR_FLOOR) == Souliss_T1n_AutoOnCoil)
 #define IsPumpCollectorToFloorOff()		(mOutput(LOFTB1_PUMP_COLLECTOR_FLOOR) == Souliss_T1n_OffCoil)
-#define IsPumpCollectorToFloorAuto()		(mOutput(LOFTB1_PUMP_COLLECTOR_FLOOR) == Souliss_T1n_AutoState)
+#define IsPumpCollectorToFloorAuto()	(mOutput(LOFTB1_PUMP_COLLECTOR_FLOOR) == Souliss_T1n_AutoState)
 #define PumpCollectorToFloorAutoOnCmd()  SetInput(LOFTB1_PUMP_COLLECTOR_FLOOR, Souliss_T1n_AutoCmd + AUTO_CYCLES_COUNT)
 #define PumpCollectorToFloorAutoDelay()  mAuxiliary(LOFTB1_PUMP_COLLECTOR_FLOOR) = HP_CMD_DELAY;
 
@@ -113,7 +115,7 @@
 #define temp_LOFT     pOutputAsFloat(ROW1B1,ROW1B1_LOFT_TEMP)
 #define UR_LOFT       pOutputAsFloat(ROW1B1,ROW1B1_LOFT_UR)
 
-#define temp_HVAC_Boiler_Saniary            (IsTempValid(pOutputAsFloat(LOFTB2,LOFTB2_HVAC_SANITARY_WATER_TEMP)) ? pOutputAsFloat(LOFTB2,LOFTB2_HVAC_SANITARY_WATER_TEMP) : mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_TEMP))
+#define temp_HVAC_Boiler_Sanitary           (IsTempValid(pOutputAsFloat(LOFTB2,LOFTB2_HVAC_SANITARY_WATER_TEMP)) ? pOutputAsFloat(LOFTB2,LOFTB2_HVAC_SANITARY_WATER_TEMP) : mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_TEMP))
 #define temp_HVAC_Boiler_Heating            pOutputAsFloat(LOFTB2,LOFTB2_HVAC_BOILER_HEATING_TEMP)
 #define temp_HVAC_HEATPUMP_Flow             pOutputAsFloat(LOFTB2,LOFTB2_HVAC_FLOOR_FLOW_TEMP)
 #define temp_HVAC_HEATPUMP_Return           pOutputAsFloat(LOFTB2,LOFTB2_HVAC_FLOOR_RETURN_TEMP)
@@ -135,4 +137,4 @@
 #define Is_HVAC_FullAuto_Off()				(mOutput(LOFTB1_HVAC_FULL_AUTO) == Souliss_T1n_OffCoil)
 
 #define Is_HVAC_ValvesAuto_On()				(mOutput(LOFTB1_HVAC_VALVES_AUTO) == Souliss_T1n_OnCoil)
-#define Is_HVAC_ValvedAuto_Off()			(mOutput(LOFTB1_HVAC_VALVES_AUTO) == Souliss_T1n_OffCoil)
+#define Is_HVAC_ValvesAuto_Off()			(mOutput(LOFTB1_HVAC_VALVES_AUTO) == Souliss_T1n_OffCoil)

@@ -108,7 +108,7 @@ inline void GetCurrentStatus(U16 phase_fast)
 inline void ProcessSanitaryWaterRequest(U16 phase_fast)
 {
 	// control SANITARY production hysteresys in Auto Mode
-	if( IsTempValid(temp_HVAC_Boiler_Saniary) )
+	if( IsTempValid(temp_HVAC_Boiler_Sanitary) )
 	{
 		if( (IsSanitaryWaterAutoOff() && IsSanitaryWaterCold()) || (IsSanitaryWaterAutoOn() && !IsSanitaryWaterHot()) )
 		{
@@ -439,7 +439,7 @@ inline void ProcessHVACValvesAuto(U16 phase_fast)
 
 inline void ProcessHpSetpoint2Auto(U16 phase_fast)
 {
-	if( !IsHpSetpoint2Auto() )
+	if( !IsHpSetpoint2Auto() || IsSanitaryWaterOn() || IsSanitaryWaterAutoOn() )
 		return;
 
 // this is setting the Setpoint2 based on light sensor..
