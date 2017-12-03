@@ -233,6 +233,8 @@ sitemap default label="Full"
 				Text item=Temperature_3F_Ext
 				Text item=UR_3F_Ext
 			}
+			
+			Switch item=HVAC_FULL_auto
 
 			Text label="Impostazioni" icon="climate"
 			{
@@ -292,6 +294,7 @@ sitemap default label="Full"
 					{
 						Frame label="Valvole sul Boiler"
 						{
+							Switch item=HVAC_Valves_auto
 							Switch item=HVAC_3way_Valve
 						}
 						Frame label="Valvole di Zona"

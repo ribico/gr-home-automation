@@ -147,6 +147,8 @@ Switch HP_Heat_Cool			"Produzione Freddo" 		<climate> (gTechnicView_Node0,gHPSet
 Switch HP_Setpoint2_auto     "Modalità Setpoint2 Man/Auto" (gTechnicView_Node0,gHPSettings) {souliss="T12:0:19:automode"}
 Switch HP_Setpoint2     "Setpoint2" (gTechnicView_Node0,gHPSettings) {souliss="T12:0:19:switch"}
 
+Switch HVAC_FULL_auto		        "Clima FULL Auto"	        (gHVAC_Valves,gTechnicView_Node0) {souliss="T12:0:27"}
+Switch HVAC_Valves_auto		        "Valvole HVAC Auto"	        (gHVAC_Valves,gTechnicView_Node0) {souliss="T12:0:28"}
 Rollershutter HVAC_3way_Valve		"Valvola a 3 Vie"			(gHVAC_Valves,gTechnicView_Node0) {souliss="T22:0:14"}
 Switch HVAC_Pump_Boiler_Floor		"Pompa Boiler->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:15:switch"}
 Switch HVAC_Pump_Boiler_Floor_auto		"Pompa Boiler->Pavimento Auto"	<lock> (gTechnicView_Node0) {souliss="T12:0:15:automode"}
