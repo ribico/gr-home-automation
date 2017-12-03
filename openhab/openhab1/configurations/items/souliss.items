@@ -172,16 +172,16 @@ Switch Fancoil_2F_GW2_Speed2_auto	"Fancoil2 Vel2 Auto"	<lock>  (gTechnicView_Nod
 Switch Fancoil_2F_GW2_Speed3	"Fancoil2 Vel3"	 (gTechnicView_Node14,gHVAC,g2F_GW2) {souliss="T12:14:3:switch"}
 Switch Fancoil_2F_GW2_Speed3_auto	"Fancoil2 Vel3 Auto"	<lock>  (gTechnicView_Node14,gHVAC,g2F_GW2) {souliss="T12:14:3:automode"}
 
-Number HVAC_Temp_Sanitary		"Temp. ACS [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:14"}
+Number HVAC_Temp_Sanitary		"Temp. ACS [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:0"}
 Number HVAC_Temp_Sanitary1		"Temp1. ACS [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:29"}
-Number HVAC_Temp_Heating		"Temp. Accumulo Alto [%.1f °C]"		<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:16"}
+Number HVAC_Temp_Heating		"Temp. Accumulo Alto [%.1f °C]"		<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:2"}
 Number HVAC_Temp_Bottom		"Temp. Accumulo Basso [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:18"}
-Number HVAC_Temp_HP_Flow		"Temp. PDC Mandata [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:20"}
-Number HVAC_Temp_HP_Ret		"Temp. PDC Ritorno [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:22"}
-Number HVAC_Temp_Fancoils_Flow		"Temp. Fancoils Mandata [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:24"}
-Number HVAC_Temp_Fancoils_Ret		"Temp. Fancoils Ritorno [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:26"}
-Number HVAC_Temp_Floor_Flow		"Temp. Pavimento Mandata [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:28"}
-Number HVAC_Temp_Floor_Ret		"Temp. Pavimento Ritorno [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:30"}
+Number HVAC_Temp_HP_Flow		"Temp. PDC Mandata [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:10"}
+Number HVAC_Temp_HP_Ret		"Temp. PDC Ritorno [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:12"}
+Number HVAC_Temp_Fancoils_Flow		"Temp. Fancoils Mandata [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:18"}
+Number HVAC_Temp_Fancoils_Ret		"Temp. Fancoils Ritorno [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:20"}
+Number HVAC_Temp_Floor_Flow		"Temp. Pavimento Mandata [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:14"}
+Number HVAC_Temp_Floor_Ret		"Temp. Pavimento Ritorno [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:16"}
 
 Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima) {souliss="T52:0:20"}
 Rollershutter HVAC_Temp_SP 	"Temp. Ambiente SetPoint" 	<temperature> (gTechnicView_Node0,gClima) {souliss="T22:0:22"}
