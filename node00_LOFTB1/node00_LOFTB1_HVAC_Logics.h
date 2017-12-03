@@ -59,14 +59,14 @@ inline void GetCurrentStatus(U16 phase_fast)
 */
 
 	tmp = ReadTempFromSolarSystem(TEMP_SANITARY_WATER_PIN_IN);
-	Serial.print(" SANITARY : ");
-	Serial.print(tmp);
+//	Serial.print(" SANITARY : ");
+//	Serial.print(tmp);
 	tmp = grh_W_Average(mOutputAsFloat(LOFTB1_HVAC_BOILER_SANITARY_TEMP), tmp);
 	ImportAnalog(LOFTB1_HVAC_BOILER_SANITARY_TEMP, &tmp);
 
 	tmp = ReadTempFromSolarSystem(TEMP_BOILER_HEATING_PIN_IN);
-	Serial.print(" HEATING : ");
-	Serial.println(tmp);
+//	Serial.print(" HEATING : ");
+//	Serial.println(tmp);
 	tmp = grh_W_Average(mOutputAsFloat(LOFTB1_HVAC_BOILER_HEATING_TEMP), tmp);
 	ImportAnalog(LOFTB1_HVAC_BOILER_HEATING_TEMP, &tmp);
 
@@ -439,14 +439,14 @@ inline void ProcessHVACValvesAuto(U16 phase_fast)
 
 inline void ProcessHpSetpoint2Auto(U16 phase_fast)
 {
-	if( !IsHpSetpoint2Auto() || IsSanitaryWaterOn() || IsSanitaryWaterAutoOn() )
+	if( !IsHpSetpoint2Auto() )
 		return;
 
 // this is setting the Setpoint2 based on light sensor..
 // it should be based on power exchance with the public network
 // to take into consideration also local loads
-	if( mOutputAsFloat(LOFTB1_LIGHT_SENSOR) > LUX_VALUE_SUN + 2000) // strong sun
-		HpSetpoint2AutoCmd();
+//	if( mOutputAsFloat(LOFTB1_LIGHT_SENSOR) > LUX_VALUE_SUN + 2000) // strong sun
+//		HpSetpoint2AutoCmd();
 }
 
 
