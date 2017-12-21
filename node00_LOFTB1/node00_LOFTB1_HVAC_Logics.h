@@ -269,8 +269,13 @@ inline void ProcessFloorRequest(U16 phase_fast)
 	{
 		FloorAutoOnCmd(); // only for user interface feedback
 
-		// check the storage water temperature 
-		if( IsTempValid(temp_HVAC_Boiler_Heating) && temp_HVAC_Boiler_Heating < 30 )
+		// if sun is shining the heatpump should be used to use the photovoltaic production
+		// while solar panels will accumulate hot water in the storage for later
+		// (this should be rewritten considering the power echange to the grid and not on the sun presence)
+		// or
+		// if storage water temperature is too cold the heatpump production should be used 
+		// (regardless the sun presence) 
+		if( IsSunShining() || (IsTempValid(temp_HVAC_Boiler_Heating) && temp_HVAC_Boiler_Heating < 30) )
 		{
 			// storage too coold -> direct floor heating from the heatpump
 //			SetHpFlowToCollector(); // DONE BY ProcessHVACValvesAuto
