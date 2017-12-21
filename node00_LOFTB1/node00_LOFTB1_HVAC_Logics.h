@@ -442,8 +442,7 @@ inline void ProcessHVACValvesAuto(U16 phase_fast)
 //		Serial.print("Boiler To Floor ");
 		SetHpFlowToBoiler(); 		// close path from collector to boiler
 	}
-	else if( IsPumpCollectorToFloorOn() || IsPumpCollectorToFloorAutoOn() || 
-			IsPumpCollectorToFancoilOn() || IsPumpCollectorToFancoilAutoOn() )
+	else
 	{
 //		Serial.print("Collector To Floor ");
 		SetHpFlowToCollector();
@@ -485,7 +484,7 @@ void ProcessFullAutoLogics()
 
 		if( IsAmbienceTempOK(ambience_temp) )
 		{
-			// do nothing since ambient temperature is just fine (18..26.5)
+			// do nothing since ambient temperature is just fine (18.8..25.7)
 			return;
 		}
 
