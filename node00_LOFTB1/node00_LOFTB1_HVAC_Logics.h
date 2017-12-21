@@ -465,8 +465,8 @@ inline void ProcessHpSetpoint2Auto(U16 phase_fast)
 }
 
 
-#define IsAmbienceTempTooCool(ambience_temp)	( ambience_temp < AMBIENCE_SETPOINT_DEFAULT_HEAT-AMBIENCE_SETPOINT_DELTA_FULLAUTO )
-#define IsAmbienceTempTooWarm(ambience_temp)	( ambience_temp > AMBIENCE_SETPOINT_DEFAULT_COOL+AMBIENCE_SETPOINT_DELTA_FULLAUTO )
+#define IsAmbienceTempTooCool(ambience_temp)	( ambience_temp < AMBIENCE_SETPOINT_DEFAULT_HEAT-SETPOINT_TEMP_DEADBAND_SMALL )
+#define IsAmbienceTempTooWarm(ambience_temp)	( ambience_temp > AMBIENCE_SETPOINT_DEFAULT_COOL+SETPOINT_TEMP_DEADBAND_SMALL )
 #define IsAmbienceTempOK(ambience_temp)		( !IsAmbienceTempTooCool(ambience_temp) && !IsAmbienceTempTooWarm(ambience_temp) )
 
 // Modify the ambience temperature setpoint and HEAT/COOL mode according to measured ambience temperature
