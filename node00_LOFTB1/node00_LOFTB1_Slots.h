@@ -55,7 +55,7 @@ inline void DefineTypicals()
 	SetInput(LOFTB1_PUMP_BOILER_FLOOR, Souliss_T1n_AutoCmd);
 	SetInput(LOFTB1_PUMP_COLLECTOR_FANCOIL, Souliss_T1n_AutoCmd);
 	SetInput(LOFTB1_PUMP_COLLECTOR_FLOOR, Souliss_T1n_AutoCmd);
-//	SetInput(LOFTB1_FLOOR_MODE, Souliss_T1n_AutoCmd);
+	SetInput(LOFTB1_FLOOR_MODE, Souliss_T1n_AutoCmd);
 	SetInput(LOFTB1_FANCOIL_MODE, Souliss_T1n_AutoCmd);
 	SetInput(LOFTB1_HP_SETPOINT_2, Souliss_T1n_AutoCmd);
 	SetInput(LOFTB1_HVAC_VALVES_AUTO, Souliss_T1n_OnCmd); // start with all valves auto mode
