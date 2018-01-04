@@ -481,14 +481,7 @@ void ProcessFullAutoLogics()
 		if( !IsTempValid(ambience_temp) )
 			return; // two sensors broken ?? -> do nothing
 	
-
-		if( IsAmbienceTempOK(ambience_temp) )
-		{
-			// do nothing since ambient temperature is just fine (18.8..25.7)
-			return;
-		}
-
-		if( IsAmbienceTempTooCool(ambience_temp) )
+		if( IsHeating() || IsAmbienceTempTooCool(ambience_temp) ) // < 18.8°C
 		{
 			SetHeatMode();
 
@@ -496,7 +489,10 @@ void ProcessFullAutoLogics()
 
 			// ambience setpoint is changed according to the presence of sun
 			if(IsSunShining())
+			{
 				ambience_set_point += AMBIENCE_SETPOINT_DELTA_FULLAUTO;
+				HpSetpoint2AutoCmd(); // during winter sunlight is too short => heat with setpoint2
+			}
 			else
 				ambience_set_point -= AMBIENCE_SETPOINT_DELTA_FULLAUTO;				
 
@@ -504,7 +500,7 @@ void ProcessFullAutoLogics()
 			return;
 		}
 
-		if( IsAmbienceTempTooWarm(ambience_temp) )
+		if( IsCooling() || IsAmbienceTempTooWarm(ambience_temp) ) // > 25.7°C
 		{
 			SetCoolMode();
 
