@@ -64,9 +64,9 @@ Switch Light_3F_Terrace_2		"Terrazzo Luce 2" 	(g3F_Terrace,gTechnicView_Node0,gL
 Switch Light_3F_Terrace_3		"Terrazzo Luce 3" 	(g3F_Terrace,gTechnicView_Node0,gLightsExt,gMyOpenHAB) {souliss="T11:0:5"}
 
 Group	gLightsAuto			"Luci Auto/Man"				<light>
-Switch Light_2F_Living_Aquarium_auto      "Acquario Modalità Luce Man/Auto" (gTechnicView_Node8,gLightsAuto,gMyOpenHAB) {souliss="T12:8:7:automode"}
-Switch Light_2F_Ext_Door_auto "Portone Modalità Luce Man/Auto" (gTechnicView_Node8,gLightsAuto,gMyOpenHAB) {souliss="T12:8:6:automode"}
-Switch Light_Facade_auto      "Facciata Modalità Luci Man/Auto" (gTechnicView_Node15,gLightsAuto,gMyOpenHAB) {souliss="T12:15:0:automode"}
+Switch Light_2F_Living_Aquarium_auto      "Acquario  Luce Man/Auto" (gTechnicView_Node8,gLightsAuto,gMyOpenHAB) {souliss="T12:8:7:automode"}
+Switch Light_2F_Ext_Door_auto "Portone Luce Man/Auto" (gTechnicView_Node8,gLightsAuto,gMyOpenHAB)  {souliss="T12:8:6:automode"}
+Switch Light_Facade_auto      "Facciata Luci Man/Auto" (gTechnicView_Node15,gLightsAuto,gMyOpenHAB) {souliss="T12:15:0:automode"}
 
 
 Group gRolleshutters	"Tapparelle"	<rollershutter>
@@ -140,7 +140,7 @@ Number UR_3F_Loft		"Loft UR [%.1f %%]" 	<humidity> (gUR,g3F_Loft,gTechnicView_No
 
 Switch Floor_Mode			"Pavimento"		 (gTechnicView_Node0,gHPSettings) {souliss="T12:0:7:switch"}
 Switch Floor_Mode_auto		"Pavimento Auto"		<lock> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:7:automode"}
-Switch HP_Remote_Switch		"Remote Switch" 		<inverter> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:8:switch"}
+Switch HP_Remote_Switch		"Remote Switch" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:8:switch"}
 Switch HP_Circulation_Pump	"Pompa Interna" 		(gTechnicView_Node0,gHPSettings) {souliss="T12:0:9:switch"}
 Switch HP_Circulation_Pump_auto	"Pompa Interna Auto" 	<lock>	(gTechnicView_Node0,gHPSettings) {souliss="T12:0:9:automode"}
 Switch HP_Sanitary_Request	"ACS" 		        (gTechnicView_Node0,gHPSettings) {souliss="T12:0:10:switch"}
@@ -149,6 +149,9 @@ Switch HP_Heat_Cool_auto			"Modalità Produzione Freddo Man/auto" 		<climate> (g
 Switch HP_Heat_Cool			"Produzione Freddo" 		<climate> (gTechnicView_Node0,gHPSettings) {souliss="T12:0:11:switch"}
 Switch HP_Setpoint2_auto     "Modalità Setpoint2 Man/Auto" (gTechnicView_Node0,gHPSettings) {souliss="T12:0:19:automode"}
 Switch HP_Setpoint2     "Setpoint2" (gTechnicView_Node0,gHPSettings) {souliss="T12:0:19:switch"}
+
+Switch HVAC_FULL_auto		        "Clima FULL Auto"	        (gHVAC_Valves,gTechnicView_Node0) {souliss="T11:0:27"}
+Switch HVAC_Valves_auto		        "Valvole HVAC Auto"	        (gHVAC_Valves,gTechnicView_Node0) {souliss="T11:0:28"}
 
 Rollershutter HVAC_3way_Valve		"Valvola a 3 Vie"			(gHVAC_Valves,gTechnicView_Node0) {souliss="T22:0:14"}
 Switch HVAC_Pump_Boiler_Floor		"Pompa Boiler->Pavimento"	(gTechnicView_Node0) {souliss="T12:0:15:switch"}
@@ -175,16 +178,16 @@ Switch Fancoil_2F_GW2_Speed2_auto	"Fancoil2 Vel2 Auto"	<lock>  (gTechnicView_Nod
 Switch Fancoil_2F_GW2_Speed3	"Fancoil2 Vel3"	 (gTechnicView_Node14,gHVAC,g2F_GW2) {souliss="T12:14:3:switch"}
 Switch Fancoil_2F_GW2_Speed3_auto	"Fancoil2 Vel3 Auto"	<lock>  (gTechnicView_Node14,gHVAC,g2F_GW2) {souliss="T12:14:3:automode"}
 
-Number HVAC_Temp_Sanitary		"Temp. ACS [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:14"}
+Number HVAC_Temp_Sanitary		"Temp. ACS [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:0"}
 Number HVAC_Temp_Sanitary1		"Temp1. ACS [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:0:29"}
-Number HVAC_Temp_Heating		"Temp. Accumulo Alto [%.1f °C]"		<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:16"}
+Number HVAC_Temp_Heating		"Temp. Accumulo Alto [%.1f °C]"		<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:2"}
 Number HVAC_Temp_Bottom		"Temp. Accumulo Basso [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:18"}
-Number HVAC_Temp_HP_Flow		"Temp. PDC Mandata [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:20"}
-Number HVAC_Temp_HP_Ret		"Temp. PDC Ritorno [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:22"}
-Number HVAC_Temp_Fancoils_Flow		"Temp. Fancoils Mandata [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:24"}
-Number HVAC_Temp_Fancoils_Ret		"Temp. Fancoils Ritorno [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:26"}
-Number HVAC_Temp_Floor_Flow		"Temp. Pavimento Mandata [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:28"}
-Number HVAC_Temp_Floor_Ret		"Temp. Pavimento Ritorno [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:1:30"}
+Number HVAC_Temp_HP_Flow		"Temp. PDC Mandata [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:10"}
+Number HVAC_Temp_HP_Ret		"Temp. PDC Ritorno [%.1f °C]"				<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:12"}
+Number HVAC_Temp_Fancoils_Flow		"Temp. Fancoils Mandata [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:18"}
+Number HVAC_Temp_Fancoils_Ret		"Temp. Fancoils Ritorno [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:20"}
+Number HVAC_Temp_Floor_Flow		"Temp. Pavimento Mandata [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:14"}
+Number HVAC_Temp_Floor_Ret		"Temp. Pavimento Ritorno [%.1f °C]"	<temperature> (gTechnicView_Node0,gHP,gHPTemp) {souliss="T52:17:16"}
 
 Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gTechnicView_Node0,gClima) {souliss="T52:0:20"}
 Rollershutter HVAC_Temp_SP 	"Temp. Ambiente SetPoint" 	<temperature> (gTechnicView_Node0,gClima) {souliss="T22:0:22"}
