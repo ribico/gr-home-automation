@@ -12,10 +12,37 @@ DHT dht_loft(LOFT_DHT22_PIN, DHT22);
 
 U8 gTempBuff[26];
 
+// from here: http://forum.arduino.cc/index.php?topic=43605.0
+float GetPlatinumRTD(float R,float R0) { 
+   float A=3.9083E-3; 
+   float B=-5.775E-7; 
+   float T; 
+   
+   R=R/R0; 
+   
+   //T = (0.0-A + sqrt((A*A) - 4.0 * B * (1.0 - R))) / 2.0 * B; 
+   T=0.0-A; 
+   T+=sqrt((A*A) - 4.0 * B * (1.0 - R)); 
+   T/=(2.0 * B); 
+   
+   if(T>0&&T<200) { 
+     return T; 
+   } 
+   else { 
+     //T=  (0.0-A - sqrt((A*A) - 4.0 * B * (1.0 - R))) / 2.0 * B; 
+     T=0.0-A; 
+     T-=sqrt((A*A) - 4.0 * B * (1.0 - R)); 
+     T/=(2.0 * B); 
+     return T; 
+   } 
+} 
+
 inline float ReadTempFromSolarSystem(U8 pin)
 {
 	int analog_val = analogRead(pin);
-	return analog_val*1.87 - 414.1;
+	float voltage = analog_val * 0.0049;
+	float resistance = voltage/0.001; // solar system is exciting RTD at constant 1mA
+	return GetPlatinumRTD(resistance, 1000);
 }
 
 inline void GetCurrentStatus(U16 phase_fast)
@@ -28,7 +55,7 @@ inline void GetCurrentStatus(U16 phase_fast)
 
 	float tmp;
 
-/*
+
 // get temperatures from PT1000 in the solar system
 	tmp = ReadTempFromSolarSystem(TEMP_SOLAR_EXT_PIN_IN);	
 	Serial.print("EXT : ");
@@ -47,16 +74,16 @@ inline void GetCurrentStatus(U16 phase_fast)
 	Serial.print(tmp);
 	tmp = grh_W_Average(pOutputAsFloat(LOFTB2, LOFTB2_HVAC_SOLAR_HEAT_EXC_TEMP), tmp);
 	Souliss_HalfPrecisionFloating(gTempBuff+4, &tmp);
-
+/*
 	tmp = NTC10k_ToCelsius( TEMP_BOILER_BOTTOM_NTC10K_PIN_IN, NTC10K_A1_PAD_RESISTANCE );
 	Serial.print(" BOTTOM : ");
 	Serial.print(tmp);
 	tmp = grh_W_Average(pOutputAsFloat(LOFTB2, LOFTB2_HVAC_BOILER_BOTTOM_TEMP), tmp);
 	Souliss_HalfPrecisionFloating(gTempBuff, &tmp);
-
-	if(!ReqTyp())
-		SendData(IP_ADDRESS_LOFTB2, LOFTB2_HVAC_SOLAR_EXT_TEMP, gTempBuff, 8); // sending 8 consecutive bytes
 */
+	if(!ReqTyp())
+		SendData(IP_ADDRESS_LOFTB2, LOFTB2_HVAC_SOLAR_EXT_TEMP, gTempBuff, 6); // sending 6 consecutive bytes
+
 
 	tmp = ReadTempFromSolarSystem(TEMP_SANITARY_WATER_PIN_IN);
 //	Serial.print(" SANITARY : ");
