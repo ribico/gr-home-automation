@@ -33,7 +33,9 @@ inline void DefineTypicals()
 
 	Set_Power(GARDB1_TOTAL_POWER);
 
-
+	Set_T12(GARDB1_BUYING_POWER);
+	Set_T12(GARDB1_SELLING_POWER);
+	
 	// set default values
 	SetInput(GARDB1_WATERING_ZONE1, Souliss_T1n_AutoCmd);
 	SetInput(GARDB1_WATERING_ZONE2, Souliss_T1n_AutoCmd);
@@ -41,32 +43,69 @@ inline void DefineTypicals()
 	SetInput(GARDB1_WATERING_ZONE4, Souliss_T1n_AutoCmd);
 	SetInput(GARDB1_WATERING_ZONE5, Souliss_T1n_AutoCmd);
 	SetInput(GARDB1_LIGHT_GARDEN, Souliss_T1n_AutoCmd);
+
+	SetInput(GARDB1_BUYING_POWER, Souliss_T1n_AutoCmd);
+	SetInput(GARDB1_SELLING_POWER, Souliss_T1n_AutoCmd);
 }
 
-double read_count = 0;
-double Isum = 0;
-float Irms;
-
-#define I_OFFSET	0	// TODO: modify this
-#define I_RATIO		1	// TODO: modify this
-
-inline void ReadCurrent()
-{
-	float current = aRead(AI1) - I_OFFSET;
-	read_count++;
-	Isum += current * current;
-}
-
-inline void CalculateIrms()
-{
-	Irms = I_RATIO * sqrt(Isum / read_count);
-	read_count = 0;
-	Isum = 0;
-}
+#define AVE_PULSES 5
+U8 iPulses = AVE_PULSES;
+static unsigned long time_start = 0;
+U8 bSelling = false;
+float iPower = 0.0;
 
 inline void ReadInputs()
 {
-	//DigIn(DI5, Souliss_T1n_ToggleCmd, GARDB1_LIGHT_GARDEN);          // Read inputs from DI5
+	U8 ret_buy = LowDigIn(DI5, Souliss_T1n_AutoCmd+4, GARDB1_BUYING_POWER);
+	U8 ret_sell = LowDigIn(DI6, Souliss_T1n_AutoCmd+4, GARDB1_SELLING_POWER);
+
+	if (ret_sell > Souliss_T1n_AutoCmd) // selling power to the grid, let's calculate how much
+	{
+		if (bSelling) // it was already in selling state
+		{
+			if (iPulses > 0) 
+				iPulses--;
+			else
+			{
+				unsigned long time_end = millis();
+				iPower = -1000*AVE_PULSES/(abs(time_end-time_start));
+				iPulses = AVE_PULSES;
+			}
+		}
+		else // starting a new calculation
+		{
+			bSelling = true;
+			iPulses = AVE_PULSES-1;
+			time_start = millis();
+		}
+	}
+	else if (ret_buy > Souliss_T1n_AutoCmd) // buying power from the grid, let's calculate how much
+	{
+		if (!bSelling) // it was already in buying state
+		{
+			if (iPulses > 0) 
+				iPulses--;
+			else
+			{
+				unsigned long time_end = millis();
+				iPower = 1000*AVE_PULSES/(abs(time_end-time_start));
+				iPulses = AVE_PULSES;
+			}
+		}
+		else // starting a new calculation
+		{
+			bSelling = false;
+			iPulses = AVE_PULSES-1;
+			time_start = millis();
+		}
+	}
+	else
+	{
+		iPulses = AVE_PULSES;
+		bSelling = false;
+		iPower = 0.0;
+	}
+
 }
 
 inline void ProcessLogics()
@@ -80,6 +119,9 @@ inline void ProcessLogics()
 	Logic_T12(GARDB1_WATERING_ZONE5);                                  // Execute the logic for Relay 5
 
 	Logic_Power(GARDB1_TOTAL_POWER);
+
+	Logic_T12(GARDB1_BUYING_POWER);
+	Logic_T12(GARDB1_SELLING_POWER);
 }
 
 inline void SetOutputs()
@@ -100,6 +142,8 @@ inline void ProcessTimers()
 	Timer_T12(GARDB1_WATERING_ZONE4);
 	Timer_T12(GARDB1_WATERING_ZONE5);
 	Timer_T12(GARDB1_LIGHT_GARDEN);
+	Timer_T12(GARDB1_BUYING_POWER);
+	Timer_T12(GARDB1_SELLING_POWER);
 }
 
 
@@ -118,9 +162,7 @@ void loop()
 	EXECUTEFAST() {
 		UPDATEFAST();
 		
-		ReadCurrent();
-
-		FAST_30ms()
+		FAST_10ms()
 		{
 			ReadInputs();
 		}
@@ -146,8 +188,7 @@ void loop()
 
 		SLOW_10s()
 		{
-			CalculateIrms();
-			ImportAnalog(GARDB1_TOTAL_POWER, &Irms);
+			ImportAnalog(GARDB1_TOTAL_POWER, &iPower);
 		}
 	}
 }
