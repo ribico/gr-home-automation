@@ -191,6 +191,8 @@
 # define GARDB1_WATERING_ZONE5                          5
 # define GARDB1_TOTAL_POWER                             6
 # define GARDB1_TOTAL_POWER_H                           7
+# define GARDB1_BUYING_POWER                            8
+# define GARDB1_SELLING_POWER                            9
 
 #define LYTB1 16
 # define LYTB1_RGB_LIGHT                               0
