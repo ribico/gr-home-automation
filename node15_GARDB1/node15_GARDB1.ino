@@ -48,64 +48,32 @@ inline void DefineTypicals()
 	SetInput(GARDB1_SELLING_POWER, Souliss_T1n_AutoCmd);
 }
 
-#define AVE_PULSES 5
-U8 iPulses = AVE_PULSES;
-static unsigned long time_start = 0;
-U8 bSelling = false;
-float iPower = 0.0;
+static unsigned long time_last_pulse = 0;
+float fPower = 0.0;
 
 inline void ReadInputs()
 {
-	U8 ret_buy = LowDigIn(DI5, Souliss_T1n_AutoCmd+4, GARDB1_BUYING_POWER);
-	U8 ret_sell = LowDigIn(DI6, Souliss_T1n_AutoCmd+4, GARDB1_SELLING_POWER);
+	U8 ret_sell = LowDigIn(DI5, Souliss_T1n_AutoCmd+100, GARDB1_SELLING_POWER);
+	U8 ret_buy = LowDigIn(DI6, Souliss_T1n_AutoCmd+100, GARDB1_BUYING_POWER);
 
-	if (ret_sell > Souliss_T1n_AutoCmd) // selling power to the grid, let's calculate how much
+	if (ret_sell > Souliss_T1n_AutoCmd || ret_buy > Souliss_T1n_AutoCmd) // new pulse detected
 	{
-		if (bSelling) // it was already in selling state
-		{
-			if (iPulses > 0) 
-				iPulses--;
-			else
-			{
-				unsigned long time_end = millis();
-				iPower = -1000*AVE_PULSES/(abs(time_end-time_start));
-				iPulses = AVE_PULSES;
-			}
-		}
-		else // starting a new calculation
-		{
-			bSelling = true;
-			iPulses = AVE_PULSES-1;
-			time_start = millis();
-		}
-	}
-	else if (ret_buy > Souliss_T1n_AutoCmd) // buying power from the grid, let's calculate how much
-	{
-		if (!bSelling) // it was already in buying state
-		{
-			if (iPulses > 0) 
-				iPulses--;
-			else
-			{
-				unsigned long time_end = millis();
-				iPower = 1000*AVE_PULSES/(abs(time_end-time_start));
-				iPulses = AVE_PULSES;
-			}
-		}
-		else // starting a new calculation
-		{
-			bSelling = false;
-			iPulses = AVE_PULSES-1;
-			time_start = millis();
-		}
-	}
-	else
-	{
-		iPulses = AVE_PULSES;
-		bSelling = false;
-		iPower = 0.0;
-	}
+		unsigned long time_this_pulse = millis();
+		// each pulse is set to be 1Wh = 1W*3.600s = 1W*3.600.000ms
+		// W = 3.600.000 / delta time [ms]
+		fPower = 3600000/(abs(time_this_pulse-time_last_pulse));
+		time_last_pulse = time_this_pulse;
 
+		if (ret_sell > Souliss_T1n_AutoCmd) // selling power to the grid
+		{
+			fPower = fPower * -1;
+			SetInput(GARDB1_BUYING_POWER, Souliss_T1n_AutoCmd); // set to AUTO OFF.. do not wait the timer
+		}
+		else if(ret_buy > Souliss_T1n_AutoCmd) // buying power from the grid
+		{
+			SetInput(GARDB1_SELLING_POWER, Souliss_T1n_AutoCmd); // set to AUTO OFF.. do not wait the timer
+		}
+	}	
 }
 
 inline void ProcessLogics()
@@ -162,7 +130,7 @@ void loop()
 	EXECUTEFAST() {
 		UPDATEFAST();
 		
-		FAST_10ms()
+		FAST_30ms()
 		{
 			ReadInputs();
 		}
@@ -188,7 +156,7 @@ void loop()
 
 		SLOW_10s()
 		{
-			ImportAnalog(GARDB1_TOTAL_POWER, &iPower);
+			ImportAnalog(GARDB1_TOTAL_POWER, &fPower);
 		}
 	}
 }
