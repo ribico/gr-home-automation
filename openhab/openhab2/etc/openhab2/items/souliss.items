@@ -25,10 +25,10 @@ Group	g3F_Terrace		"Terrazzo"			<terrace>	(g3F)
 Group	gLightsInt			"Luci Interne"				<light>
 Switch Light_2F_Entrance_1	"Ingresso Luce 1" 	(g2F_Entrance,gTechnicView_Node4,gLightsInt,gMyOpenHAB) {souliss="T11:4:1"}
 Switch Light_2F_Entrance_2	"Ingresso Luce 2" 	(g2F_Entrance,gTechnicView_Node4,gLightsInt,gMyOpenHAB) {souliss="T11:4:2"}
-Switch Light_2F_Living_1	"Salotto Luce 1" 	(g2F_Living,gTechnicView_Node1,gLightsInt,gMyOpenHAB) {souliss="T11:1:0"}
-Switch Light_2F_Living_2	"Salotto Luce 2" 	(g2F_Living,gTechnicView_Node1,gLightsInt,gMyOpenHAB) {souliss="T11:1:1"}
-Switch Light_2F_Living_3	"Salotto Luce 3" 	(g2F_Living,gTechnicView_Node1,gLightsInt,gMyOpenHAB) {souliss="T11:1:2"}
-Switch Light_2F_Living_4	"Salotto Luce 4" 	(g2F_Living,gTechnicView_Node1,gLightsInt,gMyOpenHAB) {souliss="T11:1:3"}
+Switch Light_2F_Living_1	"Salotto Luce 1" 	(g2F_Living,gTechnicView_Node1,gLightsInt,gMyOpenHAB) ["Lighting"] {souliss="T11:1:0"}
+Switch Light_2F_Living_2	"Salotto Luce 2" 	(g2F_Living,gTechnicView_Node1,gLightsInt,gMyOpenHAB) ["Lighting"] {souliss="T11:1:1"}
+Switch Light_2F_Living_3	"Salotto Luce 3" 	(g2F_Living,gTechnicView_Node1,gLightsInt,gMyOpenHAB) ["Lighting"] {souliss="T11:1:2"}
+Switch Light_2F_Living_4	"Salotto Luce 4" 	(g2F_Living,gTechnicView_Node1,gLightsInt,gMyOpenHAB) ["Lighting"] {souliss="T11:1:3"}
 Switch Light_2F_Living_Aquarium      "Acquario Luce" (gTechnicView_Node8,gLightsInt,gMyOpenHAB) {souliss="T12:8:7:switch"}
 Switch Light_2F_Stairs		"Scala Luce" 		(g2F_Living,gTechnicView_Node3,gLightsInt,gMyOpenHAB) {souliss="T11:3:4"}
 Switch Light_2F_Kitchen_1	"Cucina Luce 1" 	(g2F_Kitchen,gTechnicView_Node2,gLightsInt,gMyOpenHAB) {souliss="T11:2:1"}
