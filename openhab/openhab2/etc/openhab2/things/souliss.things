@@ -1,0 +1,13 @@
+Bridge souliss:gateway:100 "Souliss Gateway - 100" [GATEWAY_IP_ADDRESS="192.168.1.100", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=38, USER_INDEX=72, NODE_INDEX=38]
+{  
+Thing t11 4-1 "Luce1"@"Ingresso"
+Thing t11 4-2 "Luce2"@"Ingresso"
+
+Thing t11 1-0 "Luce1"@"Salotto"
+Thing t11 1-1 "Luce2"@"Salotto"
+Thing t11 1-2 "Luce3"@"Salotto"
+Thing t11 1-3 "Luce4"@"Salotto"
+
+Thing t12 8-7 "Luce_Acquario"@"Salotto"
+
+}
