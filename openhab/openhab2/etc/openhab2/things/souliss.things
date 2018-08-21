@@ -1,13 +1,139 @@
 Bridge souliss:gateway:100 "Souliss Gateway - 100" [GATEWAY_IP_ADDRESS="192.168.1.100", GATEWAY_PORT_NUMBER=230, PREFERRED_LOCAL_PORT_NUMBER=0, PING_INTERVAL=30, SUBSCRIBTION_INTERVAL=2, HEALTHY_INTERVAL=38, USER_INDEX=72, NODE_INDEX=38]
 {  
-Thing t11 4-1 "Luce1"@"Ingresso"
-Thing t11 4-2 "Luce2"@"Ingresso"
+    Thing t11 4-1 "Luce1 Ingresso"@"Ingresso"
+    Thing t11 4-2 "Luce2 Ingresso"@"Ingresso"
 
-Thing t11 1-0 "Luce1"@"Salotto"
-Thing t11 1-1 "Luce2"@"Salotto"
-Thing t11 1-2 "Luce3"@"Salotto"
-Thing t11 1-3 "Luce4"@"Salotto"
+    Thing t11 1-0 "Luce_Led Salotto"@"Salotto"
+    Thing t11 1-1 "Luce_Applique Salotto"@"Salotto"
+    Thing t11 1-2 "Luce_Abajours Salotto"@"Salotto"
+    Thing t11 1-3 "Luce_Appesa Salotto"@"Salotto"
+    Thing t11 3-4 "Luce_Scala Salotto"@"Salotto"
+    Thing t12 8-7 "Luce_Acquario Salotto"@"Salotto"
 
-Thing t12 8-7 "Luce_Acquario"@"Salotto"
+    Thing t11 2-1 "Luce_Led Cucina"@"Cucina"
+    Thing t11 2-2 "Luce_Penisola Cucina"@"Cucina"
+    Thing t11 2-3 "Luce_Parete Cucina"@"Cucina"
 
+    Thing t11 3-1 "Luce_Led Pranzo"@"Pranzo"
+    Thing t11 3-2 "Luce_Tavolo Pranzo"@"Pranzo"
+    Thing t11 3-3 "Luce_Parete Pranzo"@"Pranzo"
+
+    Thing t11 9-1 "Luce Camera1"@"Camera1"
+    Thing t11 11-1 "Luce_Led Camera2"@"Camera2"
+    Thing t11 11-2 "Luce_Soffitto Camera2"@"Camera2"
+    Thing t11 11-3 "Luce_Dx Camera2"@"Camera2"
+    Thing t11 11-4 "Luce_Sx Camera2"@"Camera2"
+    Thing t11 5-2 "Luce Camera3"@"Camera3"
+
+    Thing t11 13-4 "Luce GW1"@"Disimpegno1"
+    Thing t11 14-4 "Luce GW2"@"Disimpegno2"
+
+    Thing t11 10-1 "Luce_Specchio Bagno1"@"Bagno1"
+    Thing t11 10-2 "Luce_Soffitto Bagno1"@"Bagno1"
+    Thing t11 10-3 "Luce_Lavatoio Bagno1"@"Bagno1"
+
+    Thing t11 4-3 "Luce_Soffitto Bagno2"@"Bagno2"
+    Thing t11 4-4 "Luce_Specchio Bagno2"@"Bagno2"
+
+    Thing t11 0-1 "Luce1 Attico"@"Attico"
+    Thing t11 0-2 "Luce2 Attico"@"Attico"
+    Thing t11 0-6 "Luce Bagno3"@"Attico"
+
+    Thing t12 9-2 "Luce Balcone1"@"Facciata"
+    Thing t12 5-1 "Luce Balcone2"@"Facciata"
+    Thing t12 8-6 "Luce Portone"@"Facciata"
+    Thing t12 15-0 "Luci Facciata"@"Facciata"
+
+    Thing t11 0-3 "Luce1 Terrazzo"@"Terrazzo"
+    Thing t11 0-4 "Luce2 Terrazzo"@"Terrazzo"
+    Thing t11 0-5 "Luce3 Terrazzo"@"Terrazzo"
+
+    Thing t22 6-1 "Tapparella Salotto"@"Salotto"
+    Thing t22 6-2 "Tapparella Cucina"@"Cucina"
+    Thing t22 5-3 "Tapparella Pranzo"@"Pranzo"
+    Thing t22 12-1 "Tapparella Bagno1"@"Bagno1"
+    Thing t22 7-2 "Tapparella Bagno2"@"Bagno2"
+    Thing t22 9-3 "Tapparella Camera1"@"Camera1"
+    Thing t22 12-2 "Tapparella Camera2"@"Camera2"
+    Thing t22 7-1 "Tapparella Camera3"@"Camera3"
+
+    Thing t52 2-5 "Temperatura Salotto"@"Salotto"
+    Thing t53 2-7 "UR Salotto"@"Salotto"
+
+    Thing t52 7-3 "Temperatura Cucina"@"Cucina"
+    Thing t53 7-5 "UR Cucina"@"Cucina"
+
+    Thing t52 3-5 "Temperatura Pranzo"@"Pranzo"
+    Thing t53 3-7 "UR Pranzo"@"Pranzo"
+
+    Thing t52 12-3 "Temperatura Bagno1"@"Bagno1"
+    Thing t53 12-5 "UR Bagno1"@"Bagno1"
+
+    Thing t52 4-5 "Temperatura Bagno2"@"Bagno2"
+    Thing t53 4-7 "UR Bagno2"@"Bagno2"
+
+    Thing t52 9-4 "Temperatura Camera1"@"Camera1"
+    Thing t53 9-6 "UR Camera1"@"Camera1"
+
+    Thing t52 10-5 "Temperatura Camera2"@"Camera2"
+    Thing t53 10-7 "UR Camera2"@"Camera2"
+
+    Thing t52 5-4 "Temperatura Camera3"@"Camera3"
+    Thing t53 5-6 "UR Camera3"@"Camera3"
+
+    Thing t52 1-6 "Temperatura Ext"@"Terrazzo"
+    Thing t53 1-8 "UR Ext"@"Terrazzo"
+
+    Thing t52 1-10 "Temperatura Attico"@"Attico"
+    Thing t53 1-12 "UR Attico"@"Attico"
+
+    Thing t12 0-7 "HP_Floor_Mode"@"HVAC"
+    Thing t12 0-8 "HP_Remote_Switch"@"HVAC"
+    Thing t12 0-9 "HP_Circulation_Pump"@"HVAC"
+    Thing t12 0-10 "HP_Sanitary_Request"@"HVAC"
+    Thing t12 0-11 "HP_Heat_Cool"@"HVAC"
+    Thing t12 0-19 "HP_Setpoint2"@"HVAC"
+
+    Thing t11 0-27 "Clima Full Auto"@"HVAC"
+    Thing t11 0-28 "Valvole HVAC Auto"@"HVAC"
+
+    Thing t22 0-14 "Valvola a 3 Vie"@"HVAC"
+    Thing t12 0-15 "Pompa Boiler->Pavimento"@"HVAC"
+    Thing t12 0-16 "Pompa Collettore->Fancoil"@"HVAC"
+    Thing t12 0-17 "Pompa Collettore->Pavimento"@"HVAC"
+
+    Thing t12 0-18 "Fancoil"@"HVAC"
+    Thing t12 13-1 "Fancoil1 Vel1"@"HVAC"
+    Thing t12 13-2 "Fancoil1 Vel2"@"HVAC"
+    Thing t12 13-3 "Fancoil1 Vel3"@"HVAC"
+    Thing t12 14-1 "Fancoil2 Vel1"@"HVAC"
+    Thing t12 14-2 "Fancoil2 Vel2"@"HVAC"
+    Thing t12 14-3 "Fancoil2 Vel3"@"HVAC"
+
+    Thing t52 17-0 "Temp ACS"@"HVAC"
+    Thing t52 0-29 "Temp1 ACS"@"HVAC"
+    Thing t52 17-2 "Temp Accumulo Alto"@"HVAC"
+    Thing t52 1-18 "Temp Accumulo Basso"@"HVAC"
+    Thing t52 17-10 "Temp PDC Mandata"@"HVAC"
+    Thing t52 17-12 "Temp PDC Ritorno"@"HVAC"
+    Thing t52 17-18 "Temp Fancoils Mandata"@"HVAC"
+    Thing t52 17-20 "Temp Fancoils Ritorno"@"HVAC"
+    Thing t52 17-14 "Temp Pavimento Mandata"@"HVAC"
+    Thing t52 17-16 "Temp Pavimento Ritorno"@"HVAC"
+
+    Thing t52 0-20 "Temp. Ambiente SetPoint"@"HVAC"
+    Thing t52 0-22 "Temp. Ambiente SetPoint"@"HVAC"
+
+    Thing t1A 0-12 "Valvole zona"@"HVAC"
+
+    Thing t12 15-1 "Irrigazione Terrazzo Garage"@"Giardino"
+    Thing t12 15-2 "Irrigazione Orto e Vasi"@"Giardino"
+    Thing t12 15-3 "Irrigazione Prato 1"@"Giardino"
+    Thing t12 15-4 "Irrigazione Prato 2"@"Giardino"
+    Thing t12 15-5 "Irrigazione Ingresso"@"Giardino"
+    Thing t12 8-0 "Irrigazione Balconi"@"Giardino"
+
+    Thing t12 8-5 "Sicurezza Fornello"@"Cucina"
+
+    Thing t52 15-6 "Potenza istantanea"@"Giardino"
 }
