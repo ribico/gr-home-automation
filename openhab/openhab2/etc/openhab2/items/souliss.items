@@ -149,7 +149,7 @@ Number HVAC_Temp_Fancoils_Ret		"Temp. Fancoils Ritorno [%.1f °C]"	<temperature>
 Number HVAC_Temp_Floor_Flow		"Temp. Pavimento Mandata [%.1f °C]"	<temperature> (gHP,gHPTemp) {autoupdate="false", channel="souliss:t52:100:17-14:value"}
 Number HVAC_Temp_Floor_Ret		"Temp. Pavimento Ritorno [%.1f °C]"	<temperature> (gHP,gHPTemp) {autoupdate="false", channel="souliss:t52:100:17-16:value"}
 
-Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gClima) {autoupdate="false", channel="souliss:t52:100:0-20:value"}
+Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gClima) {autoupdate="false", channel="souliss:t62:100:0-20:value"}
 Number HVAC_Temp_SetPoint_Floor	"Temp. Pavimento SetPoint [%.1f °C]"	<temperature> (gClima) {autoupdate="false", channel="souliss:t52:100:0-22:value"}
 
 Switch Valve_2F_Bedroom1		"Camera 1"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1A:100:0-12:one"}

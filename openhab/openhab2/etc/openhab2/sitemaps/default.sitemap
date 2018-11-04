@@ -142,9 +142,9 @@ sitemap default label="Full"
 					Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
 					Switch item=HP_Heat_Cool label="Modalità" mappings=[OFF="Caldo", ON="Freddo"]
 
-					Frame label="Setpoint x AUTO Mode (modificabile da SoulissApp)"
+					Frame label="Setpoint x AUTO Mode"
 					{
-						Text item=HVAC_Temp_SetPoint
+						Setpoint item=HVAC_Temp_SetPoint label="Temp. Ambiente SetPoint [%.1f °C]" minValue=15 maxValue=30 step=0.5
 					}
 
 					Frame label="Pavimento"

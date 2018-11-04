@@ -121,8 +121,8 @@ Bridge souliss:gateway:100 "Souliss Gateway - 100" [GATEWAY_IP_ADDRESS="192.168.
     Thing t52 17-14 "Temp Pavimento Mandata"@"HVAC"
     Thing t52 17-16 "Temp Pavimento Ritorno"@"HVAC"
 
-    Thing t52 0-20 "Temp. Ambiente SetPoint"@"HVAC"
-    Thing t52 0-22 "Temp. Ambiente SetPoint"@"HVAC"
+    Thing t62 0-20 "Temp. Ambiente SetPoint"@"HVAC"
+    Thing t52 0-22 "Temp. Pavimento SetPoint"@"HVAC"
 
     Thing t1A 0-12 "Valvole zona"@"HVAC"
 
