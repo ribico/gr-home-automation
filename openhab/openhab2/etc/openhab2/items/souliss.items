@@ -98,45 +98,45 @@ Number Temperature_3F_Loft	"Attico Temp [%.1f °C]" 	<temperature> (gTemperature
 Number UR_3F_Loft		"Attico UR [%.1f %%]" 	<humidity> (gUR) {autoupdate="false", channel="souliss:t53:100:1-12:value"}
 
 
-Switch Floor_Mode			"Pavimento"		 (gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-7:onoff"}
-Switch Floor_Mode_auto		"Pavimento Auto"		<lock> (gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-7:automode"}
-Switch HP_Remote_Switch		"Remote Switch" 		(gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-8:onoff"}
-Switch HP_Circulation_Pump	"Pompa Interna" 		(gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-9:onoff"}
-Switch HP_Circulation_Pump_auto	"Pompa Interna Auto" 	<lock>	(gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-9:automode"}
-Switch HP_Sanitary_Request	"ACS" 		        (gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-10:onoff"}
-Switch HP_Sanitary_Request_auto	"ACS Auto" 		<lock> (gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-10:automode"}
-Switch HP_Heat_Cool_auto			"Modalità Produzione Freddo Man/auto" 		<climate> (gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-11:automode"}
-Switch HP_Heat_Cool			"Produzione Freddo" 		<climate> (gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-11:onoff"}
-Switch HP_Setpoint2_auto     "Modalità Setpoint2 Man/Auto" (gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-19:automode"}
-Switch HP_Setpoint2     "Setpoint2" (gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-19:onoff"}
+Switch Floor_Mode			"Pavimento"		 (gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-7:onoff"}
+Switch Floor_Mode_auto		"Pavimento Auto"		<lock> (gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-7:automode"}
+Switch HP_Remote_Switch		"Remote Switch" 		(gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-8:onoff"}
+Switch HP_Circulation_Pump	"Pompa Interna" 		(gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-9:onoff"}
+Switch HP_Circulation_Pump_auto	"Pompa Interna Auto" 	<lock>	(gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-9:automode"}
+Switch HP_Sanitary_Request	"ACS" 		        (gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-10:onoff"}
+Switch HP_Sanitary_Request_auto	"ACS Auto" 		<lock> (gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-10:automode"}
+Switch HP_Heat_Cool_auto			"Modalità Produzione Freddo Man/auto" 		<climate> (gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-11:automode"}
+Switch HP_Heat_Cool			"Produzione Freddo" 		<climate> (gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-11:onoff"}
+Switch HP_Setpoint2_auto     "Modalità Setpoint2 Man/Auto" (gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-19:automode"}
+Switch HP_Setpoint2     "Setpoint2" (gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-19:onoff"}
 
 Switch HVAC_FULL_auto		        "Clima FULL Auto"	        (gHVAC_Valves) {autoupdate="false", channel="souliss:t11:100:0-27:onoff"}
 Switch HVAC_Valves_auto		        "Valvole HVAC Auto"	        (gHVAC_Valves) {autoupdate="false", channel="souliss:t11:100:0-28:onoff"}
 
 Rollershutter HVAC_3way_Valve		"Valvola a 3 Vie"			(gHVAC_Valves) {autoupdate="false", channel="souliss:t22:100:0-14:rollershutter"}
-Switch HVAC_Pump_Boiler_Floor		"Pompa Boiler->Pavimento"	 {autoupdate="false", channel="souliss:T12:100:0-15:onoff"}
-Switch HVAC_Pump_Boiler_Floor_auto		"Pompa Boiler->Pavimento Auto"	<lock> (gTechnicView_Node0) {autoupdate="false", channel="souliss:T12:100:0-15:automode"}
-Switch HVAC_Pump_Collector_Fancoil	"Pompa Collettore->Fancoil"	(gTechnicView_Node0) {autoupdate="false", channel="souliss:T12:100:0-16:onoff"}
-Switch HVAC_Pump_Collector_Fancoil_auto	"Pompa Collettore->Fancoil Auto"	<lock> (gTechnicView_Node0) {autoupdate="false", channel="souliss:T12:100:0-16:automode"}
-Switch HVAC_Pump_Collector_Floor	"Pompa Collettore->Pavimento"	(gTechnicView_Node0) {autoupdate="false", channel="souliss:T12:100:0-17:onoff"}
-Switch HVAC_Pump_Collector_Floor_auto	"Pompa Collettore->Pavimento Auto"	<lock> (gTechnicView_Node0) {autoupdate="false", channel="souliss:T12:100:0-17:automode"}
+Switch HVAC_Pump_Boiler_Floor		"Pompa Boiler->Pavimento"	 {autoupdate="false", channel="souliss:t12:100:0-15:onoff"}
+Switch HVAC_Pump_Boiler_Floor_auto		"Pompa Boiler->Pavimento Auto"	<lock> (gTechnicView_Node0) {autoupdate="false", channel="souliss:t12:100:0-15:automode"}
+Switch HVAC_Pump_Collector_Fancoil	"Pompa Collettore->Fancoil"	(gTechnicView_Node0) {autoupdate="false", channel="souliss:t12:100:0-16:onoff"}
+Switch HVAC_Pump_Collector_Fancoil_auto	"Pompa Collettore->Fancoil Auto"	<lock> (gTechnicView_Node0) {autoupdate="false", channel="souliss:t12:100:0-16:automode"}
+Switch HVAC_Pump_Collector_Floor	"Pompa Collettore->Pavimento"	(gTechnicView_Node0) {autoupdate="false", channel="souliss:t12:100:0-17:onoff"}
+Switch HVAC_Pump_Collector_Floor_auto	"Pompa Collettore->Pavimento Auto"	<lock> (gTechnicView_Node0) {autoupdate="false", channel="souliss:t12:100:0-17:automode"}
 
-Switch Fancoil_Mode			  "Fancoil" 	<climate> (gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-18:onoff"}
-Switch Fancoil_Mode_auto  "Fancoil Auto" 	<lock> (gHPSettings) {autoupdate="false", channel="souliss:T12:100:0-18:automode"}
+Switch Fancoil_Mode			  "Fancoil" 	<climate> (gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-18:onoff"}
+Switch Fancoil_Mode_auto  "Fancoil Auto" 	<lock> (gHPSettings) {autoupdate="false", channel="souliss:t12:100:0-18:automode"}
 
-Switch Fancoil_2F_GW1_Speed1	"Fancoil1 Vel1"	 (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:T12:100:13-1:onoff"}
-Switch Fancoil_2F_GW1_Speed1_auto	"Fancoil1 Vel1 Auto"	<lock>  (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:T12:100:13-1:automode"}
-Switch Fancoil_2F_GW1_Speed2	"Fancoil1 Vel2"	  (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:T12:100:13-2:onoff"}
-Switch Fancoil_2F_GW1_Speed2_auto	"Fancoil1 Vel2 Auto"	<lock>  (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:T12:100:13-2:automode"}
-Switch Fancoil_2F_GW1_Speed3	"Fancoil1 Vel3"	 (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:T12:100:13-3:onoff"}
-Switch Fancoil_2F_GW1_Speed3_auto	"Fancoil1 Vel3 Auto"	<lock>  (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:T12:100:13-3:automode"}
+Switch Fancoil_2F_GW1_Speed1	"Fancoil1 Vel1"	 (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:t12:100:13-1:onoff"}
+Switch Fancoil_2F_GW1_Speed1_auto	"Fancoil1 Vel1 Auto"	<lock>  (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:t12:100:13-1:automode"}
+Switch Fancoil_2F_GW1_Speed2	"Fancoil1 Vel2"	  (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:t12:100:13-2:onoff"}
+Switch Fancoil_2F_GW1_Speed2_auto	"Fancoil1 Vel2 Auto"	<lock>  (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:t12:100:13-2:automode"}
+Switch Fancoil_2F_GW1_Speed3	"Fancoil1 Vel3"	 (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:t12:100:13-3:onoff"}
+Switch Fancoil_2F_GW1_Speed3_auto	"Fancoil1 Vel3 Auto"	<lock>  (gHVAC,g2F_GW1) {autoupdate="false", channel="souliss:t12:100:13-3:automode"}
 
-Switch Fancoil_2F_GW2_Speed1	"Fancoil2 Vel1"	 (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:T12:100:14-1:onoff"}
-Switch Fancoil_2F_GW2_Speed1_auto	"Fancoil2 Vel1 Auto"	<lock>  (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:T12:100:14-1:automode"}
-Switch Fancoil_2F_GW2_Speed2	"Fancoil2 Vel2"	 (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:T12:100:14-2:onoff"}
-Switch Fancoil_2F_GW2_Speed2_auto	"Fancoil2 Vel2 Auto"	<lock>  (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:T12:100:14-2:automode"}
-Switch Fancoil_2F_GW2_Speed3	"Fancoil2 Vel3"	 (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:T12:100:14-3:onoff"}
-Switch Fancoil_2F_GW2_Speed3_auto	"Fancoil2 Vel3 Auto"	<lock>  (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:T12:100:14-3:automode"}
+Switch Fancoil_2F_GW2_Speed1	"Fancoil2 Vel1"	 (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:t12:100:14-1:onoff"}
+Switch Fancoil_2F_GW2_Speed1_auto	"Fancoil2 Vel1 Auto"	<lock>  (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:t12:100:14-1:automode"}
+Switch Fancoil_2F_GW2_Speed2	"Fancoil2 Vel2"	 (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:t12:100:14-2:onoff"}
+Switch Fancoil_2F_GW2_Speed2_auto	"Fancoil2 Vel2 Auto"	<lock>  (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:t12:100:14-2:automode"}
+Switch Fancoil_2F_GW2_Speed3	"Fancoil2 Vel3"	 (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:t12:100:14-3:onoff"}
+Switch Fancoil_2F_GW2_Speed3_auto	"Fancoil2 Vel3 Auto"	<lock>  (gHVAC,g2F_GW2) {autoupdate="false", channel="souliss:t12:100:14-3:automode"}
 
 Number HVAC_Temp_Sanitary		"Temp. ACS [%.1f °C]"				<temperature> (gHP,gHPTemp) {autoupdate="false", channel="souliss:t52:100:17-0:value"}
 Number HVAC_Temp_Sanitary1		"Temp1. ACS [%.1f °C]"				<temperature> (gHP,gHPTemp) {autoupdate="false", channel="souliss:t52:100:0-29:value"}
@@ -163,26 +163,26 @@ Switch Valve_3F_Loft			"Attico"	<heating>  (gHVAC_Valves) {autoupdate="false", c
 
 Group       gIrrigation  "Irrigazione" (gAll)
 
-Switch      Irrigation_Terrace      "Terrazzo Garage"      <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-1:onoff"}
-Switch      Irrigation_Vege         "Orto e Vasi"          <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-2:onoff"}
-Switch      Irrigation_Lawn1        "Prato 1"              <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-3:onoff"}
-Switch      Irrigation_Lawn2        "Prato 2"              <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-4:onoff"}
-Switch      Irrigation_Ent          "Ingresso"             <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-5:onoff"}
-Switch      Irrigation_Balcony      "Balconi"              <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:8-0:onoff"}
+Switch      Irrigation_Terrace      "Terrazzo Garage"      <water>         (gIrrigation)    {autoupdate="false", channel="souliss:t12:100:15-1:onoff"}
+Switch      Irrigation_Vege         "Orto e Vasi"          <water>         (gIrrigation)    {autoupdate="false", channel="souliss:t12:100:15-2:onoff"}
+Switch      Irrigation_Lawn1        "Prato 1"              <water>         (gIrrigation)    {autoupdate="false", channel="souliss:t12:100:15-3:onoff"}
+Switch      Irrigation_Lawn2        "Prato 2"              <water>         (gIrrigation)    {autoupdate="false", channel="souliss:t12:100:15-4:onoff"}
+Switch      Irrigation_Ent          "Ingresso"             <water>         (gIrrigation)    {autoupdate="false", channel="souliss:t12:100:15-5:onoff"}
+Switch      Irrigation_Balcony      "Balconi"              <water>         (gIrrigation)    {autoupdate="false", channel="souliss:t12:100:8-0:onoff"}
 
 Group       gIrrigation_Auto  "Irrigazione Auto/Man" (gAll)
 
-Switch      Irrigation_Terrace_auto "Terrazzo Garage Auto" <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:15-1:automode"}
-Switch      Irrigation_Vege_auto    "Orto e Vasi Auto"     <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:15-2:automode"}
-Switch      Irrigation_Lawn1_auto   "Prato 1 Auto"         <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:15-3:automode"}
-Switch      Irrigation_Lawn2_auto   "Prato 2 Auto"         <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:15-4:automode"}
-Switch      Irrigation_Ent_auto     "Ingresso Auto"        <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:15-5:automode"}
-Switch      Irrigation_Balcony_auto "Balconi Auto"         <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:8-0:automode"}
+Switch      Irrigation_Terrace_auto "Terrazzo Garage Auto" <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:t12:100:15-1:automode"}
+Switch      Irrigation_Vege_auto    "Orto e Vasi Auto"     <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:t12:100:15-2:automode"}
+Switch      Irrigation_Lawn1_auto   "Prato 1 Auto"         <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:t12:100:15-3:automode"}
+Switch      Irrigation_Lawn2_auto   "Prato 2 Auto"         <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:t12:100:15-4:automode"}
+Switch      Irrigation_Ent_auto     "Ingresso Auto"        <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:t12:100:15-5:automode"}
+Switch      Irrigation_Balcony_auto "Balconi Auto"         <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:t12:100:8-0:automode"}
 
 Group gSafety
 
-Switch      Kitchen_Valve        "Forno+Fornello"              <light>         (gSafety)    {autoupdate="false", channel="souliss:T12:100:8-5:onoff"}
-Switch      Kitchen_Valve_auto   "Forno+Fornello Auto"         <light>         (gSafety)    {autoupdate="false", channel="souliss:T12:100:8-5:automode"}
+Switch      Kitchen_Valve        "Forno+Fornello"              <light>         (gSafety)    {autoupdate="false", channel="souliss:t12:100:8-5:onoff"}
+Switch      Kitchen_Valve_auto   "Forno+Fornello Auto"         <light>         (gSafety)    {autoupdate="false", channel="souliss:t12:100:8-5:automode"}
 
 
 Group gPower
