@@ -170,12 +170,14 @@ Switch      Irrigation_Lawn2        "Prato 2"              <water>         (gIrr
 Switch      Irrigation_Ent          "Ingresso"             <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-5:switch"}
 Switch      Irrigation_Balcony      "Balconi"              <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:8-0:switch"}
 
-Switch      Irrigation_Terrace_auto "Terrazzo Garage Auto" <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-1:automode"}
-Switch      Irrigation_Vege_auto    "Orto e Vasi Auto"     <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-2:automode"}
-Switch      Irrigation_Lawn1_auto   "Prato 1 Auto"         <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-3:automode"}
-Switch      Irrigation_Lawn2_auto   "Prato 2 Auto"         <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-4:automode"}
-Switch      Irrigation_Ent_auto     "Ingresso Auto"        <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:15-5:automode"}
-Switch      Irrigation_Balcony_auto "Balconi Auto"         <water>         (gIrrigation)    {autoupdate="false", channel="souliss:T12:100:8-0:automode"}
+Group       gIrrigation_Auto  "Irrigazione Auto/Man" (gAll)
+
+Switch      Irrigation_Terrace_auto "Terrazzo Garage Auto" <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:15-1:automode"}
+Switch      Irrigation_Vege_auto    "Orto e Vasi Auto"     <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:15-2:automode"}
+Switch      Irrigation_Lawn1_auto   "Prato 1 Auto"         <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:15-3:automode"}
+Switch      Irrigation_Lawn2_auto   "Prato 2 Auto"         <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:15-4:automode"}
+Switch      Irrigation_Ent_auto     "Ingresso Auto"        <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:15-5:automode"}
+Switch      Irrigation_Balcony_auto "Balconi Auto"         <water>         (gIrrigation_Auto)    {autoupdate="false", channel="souliss:T12:100:8-0:automode"}
 
 Group gSafety
 

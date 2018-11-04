@@ -1,99 +1,102 @@
 sitemap default label="Full"
 {
-	Text label="Luci" icon="light"{
-		Text label="Luci Interne" icon="light"{
-			Frame label="Ingresso" {
-				Switch item=Light_2F_Entrance_1 label="Luce1"
-				Switch item=Light_2F_Entrance_2 label="Luce2"
+	Frame
+	{
+
+		Text label="Luci" icon="light"{
+			Text label="Luci Interne" icon="light"{
+				Frame label="Ingresso" {
+					Switch item=Light_2F_Entrance_1 label="Luce1"
+					Switch item=Light_2F_Entrance_2 label="Luce2"
+				}
+
+				Frame label="Salotto" {
+					Switch item=Light_2F_Living_1 label="Soffitto LED"
+					Switch item=Light_2F_Living_2 label="Parete"
+					Switch item=Light_2F_Living_3 label="Abajours"
+					Switch item=Light_2F_Living_4 label="Appese"
+					Switch item=Light_2F_Stairs  label="Scala"
+					Switch item=Light_2F_Living_Aquarium  label="Acquario"
+				}
+
+				Frame label="Cucina" {
+					Switch item=Light_2F_Kitchen_1 label="Striscia LED"
+					Switch item=Light_2F_Kitchen_2 label="Soffitto"
+					Switch item=Light_2F_Kitchen_3 label="Parete"
+				}
+
+				Frame label="Pranzo" {
+					Switch item=Light_2F_Dining_1 label="Striscia LED"
+					Switch item=Light_2F_Dining_2 label="Soffitto"
+					Switch item=Light_2F_Dining_3 label="Parete"
+				}
+
+				Frame label="Camera1" {
+					Switch item=Light_2F_Bedroom1 label="Soffitto"
+				}
+
+				Frame label="Camera2" {
+					Switch item=Light_2F_Bedroom2_1 label="Striscia LED"
+					Switch item=Light_2F_Bedroom2_2 label="Soffitto"
+					Switch item=Light_2F_Bedroom2_3 label="Comodino Dx"
+					Switch item=Light_2F_Bedroom2_4 label="Comodino Sx"
+				}
+				Frame label="Camera3" {
+					Switch item=Light_2F_Bedroom3 label="Soffitto"
+				}
+
+				Frame label="Disimpegni" {
+					Switch item=Light_2F_GW1 label="Disimpegno1"
+					Switch item=Light_2F_GW2 label="Disimpegno2"
+				}
+
+				Frame label="Bagno1" {
+					Switch item=Light_2F_Bath1_1 label="Specchio"
+					Switch item=Light_2F_Bath1_2 label="Soffitto"
+					Switch item=Light_2F_Bath1_3 label="Lavatoio"
+				}
+
+				Frame label="Bagno2" {
+					Switch item=Light_2F_Bath2_1 label="Soffitto"
+					Switch item=Light_2F_Bath2_2 label="Specchio"
+				}
 			}
 
-			Frame label="Salotto" {
-				Switch item=Light_2F_Living_1 label="Soffitto LED"
-				Switch item=Light_2F_Living_2 label="Parete"
-				Switch item=Light_2F_Living_3 label="Abajours"
-				Switch item=Light_2F_Living_4 label="Appese"
-				Switch item=Light_2F_Stairs  label="Scala"
-				Switch item=Light_2F_Living_Aquarium  label="Acquario"
+			Text label="Luci Attico" icon="light"{
+				Frame label="Attico" {
+					Switch item=Light_3F_Loft_1 label="Luci1"
+					Switch item=Light_3F_Loft_2 label="Luci2"
+				}
+
+				Frame label="Bagno3" {
+					Switch item=Light_3F_Toilet label="Specchio"
+				}
 			}
 
-			Frame label="Cucina" {
-				Switch item=Light_2F_Kitchen_1 label="Striscia LED"
-				Switch item=Light_2F_Kitchen_2 label="Soffitto"
-				Switch item=Light_2F_Kitchen_3 label="Parete"
+			Text label="Luci Esterne" icon="light"{
+				Frame label="Facciata Giardino" {
+					Switch item=Light_2F_Ext_Door label="Portone"
+					Switch item=Light_Facade label="Facciata"
+					Switch item=Light_2F_Balcony_1 label="Balcone1"
+					Switch item=Light_2F_Balcony_2 label="Balcone2"
+				}
+
+				Frame label="Terrazzo" {
+					Switch item=Light_3F_Terrace_1 label="Luce1"
+					Switch item=Light_3F_Terrace_2 label="Luce2"
+					Switch item=Light_3F_Terrace_3 label="Luce3"
+				}
 			}
 
-			Frame label="Pranzo" {
-				Switch item=Light_2F_Dining_1 label="Striscia LED"
-				Switch item=Light_2F_Dining_2 label="Soffitto"
-				Switch item=Light_2F_Dining_3 label="Parete"
-			}
-
-			Frame label="Camera1" {
-				Switch item=Light_2F_Bedroom1 label="Soffitto"
-			}
-
-			Frame label="Camera2" {
-				Switch item=Light_2F_Bedroom2_1 label="Striscia LED"
-				Switch item=Light_2F_Bedroom2_2 label="Soffitto"
-				Switch item=Light_2F_Bedroom2_3 label="Comodino Dx"
-				Switch item=Light_2F_Bedroom2_4 label="Comodino Sx"
-			}
-			Frame label="Camera3" {
-				Switch item=Light_2F_Bedroom3 label="Soffitto"
-			}
-
-			Frame label="Disimpegni" {
-				Switch item=Light_2F_GW1 label="Disimpegno1"
-				Switch item=Light_2F_GW2 label="Disimpegno2"
-			}
-
-			Frame label="Bagno1" {
-				Switch item=Light_2F_Bath1_1 label="Specchio"
-				Switch item=Light_2F_Bath1_2 label="Soffitto"
-				Switch item=Light_2F_Bath1_3 label="Lavatoio"
-			}
-
-			Frame label="Bagno2" {
-				Switch item=Light_2F_Bath2_1 label="Soffitto"
-				Switch item=Light_2F_Bath2_2 label="Specchio"
+			Text label="Luci Auto/Man" icon="light"{
+				Switch item=Light_2F_Living_Aquarium_auto label="Acquario AUTO"
+				Switch item=Light_2F_Ext_Door_auto label="Portone AUTO"
+				Switch item=Light_Facade_auto label="Facciata AUTO"
 			}
 		}
+		Group item=gRolleshutters
 
-		Text label="Luci Attico" icon="light"{
-			Frame label="Attico" {
-				Switch item=Light_3F_Loft_1 label="Luci1"
-				Switch item=Light_3F_Loft_2 label="Luci2"
-			}
-
-			Frame label="Bagno3" {
-				Switch item=Light_3F_Toilet label="Specchio"
-			}
-		}
-
-		Text label="Luci Esterne" icon="light"{
-			Frame label="Facciata Giardino" {
-				Switch item=Light_2F_Ext_Door label="Portone"
-				Switch item=Light_Facade label="Facciata"
-				Switch item=Light_2F_Balcony_1 label="Balcone1"
-				Switch item=Light_2F_Balcony_2 label="Balcone2"
-			}
-
-			Frame label="Terrazzo" {
-				Switch item=Light_3F_Terrace_1 label="Luce1"
-				Switch item=Light_3F_Terrace_2 label="Luce2"
-				Switch item=Light_3F_Terrace_3 label="Luce3"
-			}
-		}
-
-		Text label="Luci Auto/Man" icon="light"{
-			Switch item=Light_2F_Living_Aquarium_auto label="Acquario AUTO"
-			Switch item=Light_2F_Ext_Door_auto label="Portone AUTO"
-			Switch item=Light_Facade_auto label="Facciata AUTO"
-		}
-	}
-	Group item=gRolleshutters
-
-	Text label="Clima" icon="climate"
+		Text label="Clima" icon="climate"
 		{
 			Frame label="Stato corrente"
 			{
@@ -109,5 +112,164 @@ sitemap default label="Full"
 				Text item=Temperature_3F_Ext label="Esterno [%.1f °C]"
 				Text item=UR_2F_Dining
 			}
+		
+			Frame label="Impostazioni"
+			{
+				Switch item=HVAC_FULL_auto
+				Text item=HVAC_Temp_SetPoint
+				Text label="Temperature HVAC" icon="temperature"
+				{
+					Frame label="Accumulo"
+					{
+						Text item=HVAC_Temp_Sanitary valuecolor=[<=38="blue",<40="orange",>42="red"]
+						Text item=HVAC_Temp_Sanitary1 valuecolor=[<=38="blue",<40="orange",>42="red"]
+						Text item=HVAC_Temp_Heating valuecolor=[<=25="blue",<=28="orange",>28="red"]
+						Text item=HVAC_Temp_Bottom valuecolor=[<=25="blue",<=28="orange",>28="red"]
+					}
+					Frame label="Distribuzione"
+					{
+						Text item=HVAC_Temp_HP_Flow
+						Text item=HVAC_Temp_HP_Ret
+						Text item=HVAC_Temp_Fancoils_Flow labelcolor=[HVAC_Pump_Collector_Fancoil==ON="blue"]
+						Text item=HVAC_Temp_Fancoils_Ret
+						Text item=HVAC_Temp_Floor_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red",HVAC_Pump_Collector_Floor==ON="blue"]
+						Text item=HVAC_Temp_Floor_Ret
+					}
+				}
+
+				Text label="Avanzate" icon="climate"
+				{
+					Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
+					Switch item=HP_Heat_Cool label="Modalità" mappings=[OFF="Caldo", ON="Freddo"]
+
+					Frame label="Setpoint x AUTO Mode (modificabile da SoulissApp)"
+					{
+						Text item=HVAC_Temp_SetPoint
+					}
+
+					Frame label="Pavimento"
+					{
+						Switch item=Floor_Mode_auto label="Modalità" mappings=[ON="Auto", OFF="Manual"]
+						Switch item=Floor_Mode label="Stato corrente" mappings=[ON="ON", OFF="OFF"]
+						Text item=HVAC_Temp_Floor_Flow labelcolor=[HVAC_Pump_Boiler_Floor==ON="red",HVAC_Pump_Collector_Floor==ON="blue"]
+						Text item=HVAC_Temp_SetPoint_Floor
+					}
+
+					Frame label="Fancoil"
+					{
+						Switch item=Fancoil_Mode_auto label="Modalità" mappings=[ON="Auto", OFF="Manual"]
+						Switch item=Fancoil_Mode label="Stato corrente" mappings=[ON="ON", OFF="OFF"]
+						Text item=HVAC_Temp_Fancoils_Flow labelcolor=[HVAC_Pump_Collector_Fancoil==ON="blue"]
+					}
+
+					Frame label="ACS"
+					{
+						Text item=HVAC_Temp_Sanitary
+						Text item=HVAC_Temp_Sanitary1
+						Switch item=HP_Sanitary_Request_auto label="Modalità" mappings=[ON="Auto", OFF="Manual"]
+						Switch item=HP_Sanitary_Request label="Stato corrente" mappings=[ON="ON", OFF="OFF"]
+					}
+
+
+
+					Text icon="settings" label="Avanzate"
+					{
+						Text icon="settings" label="HP Setpoint 2"
+						{
+							Switch item=HP_Setpoint2_auto label="Modalità" mappings=[ON="Auto", OFF="Manual"]
+							Switch item=HP_Setpoint2 label="Impostazione corrente"
+						}
+
+						Text icon="settings" label="Pompe"
+						{
+							Switch item=HP_Circulation_Pump_auto mappings=[ON="Auto", OFF="Manual"]
+							Switch item=HP_Circulation_Pump
+							Switch item=HVAC_Pump_Boiler_Floor_auto mappings=[ON="Auto", OFF="Manual"]
+							Switch item=HVAC_Pump_Boiler_Floor
+							Switch item=HVAC_Pump_Collector_Fancoil_auto mappings=[ON="Auto", OFF="Manual"]
+							Switch item=HVAC_Pump_Collector_Fancoil
+							Switch item=HVAC_Pump_Collector_Floor_auto mappings=[ON="Auto", OFF="Manual"]
+							Switch item=HVAC_Pump_Collector_Floor
+						}
+						Text icon="settings" label="Valvole"
+						{
+							Switch item=HVAC_Valves_auto
+							Frame label="Valvole sul Boiler"
+							{
+								Switch item=HVAC_3way_Valve
+							}
+							Frame label="Valvole di Zona"
+							{
+								Switch item=Valve_2F_Kitchen
+								Switch item=Valve_2F_Living
+								Switch item=Valve_2F_Bath1
+								Switch item=Valve_2F_Bath2
+								Switch item=Valve_2F_Bedroom1
+								Switch item=Valve_2F_Bedroom2
+								Switch item=Valve_2F_Bedroom3
+								Switch item=Valve_3F_Loft
+							}
+						}
+
+						Text icon="settings" label="Fancoil"
+						{
+
+							Frame label="Fancoil 1"
+							{
+								Switch item=Fancoil_2F_GW1_Speed1_auto mappings=[ON="Auto", OFF="Manual"]
+								Switch item=Fancoil_2F_GW1_Speed1
+								Switch item=Fancoil_2F_GW1_Speed2_auto mappings=[ON="Auto", OFF="Manual"]
+								Switch item=Fancoil_2F_GW1_Speed2
+								Switch item=Fancoil_2F_GW1_Speed3_auto mappings=[ON="Auto", OFF="Manual"]
+								Switch item=Fancoil_2F_GW1_Speed3
+							}
+
+							Frame label="Fancoil 2"
+							{
+								Switch item=Fancoil_2F_GW2_Speed1_auto mappings=[ON="Auto", OFF="Manual"]
+								Switch item=Fancoil_2F_GW2_Speed1
+								Switch item=Fancoil_2F_GW2_Speed2_auto mappings=[ON="Auto", OFF="Manual"]
+								Switch item=Fancoil_2F_GW2_Speed2
+								Switch item=Fancoil_2F_GW2_Speed3_auto mappings=[ON="Auto", OFF="Manual"]
+								Switch item=Fancoil_2F_GW2_Speed3
+							}
+						}
+					}
+				}
+
+
+			}
 		}
+
+		Text label="Irrigazione" icon="faucet"
+		{
+			Switch item=Irrigation_Terrace
+			Switch item=Irrigation_Vege
+			Switch item=Irrigation_Lawn1
+			Switch item=Irrigation_Lawn2
+			Switch item=Irrigation_Ent
+			Switch item=Irrigation_Balcony
+			
+			Group item=gIrrigation_Auto icon="light"
+		}
+
+		Text label="Sicurezza" icon="lock"
+		{
+			Frame label="Cucina"
+			{
+				Switch item=Kitchen_Valve_auto label="Modalità" icon="siren-off" mappings=[ON="Auto", OFF="Manual"]
+				Switch item=Kitchen_Valve label="Stato corrente" icon="fire-off"
+			}
+		}
+		Text label="Power Management" icon="energy"
+		{
+			Text item=Power_Tot label="Consumo tot [%.1f W]" valuecolor=[<=1="green",<=2="orange",>2="red"]
+		}
+	}
+
+	Frame label="Operazioni di Gruppo" {
+		Switch item=gLightsInt icon="light-off" mappings=[OFF="All Off"]
+		Switch item=gRS_Night mappings=[UP="Apri", STOP="X", DOWN="Chiudi"]
+	}
+
 }
