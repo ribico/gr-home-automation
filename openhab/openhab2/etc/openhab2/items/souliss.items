@@ -152,14 +152,14 @@ Number HVAC_Temp_Floor_Ret		"Temp. Pavimento Ritorno [%.1f °C]"	<temperature> (
 Number HVAC_Temp_SetPoint	"Temp. Ambiente SetPoint [%.1f °C]"	<temperature> (gClima) {autoupdate="false", channel="souliss:t62:100:0-20:value"}
 Number HVAC_Temp_SetPoint_Floor	"Temp. Pavimento SetPoint [%.1f °C]"	<temperature> (gClima) {autoupdate="false", channel="souliss:t52:100:0-22:value"}
 
-Switch Valve_2F_Bedroom1		"Camera 1"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1A:100:0-12:one"}
-Switch Valve_2F_Bath1			"Bagno 1"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1A:100:0-12:two"}
-Switch Valve_2F_Bedroom2		"Camera 2"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1A:100:0-12:three"}
-Switch Valve_2F_Living			"Soggiorno"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1A:100:0-12:four"}
-Switch Valve_2F_Bedroom3		"Camera 3"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1A:100:0-12:five"}
-Switch Valve_2F_Bath2			"Bagno 2"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1A:100:0-12:six"}
-Switch Valve_2F_Kitchen			"Cucina"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1A:100:0-12:seven"}
-Switch Valve_3F_Loft			"Attico"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1A:100:0-12:eight"}
+Switch Valve_2F_Bedroom1		"Camera 1"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1a:0-12:one"}
+Switch Valve_2F_Bath1			"Bagno 1"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1a:0-12:two"}
+Switch Valve_2F_Bedroom2		"Camera 2"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1a:0-12:three"}
+Switch Valve_2F_Living			"Soggiorno"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1a:0-12:four"}
+Switch Valve_2F_Bedroom3		"Camera 3"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1a:0-12:five"}
+Switch Valve_2F_Bath2			"Bagno 2"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1a:0-12::six"}
+Switch Valve_2F_Kitchen			"Cucina"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1a:0-12:seven"}
+Switch Valve_3F_Loft			"Attico"	<heating>  (gHVAC_Valves) {autoupdate="false", channel="souliss:t1a:0-12:eight"}
 
 Group       gIrrigation  "Irrigazione" (gAll)
 
