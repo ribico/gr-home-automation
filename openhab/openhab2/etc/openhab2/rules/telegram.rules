@@ -1,0 +1,41 @@
+rule "Light_3F_Loft_1"
+when
+   Item Light_3F_Loft_1 changed from OFF to ON
+then
+   sendTelegram("bot1", "Light_3F_Loft_1 ON")
+end
+
+rule "Clima pavimento acceso"
+when
+   Item Floor_Mode changed from OFF to ON
+then
+   sendTelegram("bot1", "Clima pavimento attivo")
+end
+
+rule "Clima pavimento spento"
+when
+   Item Floor_Mode changed from ON to OFF
+then
+   sendTelegram("bot1", "Clima pavimento spento")
+end
+
+rule "ACS ON"
+when
+   Item HP_Sanitary_Request changed from OFF to ON
+then
+   sendTelegram("bot1", "Inizio produzione ACS")
+end
+
+rule "ACS OFF"
+when
+   Item HP_Sanitary_Request changed from ON to OFF
+then
+   sendTelegram("bot1", "Fine produzione ACS")
+end
+
+rule "Power exchange"
+when
+   Item Power_Tot changed
+then
+    sendTelegram("bot1", "Potenza scambio %sW", Power_Tot.state.toString)
+end
