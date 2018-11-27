@@ -37,5 +37,15 @@ rule "Power exchange"
 when
    Item Power_Tot changed
 then
-    sendTelegram("bot1", "Potenza scambio %sW", Power_Tot.state.toString)
+//   sendTelegram("bot1", "Potenza scambio %sW", Power_Tot.state.toString)
+//   sendTelegram("bot1", "Power_Excess %s", Power_Excess.state.toString)
+
+    if(Power_Tot.state < 0 && (Power_Excess.state == OFF || Power_Excess.state == NULL) ) {
+        Power_Excess.postUpdate(ON)
+        sendTelegram("bot1", "Inizio esubero produzione")
+    }
+    else if(Power_Tot.state > 0 && (Power_Excess.state == ON  || Power_Excess.state == NULL) ) {
+        Power_Excess.postUpdate(OFF)
+        sendTelegram("bot1", "Fine esubero produzione")
+    }
 end
