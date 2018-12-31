@@ -420,6 +420,10 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 
 		// do not process fancoils request
 	}
+	else if( IsHeating() ) // heating request for at least one zone
+	{
+		// do nothing, do not disturb manual settings
+	}
 	else if( IsCoolMode() )
 	{
 		if( IsZoneOpen() ) // at least one floor zone open
