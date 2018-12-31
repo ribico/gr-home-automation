@@ -422,14 +422,11 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 	}
 	else if( IsHeating() ) // heating request for at least one zone
 	{
-		// do nothing, do not disturb manual settings
+			// do nothing, do not disturb manual settings
 	}
-	else if( IsCoolMode() )
+	else if( IsCooling() )
 	{
-		if( IsZoneOpen() ) // at least one floor zone open
-			FancoilsAutoOnCmd();
-		else
-			FancoilsAutoDelay(); // delay to prevent false activations
+		FancoilsAutoOnCmd();
 
 		U8 UR_level = Fancoils_AmbienceURLevel();
 
@@ -452,6 +449,7 @@ inline void ProcessFancoilsRequest(U16 phase_fast)
 		// set a delay for next activation of Pump Collector To Floor
 		// this prevents false activations
 		PumpCollectorToFancoilAutoDelay();
+		FancoilsAutoDelay(); // delay to prevent false activations
 	}
 }
 
