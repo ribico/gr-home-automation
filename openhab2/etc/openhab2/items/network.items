@@ -1,0 +1,2 @@
+Switch UmidigiS2 { channel="network:pingdevice:c9e6cf40:online" }
+Switch CellSilvia { channel="network:pingdevice:488e4213:online" }

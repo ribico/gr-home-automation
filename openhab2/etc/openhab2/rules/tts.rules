@@ -1,0 +1,13 @@
+rule "babbo"
+when   
+    Item UmidigiS2 changed from OFF to ON
+then   
+    say("babbo a casa !")
+end
+
+rule "mamma"
+when   
+    Item CellSilvia changed from OFF to ON
+then   
+    say("mamma a casa !")
+end

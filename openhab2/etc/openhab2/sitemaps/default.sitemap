@@ -268,4 +268,9 @@ sitemap default label="Home"
 		Switch item=gRS_Night mappings=[UP="Apri", STOP="X", DOWN="Chiudi"]
 	}
 
+	Frame label="LAN" {
+		Text item=UmidigiS2 label="Cell GAB [%s]"
+		Text item=CellSilvia label="Cell SILVIA [%s]"
+	}
+
 }
