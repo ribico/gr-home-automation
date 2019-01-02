@@ -112,7 +112,7 @@ sitemap default label="Home"
 				Text item=Temperature_3F_Ext label="Esterno [%.1f °C]"
 				Text item=UR_2F_Dining
 			}
-		
+
 			Frame label="Impostazioni"
 			{
 				Switch item=HVAC_FULL_auto
@@ -231,9 +231,9 @@ sitemap default label="Home"
 						}
 					}
 				}
-
-
 			}
+			
+			Chart item=gTemperatures period=D refresh=300
 		}
 
 		Text label="Irrigazione" icon="faucet"
@@ -259,6 +259,7 @@ sitemap default label="Home"
 		Text label="Power Management" icon="energy"
 		{
 			Text item=Power_Tot label="Consumo tot [%.1f W]" valuecolor=[<=1="green",<=2="orange",>2="red"]
+			Chart item=Power_Tot period=D refresh=300
 		}
 	}
 
