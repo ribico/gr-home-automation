@@ -12,8 +12,8 @@ sitemap default label="Home"
 
 				Frame label="Salotto" {
 					Switch item=Light_2F_Living_1 label="Soffitto LED"
-					Switch item=Light_2F_Living_2 label="Parete"
-					Switch item=Light_2F_Living_3 label="Abajours"
+					Switch item=Light_2F_Living_2 label="Abajours"
+					Switch item=Light_2F_Living_3 label="Parete"
 					Switch item=Light_2F_Living_4 label="Appese"
 					Switch item=Light_2F_Stairs  label="Scala"
 					Switch item=Light_2F_Living_Aquarium  label="Acquario"
