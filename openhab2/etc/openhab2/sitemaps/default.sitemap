@@ -1,4 +1,4 @@
-sitemap default label="Full"
+sitemap default label="Home"
 {
 	Frame
 	{
@@ -116,7 +116,7 @@ sitemap default label="Full"
 			Frame label="Impostazioni"
 			{
 				Switch item=HVAC_FULL_auto
-				Text item=HVAC_Temp_SetPoint
+				Setpoint item=HVAC_Temp_SetPoint label="Temp. Ambiente SetPoint [%.1f °C]" minValue=15 maxValue=30 step=0.5
 				Text label="Temperature HVAC" icon="temperature"
 				{
 					Frame label="Accumulo"
@@ -141,11 +141,6 @@ sitemap default label="Full"
 				{
 					Switch item=HP_Remote_Switch label="PDC" mappings=[ON="Abilitata", OFF="Disabilitata"]
 					Switch item=HP_Heat_Cool label="Modalità" mappings=[OFF="Caldo", ON="Freddo"]
-
-					Frame label="Setpoint x AUTO Mode"
-					{
-						Setpoint item=HVAC_Temp_SetPoint label="Temp. Ambiente SetPoint [%.1f °C]" minValue=15 maxValue=30 step=0.5
-					}
 
 					Frame label="Pavimento"
 					{
