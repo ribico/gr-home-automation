@@ -27,6 +27,7 @@ DHT dht(ONE_WIRE_PIN, DHT22);
 float th=0;
 
 #define LED_KITCHEN_SECURITY	6
+#define WATERING_TIMEOUT_CYCLES		24
 
 //--------------------------------------
 
@@ -69,7 +70,13 @@ inline void ReadInputs()
 
 inline void ProcessLogics()
 {
+	// to avoid permanent opening of watering valve
+	// convert the first activation to AutoCmd + WATERING_TIMEOUT
+	if( mInput(ROW2B4_WATERING_ZONE6) == Souliss_T1n_OnCmd )
+		SetInput(ROW2B4_WATERING_ZONE6, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
+
 	Logic_T12(ROW2B4_WATERING_ZONE6);
+
 	Logic_T12(ROW2B4_KITCHEN_POWER);
 	Logic_T12(ROW2B4_LIGHT_EXT_DOOR);
 	Logic_T12(ROW2B4_LIGHT_AQUARIUM);
@@ -88,10 +95,10 @@ inline void SetOutputs()
 
 inline void ProcessTimers()
 {
-	Timer_T12(ROW2B4_WATERING_ZONE6);
 	Timer_T12(ROW2B4_LIGHT_EXT_DOOR);
 	Timer_T12(ROW2B4_LIGHT_AQUARIUM);
 	// Timer for KITCHEN_POWER managed separately in a slower cycle
+	// Timer for ROW2B4_WATERING_ZONE6 managed separately in a slower cycle
 
 	th = grh_W_Average(mOutputAsFloat(ROW2B4_HUMIDITY), dht.readHumidity());
 	ImportAnalog(ROW2B4_HUMIDITY, &th);
@@ -203,6 +210,7 @@ void loop()
 		SLOW_50s()
 		{
 			Timer_T12(ROW2B4_KITCHEN_POWER);
+			Timer_T12(ROW2B4_WATERING_ZONE6);
 		}
 	}
 }

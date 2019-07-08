@@ -20,6 +20,8 @@ Arduino UNO + ETH Shield on a IONO SOLO BOARD
 #include "grhSoulissSlots.h"
 #include "HW_Setup_IONO.h"
 
+#define WATERING_TIMEOUT_CYCLES		36
+
 inline void DefineTypicals()
 {
 	// Define logics for the node
@@ -80,6 +82,24 @@ inline void ProcessLogics()
 {
 	Logic_T12(GARDB1_LIGHT_GARDEN);                                  // Execute the logic for Relay 6
 
+	// to avoid permanent opening of watering valve
+	// convert the first activation to AutoCmd + WATERING_TIMEOUT
+	if( mInput(GARDB1_WATERING_ZONE1) == Souliss_T1n_OnCmd )
+		SetInput(GARDB1_WATERING_ZONE1, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
+
+	if( mInput(GARDB1_WATERING_ZONE2) == Souliss_T1n_OnCmd )
+		SetInput(GARDB1_WATERING_ZONE2, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
+
+	if( mInput(GARDB1_WATERING_ZONE3) == Souliss_T1n_OnCmd )
+		SetInput(GARDB1_WATERING_ZONE3, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
+
+	if( mInput(GARDB1_WATERING_ZONE4) == Souliss_T1n_OnCmd )
+		SetInput(GARDB1_WATERING_ZONE4, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
+
+	if( mInput(GARDB1_WATERING_ZONE5) == Souliss_T1n_OnCmd )
+		SetInput(GARDB1_WATERING_ZONE5, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
+
+
 	Logic_T12(GARDB1_WATERING_ZONE1);                                  // Execute the logic for Relay 1
 	Logic_T12(GARDB1_WATERING_ZONE2);                                  // Execute the logic for Relay 2
 	Logic_T12(GARDB1_WATERING_ZONE3);                                  // Execute the logic for Relay 3
@@ -102,13 +122,17 @@ inline void SetOutputs()
 	nDigOut(DO6, Souliss_T1n_Coil, GARDB1_LIGHT_GARDEN);              // Drive the Relay 6
 }
 
-inline void ProcessTimers()
+inline void ProcessSlowTimers()
 {
 	Timer_T12(GARDB1_WATERING_ZONE1);
 	Timer_T12(GARDB1_WATERING_ZONE2);
 	Timer_T12(GARDB1_WATERING_ZONE3);
 	Timer_T12(GARDB1_WATERING_ZONE4);
 	Timer_T12(GARDB1_WATERING_ZONE5);
+}
+
+inline void ProcessFastTimers()
+{
 	Timer_T12(GARDB1_LIGHT_GARDEN);
 	Timer_T12(GARDB1_BUYING_POWER);
 	Timer_T12(GARDB1_SELLING_POWER);
@@ -143,7 +167,7 @@ void loop()
 
 		FAST_2110ms()
 		{
-			ProcessTimers();
+			ProcessFastTimers();
 		}
 
 		grhFastPeerComms();
@@ -158,5 +182,11 @@ void loop()
 		{
 			ImportAnalog(GARDB1_TOTAL_POWER, &fPower);
 		}
+
+		SLOW_50s()
+		{
+			ProcessSlowTimers();
+		}
+
 	}
 }
