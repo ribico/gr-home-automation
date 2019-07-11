@@ -20,7 +20,8 @@ Arduino UNO + ETH Shield on a IONO SOLO BOARD
 #include "grhSoulissSlots.h"
 #include "HW_Setup_IONO.h"
 
-#define WATERING_TIMEOUT_CYCLES		36
+#define WATERING_TIMEOUT_CYCLES				25
+#define WATERING_TIMEOUT_CYCLES_PRATO		30
 
 inline void DefineTypicals()
 {
@@ -82,23 +83,63 @@ inline void ProcessLogics()
 {
 	Logic_T12(GARDB1_LIGHT_GARDEN);                                  // Execute the logic for Relay 6
 
+	#ifdef DEBUG
+		Serial.print("mInputs : ");
+		Serial.print(mInput(GARDB1_WATERING_ZONE1));
+		Serial.print(" - ");
+		Serial.print(mInput(GARDB1_WATERING_ZONE2));
+		Serial.print(" - ");
+		Serial.print(mInput(GARDB1_WATERING_ZONE3));
+		Serial.print(" - ");
+		Serial.print(mInput(GARDB1_WATERING_ZONE4));
+		Serial.print(" - ");
+		Serial.print(mInput(GARDB1_WATERING_ZONE5));
+
+		Serial.print(" ------- ");
+
+		Serial.print("mOutputs : ");
+		Serial.print(mOutput(GARDB1_WATERING_ZONE1));
+		Serial.print(" - ");
+		Serial.print(mOutput(GARDB1_WATERING_ZONE2));
+		Serial.print(" - ");
+		Serial.print(mOutput(GARDB1_WATERING_ZONE3));
+		Serial.print(" - ");
+		Serial.print(mOutput(GARDB1_WATERING_ZONE4));
+		Serial.print(" - ");
+		Serial.println(mOutput(GARDB1_WATERING_ZONE5));
+	#endif
+
 	// to avoid permanent opening of watering valve
 	// convert the first activation to AutoCmd + WATERING_TIMEOUT
 	if( mInput(GARDB1_WATERING_ZONE1) == Souliss_T1n_OnCmd )
+	{
+		mOutput(GARDB1_WATERING_ZONE1) = Souliss_T1n_AutoState; // needed for the souliss logic
 		SetInput(GARDB1_WATERING_ZONE1, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
+	}
 
 	if( mInput(GARDB1_WATERING_ZONE2) == Souliss_T1n_OnCmd )
+	{
+		mOutput(GARDB1_WATERING_ZONE2) = Souliss_T1n_AutoState; // needed for the souliss logic
 		SetInput(GARDB1_WATERING_ZONE2, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
-
+	}
+	
 	if( mInput(GARDB1_WATERING_ZONE3) == Souliss_T1n_OnCmd )
-		SetInput(GARDB1_WATERING_ZONE3, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
+	{
+		mOutput(GARDB1_WATERING_ZONE3) = Souliss_T1n_AutoState; // needed for the souliss logic
+		SetInput(GARDB1_WATERING_ZONE3, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES_PRATO);
+	}
 
 	if( mInput(GARDB1_WATERING_ZONE4) == Souliss_T1n_OnCmd )
-		SetInput(GARDB1_WATERING_ZONE4, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
+	{
+		mOutput(GARDB1_WATERING_ZONE4) = Souliss_T1n_AutoState; // needed for the souliss logic
+		SetInput(GARDB1_WATERING_ZONE4, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES_PRATO);
+	}
 
 	if( mInput(GARDB1_WATERING_ZONE5) == Souliss_T1n_OnCmd )
+	{
+		mOutput(GARDB1_WATERING_ZONE5) = Souliss_T1n_AutoState; // needed for the souliss logic
 		SetInput(GARDB1_WATERING_ZONE5, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
-
+	}
 
 	Logic_T12(GARDB1_WATERING_ZONE1);                                  // Execute the logic for Relay 1
 	Logic_T12(GARDB1_WATERING_ZONE2);                                  // Execute the logic for Relay 2

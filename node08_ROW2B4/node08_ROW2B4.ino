@@ -27,7 +27,7 @@ DHT dht(ONE_WIRE_PIN, DHT22);
 float th=0;
 
 #define LED_KITCHEN_SECURITY	6
-#define WATERING_TIMEOUT_CYCLES		24
+#define WATERING_TIMEOUT_CYCLES		20
 
 //--------------------------------------
 
@@ -73,8 +73,10 @@ inline void ProcessLogics()
 	// to avoid permanent opening of watering valve
 	// convert the first activation to AutoCmd + WATERING_TIMEOUT
 	if( mInput(ROW2B4_WATERING_ZONE6) == Souliss_T1n_OnCmd )
-		SetInput(ROW2B4_WATERING_ZONE6, Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES);
-
+	{
+		mOutput(ROW2B4_WATERING_ZONE6) = Souliss_T1n_AutoState; // needed for the souliss logic
+		mInput(ROW2B4_WATERING_ZONE6) = Souliss_T1n_AutoCmd+WATERING_TIMEOUT_CYCLES;
+	}
 	Logic_T12(ROW2B4_WATERING_ZONE6);
 
 	Logic_T12(ROW2B4_KITCHEN_POWER);
@@ -144,11 +146,11 @@ void loop()
 		if( mOutput(ROW2B4_KITCHEN_POWER) == Souliss_T1n_AutoOnCoil )
 		{
 			U8 remaining_cycles = mInput(ROW2B4_KITCHEN_POWER)-Souliss_T1n_AutoCmd;
-			#ifdef DEBUG
+/*			#ifdef DEBUG
 				Serial.print("remaining_cycles : ");
 				Serial.println(remaining_cycles);
 			#endif
-
+*/
 			if( remaining_cycles > 108) // >1.5 hours
 			{
 				FAST_2110ms()
